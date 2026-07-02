@@ -2,37 +2,149 @@
 
 {% block css %}
 {{ parent() }}
+{% if fsc.useLocalCalendar() %}
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
+{% endif %}
+<style>
+    .dental-calendar-frame {
+        width: 100%;
+        min-height: calc(100vh - 190px);
+        border: 1px solid #d8dde6;
+        border-radius: 6px;
+        background: #fff;
+    }
+    .dental-calendar-settings {
+        display: {{ fsc.showSettings ? 'block' : 'none' }};
+    }
+    .dental-calendar-toolbar {
+        gap: .5rem;
+    }
+    #calendar {
+        min-height: calc(100vh - 260px);
+    }
+</style>
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
+{% if fsc.useLocalCalendar() %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+{% endif %}
 {% endblock %}
 
 {% block body %}
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-calendar-alt"></i>
-                        Calendario Dental
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div id="calendar"></div>
-                </div>
+    <div class="card shadow-sm">
+        <div class="card-header d-flex align-items-center justify-content-between flex-wrap dental-calendar-toolbar">
+            <h5 class="mb-0">
+                <i class="fas fa-calendar-alt mr-2"></i>Calendario Dental
+            </h5>
+            <div class="btn-group">
+                {% if fsc.embedUrl %}
+                    <a href="{{ fsc.embedUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-external-link-alt mr-1"></i>Abrir
+                    </a>
+                {% endif %}
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleSalonSettings">
+                    <i class="fas fa-cog mr-1"></i>Configurar
+                </button>
             </div>
+        </div>
+        <div class="card-body">
+            {% if fsc.apiStatus %}
+                <div class="alert alert-{{ fsc.apiStatus }} mb-3">{{ fsc.apiStatusMessage }}</div>
+            {% endif %}
+
+            <form method="post" class="dental-calendar-settings mb-4" id="salonSettingsForm">
+                {{ formToken() }}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>URL WordPress</label>
+                            <input type="url" name="wp_url" class="form-control" value="{{ fsc.settings.wp_url }}" placeholder="https://reservas.example.com">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Usuario API</label>
+                            <input type="text" name="api_username" class="form-control" value="{{ fsc.settings.api_username }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Password API</label>
+                            <input type="password" name="api_password" class="form-control" value="" placeholder="{{ fsc.hasApiPassword() ? 'Conservar actual' : '' }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Iframe</label>
+                            <div class="custom-control custom-switch mt-2">
+                                <input type="checkbox" class="custom-control-input" id="embedEnabled" name="embed_enabled" value="1" {{ fsc.settings.embed_enabled ? 'checked' : '' }}>
+                                <label class="custom-control-label" for="embedEnabled">Activo</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Usuario WordPress iframe</label>
+                            <input type="text" name="embed_user" class="form-control" value="{{ fsc.settings.embed_user }}" placeholder="{{ fsc.settings.api_username }}">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label>Secreto iframe compartido</label>
+                            <input type="password" name="embed_secret" class="form-control" value="" placeholder="{{ fsc.hasEmbedSecret() ? 'Conservar actual' : 'Generar y copiar tambien en WordPress' }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <div class="form-group w-100">
+                            <button type="submit" name="action" value="save-settings" class="btn btn-primary">
+                                <i class="fas fa-save mr-1"></i>Guardar
+                            </button>
+                            <button type="submit" name="action" value="test-api" class="btn btn-outline-secondary">
+                                <i class="fas fa-plug mr-1"></i>Probar API
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            {% if fsc.embedUrl %}
+                <iframe
+                    class="dental-calendar-frame"
+                    src="{{ fsc.embedUrl }}"
+                    referrerpolicy="no-referrer"
+                    allow="fullscreen">
+                </iframe>
+            {% else %}
+                <div class="alert alert-warning">
+                    Configura WordPress, usuario y secreto iframe para mostrar el calendario de Salon. Mientras tanto se muestra el calendario local.
+                </div>
+                <div id="calendar"></div>
+            {% endif %}
         </div>
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
 document.addEventListener('DOMContentLoaded', function() {
+    var toggle = document.getElementById('toggleSalonSettings');
+    var form = document.getElementById('salonSettingsForm');
+    if (toggle && form) {
+        toggle.addEventListener('click', function() {
+            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+        });
+    }
+
+    {% if fsc.useLocalCalendar() %}
     var calendarEl = document.getElementById('calendar');
-    
+    if (!calendarEl || typeof FullCalendar === 'undefined') {
+        return;
+    }
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         headerToolbar: {
@@ -43,19 +155,11 @@ document.addEventListener('DOMContentLoaded', function() {
         events: function(info, successCallback, failureCallback) {
             fetch('CalendarDental?action=events&start=' + info.startStr + '&end=' + info.endStr, {
                 method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
             })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                successCallback(data);
-            })
-            .catch(function(error) {
-                failureCallback(error);
-            });
+                .then(function(response) { return response.json(); })
+                .then(function(data) { successCallback(data); })
+                .catch(function(error) { failureCallback(error); });
         },
         eventClick: function(info) {
             info.jsEvent.preventDefault();
@@ -64,35 +168,31 @@ document.addEventListener('DOMContentLoaded', function() {
         eventDrop: function(info) {
             var startDate = info.event.start;
             var endDate = info.event.end;
-            
-            if (startDate) {
-                var fecha = startDate.toISOString().split('T')[0];
-                var horaInicio = startDate.toTimeString().split(' ')[0];
-                var horaFin = endDate ? endDate.toTimeString().split(' ')[0] : horaInicio;
-                
-                fetch('CalendarDental?action=move&id=' + info.event.id + '&fecha=' + fecha + '&hora_inicio=' + horaInicio + '&hora_fin=' + horaFin, {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(function(response) {
-                    return response.json();
-                })
+            if (!startDate) {
+                info.revert();
+                return;
+            }
+
+            var fecha = startDate.toISOString().split('T')[0];
+            var horaInicio = startDate.toTimeString().split(' ')[0];
+            var horaFin = endDate ? endDate.toTimeString().split(' ')[0] : horaInicio;
+
+            fetch('CalendarDental?action=move&id=' + info.event.id + '&fecha=' + fecha + '&hora_inicio=' + horaInicio + '&hora_fin=' + horaFin, {
+                method: 'POST',
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+                .then(function(response) { return response.json(); })
                 .then(function(data) {
                     if (!data.success) {
                         info.revert();
                     }
                 })
-                .catch(function(error) {
-                    info.revert();
-                });
-            }
+                .catch(function() { info.revert(); });
         },
         selectable: true,
         select: function(info) {
-            var fecha = info.startStr;
-            window.location.href = 'EditCita?action=new&fecha=' + fecha + '&hora_inicio=' + info.startStr.split('T')[1];
+            var hora = info.startStr.indexOf('T') === -1 ? '' : info.startStr.split('T')[1];
+            window.location.href = 'EditCita?action=new&fecha=' + info.startStr.split('T')[0] + '&hora_inicio=' + hora;
         },
         editable: true,
         selectMirror: true,
@@ -102,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     calendar.render();
+    {% endif %}
 });
 </script>
 {% endblock %}

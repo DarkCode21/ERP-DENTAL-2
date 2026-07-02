@@ -85,6 +85,7 @@ class SLN_Action_Init
         add_action('template_redirect', array($this, 'template_redirect'));
         new SLN_Privacy();
         new SLN_Action_InitScripts($this->plugin, is_admin());
+        new SLN_Action_ErpCalendarEmbed($p);
         $this->initPolylangSupport();
         SLB_Discount_Plugin::getInstance();
 
