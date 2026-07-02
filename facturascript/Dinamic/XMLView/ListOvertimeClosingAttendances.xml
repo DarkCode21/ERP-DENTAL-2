@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditOvertimeClosingAttendances.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditOvertimeClosingAttendances
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="number" fieldname="id" icon="fa-solid fa-globe" readonly="true"/>
+        </column>
+        <column name="employee" display="none" order="110">
+            <widget type="autocomplete" fieldname="idemployee" required="true">
+                <values source="rrhh_employees" fieldcode="id" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="absence-concept" numcolumns="3" order="120">
+            <widget type="select" fieldname="idabsenceconcept">
+                <values source="rrhh_absencesconcepts" fieldcode="id" fieldtitle="name"/>
+            </widget>
+        </column>
+        <column name="date" numcolumns="3" order="130">
+            <widget type="date" fieldname="checkdate"/>
+        </column>
+        <column name="hour" numcolumns="2" order="140">
+            <widget type="time" fieldname="checktime"/>
+        </column>
+        <column name="type" numcolumns="2" order="150">
+            <widget type="select" fieldname="kind" required="true" translate="true">
+                <values title="input">1</values>
+                <values title="output">2</values>
+            </widget>
+        </column>
+    </columns>
+
+    <rows>
+        <row type="header">
+            <group name="workperiod" class="mt-3 mb-4" html="Block/EmployeeWorkPeriodInfo.html.twig"/>
+        </row>
+    </rows>
+
+    <modals>
+        <group name="new-attendance" title="compensation-attendance" icon="fa-solid fa-unlink" class="modal-lg">
+            <column name="code" display="none">
+                <widget type="text" fieldname="overtime_id"/>
+            </column>
+            <column name="closing" display="none">
+                <widget type="text" fieldname="closing_id"/>
+            </column>
+            <column name="employee" display="none">
+                <widget type="text" fieldname="employee_id"/>
+            </column>
+            <column name="absence-concept" numcolumns="4">
+                <widget type="select" fieldname="absenceconcept_id" required="true">
+                    <values source="rrhh_absencesconcepts" fieldcode="id" fieldtitle="name"/>
+                </widget>
+            </column>
+            <column name="date">
+                <widget type="date" fieldname="justified_date" required="true"/>
+            </column>
+            <column name="starttime">
+                <widget type="time" fieldname="justified_time1" required="true"/>
+            </column>
+            <column name="endtime">
+                <widget type="time" fieldname="justified_time2" required="true"/>
+            </column>
+        </group>
+    </modals>
+</view>

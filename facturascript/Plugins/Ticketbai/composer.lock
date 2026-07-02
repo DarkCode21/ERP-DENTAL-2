@@ -1,0 +1,466 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "5dc44b434d61b445e2235fa84f35ae97",
+    "packages": [
+        {
+            "name": "bacon/bacon-qr-code",
+            "version": "2.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Bacon/BaconQrCode.git",
+                "reference": "8674e51bb65af933a5ffaf1c308a660387c35c22"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/8674e51bb65af933a5ffaf1c308a660387c35c22",
+                "reference": "8674e51bb65af933a5ffaf1c308a660387c35c22",
+                "shasum": ""
+            },
+            "require": {
+                "dasprid/enum": "^1.0.3",
+                "ext-iconv": "*",
+                "php": "^7.1 || ^8.0"
+            },
+            "require-dev": {
+                "phly/keep-a-changelog": "^2.1",
+                "phpunit/phpunit": "^7 | ^8 | ^9",
+                "spatie/phpunit-snapshot-assertions": "^4.2.9",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "suggest": {
+                "ext-imagick": "to generate QR code images"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BaconQrCode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Scholzen 'DASPRiD'",
+                    "email": "mail@dasprids.de",
+                    "homepage": "https://dasprids.de/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "BaconQrCode is a QR code generator for PHP.",
+            "homepage": "https://github.com/Bacon/BaconQrCode",
+            "support": {
+                "issues": "https://github.com/Bacon/BaconQrCode/issues",
+                "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.8"
+            },
+            "time": "2022-12-07T17:46:57+00:00"
+        },
+        {
+            "name": "barnetik/ticketbai",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Barnetik/tbai-php-lib.git",
+                "reference": "4a1b7f3428513879e3faf20eac7c5e0c1c278c67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Barnetik/tbai-php-lib/zipball/4a1b7f3428513879e3faf20eac7c5e0c1c278c67",
+                "reference": "4a1b7f3428513879e3faf20eac7c5e0c1c278c67",
+                "shasum": ""
+            },
+            "require": {
+                "endroid/qr-code": "^4.4",
+                "lyquidity/xml-signer": "^1.12",
+                "pburggraf/crc": "^0.8.1",
+                "php": ">=7.4 || >=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Barnetik\\": "src/Barnetik",
+                    "Test\\Barnetik\\": "tests/Barnetik"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Generate, sign and submit TicketBAI compatible invoices",
+            "support": {
+                "issues": "https://github.com/Barnetik/tbai-php-lib/issues",
+                "source": "https://github.com/Barnetik/tbai-php-lib/tree/v0.6.2"
+            },
+            "time": "2025-04-03T17:12:59+00:00"
+        },
+        {
+            "name": "dasprid/enum",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DASPRiD/Enum.git",
+                "reference": "8dfd07c6d2cf31c8da90c53b83c026c7696dda90"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/8dfd07c6d2cf31c8da90c53b83c026c7696dda90",
+                "reference": "8dfd07c6d2cf31c8da90c53b83c026c7696dda90",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1 <9.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7 || ^8 || ^9 || ^10 || ^11",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DASPRiD\\Enum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Scholzen 'DASPRiD'",
+                    "email": "mail@dasprids.de",
+                    "homepage": "https://dasprids.de/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP 7.1 enum implementation",
+            "keywords": [
+                "enum",
+                "map"
+            ],
+            "support": {
+                "issues": "https://github.com/DASPRiD/Enum/issues",
+                "source": "https://github.com/DASPRiD/Enum/tree/1.0.6"
+            },
+            "time": "2024-08-09T14:30:48+00:00"
+        },
+        {
+            "name": "endroid/qr-code",
+            "version": "4.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/endroid/qr-code.git",
+                "reference": "a75c913b0e4d6ad275e49a2c1de1cacffc6c2184"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/a75c913b0e4d6ad275e49a2c1de1cacffc6c2184",
+                "reference": "a75c913b0e4d6ad275e49a2c1de1cacffc6c2184",
+                "shasum": ""
+            },
+            "require": {
+                "bacon/bacon-qr-code": "^2.0.5",
+                "php": "^7.4||^8.0"
+            },
+            "require-dev": {
+                "endroid/quality": "dev-master",
+                "ext-gd": "*",
+                "khanamiryan/qrcode-detector-decoder": "^1.0.4",
+                "setasign/fpdf": "^1.8.2"
+            },
+            "suggest": {
+                "ext-gd": "Enables you to write PNG images",
+                "khanamiryan/qrcode-detector-decoder": "Enables you to use the image validator",
+                "roave/security-advisories": "Makes sure package versions with known security issues are not installed",
+                "setasign/fpdf": "Enables you to use the PDF writer"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Endroid\\QrCode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeroen van den Enden",
+                    "email": "info@endroid.nl"
+                }
+            ],
+            "description": "Endroid QR Code",
+            "homepage": "https://github.com/endroid/qr-code",
+            "keywords": [
+                "code",
+                "endroid",
+                "php",
+                "qr",
+                "qrcode"
+            ],
+            "support": {
+                "issues": "https://github.com/endroid/qr-code/issues",
+                "source": "https://github.com/endroid/qr-code/tree/4.6.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/endroid",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-10-26T08:48:17+00:00"
+        },
+        {
+            "name": "lyquidity/requester",
+            "version": "1.03",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bseddon/requester.git",
+                "reference": "2fde5f75d4eff296ac536864ee194f08efcdc681"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bseddon/requester/zipball/2fde5f75d4eff296ac536864ee194f08efcdc681",
+                "reference": "2fde5f75d4eff296ac536864ee194f08efcdc681",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-gmp": "*",
+                "ext-openssl": "*",
+                "php": ">=7.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "./src/autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bill Seddon",
+                    "email": "bill.seddon@lyquidity.com",
+                    "homepage": "https://www.xbrlquery.com",
+                    "role": "Author"
+                }
+            ],
+            "description": "Library to query HTTPS Certificates revocation status using the Online Certificate Status Protocol (OCSP) and to make a request to a Timestamp authority (TSA)",
+            "homepage": "https://github.com/bseddon/requester/",
+            "keywords": [
+                "certificate",
+                "check",
+                "https",
+                "ocsp",
+                "online certificate status protocol",
+                "request",
+                "revocation",
+                "revoke",
+                "revoked",
+                "rfc3161",
+                "rfc6069",
+                "security",
+                "timestamp",
+                "timestamp authority",
+                "tsa"
+            ],
+            "support": {
+                "issues": "https://github.com/bseddon/requester/issues/",
+                "source": "https://github.com/bseddon/requester/"
+            },
+            "time": "2023-01-10T10:24:55+00:00"
+        },
+        {
+            "name": "lyquidity/xml-signer",
+            "version": "1.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bseddon/xml-signer.git",
+                "reference": "007e73fdc53d0e15e8fa9ee37aa51cbfe0729165"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bseddon/xml-signer/zipball/007e73fdc53d0e15e8fa9ee37aa51cbfe0729165",
+                "reference": "007e73fdc53d0e15e8fa9ee37aa51cbfe0729165",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "lyquidity/requester": "*",
+                "php": ">= 7.2.6"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "./autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-only"
+            ],
+            "description": "A PHP to create and verify XAdES signature",
+            "homepage": "https://github.com/bseddon/xml-signer",
+            "keywords": [
+                "Policy",
+                "commitment type",
+                "counter signature",
+                "security",
+                "signature",
+                "timestamp",
+                "xades",
+                "xml",
+                "xmldsig"
+            ],
+            "support": {
+                "issues": "https://github.com/bseddon/xml-signer/issues",
+                "source": "https://github.com/bseddon/xml-signer/tree/1.12"
+            },
+            "time": "2023-01-10T10:03:39+00:00"
+        },
+        {
+            "name": "pburggraf/crc",
+            "version": "v0.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pburggraf/CRC.git",
+                "reference": "125ddc36ce74d22c007889b93984eba817afac55"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pburggraf/CRC/zipball/125ddc36ce74d22c007889b93984eba817afac55",
+                "reference": "125ddc36ce74d22c007889b93984eba817afac55",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpunit/phpunit": "^8.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PBurggraf\\CRC\\": "src/PBurggraf/CRC/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philip Burggraf",
+                    "email": "philip@pburggraf.de"
+                }
+            ],
+            "description": "Cyclic redundancy checker (crc) class to calculate crc8, crc16, crc24 and crc32 checksum values",
+            "keywords": [
+                "checksum",
+                "checksum generator",
+                "crc",
+                "crc16",
+                "crc24",
+                "crc32",
+                "crc8",
+                "cyclic redundancy checker",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/pburggraf/CRC/issues",
+                "source": "https://github.com/pburggraf/CRC/tree/v0.8.1"
+            },
+            "time": "2021-02-08T20:14:55+00:00"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "overdesign/cif-generator",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/override2k/cif-generator.git",
+                "reference": "04b9c8ee882a878ba5ecdb914232674bbaae8249"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/override2k/cif-generator/zipball/04b9c8ee882a878ba5ecdb914232674bbaae8249",
+                "reference": "04b9c8ee882a878ba5ecdb914232674bbaae8249",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "ronanguilloux/isocodes": "^2.1",
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Overdesign\\CifGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fernando Robledo",
+                    "email": "overdesign@gmail.com"
+                }
+            ],
+            "description": "Spanish CIF number generator",
+            "keywords": [
+                "CIF",
+                "generator",
+                "vat"
+            ],
+            "support": {
+                "issues": "https://github.com/override2k/cif-generator/issues",
+                "source": "https://github.com/override2k/cif-generator/tree/1.0.7"
+            },
+            "time": "2018-03-23T22:58:56+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "barnetik/ticketbai": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "ext-gd": "*",
+        "ext-json": "*",
+        "ext-soap": "*",
+        "ext-simplexml": "*"
+    },
+    "platform-dev": [],
+    "platform-overrides": {
+        "php": "7.4"
+    },
+    "plugin-api-version": "2.6.0"
+}

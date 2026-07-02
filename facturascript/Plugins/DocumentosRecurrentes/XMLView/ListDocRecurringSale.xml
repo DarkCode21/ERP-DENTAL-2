@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of DocumentosRecurrentes plugin for FacturaScripts.
+    FacturaScripts         Copyright (C) 2015-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+    DocumentosRecurrentes  Copyright (C) 2020-2021 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : docrecurrentes_purchase.xml
+    Author     : Carlos Garcia Gomez    <carlos@facturascripts.com>
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        View structure for ListDocRecurringSale.
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="company" display="none" order="100">
+            <widget type="select" fieldname="idempresa">
+                <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto" />
+            </widget>
+        </column>
+        <column name="user" display="none" order="100">
+            <widget type="select" fieldname="nick" readonly="true">
+                <values source="users" fieldcode="nick" />
+            </widget>
+        </column>
+        <column name="description" order="110">
+            <widget type="text" fieldname="name" />
+        </column>
+        <column name="customer" order="120">
+            <widget type="autocomplete" fieldname="codcliente">
+                <values source="clientes" fieldcode="codcliente" fieldtitle="nombre" />
+            </widget>
+        </column>
+        <column name="generate" order="130">
+            <widget type="select" fieldname="generatedoc" translate="true">
+                <values title="customer-estimation">PresupuestoCliente</values>
+                <values title="customer-order">PedidoCliente</values>
+                <values title="customer-delivery-note">AlbaranCliente</values>
+                <values title="customer-invoice">FacturaCliente</values>
+            </widget>
+        </column>
+        <column name="quantity" display="right" order="140">
+            <widget type="number" decimal="0" fieldname="termunits" />
+        </column>
+        <column name="term-type" order="150">
+            <widget type="select" fieldname="termtype" translate="true">
+                <values title="days">1</values>
+                <values title="weeks">2</values>
+                <values title="months">3</values>
+                <values title="manual">99</values>
+            </widget>
+        </column>
+        <column name="notes" display="none" order="160">
+            <widget type="textarea" fieldname="notes" />
+        </column>
+        <column name="start-date" display="none" order="170">
+            <widget type="date" fieldname="startdate" />
+        </column>
+        <column name="end-date" display="none" order="180">
+            <widget type="date" fieldname="enddate" />
+        </column>
+        <column name="last-date" order="190">
+            <widget type="date" fieldname="lastdate" />
+        </column>
+        <column name="next-date" display="right" order="200">
+            <widget type="date" fieldname="nextdate" />
+        </column>
+        <column name="days" display="right" order="210">
+            <widget type="number" decimal="0" fieldname="days" />
+        </column>
+    </columns>
+
+    <rows>
+        <row type="status">
+            <option color="danger" title="timed-out" fieldname="days">lte:0</option>
+            <option color="warning" title="pending" fieldname="nextdate">null:</option>
+            <option color="success" title="generated" fieldname="lastdate">notnull:</option>
+        </row>
+    </rows>
+
+    <modals>
+        <group name="generate-recurring" title="generate-docs" icon="fas fa-magic">
+            <column name="until-next-date" numcolumns="12" order="100">
+                <widget type="date" fieldname="untilNextDate" required="true" />
+            </column>
+        </group>
+    </modals>
+</view>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : anticipos.xml
+    Author     : Jorge-Prebac <info@prebac.com>
+    Description: Structure for the anticipos table.
+-->
+<table>
+    <column>
+        <name>codproveedor</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>coddivisa</name>
+        <type>character varying(3)</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>codpago</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>fase</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idalbaran</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idfactura</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idpedido</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idpresupuesto</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idproyecto</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idrecibo</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>importe</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>nota</name>
+        <type>character varying(200)</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <constraint>
+        <name>anticiposp_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_anticiposp_proveedores</name>
+        <type>FOREIGN KEY (codproveedor) REFERENCES proveedores (codproveedor) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_anticiposp_divisas</name>
+        <type>FOREIGN KEY (coddivisa) REFERENCES divisas (coddivisa) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_anticiposp_albaranesprov</name>
+        <type>FOREIGN KEY (idalbaran) REFERENCES albaranesprov (idalbaran) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_anticiposp_facturasprov</name>
+        <type>FOREIGN KEY (idfactura) REFERENCES facturasprov (idfactura) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_anticiposp_pedidosprov</name>
+        <type>FOREIGN KEY (idpedido) REFERENCES pedidosprov (idpedido) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_anticiposp_presupuestosprov</name>
+        <type>FOREIGN KEY (idpresupuesto) REFERENCES presupuestosprov (idpresupuesto) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_anticiposp_recibospagosprov</name>
+        <type>FOREIGN KEY (idrecibo) REFERENCES recibospagosprov (idrecibo) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

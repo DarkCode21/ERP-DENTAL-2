@@ -1,0 +1,23 @@
+{
+    "accepted-with-errors": "Acceptat amb errors",
+    "error-cert-not-found": "Certificat no trobat",
+    "error-read-cert": "Error en llegir el certificat",
+    "error-write-cert": "Error en escriure el certificat",
+    "incorrect": "Incorrecte",
+    "no-location-for-port": "No s'ha trobat la ubicació del port: %port%",
+    "not-sent": "No enviat",
+    "pct-irpf": "% IRPF",
+    "pct-supplied": "% Suplert",
+    "regimen-key": "Clau de règim",
+    "report-sii": "Informe SII",
+    "send-to-aeat": "Enviar a AEAT",
+    "set-decimals-to-two": "Heu de configurar els decimals a 2",
+    "sii-sent": "Data enviament SII",
+    "sii-status": "Estat SII",
+    "type-invoice": "Tipus de factura",
+    "wrong-total-tax-calculation": "Càlcul incorrecte de l'impost total",
+    "xml-processing": "S'han processat %num% de %total% XMLs",
+    "xml-sent-error": "%num% XML no enviat",
+    "xml-sent-success": "%num% XML enviat",
+    "xml-sent-warning": "%num% XML enviat amb advertiments"
+}

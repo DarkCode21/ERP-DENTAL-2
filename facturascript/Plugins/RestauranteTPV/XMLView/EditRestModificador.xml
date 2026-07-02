@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="6">
+            <column name="name" order="100">
+                <widget type="text" fieldname="nombre" required="true"/>
+            </column>
+            <column name="price" order="200">
+                <widget type="number" fieldname="precio" decimal="2"/>
+            </column>
+        </group>
+    </columns>
+</view>

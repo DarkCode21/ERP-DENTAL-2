@@ -1,0 +1,31 @@
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid d-print-none">
+        <div class="row">
+            <div class="col-md-8 mb-2">
+                <div class="btn-group">
+                    <a href="{{ fsc.url() }}" class="btn btn-sm btn-secondary" title="{{ trans('refresh') }}">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md d-none d-md-inline-block text-right">
+                <i class="fas fa-barcode fa-3x pl-3 float-right" aria-hidden="true"></i>
+                <h1 class="h5 mb-0">{{ trans('tags') }}</h1>
+            </div>
+        </div>
+    </div>
+
+    {% include('Tab/Etiquetas.html.twig') %}
+{% endblock %}

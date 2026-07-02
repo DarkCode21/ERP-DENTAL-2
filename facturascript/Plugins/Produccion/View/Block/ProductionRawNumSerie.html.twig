@@ -1,0 +1,99 @@
+{#
+/**
+ * This file is part of the Produccion plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ * All Rights Reserved.
+ */
+#}
+<style>
+    .numserie-ok td {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+    }
+
+    .numserie-error td {
+        background-color: rgba(220, 53, 69, 0.1) !important;
+    }
+</style>
+
+<div class="container-fluid mb-4">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mb-3">{{ trans('ingredients') }}</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>{{ trans('reference') }}</th>
+                            <th>{{ trans('description') }}</th>
+                            <th class="col-4">{{ trans('serial-number') }}</th>
+                            <th class="text-right">{{ trans('actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for reference, values in cursor.ingredients %}
+                        {% for key, item in values.items %}
+                            <tr class="{% if item.selected %}numserie-ok{% endif %}">
+                                <td>{{ values.reference }}</td>
+                                <td>{{ values.name }}</td>
+
+                                <td class="pr-4">
+                                    {# Pending selector #}
+                                    <div class="js-numserie-pending {% if item.selected %}d-none{% endif %}">
+                                        <select name="ingredient[]" id="ingredient_{{ key }}" class="custom-select custom-select-sm js-select2-numserie">
+                                            <option value="">{{ trans('select') }}</option>
+                                            {% for candidate in values.candidates %}
+                                                <option value="{{ candidate.id }}"
+                                                        {% if item.selected and item.selected.id == candidate.id %}selected{% endif %}
+                                                        data-numserie="{{ candidate.numserie }}"
+                                                        data-order="{{ candidate.idorden }}"
+                                                        data-line="{{ candidate.idlinea }}"
+                                                        data-date="{{ candidate.fecha }}"
+                                                        data-product="{{ candidate.producto }}">
+                                                    {{ candidate.numserie }} ({{ candidate.fecha|date('d-m-Y') }})
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    {# Assigned visual block #}
+                                    <div class="js-numserie-assigned {% if not item.selected %}d-none{% endif %}">
+                                        <input type="text" class="form-control form-control-sm" readonly value="{% if item.selected %}{{ item.selected.numserie }}{% endif %}">
+                                    </div>
+                                </td>
+
+                                <td class="text-right">
+                                    <button type="button"
+                                            class="btn btn-sm btn-spin-action btn-primary js-btn-confirm {% if item.selected %}d-none{% endif %}"
+                                            data-id="{{ item.id }}"
+                                            data-target="ingredient_{{ key }}"
+                                            onclick="window.Production.NumSerie.consume(this)">
+<i class="fa-solid fa-check mr-1"></i>
+                                        {{ trans('confirm') }}
+                                    </button>
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-spin-action btn-warning js-btn-release {% if not item.selected %}d-none{% endif %}"
+                                            data-id="{{ item.id }}"
+                                            data-target="ingredient_{{ key }}"
+                                            onclick="window.Production.NumSerie.release(this)">
+                                        <i class="fa-solid fa-rotate-left mr-1"></i>
+                                        {{ trans('release') }}
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

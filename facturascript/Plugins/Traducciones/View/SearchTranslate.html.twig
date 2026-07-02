@@ -1,0 +1,53 @@
+{#
+    * Copyright (C) 2023 Daniel Fernández Giménez <hola@danielfg.es>
+    * @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+<div class="container">
+    <div class="form-row">
+        <div class="col-12">
+            <div class="form-group text-center">
+                <div class="input-group mb-1">
+                    <input type="text" value="{{ fsc.term }}" class="form-control" placeholder="{{ trans('search-key-or-value') }}" aria-label="{{ trans('search-key-or-value') }}" aria-describedby="button-search-key-value">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-search-key-value">
+                            {{ trans('search') }}
+                        </button>
+                    </div>
+                </div>
+                <small>{{ trans('search-key-or-value-desc') }}</small>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="list-search">
+    {% for key,value in fsc.resultSearch %}
+        <div class="mx-2 h5 font-weight-bold">{{ key }} | {{ trans('languages-' ~ key) }}</div>
+        <div class="table-responsive">
+            <table class="table">
+                {% for key2,value2 in value %}
+                    <tr>
+                        <td class="text-nowrap">{{ key2|raw }}</td>
+                        <td>{{ value2|raw }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('input[aria-describedby="button-search-key-value"]').keypress(function(e) {
+            if (e.which == 13) {
+                $('#button-search-key-value').click();
+            }
+        });
+
+        $('#button-search-key-value').click(function() {
+            let search = $('input[aria-describedby="button-search-key-value"]').val();
+            if (search.length > 0) {
+                window.location.href = '{{ fsc.controllerName }}?activetab=ListTranslate-2&action=search&term=' + search;
+            }
+        });
+    });
+</script>

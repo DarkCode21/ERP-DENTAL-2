@@ -1,0 +1,66 @@
+{% extends "Master/MenuBgTemplate.html.twig" %}
+
+{% block body %}
+<div class="container-fluid mt-3">
+
+    <div class="row mb-3 align-items-center">
+        <div class="col">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-fire-burner mr-2"></i>{{ i18n.trans('stations') }}
+            </h4>
+        </div>
+        <div class="col-auto">
+            <a href="EditRestEstacion?action=insert" class="btn btn-sm btn-success">
+                <i class="fa-solid fa-plus mr-1"></i>{{ i18n.trans('add') }}
+            </a>
+        </div>
+    </div>
+
+    {% if fsc.estaciones is empty %}
+        <div class="card text-center py-5">
+            <div class="card-body text-muted">
+                <i class="fa-solid fa-fire-burner fa-3x mb-3"></i>
+                <h5>{{ i18n.trans('no-data') }}</h5>
+                <p>{{ i18n.trans('create-kitchen-stations') }}</p>
+            </div>
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>{{ i18n.trans('name') }}</th>
+                        <th>{{ i18n.trans('families') }}</th>
+                        <th class="text-right">{{ i18n.trans('actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for est in fsc.estaciones %}
+                    <tr>
+                        <td>
+                            <a href="EditRestEstacion?code={{ est.idestacion }}">
+                                {{ est.nombre }}
+                            </a>
+                        </td>
+                        <td class="text-muted">
+                            {{ est.familias ?? '-' }}
+                        </td>
+                        <td class="text-right">
+                            <a href="PanelCocina?idestacion={{ est.idestacion }}"
+                               class="btn btn-sm btn-primary" target="_blank">
+                                <i class="fa-solid fa-display mr-1"></i>{{ i18n.trans('open-panel') }}
+                            </a>
+                            <a href="EditRestEstacion?code={{ est.idestacion }}"
+                               class="btn btn-sm btn-outline-secondary ml-1">
+                                <i class="fa-solid fa-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

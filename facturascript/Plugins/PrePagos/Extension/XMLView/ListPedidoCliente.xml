@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Carlos García Gómez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="total-pending" display="none" order="405">
+            <widget type="money" fieldname="total_pending">
+                <option color="danger">gt:0</option>
+                <option color="success">lte:0</option>
+            </widget>
+        </column>
+    </columns>
+</view>

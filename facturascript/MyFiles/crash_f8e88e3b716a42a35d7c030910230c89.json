@@ -1,0 +1,15 @@
+{
+    "code": 0,
+    "message": "Method loadCitaValues does not exist on class FacturaScripts\\Dinamic\\Controller\\EditArchivo.\n\nStack trace:\n#0 \/Plugins\/Dental\/Controller\/EditArchivo.php(39): FacturaScripts\\Dinamic\\Controller\\EditArchivo-&gt;__call(&#39;loadCitaValues&#39;, Array)\n#1 \/Core\/Lib\/ExtendedController\/BaseController.php(215): FacturaScripts\\Plugins\\Dental\\Controller\\EditArchivo-&gt;createViews()\n#2 \/Core\/Lib\/ExtendedController\/PanelController.php(75): FacturaScripts\\Core\\Lib\\ExtendedController\\BaseController-&gt;privateCore(Object(FacturaScripts\\Core\\Http\\AppResponse), Object(FacturaScripts\\Dinamic\\Model\\User), Object(FacturaScripts\\Core\\Base\\ControllerPermissions))\n#3 \/Core\/Base\/Controller.php(302): FacturaScripts\\Core\\Lib\\ExtendedController\\PanelController-&gt;privateCore(Object(FacturaScripts\\Core\\Http\\AppResponse), Object(FacturaScripts\\Dinamic\\Model\\User), Object(FacturaScripts\\Core\\Base\\ControllerPermissions))\n#4 \/Core\/Kernel.php(372): FacturaScripts\\Core\\Base\\Controller-&gt;run()\n#5 \/Core\/Kernel.php(190): FacturaScripts\\Core\\Kernel::runController(&#39;\/EditArchivo&#39;)\n#6 \/index.php(63): FacturaScripts\\Core\\Kernel::run(&#39;\/EditArchivo&#39;)\n#7 {main}",
+    "file": "\/Core\/Base\/ExtensionsTrait.php",
+    "line": 54,
+    "fragment": "            if ($ext['name'] === $name && $ext['function'] instanceof Closure) {\n49            if ($ext['name'] === $name && $ext['function'] instanceof Closure) {\n50                return call_user_func_array($ext['function']->bindTo($this, static::class), $arguments);\n51            }\n52        }\n53\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">54        throw new BadMethodCallException('Method ' . $name . ' does not exist on class ' . static::class . '.');<\/spam>\n55    }\n56\n57    \/**\n58     * @param mixed $extension\n59     *\/",
+    "hash": "f8e88e3b716a42a35d7c030910230c89",
+    "url": "\/EditArchivo",
+    "report_url": "https:\/\/facturascripts.com\/errores\/f8e88e3b716a42a35d7c030910230c89",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2Ff8e88e3b716a42a35d7c030910230c89",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

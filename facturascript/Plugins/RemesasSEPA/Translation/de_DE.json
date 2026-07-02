@@ -1,0 +1,17 @@
+{
+    "cant-delete-remittance-receipts": "Sie können eine Überweisung mit Belegen nicht löschen.",
+    "charge-date": "Belastungsdatum",
+    "charges": "Cobros",
+    "creditor-id": "Kreditor ID",
+    "customer-have-no-iban": "%customer%  hat kein Bankkonto mit IBAN.",
+    "group-receipts-by-customer": "Gruppenbelege nach Kunden",
+    "ready": "Preparada",
+    "receipt-inside-remittance": "No se puede eliminar un recibo que está dentro de una remesa.",
+    "rectify": "korrigieren",
+    "remittance": "Überweisung",
+    "remittance-charged": "Überweisung kassiert",
+    "remittance-paid": "Remesa pagada",
+    "remittance-ready-to-download": "Überweisung zum Download bereit",
+    "remittance-sent": "Überweisung gesendet",
+    "remittances": "Überweisungen"
+}

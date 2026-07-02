@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : facturasprov.xml
+    Author     : Carlos Garcia Gomez
+    Description:
+        Structure for the facturasprov table.
+-->
+<table>
+    <column>
+        <name>fechaprov</name>
+        <type>date</type>
+    </column>
+</table>

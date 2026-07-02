@@ -1,0 +1,16 @@
+{
+    "accumulate-discount": "Acumular descompte",
+    "discounts": "Descomptes",
+    "fixed-price": "Preu fix",
+    "formula-cost-price-alt": "Preu de cost + %x%% + %y%",
+    "formula-sale-price-alt": "Preu - %x%% - %y%",
+    "global-changes": "Canvis globals",
+    "global-changes-desc": "Els canvis produïts aquí, s'aplicaran a totes variants de sota",
+    "level-tarifas-av": "Nivell mínim per veure preus",
+    "prices": "Preus",
+    "reset-all-rates": "Reiniciar totes les tarifes",
+    "reset-rates": "Reiniciar tarifes",
+    "reset-rates-for-this-variant": "Reiniciar tarifes per a aquesta variant",
+    "save-all-variants": "Guardar totes les variants",
+    "save-this-variant": "Guardar aquesta variant"
+}

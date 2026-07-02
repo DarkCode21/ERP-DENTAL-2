@@ -1,0 +1,14 @@
+{
+    "aisle": "Passadís",
+    "drawer": "Calaix",
+    "location-desc": "Localització física de la mercaderia. Podeu introduir els diferents valors (Passadís\/Armari\/Prestatge\/Calaix) separats per espai. Això l'ajudarà a filtrar a l'hora de seleccionar la ubicació. <b>IMPORTANT:<\/b> Una vegada seleccionada una ubicació haurà esborrar tot el text per seleccionar una altra.",
+    "location-leyend": "Llegenda de Localització de mercaderia",
+    "locations": "Localitzacions",
+    "one-field-required": "Ha d'informar al mínim un valor per als camps",
+    "rack": "Armari",
+    "shelf": "Prestatge",
+    "storage": "Ubicació",
+    "validation-code": "Codi Validació",
+    "variant-location": "Ubicació de mercaderia",
+    "warehouse-required": "Ha d'informar un magatzem"
+}

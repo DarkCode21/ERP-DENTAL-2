@@ -1,0 +1,19 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% if doc.modelClassName() in ['Cliente', 'Contacto', 'Producto', 'PresupuestoCliente', 'PedidoCliente', 'AlbaranCliente', 'FacturaCliente'] %}
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="pc_show" value="1" id="pcShowCheck" {{ docfile.pc_show ? 'checked' : '' }}>
+        <label class="form-check-label" for="pcShowCheck">
+            {{ trans('show-on-client-portal') }}
+        </label>
+    </div>
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" name="pc_show_paid" value="1" id="pcShowCheckPaid" {{ docfile.pc_show_paid ? 'checked' : '' }}>
+        <label class="form-check-label" for="pcShowCheckPaid">
+            {{ trans('show-on-client-portal-when-paying') }}
+        </label>
+    </div>
+{% endif %}

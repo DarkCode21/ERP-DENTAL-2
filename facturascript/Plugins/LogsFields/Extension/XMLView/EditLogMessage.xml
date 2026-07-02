@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="user" numcolumns="12">
+			<column name="email" order="115">
+                <widget type="email" fieldname="email" maxlength="100" readonly="true"/>
+            </column>
+		</group>
+	</columns>
+</view>
+	

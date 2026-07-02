@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples Copyright (C) 2022-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditCustomerPaymentGroup.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the edit view of CustomerPaymentGroup model
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="description" order="110">
+                <widget type="text" fieldname="name" required="true" icon="fas fa-money-check" />
+            </column>
+            <column name="delivered" numcolumns="2" order="120">
+                <widget type="date" fieldname="delivered" />
+            </column>
+            <column name="expiration" numcolumns="2" order="130">
+                <widget type="date" fieldname="expiration" />
+            </column>
+            <column name="charged" numcolumns="2" order="130">
+                <widget type="date" fieldname="charged" readonly="true" />
+            </column>
+            <column name="total" numcolumns="2" order="150">
+                <widget type="money" fieldname="total" required="true" />
+            </column>
+        </group>
+        <group name="others" numcolumns="12">
+            <column name="customer" order="100">
+                <widget type="autocomplete" fieldname="idcustomer">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre" />
+                </widget>
+            </column>
+            <column name="subaccount" titleurl="ListCuenta" description="amount-to-wallet" order="120">
+                <widget type="autocomplete" fieldname="codsubaccount">
+                    <values source="subcuentas" fieldcode="codsubcuenta" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="bank-account" numcolumns="3" order="130" description="amount-to-collected" titleurl="ListFormaPago#ListCuentaBanco">
+                <widget type="select" fieldname="idbank">
+                    <values source="cuentasbanco" fieldcode="codcuenta" fieldtitle="descripcion" />
+                </widget>
+            </column>
+        </group>
+        <group name="ids" numcolumns="12">
+            <column name="id" display="none" order="100">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="multiple-payment" display="none" order="100">
+                <widget type="text" fieldname="idmultiple" readonly="true" />
+            </column>
+        </group>
+    </columns>
+
+    <modals>
+        <group name="charged-bankcheck" title="charged-bankcheck" icon="fas fa-hand-holding-usd">
+            <column name="bank-account" numcolumns="12">
+                <widget type="select" fieldname="charged_bank" required="true">
+                    <values source="cuentasbanco" fieldcode="codcuenta" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="date">
+                <widget type="date" fieldname="charged_date" required="true" />
+            </column>
+        </group>
+    </modals>
+</view>

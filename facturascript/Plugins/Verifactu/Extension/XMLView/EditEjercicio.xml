@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="verifactu-mode" order="170">
+                <widget type="select" fieldname="vf_mode" translate="true" readonly="dinamic">
+                    <values title="verifactu">verifactu</values>
+                    <values title="no-verifactu">no-verifactu</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

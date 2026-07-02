@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="id" order="100">
+            <widget type="number" fieldname="id" readonly="true"/>
+        </column>
+        <column name="fecha" display="left" order="110">
+            <widget type="date" fieldname="fecha" readonly="true"/>
+        </column>
+        <column name="hora" display="left" order="115">
+            <widget type="time" fieldname="hora" readonly="true"/>
+        </column>
+        <column name="idempresa" display="left" order="120">
+            <widget type="select" fieldname="idempresa" readonly="true">
+                <values source="empresas" fieldcode="idempresa" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="job_name" display="left" order="130">
+            <widget type="text" fieldname="job_name" readonly="true" maxlength="100"/>
+        </column>
+        <column name="error_type" display="left" order="140">
+            <widget type="text" fieldname="error_type" readonly="true" maxlength="50"/>
+        </column>
+        <column name="error_message" display="left" order="150">
+            <widget type="text" fieldname="error_message" readonly="true" maxlength="500"/>
+        </column>
+        <column name="factura_id" display="left" order="160">
+            <widget type="text" fieldname="factura_id" readonly="true" maxlength="20"/>
+        </column>
+        <column name="json_file" display="left" order="170">
+            <widget type="text" fieldname="json_file" readonly="true" maxlength="200"/>
+        </column>
+        <column name="resolved" display="center" order="180">
+            <widget type="checkbox" fieldname="resolved"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status" fieldname="resolved">
+            <option color="danger" font-weight="bold">false</option>
+            <option color="success">true</option>
+        </row>
+    </rows>
+</view>

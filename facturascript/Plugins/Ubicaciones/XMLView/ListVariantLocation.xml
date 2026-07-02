@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of Ubicaciones plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Ubicaciones    Copyright (C) 2019-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="warehouse" order="110">
+            <widget type="text" fieldname="codewarehouse" />
+        </column>
+        <column name="product" order="120">
+            <widget type="text" fieldname="referenceproduct" />
+        </column>
+        <column name="reference" order="130">
+            <widget type="text" fieldname="reference" />
+        </column>
+        <column name="barcode" order="140">
+            <widget type="text" fieldname="barcode" />
+        </column>
+        <column name="attribute-value-1" order="140">
+            <widget type="text" fieldname="nameattribute1" />
+        </column>
+        <column name="attribute-value-2" order="150">
+            <widget type="text" fieldname="nameattribute2" />
+        </column>
+        <column name="aisle" order="160">
+            <widget type="text" fieldname="aisle" />
+        </column>
+        <column name="rack" order="170">
+            <widget type="text" fieldname="rack" />
+        </column>
+        <column name="shelf" order="180">
+            <widget type="text" fieldname="shelf" />
+        </column>
+        <column name="drawer" order="190">
+            <widget type="text" fieldname="drawer" />
+        </column>
+        <column name="storage-type" title="type" order="200">
+            <widget type="select" fieldname="storagetype" translate="true">
+                <values title="storage">0</values>
+                <values title="picking">1</values>
+            </widget>
+        </column>
+    </columns>
+</view>

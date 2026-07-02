@@ -1,0 +1,6 @@
+nombre;orden;icon;editable;rechazado;predeterminado
+"Nuevo";100;"far fa-file";1;0;1
+"Trabajando";110;"fas fa-pencil-ruler";1;0;0
+"En espera";120;"fas fa-mug-hot";1;0;0
+"Aceptado";130;"fas fa-check-double";0;0;0
+"Rechazado";140;"fas fa-times";0;1;0

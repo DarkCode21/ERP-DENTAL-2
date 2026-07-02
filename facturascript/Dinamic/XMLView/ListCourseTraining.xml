@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ListCourseTraining.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller ListCourseTraining
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="name"/>
+        </column>
+        <column name="area" order="120">
+            <widget type="autocomplete" fieldname="idarea">
+                <values source="rrhh_coursesareas" fieldcode="id" fieldtitle="name"/>
+            </widget>
+        </column>
+        <column name="cost" order="130">
+            <widget type="autocomplete" fieldname="idcost">
+                <values source="rrhh_coursescosts" fieldcode="id" fieldtitle="name"/>
+            </widget>
+        </column>
+        <column name="method" order="140">
+            <widget type="autocomplete" fieldname="idmethod">
+                <values source="rrhh_coursesmethods" fieldcode="id" fieldtitle="name"/>
+            </widget>
+        </column>
+        <column name="objective" order="150">
+            <widget type="autocomplete" fieldname="idobjective">
+                <values source="rrhh_coursesobjectives" fieldcode="id" fieldtitle="name"/>
+            </widget>
+        </column>
+    </columns>
+</view>

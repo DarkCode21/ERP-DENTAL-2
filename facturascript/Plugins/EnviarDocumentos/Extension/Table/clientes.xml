@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>emailbcc</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>emailcc</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>emailto</name>
+        <type>text</type>
+    </column>
+</table>

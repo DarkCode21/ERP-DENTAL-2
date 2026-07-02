@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Tabla: rest_comandas
+    Descripción: Cabecera de comanda. Cada comanda está ligada a una mesa
+    y opcionalmente a un pedido de FacturaScripts.
+    Estados posibles: abierta | cobrada | cancelada
+-->
+<table>
+    <column>
+        <name>idcomanda</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idmesa</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idpedido</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idfactura</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>codcamarero</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>hora</name>
+        <type>time without time zone</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>tipo</name>
+        <type>character varying(20)</type>
+        <null>NO</null>
+        <default>'in-table'</default>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>character varying(20)</type>
+        <null>NO</null>
+        <default>'abierta'</default>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>total</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <constraint>
+        <name>pk_rest_comandas</name>
+        <type>PRIMARY KEY (idcomanda)</type>
+    </constraint>
+    <constraint>
+        <name>fk_rest_comandas_mesa</name>
+        <type>FOREIGN KEY (idmesa) REFERENCES rest_mesas (idmesa) ON DELETE RESTRICT</type>
+    </constraint>
+</table>

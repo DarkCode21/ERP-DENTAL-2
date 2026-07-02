@@ -1,0 +1,149 @@
+{#
+* Copyright (C) 2022-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+* Author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+    {% set divisa = fsc.getDivisa() %}
+    <div class="bg-light pt-3 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1 class="h2">
+                        <i class="fas fa-cash-register"></i> {{ i18n.trans('close-box') }}
+                        ({{ divisa.simbolo }})
+                    </h1>
+                    <small class="text-secondary">{{ i18n.trans('pos-terminal') }}: {{ fsc.tpv.name }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: -40px;">
+        <div class="row">
+            <div class="col-sm">
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <form action="{{ fsc.url() }}" method="post">
+                            <input type="hidden" name="idtpv" value="{{ fsc.tpv.idtpv }}">
+                            <input type="hidden" name="idcaja" value="{{ fsc.caja.idcaja }}"/>
+                            <div class="form-row">
+                                {% for coin in fsc.getCoinTypes() %}
+                                    <div class="col-sm-4 pb-3">
+                                        {{ (coin.name < 1) ? coin.name | number_format(2) : coin.name }}
+                                        {{ divisa.simbolo }}
+                                        <input type="number" name="{{ coin.name|replace({'.': '_'}) }}" value="0"
+                                               min="0" class="form-control" required=""/>
+                                    </div>
+                                {% else %}
+                                    <div class="col pb-4">
+                                        <div class="alert alert-warning">{{ i18n.trans('currency-setup-incomplete') }}</div>
+                                        <a href="{{ fsc.getDivisa().url() }}" class="btn btn-warning">
+                                            {{ i18n.trans('configure') }}</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                {{ i18n.trans('observations') }}
+                                <textarea name="observaciones" class="form-control"></textarea>
+                            </div>
+                            <div class="form-row d-flex">
+                                <div class="col align-self-center">
+                                    <button type="submit" name="action" value="select-tpv" class="btn btn-secondary">
+                                        {{ i18n.trans('cancel') }}
+                                    </button>
+                                </div>
+                                <div class="col text-center align-self-center">
+                                    <div class="font-weight-bolder">{{ i18n.trans('start-money') }}</div>
+                                    <div>{{ fsc.getFormatMoney(fsc.caja.dineroini) }}</div>
+                                </div>
+                                <div class="col text-center align-self-center">
+                                    <div class="font-weight-bolder">{{ i18n.trans('income') }}</div>
+                                    <div>{{ fsc.getFormatMoney(fsc.caja.ingresos) }}</div>
+                                </div>
+                                <div class="col text-center align-self-center">
+                                    <div class="font-weight-bolder">Entrada caja</div>
+                                    <div>{{ fsc.getFormatMoney(fsc.caja.getManualIncomes()) }}</div>
+                                </div>
+                                <div class="col text-center align-self-center">
+                                    <div class="font-weight-bolder">Salida caja</div>
+                                    <div>{{ fsc.getFormatMoney(fsc.caja.getManualOutcomes()) }}</div>
+                                </div>
+                                <div class="col text-center align-self-center">
+                                    <div class="font-weight-bolder">{{ i18n.trans('total-in-box') }}</div>
+                                    <div>{{ fsc.getFormatMoney(fsc.caja.getTotalInBox()) }}</div>
+                                </div>
+                                <div class="col text-right align-self-center">
+                                    <button type="submit" name="action" value="close-box"
+                                            class="btn btn-primary btn-spin-action">
+                                        {{ i18n.trans('save') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% set totalPayments = fsc.caja.getPaymentBreakdown() %}
+                {% if totalPayments | length > 0 %}
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="form-row">
+                                {% for payment in totalPayments %}
+                                    <div class="col-sm-3 py-2 text-center">
+                                        <div class="font-weight-bold h5">{{ fsc.toolBox().coins().format(payment.total) }}</div>
+                                        <div>{{ payment.descripcion }}</div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% set movements = fsc.caja.getMovements() %}
+                <div class="card shadow mb-4">
+                    <div class="card-body p-0">
+                        <div class="px-3 py-2 border-bottom bg-light font-weight-bold">Movimientos de caja del día</div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0">
+                                <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Usuario</th>
+                                    <th>Tipo</th>
+                                    <th>Concepto</th>
+                                    <th class="text-right">Importe</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for movement in movements %}
+                                    <tr>
+                                        <td>{{ movement.fecha }}</td>
+                                        <td>{{ movement.nick }}</td>
+                                        <td>{{ movement.tipo == 'in' ? 'Entrada' : 'Salida' }}</td>
+                                        <td>{{ movement.concepto }}</td>
+                                        <td class="text-right">{{ fsc.getFormatMoney(movement.importe) }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-3">Sin movimientos manuales.</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <form action="{{ fsc.url() }}" method="post">
+                        <a href="#" onclick="this.parentNode.submit();return false;"
+                           class="btn btn-block btn-secondary">
+                            <i class="fas fa-list mr-1"></i> {{ i18n.trans('pos-terminals') }}
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <iframe class="d-none" src="http://localhost:8089"></iframe>
+{% endblock %}

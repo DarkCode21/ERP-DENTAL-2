@@ -1,0 +1,5 @@
+{
+    "cannot-mark-payment-as-paid-if-terms": "Non puoi segnare il pagamento come effettuato se ci sono termini di pagamento",
+    "payment-term": "termine di pagamento",
+    "terms-exceed-100p": "I termini superano il 100%"
+}

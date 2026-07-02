@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditEmployeeWorkPeriod.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditEmployeeWorkPeriod
+-->
+
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" numcolumns="1" order="100">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="workshift" display="none" order="110">
+                <widget type="text" fieldname="idworkshift" readonly="true" />
+            </column>
+            <column name="day" numcolumns="2" order="120">
+                <widget type="select" fieldname="dayweek" translate="true" required="true">
+                    <values title="monday">1</values>
+                    <values title="tuesday">2</values>
+                    <values title="wednesday">3</values>
+                    <values title="thursday">4</values>
+                    <values title="friday">5</values>
+                    <values title="saturday">6</values>
+                    <values title="sunday">7</values>
+                </widget>
+            </column>
+            <column name="starttime" numcolumns="2" order="130" >
+                <widget type="time" fieldname="starttime" required="true" />
+            </column>
+            <column name="endtime" numcolumns="2" order="140" >
+                <widget type="time" fieldname="endtime" required="true" />
+            </column>
+        </group>
+    </columns>
+</view>
+

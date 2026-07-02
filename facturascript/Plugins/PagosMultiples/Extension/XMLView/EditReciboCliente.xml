@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples  Copyright (C) 2018-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditReciboCliente.xml
+    Author     : Jose Antonio Cuello <yopli2000@gmail.com>
+    Description:
+        Add to columns to basic edit of customer receipt view.
+-->
+<view>
+    <columns>
+        <group name="payment" numcolumns="12">
+            <column name="amount" numcolumns="3" order="100" overwrite="true">
+                <widget type="money" fieldname="importe"/>
+            </column>
+            <column name="expenses" numcolumns="2" order="105" overwrite="true">
+                <widget type="money" fieldname="gastos"/>
+            </column>
+            <column name="currency" numcolumns="2" order="110" overwrite="true">
+                <widget type="select" fieldname="coddivisa" onclick="EditDivisa" required="true" readonly="dinamic">
+                    <values source="divisas" fieldcode="coddivisa" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="payment" title="method-payment" numcolumns="3" order="115" overwrite="true">
+                <widget type="select" fieldname="codpago" onclick="EditFormaPago" required="true">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="payment-date" order="120" numcolumns="2" overwrite="true">
+                <widget type="date" fieldname="fechapago" readonly="dinamic"/>
+            </column>
+            <column name="multiple-payment" numcolumns="2" order="125">
+                <widget type="text" fieldname="idmultiple" readonly="true" onclick="EditSupplierReceiptGroup"/>
+            </column>
+        </group>
+    </columns>
+</view>

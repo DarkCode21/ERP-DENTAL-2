@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="nombre"/>
+        </column>
+        <column name="surname" order="120">
+            <widget type="text" fieldname="apellidos"/>
+        </column>
+        <column name="license-number" order="130">
+            <widget type="text" fieldname="numero_colegiado"/>
+        </column>
+        <column name="phone" order="140">
+            <widget type="text" fieldname="telefono"/>
+        </column>
+        <column name="email" order="150">
+            <widget type="text" fieldname="email"/>
+        </column>
+        <column name="status" display="center" order="160">
+            <widget type="text" fieldname="estado" translate="true"/>
+        </column>
+    </columns>
+</view>

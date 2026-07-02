@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idespecialista</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idespecialidad</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>es_principal</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>created_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <constraint>
+        <name>dental_especialista_especialidad_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_especialista_especialidad_unique</name>
+        <type>UNIQUE (idespecialista, idespecialidad)</type>
+    </constraint>
+    <constraint>
+        <name>dental_especialista_especialidad_fk_especialista</name>
+        <type>FOREIGN KEY (idespecialista) REFERENCES dental_especialistas(id) ON DELETE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>dental_especialista_especialidad_fk_especialidad</name>
+        <type>FOREIGN KEY (idespecialidad) REFERENCES dental_especialidades(id) ON DELETE CASCADE</type>
+    </constraint>
+</table>

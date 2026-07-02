@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditAmortizacionDetalle.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of the view for a contabilization of amortization.
+-->
+<view>
+    <columns>
+        <column name="contabilization" numcolumns="2" description="accounted-by-year" order="100">
+            <widget type="select" fieldname="contabilizacion" required="true" translate="true">
+                <values title="annual">anual</values>
+                <values title="quarterly">trimestral</values>
+                <values title="monthly">mensual</values>
+            </widget>
+        </column>
+        <column name="period" title="period" description="number-years" numcolumns="2" order="120">
+            <widget type="number" fieldname="periodos" step="1" min="1" max="200" required="true"/>
+        </column>
+        <column name="annual-rate" numcolumns="1" order="140">
+            <widget type="number" fieldname="tasaanual" decimal="3" min="0"/>
+        </column>
+        <column name="per-amor" title="Porcentaje" numcolumns="1" order="140">
+            <widget type="number" fieldname="porcamort" decimal="3" min="0"/>
+        </column>
+        <column name="residual" numcolumns="2" order="150">
+            <widget type="money" decimal="2" fieldname="residual" readonly="true"/>
+        </column>
+        <column name="channel" display="none" numcolumns="1" order="160">
+            <widget type="number" fieldname="canal" step="1"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="footer">
+            <group name="help" id="footer-help-subaccounts" class="collapse show" html="Block/AmortizacionTablasInfo.html.twig"/>
+        </row>
+    </rows>
+    <modals>
+        <group name="template" title="copy-from-template" icon="fas fa-paste">
+            <column name="code" display="none">
+                <widget type="text" fieldname="idamortizacion"/>
+            </column>
+            <column name="template">
+                <widget type="select" fieldname="template_id" required="true">
+                    <values source="amortizaciones_plantillas" fieldcode="id" fieldtitle="name"/>
+                </widget>
+            </column>
+        </group>
+    </modals>
+</view>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="advanced" numcolumns="12">
+            <column name="interest" titleurl="ListContacto?activetab=ListCrmInteres" numcolumns="2" order="140">
+                <widget type="select" fieldname="idinteres" onclick="EditCrmInteres">
+                    <values source="crm_intereses" fieldcode="id" fieldtitle="nombre"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

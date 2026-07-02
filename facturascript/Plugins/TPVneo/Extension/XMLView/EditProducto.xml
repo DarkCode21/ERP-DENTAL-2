@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="advanced">
+            <column name="sort" numcolumns="1" order="150">
+                <widget type="number" min="0" step="1" fieldname="tpvsort"/>
+            </column>
+        </group>
+    </columns>
+</view>

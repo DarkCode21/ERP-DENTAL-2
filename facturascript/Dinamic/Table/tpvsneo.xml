@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<table>
+    <column>
+        <name>active</name>
+        <type>boolean</type>
+        <default>1</default>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>adddiscount</name>
+        <type>boolean</type>
+        <default>0</default>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>addemptyline</name>
+        <type>boolean</type>
+        <default>0</default>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>budgetdateend</name>
+        <type>int</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>changeprice</name>
+        <type>boolean</type>
+        <default>0</default>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>closeagent</name>
+        <type>int</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codalmacen</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codcliente</name>
+        <type>character varying(10)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>coddivisa</name>
+        <type>character varying(3)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codpago</name>
+        <type>character varying(10)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codserie</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>doctype</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idtpv</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>idprinter</name>
+        <type>int</type>
+    </column>
+    <column>
+        <name>name</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>productlimit</name>
+        <type>int</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>sound</name>
+        <type>boolean</type>
+        <default>0</default>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>printdirect</name>
+        <type>boolean</type>
+        <default>0</default>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>ticketformat</name>
+        <type>character varying(50)</type>
+    </column>
+    <constraint>
+        <name>tpvsneo_pkey</name>
+        <type>PRIMARY KEY (idtpv)</type>
+    </constraint>
+    <constraint>
+        <name>ca_tpvsneo_tickets_printers2</name>
+        <type>FOREIGN KEY (idprinter) REFERENCES tickets_printers (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_tpvsneo_clientes2</name>
+        <type>FOREIGN KEY (codcliente) REFERENCES clientes (codcliente) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_tpvsneo_almacenes2</name>
+        <type>FOREIGN KEY (codalmacen) REFERENCES almacenes (codalmacen) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_tpvsneo_series2</name>
+        <type>FOREIGN KEY (codserie) REFERENCES series (codserie) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_tpvsneo_divisas2</name>
+        <type>FOREIGN KEY (coddivisa) REFERENCES divisas (coddivisa) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_tpvsneo_formaspago2</name>
+        <type>FOREIGN KEY (codpago) REFERENCES formaspago (codpago) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

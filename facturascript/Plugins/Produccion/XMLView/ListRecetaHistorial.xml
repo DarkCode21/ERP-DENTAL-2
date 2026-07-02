@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : ListRecetaHistorial.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        XML view for listing RecetaHistorial records.
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"  />
+        </column>
+        <column name="source" order="105">
+            <widget type="text" fieldname="docmodel"  />
+        </column>
+        <column name="recipe" order="110">
+            <widget type="autocomplete" fieldname="idreceta">
+                <values source="produccion_recetas" fieldcode="idreceta" fieldtitle="descripcion"></values>
+            </widget>
+        </column>
+        <column name="quantity" order="120">
+            <widget type="number" fieldname="cantidad"  />
+        </column>
+        <column name="date" order="130">
+            <widget type="date" fieldname="fecha"  />
+        </column>
+        <column name="time" order="140">
+            <widget type="time" fieldname="hora"  />
+        </column>
+        <column name="user" order="150">
+            <widget type="text" fieldname="nick"  />
+        </column>
+    </columns>
+</view>

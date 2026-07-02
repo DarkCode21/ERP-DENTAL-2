@@ -1,0 +1,167 @@
+{% set firstView = fsc.views | first %}
+{% set factura = firstView.model %}
+{% set empresa = factura.getCompany() %}
+{% set currentView = fsc.getCurrentView() %}
+{% set ticketbai = currentView.model %}
+{% set files = fsc.getTbaiFiles() %}
+
+{% if factura.tbai_sent_date is not empty %}
+    <div class="container-fluid">
+        <div class="form-row">
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img src="{{ fsc.generateQRcode(factura.tbaiurl) }}"/>
+                    </div>
+                </div>
+                {% if files is not empty %}
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            {{ trans('files') }}
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                {% for item in files %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ asset(item.url) }}" target="_blank" download>{{ item.name }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header">
+                        {{ trans('signature-details') }}
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <b>{{ trans('url') }}:</b>
+                            <a href="{{ factura.tbaiurl }}" target="_blank">
+                                {{ factura.tbaiurl }}
+                            </a>
+                        </div>
+                        <div>
+                            <b>{{ trans('code') }}:</b>
+                            {{ factura.tbaicodbar }}
+                        </div>
+                        <div>
+                            <b>{{ trans('signature') }}:</b>
+                            {{ wrapText(factura.tbaisignature) | raw }}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-block btn-info" href="{{ factura.url('download-sign') }}" target="_blank"
+                           download>
+                            <i class="fa-solid fa-file-download mr-1"></i> {{ trans('download-sign-xml') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header">
+                        {{ trans('sent-details') }}
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <b>{{ trans('date') }}:</b>
+                            {{ factura.tbai_sent_date }}
+                        </div>
+                    </div>
+                    {% if empresa.tbai_annular and factura.tbai_canceled == false %}
+                        <div class="card-footer">
+                            <button class="btn btn-danger btn-block mt-2 btn-spin-action" onclick="annular()">
+                                <i class="fa-solid fa-times mr-1"></i> {{ trans('annular') }}
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if factura.tbai_canceled %}
+                    <div class="card border-danger mt-3">
+                        <div class="card-header bg-danger text-white">
+                            {{ trans('annulled-details') }}
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                {% if factura.tbai_canceled_date is not empty %}
+                                    <b>{{ trans('date') }}:</b>
+                                    {{ factura.tbai_canceled_date }}
+                                {% else %}
+                                    {{ trans('invoice-annulled') }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-block btn-outline-danger" href="{{ factura.url('download-annulled') }}" target="_blank"
+                               download>
+                                <i class="fa-solid fa-file-download mr-1"></i> {{ trans('download-annulled-xml') }}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        function annular() {
+            bootbox.confirm({
+                title: "{{ trans('cancel-send-to-ticketbai')|raw }}",
+                message: "{{ trans('are-you-sure') }}",
+                closeButton: false,
+                buttons: {
+                    cancel: {
+                        label: "<i class='fa-solid fa-times'></i> {{ trans('cancel') }}"
+                    },
+                    confirm: {
+                        label: "<i class='fa-solid fa-check'></i> {{ trans('annular') }}",
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        animateSpinner('add');
+                        window.location = "{{ factura.url() }}&action=annular-tbai"
+                            + "&activetab=ticketbai&multireqtoken={{ formToken(false) }}";
+                    }
+                }
+            });
+        }
+    </script>
+{% else %}
+    <form action="{{ factura.url() }}" method="post">
+        <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2">
+                    <button type="submit" name="action" value="sign-send-tbai"
+                            class="btn btn-block btn-success btn-spin-action">
+                        <i class="fa-solid fa-qrcode fa-3x"></i>
+                        <br/><br/>
+                        {{ trans('sign-and-send') }}
+                    </button>
+                    <button type="submit" name="action" value="download-xml-tbai"
+                            class="btn btn-block btn-light btn-spin-action">
+                        <i class="fa-solid fa-file-signature mr-1"></i> {{ trans('download-sign-xml') }}
+                    </button>
+                </div>
+                <div class="col-sm">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            {{ trans('configure-tbai-company') }}
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ factura.getCompany().url() }}" class="btn btn-secondary">
+                                <i class="fa-solid fa-tools mr-1"></i> {{ trans('company') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endif %}

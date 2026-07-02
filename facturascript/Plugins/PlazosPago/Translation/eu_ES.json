@@ -1,0 +1,5 @@
+{
+    "cannot-mark-payment-as-paid-if-terms": "Ezin duzu ordainketa-metodoa ordainduta bezela markatu ordainketa-epe bat badago",
+    "payment-term": "Ordainketa-epea",
+    "terms-exceed-100p": "Epeak 100% gainditzen dute"
+}

@@ -1,0 +1,5 @@
+{
+    "other-emails": "Other emails",
+    "send-docs": "Submit documents",
+    "shortcode-message-email": "Las palabras dentro de llaves se sustituirán de forma dinámica, por ejemplo {code} se cambiará por FAC2023A001. Puede mover las palabras dinámicas de posición respetando el formato de llaves."
+}

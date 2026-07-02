@@ -1,0 +1,14 @@
+{
+    "347-no-country": "A factura de %type% co cif\/nif %cifnif% non ten país e é obrigado.",
+    "347-no-data": "Sen resultados",
+    "347-no-province": "A factura de %type% con cif\/nif %cifnif% non ten provincia e é obrigatorio",
+    "company-admin-no-data": "A empresa %company% non ten administrador e é obrigatorio",
+    "company-phone-no-data": "A empresa %company% non ten teléfono e é obrigatorio",
+    "customer-supplier": "Cliente \/ proveedor",
+    "examine": "Examinar",
+    "exclude-347": "Excluír do 347",
+    "exclude-irpf": "Excluir IRPF",
+    "model-347": "Modelo 347",
+    "model-347-p": "O Modelo 347 é unha declaración anual informativa de operacións con terceiras persoas. Os empresarios e profesionais están obrigados á presentación do Modelo 347 sempre que teñan realizado operacións con terceiros por importe superior a 3.005,06 € durante o ano natural (pódese cambiar a cantidade), computando de forma separada as entregas e as adquisicións de bens e servizos.",
+    "txt-for-treasury": "TXT para facenda"
+}

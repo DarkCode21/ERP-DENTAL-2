@@ -1,0 +1,53 @@
+<!DCOTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        {% block css %}
+            <link rel="stylesheet" href="./Plugins/FSReports/View/CSS/{{ fsc.Pdfparams.cssFile }}.css" media="all">
+        {% endblock %}
+
+    </head>
+    
+    {% block body %}
+        <body>
+    {% for valor in fsc.data | column('valor','valor')|keys %}
+
+        <div id="grupo">
+            <table class="listado">
+                 <thead>
+                     <tr>
+                         <th  class="text-left sf12" style="text-align:left;" colspan="5">  {{ valor }}</th>
+                     </tr>
+                     <tr>
+                     <th class="sf10 negrita" style="width:60mm;">Articulo</th>
+                     <th class="derecha sf10 negrita" style="width:15mm;">Stock</th>
+                     <th class="derecha sf10 negrita" style="width:15mm;">Reser.</th>
+                     <th class="derecha sf10 negrita" style="width:15mm;">Pte.</th>
+                     <th class="sf10 negrita" style="width:55mm;">Pedidos pendientes</th>
+
+                     </tr>
+                 </thead>
+                 <tbody>
+                     {% for producto in fsc.data|filter(o => o.valor == valor) %}
+                         <tr>
+                             <td class="sf9" style="">{{ producto.referencia }} {{ producto.descripcion }}</td>
+                             <td class="derecha sf9">{{ producto.stockfis }}</td>
+                             <td class="derecha sf9">{{ producto.reservada }}</td>
+                             <td class="derecha sf9">{{ producto.pterecibir }}</td>
+                             <td class="derecha sf9">
+                                 {%if producto.cantpedida !=0 %}
+                                    Ped.: {{ producto.codigo }} Fecha: {{ producto.fecha|date("d/m/Y") }} Cant: {{ producto.cantpedida }}
+                                     {% endif %}
+                                 </td>
+                         </tr>
+
+                     {% endfor %} 
+                 </tbody>
+            </table>
+        </div>
+             
+        {% endfor %}
+    </body>
+    {% endblock %}
+        </html>

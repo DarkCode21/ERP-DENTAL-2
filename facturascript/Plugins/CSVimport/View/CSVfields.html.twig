@@ -1,0 +1,134 @@
+{% set profile = fsc.getModel().getProfile() %}
+{% set rows = profile.getRows() %}
+{% set fields = profile.getDataFields() %}
+{% set requiredAnd = profile.getRequiredFieldsAnd() %}
+{% set requiredOr = profile.getRequiredFieldsOr() %}
+
+{% if rows %}
+    {{ _self.renderRows(fsc, i18n, rows, fields, requiredAnd, requiredOr) }}
+{% elseif fields %}
+    {{ _self.renderFields(fsc, i18n, fields, requiredAnd, requiredOr) }}
+{% endif %}
+
+<script>
+    function sendFormImport(action) {
+        animateSpinner('add');
+        document.formImport.action.value = action;
+        document.formImport.submit();
+    }
+</script>
+
+{% macro getRequiredTitles(fsc, i18n, fields, requiredOr, requiredAnd) %}
+    <div class="card-body pb-0">
+        {% if requiredAnd %}
+            <div class="alert alert-info text-right" role="alert">
+                {{ i18n.trans('you-must-select-all-of-the-following-required-fields') }}
+                <strong>{{ fsc.getRequiredTitles(fields, requiredAnd) }}</strong>.
+            </div>
+        {% endif %}
+        {% if requiredOr %}
+            <div class="alert alert-info text-right" role="alert">
+                {{ i18n.trans('you-must-select-one-of-the-following-required-fields') }}
+                <strong>{{ fsc.getRequiredTitles(fields, requiredOr) }}</strong>.
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro renderFields(fsc, i18n, fields, requiredAnd, requiredOr) %}
+    <div class="card shadow border-secondary">
+        <div class="card-header bg-secondary">
+            <h2 class="h5">
+                <i class="fas fa-file-import"></i> {{ i18n.trans('generic-template') }}
+            </h2>
+            <p class="card-text">
+                {{ i18n.trans('generic-template-p') }}
+            </p>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <thead>
+                <tr>
+                    <th>{{ i18n.trans('column') }}</th>
+                    <th>{{ i18n.trans('description') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for key, field in fields %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ i18n.trans(field.title) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ _self.getRequiredTitles(fsc, i18n, fields, requiredOr, requiredAnd) }}
+    </div>
+{% endmacro %}
+
+{% macro renderRows(fsc, i18n, rows, fields, requiredAnd, requiredOr) %}
+    <form method="post" name="formImport">
+        <input type="hidden" name="action" value=""/>
+        <input type="hidden" name="multireqtoken" value="{{ fsc.multiRequestProtection.newToken() }}"/>
+        <div class="card shadow border-warning">
+            <div class="card-header bg-warning">
+                <h2 class="h5">
+                    <i class="fas fa-file-import"></i> {{ i18n.trans('import-options') }}
+                </h2>
+                <p class="card-text">
+                    {{ i18n.trans('strange-characters-p') }}
+                </p>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>{{ i18n.trans('column') }}</th>
+                        <th>{{ i18n.trans('value-1') }}</th>
+                        <th>{{ i18n.trans('value-2') }}</th>
+                        <th>{{ i18n.trans('value-3') }}</th>
+                        <th>{{ i18n.trans('use-as') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            <td>{{ row.title }}</td>
+                            <td>{{ row.value1 }}</td>
+                            <td>{{ row.value2 }}</td>
+                            <td>{{ row.value3 }}</td>
+                            <td class="{{ row.use is empty ? 'table-warning' : 'table-success' }}">
+                                {% set fieldName = 'field' ~ loop.index0 %}
+                                <select name="{{ fieldName }}" class="form-control">
+                                    <option value="">{{ i18n.trans('do-not-use') }}</option>
+                                    <option value="">------</option>
+                                    {% for key, option in fields %}
+                                        {% if row.use == key %}
+                                            <option value="{{ key }}"
+                                                    selected="">{{ i18n.trans(option.title) }}</option>
+                                        {% else %}
+                                            <option value="{{ key }}">{{ i18n.trans(option.title) }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {{ _self.getRequiredTitles(fsc, i18n, fields, requiredOr, requiredAnd) }}
+            <div class="card-body">
+                <button type="button" class="btn btn-primary btn-spin-action"
+                        onclick="return sendFormImport('save-columns');">
+                    <i class="fas fa-save"></i> {{ i18n.trans('save-columns') }}
+                </button>
+                <button type="button" class="btn btn-warning float-right btn-spin-action"
+                        onclick="return sendFormImport('import');">
+                    <i class="fas fa-file-import"></i> {{ i18n.trans('import') }}
+                </button>
+            </div>
+        </div>
+    </form>
+{% endmacro %}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : contactos.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Add fields to basic structure of contact model.
+        - idemployee: Link to Employee model.
+-->
+<table>
+    <column>
+        <name>idemployee</name>
+        <type>integer</type>
+    </column>
+    <constraint>
+        <name>ca_contactos_employees</name>
+        <type>FOREIGN KEY (idemployee) REFERENCES rrhh_employees (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

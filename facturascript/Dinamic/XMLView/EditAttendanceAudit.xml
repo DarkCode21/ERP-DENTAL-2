@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditAttendanceAudit.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditAttendanceAudit
+-->
+<view>
+    <columns>
+        <column name="code" numcolumns="1" display="none" order="100">
+            <widget type="text" fieldname="id" readonly="true"/>
+        </column>
+        <column name="date" numcolumns="2" order="110">
+            <widget type="datetime" fieldname="dateaction" readonly="true" required="true"/>
+        </column>
+        <column name="action" numcolumns="2" order="120">
+            <widget type="select" fieldname="action" translate="true" readonly="true" required="true">
+                <values title="update">1</values>
+                <values title="delete">2</values>
+            </widget>
+        </column>
+        <column name="reason" order="130">
+            <widget type="text" fieldname="reason" readonly="true" required="true"/>
+        </column>
+        <column name="user" numcolumns="1" order="140">
+            <widget type="text" fieldname="nick" readonly="true" required="true"/>
+        </column>
+        <column name="attendance" numcolumns="1" order="150">
+            <widget type="text" fieldname="idattendance" readonly="true" required="true"/>
+        </column>
+    </columns>
+
+    <rows>
+        <row type="footer">
+            <group name="full-data" id="footer-data" class="w-100" html="Block/AttendanceAuditLog.html.twig"/>
+        </row>
+    </rows>
+</view>

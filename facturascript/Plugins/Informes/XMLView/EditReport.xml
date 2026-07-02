@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of Informes plugin for FacturaScripts
+ * Copyright (C) 2019-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id"/>
+            </column>
+            <column name="name" order="110">
+                <widget type="text" fieldname="name" maxlength="100" required="true"/>
+            </column>
+            <column name="tag" display="none" order="115">
+                <widget type="text" fieldname="tag" maxlength="100"/>
+            </column>
+            <column name="type" numcolumns="3" order="120">
+                <widget type="select" fieldname="type" translate="true" required="true">
+                    <values title="lines">area</values>
+                    <values title="bars">bar</values>
+                    <values title="doughnut">doughnut</values>
+                    <values title="map">map</values>
+                    <values title="pie">pie</values>
+                    <values title="treemap">treemap</values>
+                </widget>
+            </column>
+            <column name="compared" order="130">
+                <widget type="select" fieldname="compared" onclick="EditReport">
+                    <values source="reports" fieldcode="id" fieldtitle="name"/>
+                </widget>
+            </column>
+        </group>
+        <group name="advanced" numcolumns="12">
+            <column name="table" numcolumns="3" order="100">
+                <widget type="select" fieldname="table" required="true"/>
+            </column>
+            <column name="x-column" order="110">
+                <widget type="select" fieldname="xcolumn"/>
+            </column>
+            <column name="x-operation" order="120">
+                <widget type="select" fieldname="xoperation" translate="true">
+                    <values title="has-a-value">HAS_A_VALUE</values>
+                    <values title="does-not-have-a-value">DOES_NOT_HAVE_A_VALUE</values>
+                    <values title="group-by-day">DAY</values>
+                    <values title="group-by-week">WEEK</values>
+                    <values title="group-by-month">MONTH</values>
+                    <values title="group-by-months">MONTHS</values>
+                    <values title="group-by-year">YEAR</values>
+                    <values title="group-by-day-unixtime">UNIXTIME_DAY</values>
+                    <values title="group-by-week-unixtime">UNIXTIME_WEEK</values>
+                    <values title="group-by-month-unixtime">UNIXTIME_MONTH</values>
+                    <values title="group-by-year-unixtime">UNIXTIME_YEAR</values>
+                </widget>
+            </column>
+            <column name="y-column" order="130">
+                <widget type="select" fieldname="ycolumn"/>
+            </column>
+            <column name="y-operation" order="140">
+                <widget type="select" fieldname="yoperation" translate="true">
+                    <values title="sum">SUM</values>
+                    <values title="average">AVERAGE</values>
+                    <values title="maximum">MAXIMUM</values>
+                    <values title="minimum">MINIMUM</values>
+                </widget>
+            </column>
+            <column name="creation-date" display="none" order="150">
+                <widget type="datetime" fieldname="creationdate" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

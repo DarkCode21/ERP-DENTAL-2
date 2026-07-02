@@ -1,0 +1,193 @@
+{% set currencyIcon = fsc.currentView().icon %}
+{% set variants = fsc.currentView().cursor %}
+
+{% if variants | length > 1 %}
+    <div class="card shadow mb-3">
+        <div class="card-body p-2">
+            <strong>{{ trans('global-changes') }}</strong>
+            <div class="small border-bottom pb-3 mb-3">
+                {{ trans('global-changes-desc') }}.
+            </div>
+            <div class="form-row align-items-end">
+                <div class="col">
+                    {{ trans('cost-price') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="{{ currencyIcon }}"></i>
+                        </span>
+                        </div>
+                        <input type="number" step="any"
+                               class="form-control prices-tab-cost-global text-right"
+                               onkeyup="return recalculateVariantGlobalWait('changeCost', event, this)"/>
+                    </div>
+                </div>
+                <div class="col">
+                    {{ trans('margin') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-percentage"></i>
+                        </span>
+                        </div>
+                        <input type="number" step="any"
+                               class="form-control prices-tab-margin-global text-right"
+                               onkeyup="return recalculateVariantGlobalWait('changeMargin', event, this)"/>
+                    </div>
+                </div>
+                <div class="col">
+                    {{ trans('price') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="{{ currencyIcon }}"></i>
+                        </span>
+                        </div>
+                        <input type="number" step="any"
+                               class="form-control prices-tab-price-global text-right"
+                               onkeyup="return recalculateVariantGlobalWait('changePrice', event, this)"/>
+                    </div>
+                </div>
+                <div class="col">
+                    {{ trans('price-with-tax') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="{{ currencyIcon }}"></i>
+                        </span>
+                        </div>
+                        <input type="number" class="form-control prices-tab-pricetax-global text-right"
+                               onkeyup="return recalculateVariantGlobalWait('changePriceTax', event, this)"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer p-2">
+            <div class="form-row">
+                <div class="col">
+                    <button type="button" class="btn btn-sm btn-warning btn-reset-rates btn-spin-action"
+                            onclick="return resetRatesGlobal()">
+                        <i class="fas fa-redo fa-fw"></i> {{ trans('reset-all-rates') }}
+                    </button>
+                </div>
+                <div class="col text-right">
+                    <button type="submit" class="btn btn-sm btn-primary btn-spin-action" onclick="return saveVariantGlobal()">
+                        <i class="fas fa-save fa-fw"></i> {{ trans('save-all-variants') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% for item in variants %}
+    <div class="card shadow mb-3 variant-price" data-idvariante="{{ item.variant.idvariante }}">
+        <div class="card-body p-2 inputs">
+            <div class="form-row align-items-end">
+                <div class="col">
+                    {{ trans('reference') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-hashtag"></i>
+                                </span>
+                        </div>
+                        <input type="text" name="referencia" value="{{ item.variant.referencia }}" class="form-control"
+                               readonly/>
+                    </div>
+                </div>
+                <div class="col">
+                    {{ trans('cost-price') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="{{ currencyIcon }}"></i>
+                                </span>
+                        </div>
+                        <input type="number" name="coste" value="{{ item.variant.coste }}" step="any"
+                               class="form-control prices-tab-cost text-right" autocomplete="off"
+                               onkeyup="return recalculateVariantWait('changeCost', event, this)"/>
+                    </div>
+                </div>
+                <div class="col">
+                    {{ trans('margin') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-percentage"></i>
+                                </span>
+                        </div>
+                        <input type="number" name="margen" value="{{ item.variant.margen }}" step="any"
+                               class="form-control prices-tab-margin text-right" autocomplete="off"
+                               onkeyup="return recalculateVariantWait('changeMargin', event, this)"/>
+                    </div>
+                </div>
+                {% for includeView in getIncludeViews('TarifaProducto', 'changePrices') %}
+                    {% include includeView['path'] %}
+                {% endfor %}
+                <div class="col">
+                    {{ trans('price') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="{{ currencyIcon }}"></i>
+                                </span>
+                        </div>
+                        <input type="number" name="precio" value="{{ item.variant.precio }}" step="any"
+                               class="form-control prices-tab-price text-right" autocomplete="off"
+                               onkeyup="return recalculateVariantWait('changePrice', event, this)"/>
+                    </div>
+                </div>
+                <div class="col">
+                    {{ trans('price-with-tax') }}
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="{{ currencyIcon }}"></i>
+                                </span>
+                        </div>
+                        <input type="number" name="precioimp" class="form-control prices-tab-pricetax text-right"
+                               placeholder="{{ item.pricetax }}" autocomplete="off"
+                               onkeyup="return recalculateVariantWait('changePriceTax', event, this)"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if item.rates is not empty %}
+            <div class="table-responsive">
+                <table class="table table-sm mb-0">
+                    <thead>
+                    <tr>
+                        <th>{{ trans('rate') }}</th>
+                        <th>{{ trans('formula-to-apply') }}</th>
+                        <th class="text-right">{{ trans('new-price') }}</th>
+                        <th class="text-right">{{ trans('price-with-tax') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody class="rates">
+                    {{ item.rates | raw }}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+        {% if fsc.permissions.allowUpdate %}
+            <div class="card-footer p-2">
+                <div class="form-row">
+                    {% if item.rates is not empty %}
+                        <div class="col">
+                            <button type="button" class="btn btn-sm btn-warning btn-reset-rates btn-spin-action"
+                                    onclick="return resetRates(this)">
+                                <i class="fas fa-redo fa-fw"></i> {{ trans('reset-rates-for-this-variant') }}
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="col text-right">
+                        <button type="button" class="btn btn-sm btn-primary btn-spin-action" onclick="return saveVariant(this)">
+                            <i class="fas fa-save fa-fw"></i> {{ trans('save-this-variant') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endfor %}

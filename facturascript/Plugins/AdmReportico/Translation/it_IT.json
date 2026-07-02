@@ -1,0 +1,16 @@
+{
+    "adm-reportico": "AdmRapporto",
+    "controller-report-launched": "Controllore da cui verrà lanciato il report",
+    "dir-projects": "dir progetti",
+    "external-link": "Fai clic e il report si aprirà in una nuova pagina del browser",
+    "ok-report": "Ok Rapporto",
+    "open-new-pag": "Reportico si aprirà in una nuova pagina del browser",
+    "organize-reports": "Ci aiuta ad organizzare i rapporti in diversi progetti",
+    "report-file": "File report in formato XML",
+    "reportico": "Reportico",
+    "reportico-reports": "Rapporti di Reportico",
+    "select-only-1-report": "Seleziona solo 1 rapporto",
+    "summary-description": "Descrizione riassuntiva del rapporto",
+    "url-to-reportico": "url a Reportico (http:\/\/LoQueSea o https:\/\/LoQueSea)",
+    "view-not-supported": "La vista >>>%view%<<< non è supportata"
+}

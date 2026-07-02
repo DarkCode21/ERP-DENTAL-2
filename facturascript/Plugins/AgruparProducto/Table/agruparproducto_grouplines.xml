@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    This file is part of AgruparProducto plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    AgruparProducto Copyright (C) 2022-2022 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : agruparproducto_grouplines.xml
+    Author     : Jose Antonio Cuello Principal
+    Description:
+        Structure for the product grouping lines table.
+-->
+
+<table>
+    <column>
+        <name>barcode</name>
+        <type>character varying(20)</type>
+    </column>
+    <column>
+        <name>bydefault</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>discount</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idproduct</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idgroup</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>quantity</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <constraint>
+        <name>agruparproducto_grouplines_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_agruparproducto_grouplines_group</name>
+        <type>FOREIGN KEY (idgroup) REFERENCES agruparproducto_group (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_agruparproducto_grouplines_productos</name>
+        <type>FOREIGN KEY (idproduct) REFERENCES productos (idproducto) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>uniq_agruparproducto_grouplines_product</name>
+        <type>UNIQUE (idgroup,idproduct)</type>
+    </constraint>
+</table>

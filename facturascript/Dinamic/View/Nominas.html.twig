@@ -1,0 +1,886 @@
+{#
+* Copyright (C) 2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+* Author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+    {% set divisa = fsc.getDivisa() %}
+    <div class="bg-light pt-3 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1 class="h2">
+                        <i class="fas fa-users"></i> {{ i18n.trans('new-nomina') }}
+                    </h1>
+                    <small class="text-secondary">{{ i18n.trans('pos-nomina') }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: -40px;">
+        <div class="row">
+            <div class="col-sm">
+                <form action="{{ fsc.url() }}" method="post" onsubmit="return false;">
+                    <input type="hidden" name="action" value="start-nomina"/>
+                    <input type="hidden" name="idnomina" value="{{ fsc.tpv.idtpv }}"/>
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+							<div class="form-row">
+	                              <div class="col-sm-3 pb-3">
+      							  	{{ i18n.trans('employee')  }}
+									<input type="text" name="query" id="employeeNominas" class="form-control form-control-sm">
+								  	<input type="hidden" name="codempleado" />
+								  </div>
+								  
+								  <div class="col-sm-2 pb-3">
+      							  	{{ i18n.trans('nif')  }}
+									<input type="text" name="cifnif" id="cifnif" class="form-control form-control-sm">
+								  </div>
+
+								  <div class="col-sm-5 pb-3">
+      							  	{{ i18n.trans('address')  }}
+									<input type="text" name="direccion" class="form-control form-control-sm">
+								  </div>
+
+								  <div class="col-sm-2 pb-3">
+      							  	{{ i18n.trans('home')  }}
+									<input type="text" name="localidad" class="form-control form-control-sm">
+								  </div>
+							</div>
+							
+							<div class="form-row border-bottom">
+	                              <div class="col-sm-2 pb-3">
+      							  	{{ i18n.trans('cif')  }}
+									<input type="text" name="cif" class="form-control form-control-sm">
+								  </div>
+								  
+								  <div class="col-sm-3 pb-3">
+      							  	{{ i18n.trans('group-professional')  }}
+									<input type="text" name="grupoprofesional" class="form-control form-control-sm">
+								  </div>
+
+								  <div class="col-sm-2 pb-3">
+      							  	{{ i18n.trans('ccss')  }}
+									<input type="text" name="ccss" class="form-control form-control-sm">
+								  </div>
+
+								  <div class="col-sm-2 pb-3">
+      							  	{{ i18n.trans('naf')  }}
+									<input type="text" name="naf" class="form-control form-control-sm">
+								  </div>
+
+								  <div class="col-sm-3 pb-3">
+      							  	{{ i18n.trans('group-cotizacion')  }}
+									<input type="text" name="grupocotizacion" class="form-control form-control-sm">
+								  </div>
+							</div>
+
+							<div class="form-row pt-2">
+								<div class="col-sm-2 py-1">
+									{{ i18n.trans('period-liquidacion')  }}
+								</div>
+								<div class="col-sm-2 pb-2">
+									<input type="date" name="inicioliquidacion" id="inicioliquidacion" 
+										class="form-control form-control-sm" 
+										onchange="calcularPeriodo()">
+								</div>
+								<div class="col-sm-1 py-1 px-auto">
+									{{ i18n.trans('to')  }}
+								</div>
+								<div class="col-sm-2 pb-2">
+									<input type="date" name="finliquidacion" id="finliquidacion" class="form-control form-control-sm"
+									onchange="calcularPeriodo()">
+								</div>
+								<div class="col-sm-1 py-1 px-auto">
+									{{ i18n.trans('total-days')  }}
+								</div>
+								<div class="col-sm-1 pb-2">
+									<input type="text" name="totaldias" id="totaldias" class="form-control form-control-sm text-center" readonly="">
+								</div>
+						    </div>
+							
+							<div class="form-row pt-2">
+								<div class="col-sm-6"></div>
+								<div class="col-sm-3 text-center"><strong>{{ i18n.trans('amount')  }}</strong></div>
+								<div class="col-sm-3 text-center"><strong>{{ i18n.trans('totals')  }}</strong></div>
+							</div>
+							
+							<div class="form-row">
+								<div class="col-sm-6">
+									<h4>I. DEVENGOS</h4>
+									<h5>1. Percepciones Salariales <small>(Sujetas a cotización)</small></h5>
+								</div>
+							</div>
+							
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Salario Base</p>
+								</div>
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+										 	id="salariobase"
+											name="salariobase" onkeypress="return isNumberKey(event)" 
+											onchange="calcularTotalDevengado()" />
+									</p>
+								</div>
+							</div>
+							
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Complementos Salariales</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" 
+										  class="form-control form-control-sm text-right" name="complementossalariales" 
+										  id="complementossalariales" onchange="calcularTotalDevengado()"
+										   onkeypress="return isNumberKey(event)" />
+									</p>
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Horas Extras Fuerza Mayor</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+											name="extrasfuerzamayor" id="extrasfuerzamayor" onchange="calcularTotalDevengado()"
+											onkeypress="return isNumberKey(event)" />
+									</p>
+								</div>	
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Horas Extras Resto</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="extrasresto" 
+										id="extrasresto" onchange="calcularTotalDevengado()" onkeypress="return isNumberKey(event)"  />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Horas Complementarias (contratos a tiempo parcial)</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+											name="horascomplementarias" id="horascomplementarias" 
+											onkeypress="return isNumberKey(event)" onchange="calcularTotalDevengado()" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Gratificaciones extraordinarias</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+										 name="gratificacionesextraordinarias" id="gratificacionesextraordinarias"
+										 onchange="calcularTotalDevengado()"
+										 onkeypress="return isNumberKey(event)" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Salario en especie</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+										name="salarioespecie" 
+										id="salarioespecie" onchange="calcularTotalDevengado()"
+										onkeypress="return isNumberKey(event)" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<h5>2. Percepciones no salariales <small>(Excluidas de cotización)</small></h5>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Indemnizaciones o suplidos</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="indemnizaciones" id="indemnizaciones" onchange="calcularTotalDevengado()" onkeypress="return isNumberKey(event)" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Prestaciones e indemnizaciones de la Seguridad Social</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="seguridadsocial" id="seguridadsocial" onchange="calcularTotalDevengado()" onkeypress="return isNumberKey(event)" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Indemnizaciones por traslados, suspensiones o despidos</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="despidos" id="despidos" onchange="calcularTotalDevengado()" onkeypress="return isNumberKey(event)"  />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">Otras percepciones salariales</p>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="otraspercepciones" id="otraspercepciones" onchange="calcularTotalDevengado()" onkeypress="return isNumberKey(event)" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-9 text-center">
+									<h4>A. TOTAL DEVENGADO</h4>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right input-bold" 
+										name="totaldevengado" id="totaldevengado" readonly="" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<h4>II. DEDUCCIONES</h4>
+									<h5>1. Aportaciones del trabajador a las cotizaciones a la S.S. Y conceptos de recaudación conjunta:</small></h5>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-3">
+									<p class="mb-0">Contingencias Comunes</p>
+								</div>
+
+								<div class="col-sm-2">
+									<p class="col-sm-12 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="porc_contingencias" id="porc_contingencias" onkeypress="return isNumberKey(event)"
+										onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+
+								<div class="col-sm-1 my-1">%</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_contingencias" id="monto_contingencias" onkeypress="return isNumberKey(event)"
+										 onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-3">
+									<p class="mb-0">Desempleo</p>
+								</div>
+
+								<div class="col-sm-2">
+									<p class="col-sm-12 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="porc_desempleo" id="porc_desempleo" onkeypress="return isNumberKey(event)"
+										onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+								
+								<div class="col-sm-1 my-1">%</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_desempleo" id="monto_desempleo" onkeypress="return isNumberKey(event)"
+										 onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-3">
+									<p class="mb-0">Formación Profesional</p>
+								</div>
+
+								<div class="col-sm-2">
+									<p class="col-sm-12 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="porc_profesional" id="porc_profesional" onkeypress="return isNumberKey(event)" 
+										onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+								
+								<div class="col-sm-1 my-1">%</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_profesional" id="monto_profesional" onkeypress="return isNumberKey(event)" 
+										 onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-3">
+									<p class="mb-0">Horas Extras Fuerza Mayor</p>
+								</div>
+
+								<div class="col-sm-2">
+									<p class="col-sm-12 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="porc_extras_fuerza_mayor" id="porc_extras_fuerza_mayor" 
+										onkeypress="return isNumberKey(event)" 
+										onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+
+								<div class="col-sm-1 my-1">%</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_extras_fuerza_mayor" 
+										 id="monto_extras_fuerza_mayor" 
+										 onkeypress="return isNumberKey(event)"
+										 onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-3">
+									<p class="mb-0">Horas Extras Resto</p>
+								</div>
+
+								<div class="col-sm-2">
+									<p class="col-sm-12 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="porc_extras_resto" id="porc_extras_resto" onkeypress="return isNumberKey(event)" 
+										onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+
+								<div class="col-sm-1 my-1">%</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_extras_resto" id="monto_extras_resto" onkeypress="return isNumberKey(event)"
+										 onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0 text-center"><strong>TOTAL APORTACIONES</strong></p>
+								</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right input-bold"
+ 										 name="total_aportaciones" id="total_aportaciones" readonly="" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-3">
+									<p class="mb-0">2. Impuesto sobre la Renta de las Personas Físicas</p>
+								</div>
+
+								<div class="col-sm-2">
+									<p class="col-sm-12 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right" 
+										name="porc_impuesto_renta" id="porc_impuesto_renta" onkeypress="return isNumberKey(event)"
+										onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+
+								<div class="col-sm-1 my-1">%</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_impuesto_renta" id="monto_impuesto_renta" readonly="" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">3. Anticipos</p>
+								</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_anticipos" id="monto_anticipos"
+										 onkeypress="return isNumberKey(event)"
+										 onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+							</div>
+							
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">4. Valor de los productos recibidos en especie</p>
+								</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_productos_especies" id="monto_productos_especies"
+										 onkeypress="return isNumberKey(event)"
+										 onchange="calcularTotalAportaciones()"/>
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-6">
+									<p class="mb-0">5. Otras deducciones</p>
+								</div>
+								
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right"
+ 										 name="monto_deducciones" id="monto_deducciones"
+										 onkeypress="return isNumberKey(event)"
+										 onchange="calcularTotalAportaciones()"
+										 />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-9 text-center">
+									<h4>B. TOTAL A DEDUCIR</h4>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right input-bold" 
+										name="totaldeducir" id="totaldeducir" readonly="" />
+									</p>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="col-sm-9 text-center">
+									<h4>LIQUIDO TOTAL A PERCIBIR (A-B)</h4>
+								</div>
+
+								<div class="col-sm-3">
+									<p class="col-sm-9 mx-auto">
+										<input type="text" step="0.01" min="0" class="form-control form-control-sm text-right input-bold" 
+										name="total_liquido_percibir" id="total_liquido_percibir" readonly="" />
+									</p>
+								</div>
+							</div>
+
+							<!--
+							<div class="form-row">
+                                {% for coin in fsc.getCoinTypes() %}
+                                    <div class="col-sm-4 pb-3">
+                                        {{ (coin.name < 1) ? coin.name|number_format(2) : coin.name }}
+                                        {{ divisa.simbolo }}
+                                        <input type="number" name="{{ coin.name|replace({'.': '_'}) }}" value="0"
+                                               min="0" class="form-control" required=""/>
+                                    </div>
+                                {% else %}
+                                    <div class="col">
+                                        <div class="alert alert-warning">{{ i18n.trans('currency-setup-incomplete') }}</div>
+                                        <a href="{{ fsc.getDivisa().url() }}" class="btn btn-warning">
+                                            {{ i18n.trans('configure') }}</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+							-->
+                        </div>
+                        <div class="card-footer">
+                            <div class="form-row">
+                                <div class="col">
+                                    <form action="{{ fsc.url() }}" method="post">
+                                        <input type="hidden" name="idtpv" value="{{ fsc.tpv.idtpv }}">
+                                        <button type="submit" name="action" value="agent-out" class="btn btn-danger">
+                                            {{ i18n.trans('clean') }}
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col text-right">
+                                    <button type="submit" class="btn btn-success btn-spin-action">
+                                        {{ i18n.trans('save') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- <div class="text-center">
+                    <form action="{{ fsc.url() }}" method="post">
+                        <a href="#" onclick="this.parentNode.submit();return false;"
+                           class="btn btn-block btn-secondary">
+                            <i class="fas fa-list mr-1"></i> {{ i18n.trans('pos-terminals') }}
+                        </a>
+                    </form>
+                </div>
+				
+				-->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+	<style>
+		.input-bold {
+			font-weight: bold;
+			font-size: large;
+		}
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+	<script>
+		let cifnif = "";
+		$(document).ready(function () {
+			$("#employeeNominas").autocomplete({
+                source: function (request, response) {
+                    let formData = {};
+                    formData["action"] = "autocomplete-employee";
+                    formData["query"] = $("#employeeNominas").val();
+                  
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ fsc.url() }}",
+                        data: formData,
+                        dataType: "json",
+                        success: function (results) {
+                            let values = [];
+                            results.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        cifnif = ui.item.key;
+						updateEmployee();
+                        let value = ui.item.value.split(" | ");
+                        if (value.length > 1) {
+                            ui.item.value = value[1];
+                        } else {
+                            ui.item.value = value[0];
+                        }
+                    }
+                }
+            });
+		});
+		
+		function getDataEmployee () {
+			let formData = {};
+			formData["action"] = "autocomplete-data-employee";
+			formData["cifnif"] = $("#cifnif").val();
+               
+			$.ajax({
+				method: "POST",
+				url: "{{ fsc.url() }}",
+				data: formData,
+				dataType: "json",
+				success: function (results) {
+					let values = [];
+					results.forEach(function (element) {
+						if (element.key === null || element.key === element.value) {
+							values.push(element);
+						} else {
+							values.push({key: element.key, value: element.key + " | " + element.value});
+						}
+					});
+					response(values);
+				},
+				error: function (msg) {
+					alert(msg.status + " " + msg.responseText);
+				}
+			});
+		}
+		
+		function updateEmployee() {
+			$('#cifnif').val(cifnif);
+			getDataEmployee();
+		}
+		
+		function calcularPeriodo() {
+			let inicio = $('#inicioliquidacion').val();
+			let fin = $('#finliquidacion').val();
+			var dateInicio = new Date(inicio);
+			var dateFin = new Date(fin);
+			const diffInDays = Math.floor((dateFin - dateInicio)/ (1000 * 60 * 60 * 24) + 1);
+			if (diffInDays > 0) {
+				$('#totaldias').val(diffInDays);				
+			} else {
+				$('#totaldias').val("-1");
+			}
+		}
+		
+		function isBlank(str) {
+ 		   return (!str || /^\s*$/.test(str));
+		}
+		function calcularTotalAportaciones () {
+			let totalDeducir = 0;
+			let totalDeducirCompleto = 0;
+			let porc_contingencias = $('#porc_contingencias').val();
+			let monto_contingencias = $('#monto_contingencias').val();
+			
+			let porc_desempleo = $('#porc_desempleo').val();
+			let monto_desempleo = $('#monto_desempleo').val();
+			
+			let porc_profesional = $('#porc_profesional').val();
+			let monto_profesional = $('#monto_profesional').val();
+			
+			let porc_extras_fuerza_mayor = $('#porc_extras_fuerza_mayor').val();
+			let monto_extras_fuerza_mayor = $('#monto_extras_fuerza_mayor').val();
+			
+			let porc_extras_resto = $('#porc_extras_resto').val();
+			let monto_extras_resto = $('#monto_extras_resto').val();
+
+			let porc_impuesto_renta = $('#porc_impuesto_renta').val();
+			let monto_impuesto_renta = $('#monto_impuesto_renta').val();
+			let total_devengado = $('#totaldevengado').val();
+			
+			let monto_anticipos = $('#monto_anticipos').val();
+			let monto_productos_especies = $('#monto_productos_especies').val();
+			let monto_deducciones = $('#monto_deducciones').val();
+			
+			if(!isBlank(porc_contingencias)) {
+				$('#porc_contingencias').val(parseFloat(porc_contingencias).toFixed(2)); 
+			}
+			if(!isBlank(monto_contingencias)) { 
+				totalDeducir += parseFloat(monto_contingencias); 
+				$('#monto_contingencias').val(parseFloat(monto_contingencias).toFixed(2)); 
+			}
+
+			if(!isBlank(porc_desempleo)) {
+				$('#porc_desempleo').val(parseFloat(porc_desempleo).toFixed(2)); 
+			}
+			if(!isBlank(monto_desempleo)) { 
+				totalDeducir += parseFloat(monto_desempleo); 
+				$('#monto_desempleo').val(parseFloat(monto_desempleo).toFixed(2)); 
+			}
+
+			if(!isBlank(porc_profesional)) {
+				$('#porc_profesional').val(parseFloat(porc_profesional).toFixed(2)); 
+			}
+			if(!isBlank(monto_profesional)) { 
+				totalDeducir += parseFloat(monto_profesional); 
+				$('#monto_profesional').val(parseFloat(monto_profesional).toFixed(2)); 
+			}
+
+			if(!isBlank(porc_extras_fuerza_mayor)) {
+				$('#porc_extras_fuerza_mayor').val(parseFloat(porc_extras_fuerza_mayor).toFixed(2)); 
+			}
+			if(!isBlank(monto_extras_fuerza_mayor)) { 
+				totalDeducir += parseFloat(monto_extras_fuerza_mayor); 
+				$('#monto_extras_fuerza_mayor').val(parseFloat(monto_extras_fuerza_mayor).toFixed(2)); 
+			}
+
+			if(!isBlank(porc_extras_resto)) {
+				$('#porc_extras_resto').val(parseFloat(porc_extras_resto).toFixed(2)); 
+			}
+			if(!isBlank(monto_extras_resto)) { 
+				totalDeducir += parseFloat(monto_extras_resto); 
+				$('#monto_extras_resto').val(parseFloat(monto_extras_resto).toFixed(2)); 
+			}
+
+			if(!isBlank(porc_impuesto_renta)) {
+				$('#porc_impuesto_renta').val(parseFloat(porc_impuesto_renta).toFixed(2)); 
+				let monto_imp = parseFloat(porc_impuesto_renta)/100 * parseFloat(total_devengado);
+				totalDeducirCompleto += parseFloat(monto_imp); 
+				$('#monto_impuesto_renta').val(monto_imp.toFixed(2));
+			}
+
+			$('#total_aportaciones').val((Math.round(totalDeducir * 100) / 100).toFixed(2));
+			totalDeducirCompleto += totalDeducir;
+
+			if(!isBlank(monto_anticipos)) { 
+				totalDeducirCompleto += parseFloat(monto_anticipos); 
+				$('#monto_anticipos').val(parseFloat(monto_anticipos).toFixed(2)); 
+			}
+
+			if(!isBlank(monto_productos_especies)) { 
+				totalDeducirCompleto += parseFloat(monto_productos_especies); 
+				$('#monto_productos_especies').val(parseFloat(monto_productos_especies).toFixed(2)); 
+			}
+
+			if(!isBlank(monto_deducciones)) { 
+				totalDeducirCompleto += parseFloat(monto_deducciones); 
+				$('#monto_deducciones').val(parseFloat(monto_deducciones).toFixed(2)); 
+			}
+
+			$('#totaldeducir').val((Math.round(totalDeducirCompleto * 100) / 100).toFixed(2));
+			calcularLiquidoPercibir();
+		}
+		
+		function calcularLiquidoPercibir () {
+			let totaldevengado = $('#totaldevengado').val();
+			let totaldeducir = $('#totaldeducir').val();
+			let liquido = 0;
+			if(!isBlank(totaldevengado)) { 
+				liquido = parseFloat(totaldevengado); 
+			}
+
+			if(!isBlank(totaldeducir)) { 
+				liquido -= parseFloat(totaldeducir); 
+			}
+
+			$('#total_liquido_percibir').val((Math.round(liquido * 100) / 100).toFixed(2));
+		}
+		
+		function calcularTotalDevengado() {
+			let total = 0;
+			let salario = $('#salariobase').val();
+			let complementosalarial = $('#complementossalariales').val();
+			let extrasfuerzamayor = $('#extrasfuerzamayor').val();
+			let extrasresto = $('#extrasresto').val();
+			let horascomplementarias = $('#horascomplementarias').val();
+			let gratificacionesextraordinarias = $('#gratificacionesextraordinarias').val();
+			let salarioespecie = $('#salarioespecie').val();
+			
+			let indemnizaciones = $('#indemnizaciones').val();
+			let seguridadsocial = $('#seguridadsocial').val();
+			let despidos = $('#despidos').val();	
+			let otraspercepciones = $('#otraspercepciones').val();
+			
+			let porc_impuesto_renta = $('#porc_impuesto_renta').val();
+			let monto_impuesto_renta = $('#monto_impuesto_renta').val();
+
+			if(!isBlank(salario)) { 
+				total += parseFloat(salario); 
+				$('#salariobase').val(parseFloat(salario).toFixed(2)); 
+			}
+			if(!isBlank(complementosalarial)) { 
+				total += parseFloat(complementosalarial); 
+				$('#complementossalariales').val(parseFloat(complementosalarial).toFixed(2));
+			}
+			if(!isBlank(extrasfuerzamayor)) { 
+				total += parseFloat(extrasfuerzamayor); 
+				$('#extrasfuerzamayor').val(parseFloat(extrasfuerzamayor).toFixed(2));
+			}
+			if(!isBlank(extrasresto)) { 
+				total += parseFloat(extrasresto); 
+				$('#extrasresto').val(parseFloat(extrasresto).toFixed(2));
+			}
+			if(!isBlank(horascomplementarias)) { 
+				total += parseFloat(horascomplementarias); 
+				$('#horascomplementarias').val(parseFloat(horascomplementarias).toFixed(2));
+			}
+			if(!isBlank(gratificacionesextraordinarias)) { 
+				total += parseFloat(gratificacionesextraordinarias); 
+				$('#gratificacionesextraordinarias').val(parseFloat(gratificacionesextraordinarias).toFixed(2));
+			}
+			if(!isBlank(salarioespecie)) { 
+				total += parseFloat(salarioespecie); 
+				$('#salarioespecie').val(parseFloat(salarioespecie).toFixed(2));
+			}
+			if(!isBlank(indemnizaciones)) { 
+				total += parseFloat(indemnizaciones); 
+				$('#indemnizaciones').val(parseFloat(indemnizaciones).toFixed(2));
+			}
+			if(!isBlank(seguridadsocial)) { 
+				total += parseFloat(seguridadsocial); 
+				$('#seguridadsocial').val(parseFloat(seguridadsocial).toFixed(2));
+			}
+			if(!isBlank(despidos)) { 
+				total += parseFloat(despidos); 
+				$('#despidos').val(parseFloat(despidos).toFixed(2));
+			}
+			if(!isBlank(otraspercepciones)) { 
+				total += parseFloat(otraspercepciones); 
+				$('#otraspercepciones').val(parseFloat(otraspercepciones).toFixed(2));
+			}
+		
+			$('#totaldevengado').val((Math.round(total * 100) / 100).toFixed(2));
+
+			if(!isBlank(porc_impuesto_renta)) {
+				let monto_imp = parseFloat(porc_impuesto_renta)/100 * parseFloat((Math.round(total * 100) / 100));
+				$('#monto_impuesto_renta').val(monto_imp.toFixed(2));
+				//totalDeducir += monto_imp.toFixed(2);
+				calcularTotalAportaciones();
+			}
+
+			calcularLiquidoPercibir();
+		}
+		
+		function isNumberKey(evt) {
+ 	   		const charCode = (evt.which) ? evt.which : event.keyCode;
+    		// Permitir números y punto decimal
+			if (charCode == 46 || (charCode >= 48 && charCode <= 57)) {
+				if (charCode == 46) {
+					return evt.target.value.includes('.')? false: true;
+				}
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+	</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>creationdate</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>featured</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>name</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>tag</name>
+        <type>character varying(100)</type>
+    </column>
+    <constraint>
+        <name>reports_boards_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+</table>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : tarifas.xml
+    Description:
+        Estructura de la tabla tarifas.
+-->
+<table>
+    <column>
+        <name>decimales</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>5</default>
+    </column>
+</table>

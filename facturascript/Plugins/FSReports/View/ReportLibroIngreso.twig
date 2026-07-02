@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        {% block css %}
+            <link rel="stylesheet" href="./Plugins/FSReports/View/CSS/{{ fsc.params.cssFile }}.css" media="all"/>
+        {% endblock %}
+
+    </head>
+    {% block body %}
+        {# Macros Template Imports #}
+        <div style="clear:both;">
+            <div>
+                <table style="border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th class=" columna document">{{ i18n.trans('document') }}</th>
+                            <th class="columna date">{{ i18n.trans('date') }}</th>
+                            <th class="columna cif">{{ i18n.trans('cif/nif') }}</th>
+                            <th class="columna customer">{{ i18n.trans('customer') }}</th>
+                            <th class="columna base">{{ i18n.trans('Base') }}</th>
+                            <th class="columna poriva">{{ i18n.trans('%IVA') }}</th>
+                            <th class="columna iva">{{ i18n.trans('IVA') }}</th>
+                            <th class="columna porre">{{ i18n.trans('%RE') }}</th>
+                            <th class="columna re">{{ i18n.trans('RE') }}</th>
+                            <th class="columna porirpf">{{ i18n.trans('%IRPF') }}</th>
+                            <th class="columna irpf">{{ i18n.trans('IRPF') }}</th>
+                            <th class="columna total">{{ i18n.trans('total') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%  for value in fsc.listHeaderDoc() %}
+                            <tr class="contenido">
+                                <td class="">&nbsp;&nbsp;{{value.idfactura}} &nbsp;&nbsp; {{ value.codigo }}</td>
+                                <td class="">{{ value.fecha|date("d/m/Y") }}</td>
+                                <td class="vcifnif">{{ value.cifnif }}</td>
+                                <td class="">{{ value.nombrecliente }}</td>
+
+                            </tr>
+                            {% for value2 in fsc.listLinesDoc({'idfactura': value.idfactura}) %}
+                                <tr class="contenido valoresparciales columna">
+                                    <td colspan="4" id="relleno"></td>
+                                    <td id="vbasep" class="vbasep linea">{{ value2.base|number_format(2, ',', '.') }}</td>
+                                    <td id="vporiva" class="vporiva linea">{{ value2.iva|number_format(2, ',', '.') }}%</td>
+                                    <td id="viva" class="viva linea ">{{ value2.importe_iva|number_format(2, ',', '.') }}</td>
+                                    <td id="vpre" class="vpre linea ">{%if value2.recargo!=0 %} {{ value2.recargo|number_format(2, ',', '.') }}% {% endif %}</td>
+                                    <td id="vre" class="vre linea ">{%if value2.importe_recargo!=0 %}{{ value2.importe_recargo|number_format(2, ',', '.') }} {% endif %}</td>
+                                    <td id="vpirpf" class="vpirpf linea ">{%if value2.irpf!=0 %}{{ value2.irpf|number_format(2, ',', '.') }}% {% endif %}</td>
+                                    <td id="virpf" class="virpf linea">{%if value2.importe_irpf!=0 %}{{ value2.importe_irpf|number_format(2, ',', '.') }} {% endif %}</td>
+                                    <td id="vtotal" class="total linea">{{ (value2.base + value2.importe_iva + value2.importe_recargo + value2.importe_irpf)|number_format(2, ',', '.') }}</td>
+                                </tr>
+                            {%  endfor %}
+                            <tr class="columna filatotaldocumento">
+                                <td colspan="4"></td>
+                                <td id="totalbase" class="totalbase">{{ (value.total - value.totaliva - value.totalrecargo - value.totalirpf)|number_format(2, ',', '.') }}</td>
+
+                                <td id="totaliva" class="totaliva" colspan="2">{{ value.totaliva|number_format(2, ',', '.') }}</td>
+
+                                <td id="totalre" class="totalre" colspan="2">{{ value.totalrecargo|number_format(2, ',', '.') }}</td>
+
+                                <td id="totalirpf" class="totalirpf" colspan="2">{{ value.totalirpf|number_format(2, ',', '.') }}</td>
+                                <td id="totalfactura" class="totalfactura columna">{{ value.total|number_format(2, ',', '.') }}{{ value.coddivisa }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endblock %}
+</html>

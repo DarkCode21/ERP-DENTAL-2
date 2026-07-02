@@ -1,0 +1,11 @@
+{
+    "accounting-prepaid": "Pré-pago %code%",
+    "accounting-prepaid-customer-delivery-note": "Prepago da nota de entrega do cliente %code%",
+    "accounting-prepaid-customer-estimation": "Estimativa de cliente pré-pago %code%",
+    "accounting-prepaid-customer-order": "Pedido do cliente pré-pago %code%",
+    "amount-greater-zero": "O valor deve ser maior que zero",
+    "document-company-different-from-payment-method-company": "A empresa do documento é diferente da empresa do método de pagamento",
+    "document-not-found": "Documento não encontrado",
+    "no-editable": "Não editável",
+    "only-one-document-allowed": "Apenas um documento permitido"
+}

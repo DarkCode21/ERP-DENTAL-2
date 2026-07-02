@@ -1,0 +1,112 @@
+
+{% extends "Master/MenuTemplate.html.twig" %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        [data-toggle="collapse"] i:before{
+            content: "\f139";
+        }
+
+        [data-toggle="collapse"].collapsed i:before{
+            content: "\f13a";
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <body>
+    {% set refresh = i18n.trans('refresh-page') %}
+    {% set defaultT, defaultF = i18n.trans('mark-as-homepage'), i18n.trans('marked-as-homepage') %}
+    {% set title = i18n.trans(fsc.getPageData()['title']) | capitalize %}
+    {% set generate, generate_title = i18n.trans('generate'), i18n.trans('generate-title') %}
+    {% set dataSource, othersFilters = i18n.trans('data-source'), i18n.trans('others-filters') %}
+    {# -- Others Values -- #}
+    {% set exportOptions = fsc.exportManager.options() %}
+    {% set select_filter_attr = {onchange: 'this.form.submit()'} %}
+    {% set input_date_attr = {class: 'form-control datepicker',  style: 'font-size: 90%;'} %}
+    {% set input_text_attr = {class: 'form-control ',  style: 'font-size: 90%;'} %}
+    {% import 'Macro/Forms.html.twig' as forms %}
+    {# -- Visual macros -- #}
+    {% from 'Macro/Utils.html.twig' import popoverTitle as popoverTitle %}
+    
+    {# -- Header Row -- #}
+    <div class="row">
+        <div class="col-sm-7 col-6">
+            <div class="btn-group d-xs-none">
+                <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}" {{ popoverTitle(refresh, 'bottom') }}>
+                    <i class="fas fa-sync" aria-hidden="true"></i>
+                </a>
+                {% if fsc.getPageData()['name'] == fsc.user.homepage %}
+                    <a class="btn btn-sm btn-outline-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE" {{ popoverTitle(defaultF, 'bottom') }}>
+                        <i class="fas fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}?defaultPage=TRUE" {{ popoverTitle(defaultT, 'bottom') }}>
+                        <i class="far fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-sm-5 col-6 text-right">
+            <h1 style="margin-top: 0px; margin-bottom: 0px;">
+                <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i> {{ title }}
+            </h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <form name="f_search" id="formSearch" action="{{ fsc.url() }}" method="post" class="form-inline col-12">
+        <div class="row col-12">
+            <input type="hidden" name="action" value="reload"/>
+            <div class="form-group col-4">
+                {{ forms.simpleInput('date-from' , 'date-from',  fsc.filters.desdeFecha|date('d-m-Y')  , 'text', 'Desde Fecha', 'fas fa-calendar',  input_date_attr) }}
+            </div>
+            <div class="form-group col-3">
+                {{ forms.simpleInput('date-to' , 'date-to' , fsc.filters.hastaFecha|date('d-m-Y'), 'text', 'Hasta Fecha', 'fas fa-calendar', input_date_attr) }}
+            </div>
+        </div>
+            <div class="row col-12">
+            <div class="form-group col-6">
+                <label class="mb-1" for="cuenta">Cuenta</label>
+                <div class="input-group col-9">
+                    <span class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-book fa-fw" aria-hidden="true"></i>
+                        </span>
+                    </span>
+                    
+                    <input type="text" id="cuenta" name="cuenta" value="" class="form-control " onchange="" style="font-size: 90%;"/> 
+                </div>
+            </div>
+             <div class="form-group col-4">
+                
+                <div class="input-group">
+                    <span class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fas fa-book fa-fw" aria-hidden="true"></i>
+                        </span>
+                    </span>
+                    <input type="text" id="codsubcuenta" name="codsucbuenta" value="" class="form-control" readonly="readonly"/>
+                    
+                </div>
+            </div>
+        </div>
+            
+            <div class="row">
+                <div class="form-group col-3">
+                    <button type="button" class="btn btn-primary" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="Recalcular" onclick="getData();">
+                        <i class="fas fa-database fa-fw" aria-hidden="true"></i> Mostrar
+                    </button>
+                </div> 
+                
+            </div>
+             
+            </form>
+    </div>
+    <div id="data">
+    </div>
+    </body>
+
+{%  endblock %} {# Fin del body #}
+
+

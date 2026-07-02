@@ -1,0 +1,46 @@
+{#
+/**
+ * This file is part of the Produccion plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ * All Rights Reserved.
+ */
+#}
+<div id="footer-info-product" class="col-12 text-secondary small">
+    {{ _self.renderHeader('recipes') }}
+    {{ _self.renderText('duplicate-code', 'duplicate-code-text') }}
+    {{ _self.renderText('cost-in-report', 'cost-in-report-text') }}
+
+    {{ _self.renderHeader('production-orders') }}
+    {{ _self.renderText('cost-update-policy', 'cost-update-policy-text') }}
+    {{ _self.renderText('confirm-quantities', 'confirm-quantities-text') }}
+    {{ _self.renderText('amount-decimals', 'amount-decimals-text') }}
+
+    {{ _self.renderHeader('numserie') }}
+    {{ _self.renderText('separator', 'separator-text') }}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const footerInfoDiv = document.getElementById('footer-info-product');
+        const form = footerInfoDiv?.closest('form');
+        if (form) {
+            form.classList.add('w-100');
+        }
+    });
+</script>
+
+{% macro renderHeader(title) %}
+    <div class="border-bottom border-light mb-2 mt-4">
+        <h6 class="text-primary font-weight-bold mb-1">{{ trans(title) }}</h6>
+    </div>
+{% endmacro %}
+
+{% macro renderText(title, text) %}
+    <div class="row mb-2">
+        <div class="col-4 font-weight-bold text-dark">{{ trans(title) }}</div>
+        <div class="col-8 text-muted">{{ trans(text) }}</div>
+    </div>
+{% endmacro %}

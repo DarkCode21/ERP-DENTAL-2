@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="email-config" title="email-configuration" icon="fas fa-envelope-open-text" numcolumns="12">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+            <column name="usuario" title="email-user" numcolumns="6" order="100">
+                <widget type="text" fieldname="usuario" required="true" icon="fas fa-user"/>
+            </column>
+            <column name="contrasena" title="password" numcolumns="6" order="110">
+                <widget type="password" fieldname="contrasena" required="true" icon="fas fa-key"/>
+            </column>
+            <column name="tipeserv" title="server-type" numcolumns="4" order="120">
+                <widget type="select" fieldname="tipeserv" required="true" icon="fas fa-server">
+                    <values title="IMAP">imap</values>
+                    <values title="POP3">pop3</values>
+                </widget>
+            </column>
+            <column name="nomserv" title="server-name" numcolumns="4" order="130">
+                <widget type="text" fieldname="nomserv" required="true" icon="fas fa-server"/>
+            </column>
+            <column name="port" title="port" numcolumns="4" order="140">
+                <widget type="number" fieldname="port" required="true" icon="fas fa-ethernet"/>
+            </column>
+        </group>
+    </columns>
+</view>

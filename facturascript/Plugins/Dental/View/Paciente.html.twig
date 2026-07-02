@@ -1,0 +1,400 @@
+{% extends "Master/PanelController.html.twig" %}
+
+{% block body %}
+<div class="container-fluid py-3 patients-page">
+
+	<div class="d-flex justify-content-between align-items-center mb-3">
+		<h3 class="mb-0 font-weight-bold">Pacientes</h3>
+
+		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#newPatientModal">
+			<i class="fas fa-plus mr-1"></i>
+			Nuevo paciente
+		</button>
+	</div>
+
+	<div class="card border-0 shadow-sm mb-3">
+		<div class="card-body py-3">
+			<div class="row align-items-center">
+
+				<div class="col-md-6 mb-2 mb-md-0">
+					<div class="input-group input-group-sm">
+						<div class="input-group-prepend">
+							<span class="input-group-text bg-white">
+								<i class="fas fa-search"></i>
+							</span>
+						</div>
+						<input type="text" class="form-control" id="buscar" placeholder="Buscar por nombre, DNI o teléfono">
+					</div>
+				</div>
+
+				<div class="col-md-3 mb-2 mb-md-0">
+					<select class="custom-select custom-select-sm" id="filtro-estado">
+						<option value="">Todos los estados</option>
+						<option value="activo">Activo</option>
+						<option value="inactivo">Inactivo</option>
+					</select>
+				</div>
+
+				<div class="col-md-3">
+					<select class="custom-select custom-select-sm" id="ordenar">
+						<option value="nombre">Ordenar por nombre</option>
+						<option value="fecha">Fecha de registro</option>
+					</select>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="card border-0 shadow-sm patients-list" id="patients-list">
+
+		{% for paciente in fsc.pacientes %}
+		{% set cliente = paciente.getCliente() %}
+		<div class="patient-row" 
+			 data-nombre="{{ cliente ? cliente.razonsocial|lower : '' }}" 
+			 data-estado="{{ paciente.estado }}"
+			 data-fecha="{{ paciente.fecha_alta }}"
+			 onclick="window.location.href='{{ asset('Paciente?action=edit&code=' ~ paciente.id) }}'">
+			<div class="patient-main">
+				<div class="patient-name">{{ cliente ? cliente.razonsocial : paciente.codcliente }}</div>
+				<div class="patient-meta">
+					<span>
+						<i class="fas fa-phone-alt"></i>
+						{{ cliente ? cliente.telefono1 : '-' }}</span>
+					<span>
+						<i class="far fa-calendar-check"></i>
+						{{ paciente.fecha_alta }}</span>
+				</div>
+			</div>
+
+			<div class="patient-right">
+				<span class="badge badge-{{ paciente.estado == 'activo' ? 'success' : 'secondary' }}">{{ paciente.estado }}</span>
+				<i class="fas fa-chevron-right"></i>
+			</div>
+		</div>
+		{% else %}
+		<div class="patient-row text-center text-muted py-4 no-results">
+			No hay pacientes registrados
+		</div>
+		{% endfor %}
+
+	</div>
+
+</div>
+
+<div class="modal fade" id="newPatientModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<form method="post">
+			<input type="hidden" name="action" value="save" />
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Nuevo Paciente</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group mb-0">
+						<label>Cliente *</label>
+						<div class="position-relative">
+							<input type="text" class="form-control" id="sel-cliente-input" autocomplete="off" placeholder="Buscar por nombre, teléfono..." />
+							<input type="hidden" name="codcliente" id="sel-cliente-hidden" value="" />
+							<div id="sel-cliente-drop" class="cli-drop"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group">
+								<label>Alergias</label>
+								<textarea name="alergias" class="form-control" rows="2"></textarea>
+							</div>
+							<div class="form-group">
+								<label>Medicación</label>
+								<textarea name="medicacion" class="form-control" rows="2"></textarea>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Antecedentes médicos</label>
+								<textarea name="antecedentes_medicos" class="form-control" rows="2"></textarea>
+							</div>
+							<div class="form-group">
+								<label>Antecedentes odontológicos</label>
+								<textarea name="antecedentes_odontologicos" class="form-control" rows="2"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group mb-0">
+								<label>Aseguradora</label>
+								<input type="text" name="aseguradora" class="form-control" />
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group mb-0">
+								<label>Nº Póliza</label>
+								<input type="text" name="numero_poliza" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-primary">Guardar</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+{% block css %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+
+<style>
+	.patients-page {
+		background: #f8fafc;
+		min-height: 100vh;
+	}
+
+	.patients-list {
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	.patient-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 16px 18px;
+		border-bottom: 1px solid #edf0f2;
+		background: #fff;
+		cursor: pointer;
+	}
+
+	.patient-row:hover {
+		background: #f9fbfd;
+	}
+
+	.patient-row:last-child {
+		border-bottom: 0;
+	}
+
+	.patient-row.hidden {
+		display: none;
+	}
+
+	.patient-name {
+		font-weight: 600;
+		color: #1f2937;
+		margin-bottom: 5px;
+	}
+
+	.patient-meta {
+		font-size: 13px;
+		color: #6b7280;
+	}
+
+	.patient-meta span {
+		margin-right: 18px;
+	}
+
+	.patient-meta i {
+		margin-right: 5px;
+		color: #9ca3af;
+	}
+
+	.patient-right {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+	}
+
+	.patient-right .fa-chevron-right {
+		color: #9ca3af;
+		font-size: 12px;
+	}
+
+	.badge-success {
+		background: #e9f8ef;
+		color: #16803c;
+		border: 1px solid #b7ebc8;
+		font-weight: 500;
+	}
+
+	#newPatientModal .modal-dialog {
+		max-width: 550px;
+	}
+
+	.cli-drop {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		max-height: 200px;
+		overflow-y: auto;
+		background: #fff;
+		border: 1px solid #ced4da;
+		border-radius: 0 0 4px 4px;
+		z-index: 1060;
+		display: none;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+	}
+
+	.cli-drop .cli-opt {
+		padding: 8px 12px;
+		cursor: pointer;
+		border-bottom: 1px solid #f0f0f0;
+		font-size: 14px;
+	}
+
+	.cli-drop .cli-opt:hover {
+		background: #e9f8ef;
+	}
+
+	.cli-drop .cli-opt:last-child {
+		border-bottom: none;
+	}
+
+	.cli-drop .cli-opt .cli-sub {
+		font-size: 12px;
+		color: #6c757d;
+	}
+
+	@media(max-width: 768px) {
+		.patient-row {
+			align-items: flex-start;
+		}
+
+		.patient-meta span {
+			display: block;
+			margin-bottom: 3px;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+<script>
+var CLIENTES = {
+{% for c in fsc.clientes %}
+'{{ c.codcliente }}' : {nombre: {{ c.razonsocial|json_encode|raw}}, telefono: {{ c.telefono1|json_encode|raw}}, cifnif: {{ c.cifnif|json_encode|raw}} }{{ loop.last ? '' : ',' }}
+{% endfor %}
+};
+
+	function filtrarClientes(inputEl, hiddenId) {
+    var q = inputEl.value.toLowerCase().trim();
+    var drop = document.getElementById(hiddenId + '-drop');
+    drop.innerHTML = '';
+    
+    if (q.length < 2) {
+        drop.style.display = 'none';
+        return;
+    }
+    
+    var results = [];
+    Object.keys(CLIENTES).forEach(function(cod) {
+        var c = CLIENTES[cod];
+        var haystack = ((c.nombre || '') + ' ' + (c.telefono || '') + ' ' + (c.cifnif || '')).toLowerCase();
+        if (haystack.indexOf(q) !== -1) {
+            results.push({cod: cod, nombre: c.nombre, tel: c.telefono, cif: c.cifnif});
+        }
+    });
+    
+    if (results.length === 0) {
+        drop.style.display = 'none';
+        return;
+    }
+    
+	results.slice(0, 30).forEach(function(r) {
+        var div = document.createElement('div');
+        div.className = 'cli-opt';
+        div.innerHTML = '<div>' + r.nombre + '</div>' + (r.tel || r.cif ? '<div class="cli-sub">' + (r.tel || '') + (r.tel && r.cif ? ' · ' : '') + (r.cif || '') + '</div>' : '');
+        div.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            inputEl.value = r.nombre;
+            document.getElementById(hiddenId + '-hidden').value = r.cod;
+            drop.style.display = 'none';
+        });
+        drop.appendChild(div);
+    });
+    
+    drop.style.display = 'block';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	var buscarInput = document.getElementById('buscar');
+	var filtroEstado = document.getElementById('filtro-estado');
+	var ordenarSelect = document.getElementById('ordenar');
+	var patientsList = document.getElementById('patients-list');
+	var rows = patientsList.querySelectorAll('.patient-row');
+	var noResults = patientsList.querySelector('.no-results');
+
+	function filterAndSort() {
+		var buscar = buscarInput.value.toLowerCase();
+		var estado = filtroEstado.value;
+		var ordenar = ordenarSelect.value;
+
+		var filteredRows = [];
+
+		rows.forEach(function(row) {
+			var nombre = row.dataset.nombre;
+			var rowEstado = row.dataset.estado;
+			var matchesBuscar = nombre.includes(buscar);
+			var matchesEstado = estado === '' || rowEstado === estado;
+
+			if (matchesBuscar && matchesEstado) {
+				row.classList.remove('hidden');
+				filteredRows.push(row);
+			} else {
+				row.classList.add('hidden');
+			}
+		});
+
+		filteredRows.sort(function(a, b) {
+			if (ordenar === 'fecha') {
+				var fechaA = a.dataset.fecha || '';
+				var fechaB = b.dataset.fecha || '';
+				return fechaB.localeCompare(fechaA);
+			} else {
+				var nombreA = a.dataset.nombre || '';
+				var nombreB = b.dataset.nombre || '';
+				return nombreA.localeCompare(nombreB);
+			}
+		});
+
+		if (noResults) {
+			noResults.style.display = filteredRows.length === 0 ? 'block' : 'none';
+		}
+	}
+
+	buscarInput.addEventListener('input', filterAndSort);
+	filtroEstado.addEventListener('change', filterAndSort);
+	ordenarSelect.addEventListener('change', filterAndSort);
+
+	filterAndSort();
+
+	var selClienteInput = document.getElementById('sel-cliente-input');
+	selClienteInput.addEventListener('input', function() {
+		filtrarClientes(this, 'sel-cliente');
+	});
+	selClienteInput.addEventListener('focus', function() {
+		if (this.value.length >= 2) {
+			filtrarClientes(this, 'sel-cliente');
+		}
+	});
+
+	document.addEventListener('click', function(e) {
+		if (!e.target.closest('#sel-cliente-input') && !e.target.closest('#sel-cliente-drop')) {
+			document.getElementById('sel-cliente-drop').style.display = 'none';
+		}
+	});
+
+});
+</script>
+{% endblock %}

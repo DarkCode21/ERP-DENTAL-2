@@ -1,0 +1,16 @@
+{
+    "accumulate-discount": "Akumulować zniżkę",
+    "discounts": "Rabaty",
+    "fixed-price": "Cena stała",
+    "formula-cost-price-alt": "Cena zakupu + %x%% + %y%",
+    "formula-sale-price-alt": "Cena - %x%% - %y%",
+    "global-changes": "Zmiany globalne",
+    "global-changes-desc": "Zmiany dokonane tutaj będą miały zastosowanie do wszystkich poniższych wariantów",
+    "level-tarifas-av": "Minimalny poziom do zobaczenia cen",
+    "prices": "Ceny",
+    "reset-all-rates": "Zresetuj wszystkie stawki",
+    "reset-rates": "Resetowanie stawek",
+    "reset-rates-for-this-variant": "Zresetuj stawki dla tej warianty",
+    "save-all-variants": "Zapisz wszystkie warianty",
+    "save-this-variant": "Zapisz tę wariantę"
+}

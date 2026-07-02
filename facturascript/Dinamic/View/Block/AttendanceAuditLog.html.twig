@@ -1,0 +1,62 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * @author José Antonio Cuello Principal <yopli2000@gmail.com>
+ */
+#}
+{% set view = fsc.views | first %}
+{% set model = view.model %}
+{% set modifiedValues = model.getComparativeData() %}
+<div class="row">
+    <div class="col-12 col-md-6">
+        <div class="card h-100">
+            <div class="card-header text-info h4">
+                <i class="fa-solid fa-diagram-predecessor fa-fw"></i>
+                {{ trans('old-data') }}
+            </div>
+            <div class="card-body">
+                {{ _self.renderData(model, modifiedValues, 'olddata') }}
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6">
+        <div class="card h-100">
+            <div class="card-header text-info h4">
+                <i class="fa-solid fa-diagram-next fa-fw"></i>
+                {{ trans('new-data') }}
+            </div>
+            <div class="card-body">
+                {{ _self.renderData(model, modifiedValues, 'newdata') }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Force max width to parent form #}
+<script>
+    const footerInfoDiv = document.getElementById('footer-data');
+    const form = footerInfoDiv.closest('form');
+    if (form) {
+        form.classList.add('w-100');
+    }
+</script>
+
+{# Render the JSON data into rows and columns #}
+{% macro renderData(model, modifiedValues, field) %}
+    {% for item, value in model.getData(field)  %}
+        {% set class = modifiedValues[item] is defined ? 'font-weight-bold' : '' %}
+        <div class="row">
+            <div class="col-4">
+                <span class="{{ class }}">{{ item }}:</span>
+            </div>
+            <div class="col-8">
+                <span class="{{ class }}">{{ value }}</span>
+            </div>
+        </div>
+    {% endfor %}
+{% endmacro %}

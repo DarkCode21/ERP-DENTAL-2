@@ -1,0 +1,15 @@
+{
+    "code": 64,
+    "message": "FacturaScripts\\Plugins\\Dental\\Model\\Paciente and FacturaScripts\\Plugins\\Dental\\Model\\Traits\\EncryptedFieldsTrait define the same property ($encryptedFields) in the composition of FacturaScripts\\Plugins\\Dental\\Model\\Paciente. However, the definition differs and is considered incompatible. Class was composed",
+    "file": "\/Plugins\/Dental\/Model\/Paciente.php",
+    "line": 12,
+    "fragment": "\n7\n8use FacturaScripts\\Core\\Base\\DataBase\\DataBaseWhere;\n9use FacturaScripts\\Core\\Model\\Cliente;\n10use FacturaScripts\\Core\\Model\\Base\\ModelClass;\n11\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">12class Paciente extends ModelClass<\/spam>\n13{\n14    use \\FacturaScripts\\Core\\Model\\Base\\ModelTrait;\n15    use \\FacturaScripts\\Plugins\\Dental\\Model\\Traits\\EncryptedFieldsTrait;\n16\n17    protected static $encryptedFields = [",
+    "hash": "2c54965cd7583ce97c6a62afb2ddd288",
+    "url": "\/ListPaciente",
+    "report_url": "https:\/\/facturascripts.com\/errores\/2c54965cd7583ce97c6a62afb2ddd288",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F2c54965cd7583ce97c6a62afb2ddd288",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

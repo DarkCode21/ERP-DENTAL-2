@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="topbar-color" title="colors" icon="fa-solid fa-palette" numcolumns="12">
+            <column name="topbar-background-color" description="tbgcolor-desc" numcolumns="3" order="110">
+                <widget type="color" fieldname="tbgcolor" required="true"/>
+            </column>
+            <column name="text-color" description="ttext-color-desc" numcolumns="3" order="110">
+                <widget type="color" fieldname="ttxtcolor" required="true"/>
+            </column>
+            <column name="icons-color" description="icons-txtcolor-desc" numcolumns="3" order="110">
+                <widget type="color" fieldname="itxtcolor" required="true"/>
+            </column>
+            <column name="user-info-gradient" description="gradient-userinfo-desc" numcolumns="3" order="110">
+                <widget type="color" fieldname="uigradient" required="true"/>
+            </column>
+        </group>
+        <group name="topbar-options" title="options" icon="fa-solid fa-cog" numcolumns="12">
+            <column name="disable-cn-topbar" numcolumns="4" order="110">
+                <widget type="checkbox" fieldname="tcndis"/>
+            </column>
+        </group>
+
+    </columns>
+</view>

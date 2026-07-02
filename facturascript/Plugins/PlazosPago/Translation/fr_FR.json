@@ -1,0 +1,5 @@
+{
+    "cannot-mark-payment-as-paid-if-terms": "Vous ne pouvez pas marquer le mode de paiement comme payé s'il y a des conditions de paiement",
+    "payment-term": "Échéance de paiement",
+    "terms-exceed-100p": "Les versements excèdent les 100%"
+}

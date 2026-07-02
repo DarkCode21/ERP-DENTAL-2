@@ -1,0 +1,263 @@
+{% import 'Macro/GoogleTagManager.html.twig' as GoogleTagManager %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ constant('FS_LANG') | slice(0, 2) }}"
+      xml:lang="{{ constant('FS_LANG') | slice(0, 2) }}">
+<head>
+    {{ GoogleTagManager.head() }}
+    {% for item in getIncludeViews('MenuTemplate', 'HeadFirst') %}
+        {% include item['path'] %}
+    {% endfor %}
+    {% block meta %}
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>{{ fsc.title | raw }}</title>
+        <meta name="description" content="{{ trans('meta-description') }}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="generator" content="Interiberica Pyme"/>
+        <meta name="robots" content="noindex"/>
+    {% endblock %}
+    {% block icons %}
+        <link rel="shortcut icon" href="{{ asset('Dinamic/Assets/Images/favicon.ico') }}"/>
+        <link rel="apple-touch-icon" sizes="180x180"
+              href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png') }}"/>
+    {% endblock %}
+    {% for item in getIncludeViews('MenuTemplate', 'CssBefore') %}
+        {% include item['path'] %}
+    {% endfor %}
+    {% block css %}
+        <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}?v=5"/>
+        <link rel="stylesheet" href="{{ asset('node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}?v=6"/>
+        <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/custom.css') }}?v=7"/>
+
+        <!-- Richi Theme CSS -->
+        <link rel="stylesheet" href="{{ asset('Plugins/RichiTheme/Assets/libs/simplebar/dist/simplebar.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('Plugins/RichiTheme/Assets/CSS/RichiTheme.css') }}?v={{ 'now' | date('ymd') }}"/>
+        <link rel="stylesheet" href="{{ asset('Plugins/RichiTheme/Assets/CSS/richitheme-bootstrap-colors.css') }}?v={{ 'now' | date('ymd') }}"/>
+
+        <!-- Richi Theme Dynamic Styles -->
+        <style>
+            .sidebar {
+                background: {{ settings('richitheme', 'sbgcolor', '#f7f7f7') }} !important;
+            }
+            .submenu, .submenu.open {
+                background: {{ settings('richitheme', 'subbgcolor', '#ffffff') }} !important;
+            }
+
+            .submenu-nested, .submenu-nested.open {
+                background: {{ settings('richitheme', 'subbgcolor', '#ffffff') }} !important;
+                filter: brightness(1.15) !important;
+            }
+
+            .submenu-item.active {
+                background: {{ settings('richitheme', 'itembgcolor', '#edf5fc') }} !important;
+            }
+            .menu-item.active, .menu-item:hover, .submenu-nested-item.active, .submenu-nested-item:hover {
+                border-left-color: {{ settings('richitheme', 'accentcolor', '#000000') }} !important;
+                background: {{ settings('richitheme', 'itembgcolor', '#edf5fc') }} !important;
+                box-shadow: inset 0 0 0 100px rgba(0, 0, 0, 0.07) !important;
+            }
+            .menu-item.active, .menu-item, .submenu-item.active, .submenu-item, .submenu-nested-item.active, .submenu-nested-item  {
+                color: {{ settings('richitheme', 'stxtcolor', '#444b52') }} !important;
+            }
+            .menu-item.open .folder-icon {
+                color: {{ settings('richitheme', 'accentcolor', '#000000') }} !important;
+            }
+
+        </style>
+
+    {% endblock %}
+    {# Adds custom CSS assets #}
+    {% for css in assetManager.get('css') %}
+        <link rel="stylesheet" href="{{ css }}"/>
+    {% endfor %}
+    {% for item in getIncludeViews('MenuTemplate', 'CssAfter') %}
+        {% include item['path'] %}
+    {% endfor %}
+    {% for item in getIncludeViews('MenuTemplate', 'JsHeadBefore') %}
+        {% include item['path'] %}
+    {% endfor %}
+    {% block javascripts %}
+        <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}?v=5"></script>
+        <script src="{{ asset('node_modules/bootbox/dist/bootbox.min.js') }}"></script>
+        <script src="{{ asset('node_modules/bootbox/dist/bootbox.locales.min.js') }}"></script>
+        <script src="{{ asset('node_modules/pace-js/pace.min.js') }}"></script>
+        <script src="{{ asset('node_modules/@fortawesome/fontawesome-free/js/all.min.js') }}?v=6"></script>
+        <script src="{{ asset('Dinamic/Assets/JS/Custom.js') }}?v=7"></script>
+
+        <!-- Richi Theme JS -->
+        <script src="{{ asset('Plugins/RichiTheme/Assets/libs/simplebar/dist/simplebar.min.js') }}"></script>
+        <script src="{{ asset('Plugins/RichiTheme/Assets/JS/RichiTheme.js') }}"></script>
+
+    {% endblock %}
+    {# Adds custom JS assets #}
+    {% for js in assetManager.get('js') %}
+        <script src="{{ js }}"></script>
+    {% endfor %}
+    {% for item in getIncludeViews('MenuTemplate', 'JsHeadAfter') %}
+        {% include item['path'] %}
+    {% endfor %}
+    {% if debugBarRender %}
+        {{ debugBarRender.renderHead() | raw }}
+    {% endif %}
+    {% for item in getIncludeViews('MenuTemplate', 'HeadEnd') %}
+        {% include item['path'] %}
+    {% endfor %}
+</head>
+{% block fullBody %}
+    <body>
+    {{ GoogleTagManager.body() }}
+    {% for item in getIncludeViews('MenuTemplate', 'BodyFirst') %}
+        {% include item['path'] %}
+    {% endfor %}
+    {% block navbar %}
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a class="align-items-center mx-auto" href="{{ asset(fsc.user.homepage) }}"
+                   title="{{ trans('homepage') }}">
+
+                    {% set idlogobar = settings('richitheme', 'lsfile') %}
+                    {% set pluginLogo = idlogobar > 0 ? attachedFile(idlogobar) : null %}
+                    {% set idlogo = fsc.user.getCompany().idlogo %}
+                    {% set companyLogo = idlogo > 0 ? attachedFile(idlogo) : null %}
+
+                    {# Prioridad: 1. Logo del plugin, 2. Logo de empresa, 3. Logo por defecto #}
+                    {% if pluginLogo is not null and pluginLogo.filename is not empty %}
+                        {# Logo personalizado del plugin RichiTheme #}
+                        <img src="{{ pluginLogo.url('download-permanent') }}"
+                             style="max-width: 100%; max-height: 69px;"
+                             class="d-inline-block align-top"
+                             alt="Logo Personalizado">
+                    {% elseif companyLogo is not null and companyLogo.filename is not empty %}
+                        {# Logo de la empresa #}
+                        <img src="{{ companyLogo.url('download-permanent') }}"
+                             style="max-width: 100%; max-height: 69px;"
+                             class="d-inline-block align-top"
+                             alt="Logo Empresa">
+                    {% else %}
+                        <img src="{{ asset('Dinamic/Assets/Images/logo.png') }}"
+                             width="64" height="64"
+                             class="d-inline-block align-top"
+                             alt="Logo">
+                    {% endif %}
+                </a>
+            </div>
+            <nav class="sidebar-menu" data-simplebar>
+                {% for menuItem in menuManager.getMenu() %}
+                    {{ _self.showMenu(menuItem) }}
+                {% endfor %}
+            </nav>
+        </div>
+    {% endblock %}
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        {% include 'Master/TopNavbar.html.twig' %}
+
+        <div class="ppal pt-4 p-3">
+            {% block messages %}
+                {% include 'Macro/Toasts.html.twig' %}
+                {% from 'Macro/Utils.html.twig' import message as showMessage %}
+
+                {{ showMessage(log, ['error', 'critical'], 'danger') }}
+                {{ showMessage(log, ['warning'], 'warning') }}
+                {{ showMessage(log, ['notice'], 'success') }}
+                {{ showMessage(log, ['info'], 'info') }}
+
+            {% endblock %}
+            {% block bodyHeaderOptions %}
+            {% endblock %}
+            {% block body %}
+            {% endblock %}
+        </div>
+    </div>
+    {% for item in getIncludeViews('MenuTemplate', 'JsFooter') %}
+        {% include item['path'] %}
+    {% endfor %}
+    {% if debugBarRender %}
+        {{ debugBarRender.render() | raw }}
+    {% endif %}
+    {% for item in getIncludeViews('MenuTemplate', 'BodyEnd') %}
+        {% include item['path'] %}
+    {% endfor %}
+    </body>
+{% endblock %}
+</html>
+
+{% macro showMenu(menuItem, parent) %}
+    {% import _self as macros %}
+
+    {# Detectamos si es un elemento raíz (Ventas, Compras...) o un hijo #}
+    {% if parent is empty %}
+        {# ============================================= #}
+        {# NIVEL 1: Menú principal                      #}
+        {# ============================================= #}
+        {% if menuItem.menu is empty %}
+            {# CASO A: Menú principal sin hijos (ej. Dashboard) #}
+            <a href="{{ menuItem.url }}" class="menu-item {{ menuItem.active ? 'active' : '' }}">
+                <i class="{{ menuItem.icon }} fa-fw"></i>
+                <span>{{ menuItem.title }}</span>
+            </a>
+        {% else %}
+            {# CASO B: Menú principal con hijos (ej. Ventas -> Facturas) #}
+            <a href="#" class="menu-item has-submenu {{ menuItem.active ? 'active open' : '' }}"
+               data-submenu="{{ menuItem.name }}">
+                <i class="fa-fw me-2 far {{ menuItem.active ? 'fa-folder-open' : 'fa-folder-closed' }} fa-fw folder-icon"></i>
+                <span>{{ menuItem.title }}</span>
+                <i class="fa-xs me-1 fas fa-chevron-right arrow"></i>
+            </a>
+
+            <div class="submenu {{ menuItem.active ? 'open' : '' }}" id="submenu-{{ menuItem.name }}">
+                {% for item in menuItem.menu %}
+                    {% if item.menu is empty %}
+                        {# ============================================= #}
+                        {# NIVEL 2: Sub-item sin más hijos              #}
+                        {# ============================================= #}
+                        <a href="{{ item.url }}" class="submenu-item {{ item.active ? 'active' : '' }}">
+                            <i class="{{ item.icon }} fa-fw me-1"></i>
+                            {{ item.title }}
+                        </a>
+                    {% else %}
+                        {# ============================================= #}
+                        {# NIVEL 2: Sub-item CON hijos (tercer nivel)   #}
+                        {# ============================================= #}
+                        <div class="submenu-item-wrapper {{ item.active ? 'active' : '' }}">
+                            <a href="#" class="submenu-item has-children {{ item.active ? 'active open' : '' }}"
+                               data-submenu-child="{{ menuItem.name }}-{{ item.name }}">
+                                <i class="{{ item.icon }} fa-fw me-1"></i>
+                                {{ item.title }}
+                                <i class="fas fa-chevron-right submenu-arrow"></i>
+                            </a>
+
+                            {# ============================================= #}
+                            {# NIVEL 3: Submenú anidado                     #}
+                            {# ============================================= #}
+                            <div class="submenu-nested {{ item.active ? 'open' : '' }}"
+                                 id="submenu-{{ menuItem.name }}-{{ item.name }}">
+                                {% for subItem in item.menu %}
+                                    <a href="{{ subItem.url }}"
+                                       class="submenu-nested-item {{ subItem.active ? 'active' : '' }}">
+                                        <i class="{{ subItem.icon }} fa-fw"></i>
+                                        {{ subItem.title }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% macro loadLogo(idfile) -%}
+    {% apply spaceless %}
+        {% set url = 'Dinamic/Assets/Images/logo.png' %}
+        {% if idfile > 0 %}
+            {% set attached = attachedFile(idfile) %}
+            {% if attached.filename is not empty %}
+                {% set url = attached.url('download-permanent') %}
+            {% endif %}
+        {% endif %}
+        {{ asset(url) }}
+    {% endapply %}
+{%- endmacro loadLogo %}

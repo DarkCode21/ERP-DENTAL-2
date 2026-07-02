@@ -1,0 +1,64 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% import 'Macro/PortalClienteTools.html.twig' as portal %}
+{% set ticket = fsc.getCurrentView().model %}
+{% set ticketFiles = ticket.getFiles() %}
+
+<div class="container pt-3 pb-3">
+    <div class="form-row d-flex align-items-center">
+        <div class="col-sm">
+            <h1 class="h3 m-0 p-0">
+                <i class="far fa-comment-dots"></i>
+                {% if fsc.newTicket %}
+                    {{ trans('new-support-ticket') }}
+                {% else %}
+                    {{ ticket.title() }}
+                {% endif %}
+            </h1>
+        </div>
+
+        {% for item in getIncludeViews('PortalTicket', 'buttonsBefore') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% block buttons %}
+            <div class="col-sm-auto text-right">
+                <a href="{{ asset('PortalCliente') }}?activetab=ListPortalTicket" class="btn btn-secondary">
+                    <i class="fas fa-list fa-fw"></i>
+                    {{ trans('back') }}
+                </a>
+            </div>
+            <div class="col-sm-auto text-right">
+                <form action="{{ asset('PortalCliente') }}" method="post">
+                    <button type="submit" name="action" value="logout" class="btn btn-danger"
+                            title="{{ trans('logout') }}">
+                        <i class="fas fa-door-open"></i>
+                        {{ trans('exit') }}
+                    </button>
+                </form>
+            </div>
+        {% endblock %}
+
+        {% for item in getIncludeViews('PortalTicket', 'buttonsAfter') %}
+            {% include item['path'] %}
+        {% endfor %}
+    </div>
+
+    {% if ticket.exists() %}
+        <div class="row mt-5">
+            <div class="col-12">
+                {{ ticket.markdown() | raw }}
+            </div>
+        </div>
+        {% if ticketFiles is not empty %}
+            <div class="row border p-0 mx-2">
+                {% for file in ticketFiles %}
+                    {{ portal.htmlFile(file) | raw }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

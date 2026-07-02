@@ -1,0 +1,129 @@
+
+{% extends "Master/MenuTemplate.html.twig" %}
+{% block js %}
+   
+{% endblock %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        [data-toggle="collapse"] i:before{
+            content: "\f139";
+        }
+
+        [data-toggle="collapse"].collapsed i:before{
+            content: "\f13a";
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+     <script type="module" src="./Plugins/FSReports/node_modules/luxon/src/luxon.js"></script>
+   
+    <!--<script type="module" src="./Plugins/FSReports/node_modules/luxon/src/luxon.js"></script>-->
+    {% set refresh = i18n.trans('refresh-page') %}
+    {% set defaultT, defaultF = i18n.trans('mark-as-homepage'), i18n.trans('marked-as-homepage') %}
+    {% set title = i18n.trans(fsc.getPageData()['title']) | capitalize %}
+    {% set generate, generate_title = i18n.trans('generate'), i18n.trans('generate-title') %}
+    {% set dataSource, othersFilters = i18n.trans('data-source'), i18n.trans('others-filters') %}
+    {# -- Others Values -- #}
+    {% set exportOptions = fsc.exportManager.options() %}
+    {% set select_filter_attr = {onchange: 'this.form.submit()'} %}
+    {% set input_date_attr = {class: 'form-control datepicker', onchange: 'this.form.submit()', style: 'font-size: 90%;'} %}
+    {% set input_text_attr = {class: 'form-control ', onchange: 'this.form.submit()', style: 'font-size: 90%;'} %}
+    {% import 'Macro/Forms.html.twig' as forms %}
+    {# -- Visual macros -- #}
+    {% from 'Macro/Utils.html.twig' import popoverTitle as popoverTitle %}
+    {# -- Header Row -- #}
+    <div class="row">
+        <div class="col-sm-7 col-6">
+            <div class="btn-group d-xs-none">
+                <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}" {{ popoverTitle(refresh, 'bottom') }}>
+                    <i class="fas fa-sync" aria-hidden="true"></i>
+                </a>
+                {% if fsc.getPageData()['name'] == fsc.user.homepage %}
+                    <a class="btn btn-sm btn-outline-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE" {{ popoverTitle(defaultF, 'bottom') }}>
+                        <i class="fas fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}?defaultPage=TRUE" {{ popoverTitle(defaultT, 'bottom') }}>
+                        <i class="far fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-sm-5 col-6 text-right">
+            <h1 style="margin-top: 0px; margin-bottom: 0px;">
+                <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i> {{ title }}
+            </h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <form name="f_search" id="formSearch" action="{{ fsc.url() }}" method="post" class="form-inline col-12">
+        <div class="row">
+
+            
+                 <input type="hidden" name="action" value="reload"/>
+                <div class="form-group col-2">
+                    {#{{ forms.simpleDate('date-from' , 'date-from',  fsc.filters.desdeFecha|date('d-m-Y')  , 'text', 'Desde Fecha', 'fas fa-calendar',  input_date_attr) }}#}
+                    {{ i18n.trans('from-date') }}
+                    <input type="date" id="date-from" name="desFec" value="{{ fsc.filters.desdeFecha|date('d-m-Y') }}"
+                                               class="form-control" required=""/>
+                </div>
+                <div class="form-group col-2">
+
+                    {#{{ forms.simpleInput('date-to' , 'date-to' , fsc.filters.hastaFecha|date('d-m-Y'), 'text', 'Hasta Fecha', 'fas fa-calendar', input_date_attr) }}#}
+                     {{ i18n.trans('to-date') }}
+                    <input type="date" id="date-to" name="hasFec" value="{{ fsc.filters.desdeFecha|date('d-m-Y') }}"
+                                               class="form-control" required=""/>
+                </div>
+                <div class="form-group col-3">
+                    {{ forms.simpleSelect('codgrupo' , 'codgrupo' , '', fsc.gruposCliente, 'Grupo', 'fas fa-book fa-fw', input_select_attr) }}
+                </div>
+                <div class="form-group col-3">
+                    {{ forms.simpleSelect('codagente' , 'codagente' , '', fsc.agentes, 'Vendedor', 'fas fa-book fa-fw', input_select_attr) }}
+                </div>
+        </div>
+            <div class="row col-6">
+                <div class="form-check col-4 col-md-4">
+                    <input class="form-check-input" type="radio" name="tipodesglose" id="resumen" value="r" checked>
+                        <label class="form-check-label" for="resumen">
+                            Resumen por grupo
+                        </label>
+                </div>
+                <div class="form-check col-4 col-md-4">
+                    <input class="form-check-input" type="radio" name="tipodesglose" id="desglosado" value="d">
+                        <label class="form-check-label" for="desglosado">
+                            Deglosado por cliente
+                    </label>
+                </div>
+                <div class="form-check col-4 col-md-4">
+                    <input class="form-check-input" type="radio" name="tipodesglose" id="desglosadop" value="sp">
+                        <label class="form-check-label" for="desglosadop">
+                            Por serie de producto
+                    </label>
+                </div>
+            </div>
+            <div class="row col-6">
+                <div class="form-group col-3">
+                    <button type="button" class="btn btn-primary" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="Recalcular" onclick="getDatosVentas();">
+                        <i class="fas fa-database fa-fw" aria-hidden="true"></i> Calcular
+                    </button>
+                </div> 
+                <div class="form-group col-3">
+                    <button type="button" class="btn btn-primary" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="Imprimir informe" onclick="console.log('enviamos');this.form.action.value='print-pdf';this.form.submit();">
+                        <i class="fas fa-print fa-fw" aria-hidden="true"></i> Imprimir
+                    </button>
+                </div> 
+            </div>
+            </form>
+                
+                <div id="data">
+                </div>
+          
+
+    </div>
+</div>
+
+{%  endblock %} {# Fin del body #}
+

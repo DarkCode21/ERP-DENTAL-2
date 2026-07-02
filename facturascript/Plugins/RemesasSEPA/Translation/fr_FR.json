@@ -1,0 +1,17 @@
+{
+    "cant-delete-remittance-receipts": "Impossible de supprimer les reçus de versement.",
+    "charge-date": "Date de facturation",
+    "charges": "Paiements",
+    "creditor-id": "ID Créancier",
+    "customer-have-no-iban": "Le client %customer% ne possède pas de compte avec un IBAN.",
+    "group-receipts-by-customer": "Grouper les reçus par client",
+    "ready": "Prêt",
+    "receipt-inside-remittance": "Vous ne pouvez pas supprimer un reçu se trouvant dans une remise.",
+    "rectify": "Rectifier",
+    "remittance": "Remise",
+    "remittance-charged": "Remise collectée",
+    "remittance-paid": "Remesa pagada",
+    "remittance-ready-to-download": "Remise prête au téléchargement",
+    "remittance-sent": "Remise envoyée",
+    "remittances": "Remises"
+}

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : empleados.xml
+    Author     : Erick Lizana
+    Description:
+-->
+<table>
+    <column>
+        <name>codempleado</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombretrabajador</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nif</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>direccion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>localidad</name>
+        <type>text</type>
+    </column>
+	<column>
+        <name>cif</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>grupoprofesional</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>naf</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>cccss</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>grupocotizacion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>inicioliquidacion</name>
+        <type>date</type>
+		<null>NO</null>
+    </column>
+    <column>
+        <name>finliquidacion</name>
+        <type>date</type>
+		<null>NO</null>
+    </column>
+    <column>
+        <name>totaldias</name>
+        <type>integer</type>
+		<null>NO</null>
+    </column>
+    <column>
+        <name>salariobase</name>
+        <type>double precision</type>
+		<null>NO</null>
+    </column>
+    <column>
+        <name>complementossalariales</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>extrasfuerzamayor</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>extrasresto</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>horascomplementarias</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>gratificacionesextraordinarias</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>salarioespecie</name>
+        <type>double precision</type>
+    </column>
+
+	<column>
+        <name>indemnizaciones</name>
+        <type>double precision</type>
+    </column>
+	<column>
+        <name>seguridadsocial</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>despidos</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>otraspercepciones</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>totaldevengado</name>
+        <type>double precision</type>
+		<null>NO</null>
+    </column>
+    <column>
+        <name>porc_contingencias</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_contingencias</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>porc_desempleo</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_desempleo</name>
+        <type>double precision</type>
+    </column>
+
+	<column>
+        <name>porc_profesional</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_profesional</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>porc_extras_fuerza_mayor</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_extras_fuerza_mayor</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>porc_extras_resto</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_extras_resto</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>total_aportaciones</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>porc_impuesto_renta</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_impuesto_renta</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_anticipos</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_productos_especies</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_deducciones</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>totaldeducir</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>total_liquido_percibir</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>remuneracion_mensual_cotizacion</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>prorratas_pagas_extras</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>total_remuneracion</name>
+        <type>double precision</type>
+		<null>NO</null>
+    </column>
+    <column>
+        <name>base_cotizacion_horas_extras_fuerza_mayor</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>base_cotizacion_horas_extras_resto</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>base_retencion_irpf</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>base</name>
+        <type>double precision</type>
+    </column>
+
+	<column>
+        <name>porc_base</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_base</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>porc_at_ep</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_at_ep</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>porc_desempleo_c</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_desempleo_c</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>porc_formacion_empresarial</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>bccp</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_formacion_empresarial</name>
+        <type>double precision</type>
+    </column>
+
+    <column>
+        <name>porc_base_cot_horas_extras_fuerza_mayor</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_base_cot_horas_extras_fuerza_mayor</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>porc_base_cot_horas_extras_resto</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>monto_base_cot_horas_extras_resto</name>
+        <type>double precision</type>
+    </column>
+	<column>
+        <name>activo</name>
+        <type>integer</type>
+		<default>1</default>
+		<null>NO</null>
+    </column>
+	<column>
+        <name>idnomina</name>
+        <type>serial</type>
+		<null>NO</null>
+    </column>
+	<column>
+        <name>recibido_el</name>
+        <type>date</type>
+    </column>
+    <constraint>
+        <name>nominas_pkey</name>
+        <type>PRIMARY KEY (idnomina)</type>
+    </constraint>
+    <constraint>
+        <name>ca_nominas_empleados</name>
+        <type>FOREIGN KEY (codempleado) REFERENCES empleados (idempleado) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

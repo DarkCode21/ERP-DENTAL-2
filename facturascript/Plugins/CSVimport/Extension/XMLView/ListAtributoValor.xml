@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <modals>
+        <group name="upload-attributes" title="import-attributes" icon="fas fa-file-import">
+            <column name="file" numcolumns="12" order="100">
+                <widget type="file" fieldname="attributes_file" accept=".csv" required="true"/>
+            </column>
+        </group>
+    </modals>
+</view>

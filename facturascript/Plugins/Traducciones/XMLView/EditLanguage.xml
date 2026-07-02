@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2023 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12" valign="bottom">
+            <column name="codeicu" titleurl="https://www.localeplanet.com/icu/" order="100">
+                <widget type="text" fieldname="codicu" required="true" readonly="dinamic"/>
+            </column>
+            <column name="name" order="110">
+                <widget type="text" fieldname="name" required="true"/>
+            </column>
+            <column name="country" order="120">
+                <widget type="select" fieldname="codpais" required="true" onclick="EditPais">
+                    <values source="paises" fieldcode="codpais" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="flag" order="130">
+                <widget type="select" fieldname="idflag">
+                    <values/>
+                </widget>
+            </column>
+        </group>
+        <group name="log" numcolumns="12" title="logs">
+            <column name="user" order="100">
+                <widget type="text" fieldname="nick" readonly="true"/>
+            </column>
+            <column name="creation-date" order="110">
+                <widget type="date" fieldname="creationdate" readonly="true"/>
+            </column>
+            <column name="last-user" order="120">
+                <widget type="text" fieldname="lastnick" readonly="true"/>
+            </column>
+            <column name="last-update" order="130">
+                <widget type="date" fieldname="lastupdate" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+    <modals>
+        <group name="copy-core-plugin-translates-from" title="copy-core-plugin-translates-from" icon="fas fa-copy">
+            <column name="language-core-plugin" title="language" description="copy-core-plugin-translates-from-desc" order="100">
+                <widget type="select" fieldname="copylanguage" required="true">
+                    <values/>
+                </widget>
+            </column>
+        </group>
+        <group name="copy-custom-translates-from" title="copy-custom-translates-from" icon="fas fa-copy">
+            <column name="language-custom" title="language" description="copy-custom-translates-from-desc" order="100">
+                <widget type="select" fieldname="copylanguage" required="true">
+                    <values/>
+                </widget>
+            </column>
+        </group>
+    </modals>
+</view>

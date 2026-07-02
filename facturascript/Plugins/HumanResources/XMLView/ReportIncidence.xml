@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ReportIncidence.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller ReportIncidence
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="idemployee" />
+        </column>
+        <column name="employee" order="110">
+            <widget type="text" fieldname="name" />
+        </column>
+        <column name="days" order="120">
+            <widget type="number" decimal="0" fieldname="totaldays" />
+        </column>
+        <column name="input" order="130">
+            <widget type="number" decimal="0" fieldname="entries" />
+        </column>
+        <column name="delays" order="135">
+            <widget type="number" decimal="0" fieldname="delays" />
+        </column>
+        <column name="withoutrest" order="140">
+            <widget type="number" decimal="0" fieldname="withoutrest" />
+        </column>
+        <column name="justified" order="150">
+            <widget type="number" decimal="0" fieldname="justified" />
+        </column>
+        <column name="leaves" title="sick-leave" order="160">
+            <widget type="number" decimal="0" fieldname="leaves" />
+        </column>
+        <column name="holidays" order="160">
+            <widget type="number" decimal="0" fieldname="holidays" />
+        </column>
+    </columns>
+</view>

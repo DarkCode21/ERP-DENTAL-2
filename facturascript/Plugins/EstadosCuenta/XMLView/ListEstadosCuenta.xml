@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="codcliente" onclick="EditEstadosCuenta"/>
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="nombre"/>
+        </column>
+        <column name="business-name" display="none" order="120">
+            <widget type="text" fieldname="razonsocial"/>
+        </column>
+        <column name="fiscal-number" order="140">
+            <widget type="text" fieldname="cifnif"/>
+        </column>
+    </columns>
+</view>

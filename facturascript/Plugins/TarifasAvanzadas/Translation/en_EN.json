@@ -1,0 +1,16 @@
+{
+    "accumulate-discount": "Accumulate discount",
+    "discounts": "Discounts",
+    "fixed-price": "Fixed price",
+    "formula-cost-price-alt": "Cost price + %x%% + %y%",
+    "formula-sale-price-alt": "Price - %x%% - %y%",
+    "global-changes": "Global changes",
+    "global-changes-desc": "Changes made here will apply to all variants below",
+    "level-tarifas-av": "Minimum level to see prices",
+    "prices": "Prices",
+    "reset-all-rates": "Reset all rates",
+    "reset-rates": "Reset rates",
+    "reset-rates-for-this-variant": "Reset rates for this variant",
+    "save-all-variants": "Save all variants",
+    "save-this-variant": "Save this variant"
+}

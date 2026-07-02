@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : SettingsRRHH.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Add RRHH settings options to App Settings
+-->
+<view>
+    <columns>
+        <group name="rrhh-data" title="general" numcolumns="12" icon="fa-solid fa-address-card">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true" />
+            </column>
+            <column name="journal" numcolumns="3" order="100">
+                <widget type="select" fieldname="journal" icon="fa-solid fa-book">
+                    <values source="diarios" fieldcode="iddiario" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="attendances" numcolumns="3" order="130">
+                <widget type="select" fieldname="filtercheckdate" translate="true" icon="fa-solid fa-clock">
+                    <values title="daily">today</values>
+                    <values title="weekly">this-week</values>
+                    <values title="monthly">this-month</values>
+                    <values title="yearly">this-year</values>
+                </widget>
+            </column>
+            <column name="manual-attendance" numcolumns="3" order="140">
+                <widget type="select" fieldname="allowmanual" translate="true" icon="fa-solid fa-user-clock" required="true">
+                    <values title="allow">1</values>
+                    <values title="not-allow">0</values>
+                </widget>
+            </column>
+            <column name="biometric-device" numcolumns="3" order="150">
+                <widget type="select" fieldname="biodevice" translate="true" required="true" icon="fa-solid fa-fingerprint">
+                    <values title="no">0</values>
+                    <values title="yes">1</values>
+                </widget>
+            </column>
+            <column name="extra-hours" numcolumns="3" order="200">
+                <widget type="select" fieldname="extra-hours" icon="fa-solid fa-business-time">
+                    <values source="rrhh_salaryconcepts" fieldcode="id" fieldtitle="name" />
+                </widget>
+            </column>
+            <column name="overtime-compensation" numcolumns="3" order="210">
+                <widget type="select" fieldname="overtime" icon="fa-solid fa-unlink">
+                    <values source="rrhh_absencesconcepts" fieldcode="id" fieldtitle="name" />
+                </widget>
+            </column>
+        </group>
+        <group name="rrhh-delay" title="delays" numcolumns="12" icon="fa-solid fa-clock-rotate-left">
+            <column name="inputdelay" title="input" description="delay-minutes-desc" numcolumns="2" order="200">
+                <widget type="number" fieldname="inputdelay" decimal="0" step="1" icon="fa-solid fa-business-time" />
+            </column>
+            <column name="maxdelay" title="max-delay" description="delay-max-desc" numcolumns="2" order="210">
+                <widget type="number" fieldname="maxdelay" decimal="0" step="1" icon="fa-solid fa-triangle-exclamation" />
+            </column>
+            <column name="perioddelay" title="period-delay" description="delay-period-desc" numcolumns="2" order="220">
+                <widget type="number" fieldname="perioddelay" decimal="0" step="1" max="365" icon="fa-solid fa-triangle-exclamation" />
+            </column>
+            <column name="computable" description="computable-desc" numcolumns="3" order="230">
+                <widget type="select" fieldname="allowcomputable" translate="true" icon="fa-solid fa-person-circle-question" required="true">
+                    <values title="dont-ask">0</values>
+                    <values title="ask">1</values>
+                </widget>
+            </column>
+            <column name="minforextra" title="min-for-extra-hour" description="min-for-extra-hour-desc" numcolumns="3" order="240">
+                <widget type="number" fieldname="minforextra" decimal="0" step="1" icon="fa-solid fa-business-time" />
+            </column>
+        </group>
+        <group name="rrhh-location" title="location" numcolumns="12" icon="fa-solid fa-map-location-dot" valign="bottom">
+            <column name="location-gps" title="use-location-gps" numcolumns="12" order="300">
+                <widget type="checkbox" fieldname="locationgps" />
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="footer">
+            <group name="help" id="footer-info" class="w-100" html="Block/SettingInfo.html.twig" />
+        </row>
+    </rows>
+</view>

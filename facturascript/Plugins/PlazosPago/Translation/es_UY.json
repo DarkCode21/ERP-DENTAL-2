@@ -1,0 +1,5 @@
+{
+    "cannot-mark-payment-as-paid-if-terms": "No puedes marcar la forma de pago como pagada si hay plazos de pago",
+    "payment-term": "Plazo de pago",
+    "terms-exceed-100p": "Los plazos exceden el 100%"
+}

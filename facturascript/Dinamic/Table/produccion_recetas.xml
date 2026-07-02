@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gómez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : produccion_recetas.xml
+    Author     : Carlos Garcia Gomez    <carlos@facturascripts.com>
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la tabla recetas.
+-->
+<table>
+    <column>
+        <name>codalmacen</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codalmacen2</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codreceta</name>
+        <type>character varying(25)</type>
+    </column>
+    <column>
+        <name>coste</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>character varying(250)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idreceta</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <!-- Deprecated since 1.6x -->
+        <column>
+            <name>referencia</name>
+            <type>character varying(30)</type>
+        </column>
+    <!-- -->
+    <column>
+        <name>ultimaproduccion</name>
+        <type>timestamp</type>
+    </column>
+
+    <constraint>
+        <name>produccion_recetas_pkey</name>
+        <type>PRIMARY KEY (idreceta)</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_recetas_almacenes</name>
+        <type>FOREIGN KEY (codalmacen) REFERENCES almacenes (codalmacen) ON DELETE RESTRICT ON UPDATE CASCADE </type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_recetas_almacenes2</name>
+        <type>FOREIGN KEY (codalmacen2) REFERENCES almacenes (codalmacen) ON DELETE RESTRICT ON UPDATE CASCADE </type>
+    </constraint>
+</table>

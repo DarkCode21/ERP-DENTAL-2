@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : crm_listas.xml
+    Description:
+        Estructura de la tabla crm_listas.
+-->
+<table>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>numcontactos</name>
+        <type>integer</type>
+    </column>
+    <constraint>
+        <name>crm_listas_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+</table>

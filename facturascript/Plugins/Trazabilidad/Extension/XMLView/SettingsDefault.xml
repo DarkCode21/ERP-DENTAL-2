@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="products">
+            <column name="automatic-batch-serial-number-sales" order="130">
+                <widget type="checkbox" fieldname="autobatchserialsales"/>
+            </column>
+        </group>
+    </columns>
+</view>

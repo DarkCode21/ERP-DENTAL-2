@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2022-2024 Carlos García Gómez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="idlote"/>
+            </column>
+            <column name="product" display="none" order="110">
+                <widget type="text" fieldname="idproducto"/>
+            </column>
+            <column name="reference" order="120">
+                <widget type="select" fieldname="referencia"/>
+            </column>
+            <column name="warehouse" order="130">
+                <widget type="select" fieldname="codalmacen">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="batch-serial-number" order="140">
+                <widget type="text" fieldname="numserie"/>
+            </column>
+            <column name="quantity" display="right" order="150">
+                <widget type="number" fieldname="cantidad" min="1"/>
+            </column>
+            <column name="date" display="right" order="160">
+                <widget type="date" fieldname="fecha"/>
+            </column>
+            <column name="expiration-date" display="right" order="170">
+                <widget type="date" fieldname="fecha_caducidad"/>
+            </column>
+        </group>
+    </columns>
+    <modals>
+        <group name="add-lote" title="add-lote" icon="fa-solid fa-square-plus">
+            <column name="variant" numcolumns="12">
+                <widget type="select" fieldname="lote-referencia" required="true">
+                    <values/>
+                </widget>
+            </column>
+            <column name="warehouse" numcolumns="12">
+                <widget type="select" fieldname="lote-codalmacen" required="true">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="batch-serial-number" numcolumns="12">
+                <widget type="text" fieldname="lote-numserie" required="true"/>
+            </column>
+            <column name="date" numcolumns="12">
+                <widget type="date" fieldname="lote-fecha" required="true"/>
+            </column>
+            <column name="expiration-date" numcolumns="12">
+                <widget type="date" fieldname="lote-fecha_caducidad"/>
+            </column>
+        </group>
+    </modals>
+    <rows>
+        <row type="status">
+            <option color="success" fieldname="cantidad">gt:0</option>
+            <option color="warning" fieldname="cantidad">lte:0</option>
+        </row>
+    </rows>
+</view>

@@ -1,0 +1,155 @@
+{% extends "Master/MenuTemplate.html.twig" %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        [data-toggle="collapse"] i:before{
+            content: "\f139";
+        }
+
+        [data-toggle="collapse"].collapsed i:before{
+            content: "\f13a";
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% set refresh = i18n.trans('refresh-page') %}
+    {% set defaultT, defaultF = i18n.trans('mark-as-homepage'), i18n.trans('marked-as-homepage') %}
+    {% set title = i18n.trans(fsc.getPageData()['title']) | capitalize %}
+    {% set generate, generate_title = i18n.trans('generate'), i18n.trans('generate-title') %}
+    {% set dataSource, othersFilters = i18n.trans('data-source'), i18n.trans('others-filters') %}
+    {# -- Others Values -- #}
+    {% set exportOptions = fsc.exportManager.options() %}
+    {% set select_filter_attr = {onchange: 'this.form.submit()'} %}
+    {% set input_date_attr = {class: 'form-control datepicker', onchange: 'this.form.submit()', style: 'font-size: 90%;'} %}
+    {% set input_text_attr = {class: 'form-control ', onchange: 'this.form.submit()', style: 'font-size: 90%;'} %}
+    {% import 'Macro/Forms.html.twig' as forms %}
+    {# -- Visual macros -- #}
+    {% from 'Macro/Utils.html.twig' import popoverTitle as popoverTitle %}
+    {%  set sumBaseImponible = 0 %}
+    {%  set sumImporteRetencion = 0 %}
+    {%  set sumBaseImponibleCompras = 0 %}
+    {%  set sumImporteRetencionCompras = 0 %}
+    {# -- Header Row -- #}
+    <div class="row">
+        <div class="col-sm-7 col-6">
+            <div class="btn-group d-xs-none">
+                <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}" {{ popoverTitle(refresh, 'bottom') }}>
+                    <i class="fas fa-sync" aria-hidden="true"></i>
+                </a>
+                {% if fsc.getPageData()['name'] == fsc.user.homepage %}
+                    <a class="btn btn-sm btn-outline-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE" {{ popoverTitle(defaultF, 'bottom') }}>
+                        <i class="fas fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}?defaultPage=TRUE" {{ popoverTitle(defaultT, 'bottom') }}>
+                        <i class="far fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-sm-5 col-6 text-right">
+            <h1 style="margin-top: 0px; margin-bottom: 0px;">
+                <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i> {{ title }}
+            </h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <form name="f_search" id="formSearch" action="{{ fsc.url() }}" method="post" class="form-inline col-12">
+                <input type="hidden" name="action" value="reload"/>
+                <div class="form-group col-3">
+                    {{ forms.simpleInput('date-from' , 'date-from', fsc.filters.desdeFechaMostrar , 'text', 'Desde Fecha', 'fas fa-calendar',  input_date_attr) }}
+                </div>
+                <div class="form-group col-3">
+                    {{ forms.simpleInput('date-to' , 'date-to' , fsc.filters.hastaFechaMostrar, 'text', 'Hasta Fecha', 'fas fa-calendar', input_date_attr) }}
+                </div> 
+                <div class="form-group col-2">
+                    <button type="button" class="btn btn-primary" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="Imprimir informe" onclick="console.log('enviamos');
+                            this.form.action.value = 'print-pdf';
+                            this.form.submit();">
+                        <i class="fas fa-print fa-fw" aria-hidden="true"></i> Imprimir
+                    </button>
+                </div> 
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th  class="text-center" colspan="7"> Ventas/Ingresos</th>
+                            </tr>
+                            <tr>  
+                                <th class="text-left">Base Imponible</th>
+                                <th class="text-right">%IRPF</th>
+                                <th class="text-right">Importe Retención</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for value in fsc.salesResume() %}
+                                <tr>
+                                    <td class="text-right">{{ value.base_imponible|number_format(2, ',', '.') }} </td>
+                                    <td class="text-right">{{ value.irpf|number_format(2, ',', '.') }}%</td>
+                                    <td class="text-right">{{ value.importe_retencion|number_format(2, ',', '.') }}</td>
+                                </tr>
+                                {%  set sumBaseImponible = sumBaseImponible + value.base_imponible %}
+                                {%  set sumImporteRetencion = sumImporteRetencion + value.importe_retencion %}
+                            {% endfor %}
+                        </tbody>
+                        <tfoot style="font-weight:bold">
+                            <tr>
+                                <td>Sumas</td>
+                                <td class="text-right">{{ sumBaseImponible |number_format(2, ',', '.') }}</td>
+                                <td class="text-right" colspan="2">{{ sumImporteRetencion |number_format(2, ',', '.') }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th  class="text-center" colspan="7"> Compras y gastos</th>
+                            </tr>
+                            <tr>  
+                                <th class="text-left">Base Imponible</th>
+                                <th class="text-right">%IRPF</th>
+                                <th class="text-right">Importe Retención</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for value in fsc.purchasesResume() %}
+                                <tr>
+                                    <td class="text-right">{{ value.base_imponible|number_format(2, ',', '.') }} </td>
+                                    <td class="text-right">{{ value.irpf|number_format(2, ',', '.') }}%</td>
+                                    <td class="text-right">{{ value.importe_retencion|number_format(2, ',', '.') }}</td>
+                                </tr>
+                                {%  set sumBaseImponibleCompras = sumBaseImponibleCompras + value.base_imponible %}
+                                {%  set sumImporteRetencionCompras = sumImporteRetencionCompras + value.importe_retencion %}
+                            {% endfor %}
+
+                        </tbody>
+                        <tfoot style="font-weight:bold">
+                            <tr>
+                                <td>Sumas</td>
+                                <td class="text-right">{{ sumBaseImponibleCompras |number_format(2, ',', '.') }}</td>
+                                <td class="text-right" colspan="2">{{ sumImporteRetencionCompras |number_format(2, ',', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="7"</td>
+                            </tr>
+                            <tr>
+                                <td>Diferencia</td>
+                                <td class="text-right">{{ (sumBaseImponible-sumBaseImponibleCompras) |number_format(2, ',', '.') }}</td>
+                                <td class="text-right" colspan="2">{{ (sumImporteRetencion-sumImporteRetencionCompras) |number_format(2, ',', '.') }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{%  endblock %} {# Fin del body #}
+

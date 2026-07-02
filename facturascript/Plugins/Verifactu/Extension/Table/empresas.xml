@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<table>
+    <column>
+        <name>vf_certificate</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>vf_debug_mode</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>vf_password</name>
+        <type>character varying(100)</type>
+    </column>
+</table>

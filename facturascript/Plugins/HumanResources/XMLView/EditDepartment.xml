@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditDepartment.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditDepartment
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12" >
+            <column name="code" order="0" display="none" >
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="name" order="110">
+                <widget type="text" fieldname="name" />
+            </column>
+        </group>
+        <group name="notes" numcolumns="12" >
+            <column name="notes" order="110">
+                <widget type="textarea" fieldname="note" />
+            </column>
+        </group>
+    </columns>
+</view>

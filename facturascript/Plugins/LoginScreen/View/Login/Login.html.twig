@@ -1,0 +1,124 @@
+{% extends "Master/MicroTemplate.html.twig" %}
+{% block icons %}
+    <link rel="shortcut icon" href="{{ asset('Dinamic/Assets/Images/favicon.ico?v=4') }}"/>
+    <link rel="icon" href="{{ asset('Dinamic/Assets/Images/favicon.ico?v=4') }}"/>
+    <link rel="apple-touch-icon" sizes="180x180"
+          href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png?v=4') }}"/>
+    <link rel="apple-touch-icon" href="{{ asset('Dinamic/Assets/Images/apple-icon.png?v=4') }}"/>
+{% endblock %}
+{% block body %}
+    {{ parent() }}
+    <div class="d-flex flex-column flex-md-row bg-white vh-100 w-100">
+        <div id="login-sidebar-image" class="d-flex col col-md-5">
+            <div class="d-flex flex-column flex-fill align-items-center">
+                <div class="mt-md-4" style="width: 250px">
+                    {% set idfile = settings('loginscreen','login_image_id', 0) %}
+                    {{ _self.loadLogo(idfile) }}
+                </div>
+                <div class="mt-auto text-center">
+                    {{ settings('loginscreen', 'login_footer_content') | raw }}
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-fill justify-content-center align-items-center">
+            <div class="w-75 w-md-50">
+                <div class="mb-4">
+                    <h3 class="login-secondary-text">{{ trans('login') }}</h3>
+                </div>
+                <form action="{{ asset('login') }}" method="post" class="form">
+                    {{ formToken() }}
+                    <input type="hidden" name="action" value="login">
+                    <div class="form-group mb-2">
+                        <label for="fsNick">{{ trans('user') }}</label>
+                        <input type="text" id="fsNick" name="fsNick" class="form-control" maxlength="50"
+                               placeholder="{{ trans('user') }}" required autocomplete="off"
+                               autofocus/>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="fsPassword">{{ trans('password') }}</label>
+                        <input type="password" id="fsPassword" name="fsPassword" class="form-control"
+                               maxlength="50"
+                               placeholder="{{ trans('password') }}" required autocomplete="off"/>
+                    </div>
+                    <button type="submit" class="btn btn-dark" style="background-color: #303030">
+                        {{ trans('login') }}
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #fff;
+        }
+
+        .form-control:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            border: 2px solid #0424AA;
+        }
+
+        .login-secondary-text {
+            color: #858585;
+        }
+
+        {% set primaryColor =  settings('loginscreen', 'login_primary_color', '#0424AA') %}
+        {% set secondaryColor =  settings('loginscreen', 'login_primary_color', '#0424AA') %}
+        {% set idbackground = settings('loginscreen','login_background_id', 0) %}
+        #login-sidebar-image {
+            background-color: #0424AA;
+            background-image: linear-gradient(to bottom, {{ primaryColor }}, rgba(17, 28, 42, 0.73)),
+            {{ _self.loadBackgroundImage(idbackground) }};
+            background-size: cover;
+            color: white;
+            padding: 20px;
+        }
+
+        /*rgba(17, 28, 42, 0.73)),*/
+
+        .login-sidebar-text > * {
+            color: #FFFFFF;
+            opacity: 75%;
+            text-decoration: none;
+        }
+
+        .login-sidebar-text > a:hover {
+            color: #FFFFFF;
+            opacity: 95%;
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}
+{% macro loadLogo(idfile) %}
+    {% set url = 'Dinamic/Assets/Images/logo-white.png' %}
+    {% if idfile > 0 %}
+        {% set attached = attachedFile(idfile) %}
+        {% if attached.filename is not empty %}
+            {% set url = attached.url('download-permanent') %}
+        {% endif %}
+    {% endif %}
+    <img src="{{ asset(url) }}" alt="Logo" class="img-fluid">
+{% endmacro loadLogo %}
+
+{% macro loadBackgroundImage(idfile) %}
+    {% if idfile > 0 %}
+        {% set attached = attachedFile(idfile) %}
+        {% if attached.filename is not empty %}
+            {% set url = attached.url('download-permanent') %}
+        {% endif %}
+    {% endif %}
+
+    url({{ asset(url) }})
+{% endmacro loadBackgroundImage %}
+
+{% macro getBackgroundGradient() %}
+    {% set primaryColor =  settings('loginscreen', 'login_primary_color', '#0424AA') %}
+    {% set secondaryColor =  settings('loginscreen', 'login_primary_color', '#0424AA') %}
+{% endmacro %}
+
+

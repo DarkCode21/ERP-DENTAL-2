@@ -1,0 +1,87 @@
+<form id="formSettingsSuscription" method="post" enctype="multipart/form-data" onsubmit="animateSpinner('add')">
+	{{ formToken() }}
+	<input type="hidden" name="action" value="edit">
+	<input type="hidden" name="activetab" value="SettingsSuscription">
+	<input type="hidden" name="code" value="suscription">
+	<div class="card shadow">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-12 text-right"></div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-12">
+					<div class="form-row ">
+						<legend class="text-info mt-2 mb-0">
+							<svg class="svg-inline--fa fa-money-check fa-fw" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="money-check" role="img" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 576 512" data-fa-i2svg="">
+								<path fill="currentColor" d="M64 64C28.7 64 0 92.7 0 128L0 384c0 35.3 28.7 64 64 64l448 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L64 64zm48 160l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zM96 336c0-8.8 7.2-16 16-16l352 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-352 0c-8.8 0-16-7.2-16-16zM376 160l80 0c13.3 0 24 10.7 24 24l0 48c0 13.3-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24l0-48c0-13.3 10.7-24 24-24z" data-darkreader-inline-fill="" style="--darkreader-inline-fill: currentColor;"></path>
+							</svg>
+							<!-- <i class="fas fa-money-check fa-fw"></i> Font Awesome fontawesome.com -->
+							Licencia</legend>
+						<div class="col-md-12">
+							<div class="form-group mb-2">
+								<label class="mb-0"></label><input type="text" name="licencia" value="{{ settings('suscription', 'licencia') }}" class="form-control" required="" readonly="" autocomplete="off"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group mb-2">
+								<label class="mb-0">N° de Empresas permitidas</label><input type="number" name="empresas" value="{{ settings('suscription', 'empresas') }}" class="form-control" step="any" required="" readonly="" autocomplete="off"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group mb-2">
+								<label class="mb-0">Usuarios Actuales (Máximo:5)</label><input type="number" name="maxusuarios" value="{{ settings('suscription', 'maxusuarios') }}" class="form-control" step="any" required="" readonly="" autocomplete="off"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group mb-2">
+								<label class="mb-0">Máximo de Facturas permitidas</label><input type="text" name="maxfacturaspermitidas" value="Ilimitados" class="form-control" required="" readonly="" autocomplete="off"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group mb-2">
+								<label class="mb-0">Máximo de Clientes Permitidos</label><input type="text" name="maxclientespermitidos" value="Ilimitados" class="form-control" required="" readonly="" autocomplete="off"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group mb-2">
+								<label class="mb-0">Máximo de Proveedores Permitidos</label><input type="text" name="maxproveedorespermitidos" value="Ilimitados" class="form-control" required="" readonly="" autocomplete="off"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group mb-2">
+								<label class="mb-0">Máximo de Productos y Servicios Permitidos</label><input type="text" name="maxproductoserviciospermitidos" value="Ilimitados" class="form-control" required="" readonly="" autocomplete="off"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group mb-2">
+								<label class="mb-0">Uso de Almacenamiento Actual</label><input type="text" name="capacidadalmacenamiento" value="{{ settings('suscription', 'capacidadalmacenamiento') }}" class="form-control" required="" readonly="" autocomplete="off"></div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group mb-2">
+								<label class="mb-0">Máximo de Almacenamiento Permitido</label><input type="text" name="capacidadmaxalmacenamiento" value="{{ settings('suscription', 'capacidadmaxalmacenamiento') }}" class="form-control" required="" readonly="" autocomplete="off"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-footer p-2">
+			<div class="form-row">
+				<div class="col "></div>
+				<div class="col-auto"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card shadow mt-4">
+		<div class="card-body">
+			<h3>
+				<i class="fa-solid fa-qrcode me-2"></i>
+				{{ trans('verifactu') }}
+			</h3>
+			<hr>
+			<div class="row align-items-center">
+				<div class="col-md-6">
+					<a href="{{ 'Plugins/Suscripcion/declaracion-responsable-sistemainformatico-facturacion.pdf' }}" target="_blank" download="declaracion-responsable-sistemainformatico-facturacion.pdf">
+						Descargar declaración responsable
+					</a>
+				</div>
+				<div class="col-md-6 text-center">
+					<img src="Plugins/Verifactu/Assets/Images/verifactu-logo.png" alt="Verifactu" class="img-fluid" style="max-height: 80px;">
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

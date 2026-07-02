@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="main">
+            <column name="code-iae" order="150">
+                <widget type="autocomplete" fieldname="tbai_idiae" onclick="EditCodigoIae">
+                    <values source="codigos_iae" fieldcode="idiae" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

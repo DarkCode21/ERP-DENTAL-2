@@ -1,0 +1,49 @@
+{%  set totalInformeBase = 0 %}
+{% set totalInformeIva = 0 %}
+{%  set totalInformeRE = 0 %}
+{%  set totalInformeIRPF = 0 %}
+{% set totalInforme = 0 %}
+<table style="border-collapse: collapse; width:60%;margin-top:5mm;align-content:center;margin:0 auto;margin-top:10px;">
+    <thead>
+        
+        <tr>
+            <th colspan="8">Resúmen final</th>
+        </tr>
+        <tr>
+            <th class="columna base" >{{ i18n.trans('Base') }}</th>
+            <th class="columna poriva">{{ i18n.trans('%IVA') }}</th>
+            <th class="columna iva">{{ i18n.trans('IVA') }}</th>
+            <th class="columna porre">{{ i18n.trans('%RE') }}</th>
+            <th class="columna re">{{ i18n.trans('RE') }}</th>
+            <th class="columna porirpf">{{ i18n.trans('%IRPF') }}</th>
+            <th class="columna irpf">{{ i18n.trans('IRPF') }}</th>
+            <th class="columna total">{{ i18n.trans('total') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for valores in fsc.resumenListado %}
+            <tr class="columna filatotaldocumento"> 
+                <td id="restotalbase" class="totalbase">{{ (valores.base)|number_format(2, ',', '.') }}</td>
+                <td id="resporiva" class="totaliva"> {{ valores.iva|number_format(2, ',', '.') }}%</td>
+                <td id="restotaliva" class="totaliva" >{{ valores.importe_iva|number_format(2, ',', '.') }}</td>
+                <td id="resporre" class="totalre"> {{ valores.re|number_format(2, ',', '.') }}%</td>
+                <td id="restotalre" class="totalre"> {{ valores.importe_recargo|number_format(2, ',', '.') }}</td>
+                <td id="resporirpf" class="totalirpf"> {{ valores.irpf|number_format(2, ',', '.') }}%</td>
+                <td id="totalirpf" class="totalirpf" >{{ valores.importe_irpf|number_format(2, ',', '.') }}</td>
+                <td id="totalfactura" class="totalfactura columna">{{ (valores.base + valores.importe_iva + valores.importe_recargo -valores.importe_irpf )|number_format(2, ',', '.') }}&nbsp;{{ valores.coddivisa }}</td>
+            </tr>
+            {%  set totalInformeBase = totalInformeBase + valores.base %}
+            {% set totalInformeIva = totalInformeIva + valores.importe_iva %}
+            {%  set totalInformeRE = totalInformeRE + valores.importe_recargo %}
+            {%  set totalInformeIRPF = totalInformeIRPF + valores.importe_irpf %}
+            {% set totalInforme = totalInforme + (valores.base + valores.importe_iva + valores.importe_recargo -valores.importe_irpf) %}
+        {% endfor %}
+        <tr class="columna totaleslistado"> 
+            <td id="restotalbase" class="totalbase">{{ (totalInformeBase)|number_format(2, ',', '.') }}</td>
+            <td id="restotaliva" class="totaliva" colspan="2" >{{ totalInformeIva|number_format(2, ',', '.') }}</td>
+            <td id="restotalre" class="totalre" colspan="2"> {{ valores.importe_recargo|number_format(2, ',', '.') }}</td>
+            <td id="totalirpf" class="totalirpf" colspan="2" >{{ totalInformeIRPF|number_format(2, ',', '.') }}</td>
+            <td id="totalfactura" class="totalfactura columna">{{ (totalInforme )|number_format(2, ',', '.') }}&nbsp;{{ valores.coddivisa }}</td>
+        </tr>
+    </tbody>
+</table>

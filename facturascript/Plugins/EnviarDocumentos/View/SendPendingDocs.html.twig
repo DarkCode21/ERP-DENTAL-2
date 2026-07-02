@@ -1,0 +1,165 @@
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block bodyHeaderOptions %}
+    {{ parent() }}
+    <div class="container-fluid pb-5">
+        <div class="row">
+            <div class="col-md">
+                <div class="btn-group">
+                    <a href="{{ fsc.model.url('list') }}" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-list fa-fw" aria-hidden="true"></i>
+                        <span class="d-none d-lg-inline-block">{{ trans('all') }}</span>
+                    </a>
+                </div>
+            </div>
+            {% set pageData = fsc.getPageData() %}
+            <div class="col-md text-right">
+                <h1 class="h4">
+                    {{ trans(pageData.title) }}<br/>
+                    <small class="text-info">{{ fsc.model.modelClassName() }}</small>
+                </h1>
+            </div>
+            <div class="col-lg-1 d-none d-lg-inline-block text-center">
+                <i class="{{ pageData.icon }} fa-3x" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {# -- main view -- #}
+    <div class="container-fluid" style="margin-top: -50px;">
+        <form id="form{{ fsc.getClassName() }}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="send"/>
+            <input type="hidden" name="multireqtoken" value="{{ fsc.multiRequestProtection.newToken() }}"/>
+            <div class="row">
+                <div class="col">
+                    {{ _self.headerMail(fsc, i18n) }}
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function listViewCheckboxes(viewName) {
+            const checked = $("#form" + viewName + " .listActionCB").prop("checked");
+            $("#form" + viewName + " .listAction").each(function () {
+                $(this).prop("checked", checked);
+            });
+        }
+    </script>
+{% endblock %}
+
+{% macro headerMail(fsc, i18n) %}
+    <div class="card shadow mb-5">
+        <div class="card-body">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">{{ trans('from') }}</span>
+                    </div>
+                    <select class="custom-select" name="email-from">
+                        {% for emailFrom in fsc.newMail.getAvailableMailboxes() %}
+                            <option value="{{ emailFrom }}">{{ emailFrom }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-3">
+                        {{ trans('send') }}
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">{{ trans('subject') }}</span>
+                    </div>
+                    <input type="text" name="subject" value="{{ fsc.newMail.title }}" class="form-control" required=""
+                           placeholder="{{ trans('subject') }}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <textarea name="body" rows="4" placeholder="{{ trans('message') }}" class="form-control" required>{{ fsc.newMail.text }}</textarea>
+                <small class="text-muted">{{ trans('shortcode-message-email') }}</small>
+            </div>
+        </div>
+        {{ _self.listDocs(fsc, i18n) }}
+    </div>
+{% endmacro %}
+
+{% macro listDocs(fsc, i18n) %}
+    <div class="table-responsive">
+        {% set tableClass = fsc.toolBox().appSettings().get('default', 'tablesize') == 'small' ? 'table-sm' : '' %}
+        {% set checked = fsc.checkedInitial ? 'checked' : '' %}
+        <table class="table table-hover mb-0 {{ tableClass }}">
+            <thead>
+            <tr>
+                <th>
+                    <div class="form-check form-check-inline mb-2 mr-sm-2 mb-sm-0">
+                        <input class="form-check-input listActionCB" type="checkbox"
+                               onclick="listViewCheckboxes('{{ fsc.getClassName() }}');" {{ checked }} />
+                    </div>
+                </th>
+                {% for column in fsc.getColumns() %}
+                    {% if column.field == 'total' %}
+                        <th class="text-right">{{ trans(column.title) }}</th>
+                    {% elseif column.field == 'fecha' %}
+                        <th class="text-right">{{ trans(column.title) }}</th>
+                    {% else %}
+                        <th class="text-left">{{ trans(column.title) }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for model in fsc.cursor %}
+                {% set subject = model.getSubject() %}
+                {% set email = subject.email %}
+                {% set email = email == '' ? subject.emailto : email ~ ',' ~ subject.emailto %}
+                {% set email = email == '' ? subject.emailcc : email ~ ',' ~ subject.emailcc %}
+                {% set email = email == '' ? subject.emailbcc : email ~ ',' ~ subject.emailbcc %}
+                {% set emailArr = email | split(',') %}
+                <tr{% if email is empty %} class="table-danger"{% endif %}>
+                    <td>
+                        <div class="form-check form-check-inline mb-2 mr-sm-2 mb-sm-0">
+                            <input class="form-check-input listAction" type="checkbox" name="code[]"
+                                   value="{{ model.primaryColumnValue() }}" {{ checked }} />
+                        </div>
+                    </td>
+                    {% for column in fsc.getColumns() %}
+                        {% if column.field == 'fecha' %}
+                            <td class="text-right text-nowrap">{{ attribute(model, column.field) }}</td>
+                        {% elseif column.field == 'codigo' %}
+                            <td class="text-left">
+                                <a href="Edit{{ model.modelClassName() }}?code={{ model.primaryColumnValue() }}">
+                                    {{ attribute(model, column.field) }}
+                                </a>
+                            </td>
+                        {% elseif column.field == 'nombrecliente' %}
+                            <td class="text-left">
+                                <a href="Edit{{ subject.modelClassName() }}?code={{ subject.primaryColumnValue() }}">
+                                    {{ attribute(model, column.field) }}
+                                </a>
+                            </td>
+                        {% elseif column.field == 'total' %}
+                            <td class="text-right text-nowrap">
+                                {{ fsc.toolBox().coins().format(attribute(model, column.field)) }}
+                            </td>
+                        {% elseif column.field == 'email' %}
+                            <td class="text-left">{{ emailArr | join('<br>') | raw }}</td>
+                        {% else %}
+                            <td class="text-left">{{ attribute(model, column.field) }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% else %}
+                <tr class="table-warning">
+                    <td colspan="{{ 1 + fsc.getColumns() | length }}">{{ trans('no-data') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endmacro %}

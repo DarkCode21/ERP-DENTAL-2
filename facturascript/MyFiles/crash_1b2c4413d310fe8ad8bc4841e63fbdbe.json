@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Class &quot;FacturaScripts\\Dinamic\\Controller\\SendTicket&quot; not found in \/Plugins\/Tickets\/Init.php:47\n\nStack trace:\n#0 \/Plugins\/Tickets\/Init.php(27): FacturaScripts\\Plugins\\Tickets\\Init-&gt;loadFormatTickets()\n#1 \/Core\/Internal\/Plugin.php(235): FacturaScripts\\Plugins\\Tickets\\Init-&gt;init()\n#2 \/Core\/Plugins.php(244): FacturaScripts\\Core\\Internal\\Plugin-&gt;init()\n#3 \/index.php(59): FacturaScripts\\Core\\Plugins::init()\n#4 {main}\n  thrown",
+    "file": "\/Plugins\/Tickets\/Init.php",
+    "line": 47,
+    "fragment": "\n42\n43    private function loadFormatTickets(): void\n44    {\n45        $models = ['PresupuestoCliente', 'PedidoCliente', 'AlbaranCliente', 'FacturaCliente'];\n46        foreach ($models as $model) {\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">47            SendTicket::addFormat(Normal::class, $model, 'normal');<\/spam>\n48            SendTicket::addFormat(Gift::class, $model, 'gift');\n49        }\n50\n51        SendTicket::addFormat(PaymentReceipt::class, 'ReciboCliente', 'receipt');\n52    }",
+    "hash": "1b2c4413d310fe8ad8bc4841e63fbdbe",
+    "url": "\/PanelCamarero",
+    "report_url": "https:\/\/facturascripts.com\/errores\/1b2c4413d310fe8ad8bc4841e63fbdbe",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F1b2c4413d310fe8ad8bc4841e63fbdbe",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,TPVneo,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,RestauranteTPV,LogsFields,LoginScreen"
+}

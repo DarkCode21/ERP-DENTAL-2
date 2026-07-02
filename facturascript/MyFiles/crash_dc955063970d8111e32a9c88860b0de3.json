@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Call to a member function loadFromCode() on null in \/Core\/Lib\/ExtendedController\/HtmlView.php:77\n\nStack trace:\n#0 \/Plugins\/Dental\/Controller\/EditPaciente.php(51): FacturaScripts\\Core\\Lib\\ExtendedController\\HtmlView-&gt;loadData(&#39;&#39;, Array)\n#1 \/Core\/Lib\/ExtendedController\/PanelController.php(102): FacturaScripts\\Plugins\\Dental\\Controller\\EditPaciente-&gt;loadData(&#39;EditArchivoFrom...&#39;, Object(FacturaScripts\\Core\\Lib\\ExtendedController\\HtmlView))\n#2 \/Core\/Base\/Controller.php(302): FacturaScripts\\Core\\Lib\\ExtendedController\\PanelController-&gt;privateCore(Object(FacturaScripts\\Core\\Http\\AppResponse), Object(FacturaScripts\\Dinamic\\Model\\User), Object(FacturaScripts\\Core\\Base\\ControllerPermissions))\n#3 \/Core\/Kernel.php(372): FacturaScripts\\Core\\Base\\Controller-&gt;run()\n#4 \/Core\/Kernel.php(190): FacturaScripts\\Core\\Kernel::runController(&#39;\/EditPaciente&#39;)\n#5 \/index.php(63): FacturaScripts\\Core\\Kernel::run(&#39;\/EditPaciente&#39;)\n#6 {main}\n  thrown",
+    "file": "\/Core\/Lib\/ExtendedController\/HtmlView.php",
+    "line": 77,
+    "fragment": "    {\n72    {\n73        if (empty($code) && empty($where)) {\n74            return;\n75        }\n76\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">77        $this->model->loadFromCode($code, $where, $order);<\/spam>\n78        if (false === empty($where)) {\n79            $this->count = $this->model->count($where);\n80            $this->cursor = $this->model->all($where, $order, $offset, $limit);\n81        }\n82    }",
+    "hash": "dc955063970d8111e32a9c88860b0de3",
+    "url": "\/EditPaciente",
+    "report_url": "https:\/\/facturascripts.com\/errores\/dc955063970d8111e32a9c88860b0de3",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2Fdc955063970d8111e32a9c88860b0de3",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

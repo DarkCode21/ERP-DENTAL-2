@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="main" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id"/>
+            </column>
+            <column name="patient" display="none" order="105">
+                <widget type="text" fieldname="idpaciente"/>
+            </column>
+            <column name="specialist" numcolumns="4" order="106">
+                <widget type="select" fieldname="idespecialista">
+                    <values source="dental_especialistas" fieldcode="id" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="appointment" numcolumns="4" order="107">
+                <widget type="select" fieldname="idcita">
+                    <values source="dental_citas" fieldcode="id" fieldtitle="fecha"/>
+                </widget>
+            </column>
+            <column name="treatment" numcolumns="4" order="108">
+                <widget type="select" fieldname="idtratamiento">
+                    <values source="dental_tratamientos_paciente" fieldcode="id" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="category" numcolumns="4" order="110">
+                <widget type="text" fieldname="categoria"/>
+            </column>
+            <column name="original-name" numcolumns="8" order="120">
+                <widget type="text" fieldname="nombre_original" readonly="true"/>
+            </column>
+            <column name="extension" numcolumns="2" order="130">
+                <widget type="text" fieldname="extension" readonly="true"/>
+            </column>
+            <column name="size" numcolumns="2" order="140">
+                <widget type="number" decimal="0" fieldname="tamano" readonly="true"/>
+            </column>
+            <column name="mime-type" numcolumns="4" order="150">
+                <widget type="text" fieldname="mime_type" readonly="true"/>
+            </column>
+            <column name="status" numcolumns="2" order="160">
+                <widget type="select" fieldname="estado" translate="true">
+                    <values title="active">activo</values>
+                    <values title="inactive">inactivo</values>
+                </widget>
+            </column>
+            <column name="description" numcolumns="12" order="170">
+                <widget type="textarea" fieldname="descripcion"/>
+            </column>
+        </group>
+    </columns>
+</view>

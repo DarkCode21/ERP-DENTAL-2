@@ -1,0 +1,15 @@
+{
+  "config": {
+    "platform": {
+      "php": "7.3"
+    }
+  },
+  "require": {
+    "phpoffice/phpspreadsheet": "1.*",
+    "ext-fileinfo": "*",
+    "ext-json": "*",
+    "openspout/openspout": "*",
+    "ext-iconv": "*",
+    "ext-ftp": "*"
+  }
+}

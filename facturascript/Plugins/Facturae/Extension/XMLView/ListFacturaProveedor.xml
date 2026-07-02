@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <modals>
+        <group name="upload-factura-e" title="import-factura-e" icon="fa-solid fa-qrcode">
+            <column name="company" numcolumns="12" order="100">
+                <widget type="select" fieldname="ife_company" required="true">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>
+                </widget>
+            </column>
+            <column name="file" numcolumns="12" order="110">
+                <widget type="file" fieldname="ife_file" accept=".xml,.xsig" required="true"/>
+            </column>
+        </group>
+    </modals>
+</view>

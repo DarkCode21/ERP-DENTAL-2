@@ -1,0 +1,143 @@
+<!DCOTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        {% block css %}
+            <link rel="stylesheet" href="./Plugins/FSReports/View/CSS/{{ fsc.Pdfparams.cssFile }}.css" media="all">
+        {% endblock %}
+
+    </head>
+    {% set totalImporte = 0 %}
+    {% set totalUnid = 0 %}
+    {% block body %}
+       {% if fsc.tipoDesglose=='r' %}
+        <table class="listado">
+            <thead>
+                <tr>
+                    <th  class="text-center" colspan="5"> Ventas por grupo</th></tr>
+                <tr>
+                    <th class="text-center" style="width:70mm;">Grupo</th>
+                    <th class="text-right" style="width:30mm;">Importe</th>
+                    <th class="text-right" style="width:30mm;">Unid</th>
+                    <th class="text-right" style="width:30mm;">Precio Medio</th>
+                    <th class="text-right" style="width:40mm;">Ultima Compra</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                {% for dato in fsc.data %}
+                    <tr>
+                        <td class="text-left" style="">{{ dato.grupo }}</td>
+                        <td class="text-right">{{ dato.importe|number_format(2,',','.') }}</td>
+                        <td class="text-right">{{ dato.unid|number_format(0,',','.') }}</td>
+                        <td class="text-right">{{ dato.pvmedio|number_format(2,',','.') }}</td>
+                        <td class="text-center">{{ dato.ultimafecha|date('d-m-Y') }}</td>
+                    </tr>
+                     {% set totalImporte = totalImporte + dato.importe %}
+                     {% set totalUnid = totalUnid + dato.unid %}
+                {% endfor %}
+                <tr>
+                    <td  style="font-weight: bold;text-align:left;font-size:12px;">Totales ............</td>
+                    <td style="font-weight: bold;text-align:right;font-size:12px;">{{ totalImporte|number_format(2,',','.') }}</td>
+                    <td style="font-weight: bold;text-align:right;font-size:12px;">{{ totalUnid|number_format(0,',','.') }}</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+        
+        {%  if fsc.tipoDesglose=='d' %}
+           {% for grupo in fsc.data | column('grupo','grupo')|keys %}
+              
+                {% set totalImporte = 0 %}
+                {% set totalUnid = 0 %}
+               <div id="grupo">
+                   <table class="listado">
+                        <thead>
+                            <tr>
+                                <th  class="text-center" colspan="5"> Ventas {{ grupo }}</th>
+                            </tr>
+                            <tr>
+                            <th class="text-center" style="width:70mm;">Cliente</th>
+                            <th class="text-right" style="width:30mm;">Importe</th>
+                            <th class="text-right" style="width:30mm;">Unid</th>
+                            <th class="text-right" style="width:30mm;">Precio Medio</th>
+                            <th class="text-right" style="width:40mm;">Ultima Compra</th>
+                   
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for cliente in fsc.data|filter(o => o.grupo == grupo) %}
+                                <tr>
+                                    <td class="text-left" style="">{{ cliente.nombrecliente }}</td>
+                                    <td class="text-right">{{ cliente.importe|number_format(2,',','.') }}</td>
+                                    <td class="text-right">{{ cliente.unid|number_format(0,',','.') }}</td>
+                                    <td class="text-right">{{ cliente.pvmedio|number_format(2,',','.') }}</td>
+                                    <td class="text-center">{{ cliente.ultimafecha|date('d-m-Y') }}</td>
+                                </tr>
+                                {% set totalImporte = totalImporte + cliente.importe %}
+                                {% set totalUnid = totalUnid + cliente.unid %}
+                            {% endfor %} 
+                            <tr>
+                    <td  style="font-weight: bold;text-align:left;font-size:12px;">Totales {{ grupo }}............</td>
+                    <td style="font-weight: bold;text-align:right;font-size:12px;">{{ totalImporte|number_format(2,',','.') }}</td>
+                    <td style="font-weight: bold;text-align:right;font-size:12px;">{{ totalUnid|number_format(0,',','.') }}</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    
+                </tr>
+                        </tbody>
+                   </table>
+               </div>
+                   <!-- <pagebreak>-->
+               {% endfor %}
+                
+        {% endif %}
+        
+        {%  if fsc.tipoDesglose=='sp' %}
+           {% for serie in fsc.data | column('serie','serie')|keys %}
+                {% set totalImporte = 0 %}
+                {% set totalUnid = 0 %}
+               <div id="grupo">
+                   <table class="listado">
+                        <thead>
+                            <tr>
+                                <th  class="text-center" colspan="5"> Ventas {{ serie }}</th>
+                            </tr>
+                            <tr>
+                            <th class="text-center" style="width:30mm;">Referencia</th>
+                            <th class="text-center" style="width:30mm;">Referencia</th>
+                            <th class="text-right" style="width:70mm;">Descripcion</th>
+                            <th class="text-right" style="width:30mm;">Cantidad</th>
+                            <th class="text-right" style="width:30mm;">Ventas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for producto in fsc.data|filter(o => o.serie == serie) %} 
+                                <tr>
+                                    <td class="text-left" style="">{{ producto.referencia }}</td>
+                                    <td class="text-left">{{ producto.descripcion }}</td>
+                                    <td class="text-right">{{ producto.cuantos|number_format(0,',','.') }}</td>
+                                    <td class="text-right">{{ producto.simporte|number_format(2,',','.') }}</td>
+                                </tr>
+                                {% set totalImporte = totalImporte + producto.simporte %}
+                                {% set totalUnid = totalUnid + producto.cuantos %}
+                            {% endfor %} 
+                            <tr>
+                    <td  colspan="2" style="font-weight: bold;text-align:left;font-size:12px;">Totales {{ serie }}............</td>
+                    <td style="font-weight: bold;text-align:right;font-size:12px;">{{ totalUnid|number_format(0,',','.') }}</td>
+                    <td style="font-weight: bold;text-align:right;font-size:12px;">{{ totalImporte|number_format(2,',','.') }}</td>
+ 
+                </tr>
+                        </tbody>
+                   </table>
+               </div>
+                   <!-- <pagebreak>-->
+               {% endfor %}
+                
+        {% endif %}
+    {% endblock %}

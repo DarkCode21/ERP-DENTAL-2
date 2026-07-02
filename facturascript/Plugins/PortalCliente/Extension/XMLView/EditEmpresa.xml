@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="portal-cliente-stripe" title="portal-cliente-stripe" icon="fab fa-stripe-s" numcolumns="12">
+            <column name="stripe-payment-method" title="payment-method" order="100">
+                <widget type="select" fieldname="pc_stripe_codpago" onclick="EditFormaPago">
+                    <values/>
+                </widget>
+            </column>
+            <column name="stripe-public-key" title="public-key" order="110">
+                <widget type="text" fieldname="pc_stripe_pk" icon="fas fa-key"/>
+            </column>
+            <column name="stripe-private-key" title="private-key" order="120">
+                <widget type="text" fieldname="pc_stripe_sk" icon="fas fa-key"/>
+            </column>
+            <column name="stripe-legend" title="legend" description="translatable" order="130">
+                <widget type="text" fieldname="pc_stripe_legend" maxlenght="100"/>
+            </column>
+        </group>
+        <group name="portal-cliente-paypal" title="portal-cliente-paypal" icon="fab fa-paypal" numcolumns="12">
+            <column name="paypal-payment-method" title="payment-method" order="100">
+                <widget type="select" fieldname="pc_paypal_codpago" onclick="EditFormaPago">
+                    <values/>
+                </widget>
+            </column>
+            <column name="paypal-public-key" title="public-key" order="110">
+                <widget type="text" fieldname="pc_paypal_pk" icon="fa-solid fa-key"/>
+            </column>
+            <column name="paypal-private-key" title="private-key" order="120">
+                <widget type="text" fieldname="pc_paypal_sk" icon="fa-solid fa-key"/>
+            </column>
+            <column name="paypal-legend" title="legend" description="translatable" order="130">
+                <widget type="text" fieldname="pc_paypal_legend" maxlenght="100"/>
+            </column>
+            <column name="paypal-sandbox-mode" title="test-mode" numcolumns="12" order="140">
+                <widget type="checkbox" fieldname="pc_paypal_sandbox"/>
+            </column>
+        </group>
+        <group name="portal-cliente-redsys" title="portal-cliente-redsys" icon="fas fa-credit-card" numcolumns="12">
+            <column name="redsys-payment-method" title="payment-method" order="100">
+                <widget type="select" fieldname="pc_redsys_codpago" onclick="EditFormaPago">
+                    <values/>
+                </widget>
+            </column>
+            <column name="redsys-public-key" title="trade-number" order="110">
+                <widget type="text" fieldname="pc_redsys_pk" icon="fa-solid fa-key"/>
+            </column>
+            <column name="redsys-private-key" title="trade-key" order="120">
+                <widget type="text" fieldname="pc_redsys_sk" icon="fa-solid fa-key"/>
+            </column>
+            <column name="redsys-terminal" title="terminal" order="130">
+                <widget type="text" fieldname="pc_redsys_terminal" icon="fa-solid fa-store" maxlenght="30"/>
+            </column>
+            <column name="redsys-legend" title="legend" description="translatable" order="140">
+                <widget type="text" fieldname="pc_redsys_legend" maxlenght="100"/>
+            </column>
+            <column name="redsys-sandbox-mode" title="test-mode" numcolumns="12" order="150">
+                <widget type="checkbox" fieldname="pc_redsys_sandbox"/>
+            </column>
+        </group>
+    </columns>
+</view>

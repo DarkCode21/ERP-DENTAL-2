@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : remesas_sepa.xml
+    Description:
+        Estructura de la tabla remesas_sepa.
+-->
+<table>
+    <column>
+        <name>agrupar</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>codcuenta</name>
+        <type>character varying(10)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>coddivisa</name>
+        <type>character varying(3)</type>
+    </column>
+    <column>
+        <name>codpago</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>creditorid</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>character varying(15)</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fechacargo</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>iban</name>
+        <type>character varying(34)</type>
+    </column>
+    <column>
+        <name>idasiento</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idremesa</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>swift</name>
+        <type>character varying(11)</type>
+    </column>
+    <column>
+        <name>tasaconv</name>
+        <type>double precision</type>
+        <defecto>1</defecto>
+    </column>
+    <column>
+        <name>tipo</name>
+        <type>character varying(4)</type>
+    </column>
+    <column>
+        <name>total</name>
+        <type>double precision</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>remesas_sepa_pkey</name>
+        <type>PRIMARY KEY (idremesa)</type>
+    </constraint>
+    <constraint>
+        <name>ca_remesas_sepa_asiento</name>
+        <type>FOREIGN KEY (idasiento) REFERENCES asientos (idasiento) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_remesas_sepa_empresas</name>
+        <type>FOREIGN KEY (idempresa) REFERENCES empresas (idempresa) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_remesas_sepa_divisas</name>
+        <type>FOREIGN KEY (coddivisa) REFERENCES divisas (coddivisa) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_remesas_sepa_formaspago</name>
+        <type>FOREIGN KEY (codpago) REFERENCES formaspago (codpago) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_remesas_sepa_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

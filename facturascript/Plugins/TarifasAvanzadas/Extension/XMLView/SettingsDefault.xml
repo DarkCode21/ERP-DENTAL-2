@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="products" numcolumns="12">
+            <column name="level-tarifas-av" numcolumns="4" order="90">
+                <widget type="number" min="0" fieldname="leveltarifasav"/>
+            </column>
+        </group>
+    </columns>
+</view>

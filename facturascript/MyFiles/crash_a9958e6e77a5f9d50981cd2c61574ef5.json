@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Class &quot;FacturaScripts\\Dinamic\\Lib\\StockMovementManager&quot; not found in \/Plugins\/Produccion\/Init.php:40\n\nStack trace:\n#0 \/Core\/Internal\/Plugin.php(235): FacturaScripts\\Plugins\\Produccion\\Init-&gt;init()\n#1 \/Core\/Plugins.php(244): FacturaScripts\\Core\\Internal\\Plugin-&gt;init()\n#2 \/index.php(59): FacturaScripts\\Core\\Plugins::init()\n#3 {main}\n  thrown",
+    "file": "\/Plugins\/Produccion\/Init.php",
+    "line": 40,
+    "fragment": "    {\n35    {\n36        $this->loadExtension(new Extension\\Model\\Producto());\n37        $this->loadExtension(new Extension\\Model\\Variante());\n38        $this->loadExtension(new Extension\\Controller\\EditProducto());\n39        $this->loadExtension(new Extension\\Controller\\EditAlbaranCliente());\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">40        StockMovementManager::addMod(new Lib\\Produccion\\StockMovementManager());<\/spam>\n41\n42        if (Plugins::isEnabled('PlantillasPDF')) {\n43            $this->loadExtension(new Extension\\Lib\\PlantillasPDF\\Helper\\BusinessDocLinesHelper());\n44        }\n45    }",
+    "hash": "a9958e6e77a5f9d50981cd2c61574ef5",
+    "url": "\/EditArchivo",
+    "report_url": "https:\/\/facturascripts.com\/errores\/a9958e6e77a5f9d50981cd2c61574ef5",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2Fa9958e6e77a5f9d50981cd2c61574ef5",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

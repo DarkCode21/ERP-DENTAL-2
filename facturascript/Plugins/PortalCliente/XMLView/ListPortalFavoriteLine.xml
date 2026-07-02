@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="reference" order="100">
+            <widget type="select" fieldname="idproducto">
+                <values source="productos" fieldcode="idproducto" fieldtitle="referencia"/>
+            </widget>
+        </column>
+        <column name="creation-date" display="right" order="110">
+            <widget type="datetime" fieldname="creation_date"/>
+        </column>
+    </columns>
+</view>

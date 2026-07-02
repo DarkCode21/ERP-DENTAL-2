@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="other" title="other-data" valign="bottom" numcolumns="12">
+            <column name="source" titleurl="ListContacto?activetab=ListCrmFuente" numcolumns="3" order="90">
+                <widget type="select" fieldname="idfuente" onclick="EditCrmFuente">
+                    <values source="crm_fuentes2" fieldcode="id" fieldtitle="nombre" />
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

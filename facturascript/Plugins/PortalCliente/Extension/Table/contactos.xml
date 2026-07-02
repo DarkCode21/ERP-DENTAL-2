@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<table>
+    <column>
+        <name>pc_active</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>pc_allow_buy</name>
+        <type>bool</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>pc_allow_show_addresses</name>
+        <type>bool</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>pc_allow_show_catalogue</name>
+        <type>bool</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>pc_allow_show_delivery_note</name>
+        <type>bool</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>pc_allow_show_estimation</name>
+        <type>bool</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>pc_allow_show_files</name>
+        <type>bool</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>pc_allow_show_invoice</name>
+        <type>bool</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>pc_allow_show_order</name>
+        <type>bool</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>pc_allow_pay</name>
+        <type>bool</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>pc_last_browser</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>pc_last_login</name>
+        <type>datetime</type>
+    </column>
+    <column>
+        <name>pc_last_ip</name>
+        <type>character varying(40)</type>
+    </column>
+    <column>
+        <name>pc_log_key</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>pc_nick</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>pc_password</name>
+        <type>character varying(100)</type>
+    </column>
+    <constraint>
+        <name>uniq_contactos_portal_cliente_nick</name>
+        <type>UNIQUE (pc_nick)</type>
+    </constraint>
+</table>

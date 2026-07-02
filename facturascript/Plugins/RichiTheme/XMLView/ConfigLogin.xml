@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="login-image" title=" " description="login-logo-desc" icon="fa-solid fa-info" numcolumns="12">
+        </group>
+
+        <group name="login-colors" title="colors" icon="fa-solid fa-palette" numcolumns="12">
+            <column name="login-background-color" description="lbg-desc" numcolumns="3" order="90">
+                <widget type="color" fieldname="lbgcolor" required="true" />
+            </column>
+            <column name="form-background-color" description="fbg-desc" numcolumns="3" order="110">
+                <widget type="color" fieldname="fbgcolor" required="true" />
+            </column>
+            <column name="login-button-color" description="lbtn-desc" numcolumns="3" order="120">
+                <widget type="color" fieldname="lbtncolor" required="true" />
+            </column>
+        </group>
+
+        <group name="login-options" title="options" icon="fa-solid fa-cog" numcolumns="12">
+            <column name="lfoo-desc" numcolumns="3" order="110">
+                <widget type="checkbox" fieldname="lfoodis" />
+            </column>
+            <column name="lrp-desc" numcolumns="4" order="120">
+                <widget type="checkbox" fieldname="lrpdis" />
+            </column>
+        </group>
+    </columns>
+</view>

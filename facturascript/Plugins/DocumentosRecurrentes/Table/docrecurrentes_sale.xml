@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of DocumentosRecurrentes plugin for FacturaScripts.
+    FacturaScripts         Copyright (C) 2015-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+    DocumentosRecurrentes  Copyright (C) 2020-2021 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : docrecurrentes_sale.xml
+    Author     : Carlos Garcia Gomez    <carlos@facturascripts.com>
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Structure for the document recurring sale table.
+-->
+<table>
+    <column>
+        <name>codagente</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>codalmacen</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codcliente</name>
+        <type>character varying(10)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>coddivisa</name>
+        <type>character varying(3)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codpago</name>
+        <type>character varying(10)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codserie</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>enddate</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>firstdate</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>firstforce</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>firstpct</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>generatedoc</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idstatus</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>lastdate</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>name</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nextdate</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>notes</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>notesdocument</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>termtype</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>termunits</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>sendmail</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>startdate</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>docrecurrentes_sale_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_sale_agentes</name>
+        <type>FOREIGN KEY (codagente) REFERENCES agentes (codagente) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_sale_almacenes</name>
+        <type>FOREIGN KEY (codalmacen) REFERENCES almacenes (codalmacen) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_sale_clientes</name>
+        <type>FOREIGN KEY (codcliente) REFERENCES clientes (codcliente) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_sale_divisas</name>
+        <type>FOREIGN KEY (coddivisa) REFERENCES divisas (coddivisa) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_sale_empresas</name>
+        <type>FOREIGN KEY (idempresa) REFERENCES empresas (idempresa) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_estados</name>
+        <type>FOREIGN KEY (idstatus) REFERENCES estados_documentos (idestado) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_sale_fpago</name>
+        <type>FOREIGN KEY (codpago) REFERENCES formaspago (codpago) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_sale_series</name>
+        <type>FOREIGN KEY (codserie) REFERENCES series (codserie) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_sale_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

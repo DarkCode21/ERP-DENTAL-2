@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~ This file is part of plugin ControlPresencia for FacturaScripts
+ ~ Copyright (C) 2018  Nazca Networks <comercial@nazcanetworks.com>
+ ~
+ ~ Description:
+        Structure for the fsreports_reports table.
+ ~
+ ~ @author: Raúl Jiménez <raljopa@gmail.com>
+-->
+
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+        <default>nextval('fs_reports_reports_seq'::regclass)</default>
+    </column>
+    <column>
+        <name>idgroup</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <column>
+        <name>name</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>description</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>label</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>template</name>
+        <type>character varying(50)</type>
+    </column>
+    <constraint>
+        <name>fsreports_reports_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_reports_groups</name>
+        <type>FOREIGN KEY (idgroup) REFERENCES fsreports_groups (id) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

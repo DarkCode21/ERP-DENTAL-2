@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="main" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id" />
+            </column>
+            <column name="name" order="110">
+                <widget type="text" fieldname="nombre" />
+            </column>
+            <column name="contacts" numcolumns="2" order="120">
+                <widget type="number" decimal="0" fieldname="numcontactos" icon="fas fa-users" readonly="true" />
+            </column>
+            <column name="date" numcolumns="2" order="130">
+                <widget type="date" fieldname="fecha" readonly="dinamic" />
+            </column>
+        </group>
+    </columns>
+</view>

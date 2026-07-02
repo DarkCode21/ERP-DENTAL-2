@@ -1,0 +1,15 @@
+{
+    "bank-movement": "Moviment bancari",
+    "conciliate": "Conciliar",
+    "conciliate-bank-movements": "Conciliar moviments bancaris",
+    "import-banking-movements": "Importar moviments bancaris",
+    "link-mov-with-acc": "Enllaçar moviment amb seients",
+    "link-mov-with-acc-c": "Selecciona els subcomptes a utilitzar al seient comptable.",
+    "link-mov-with-acc-p": "Selecciona els seients amb què vulguis vincular aquest moviment. O bé crea un seient nou des de la pestanya nova.",
+    "link-up": "Vincular",
+    "reconcile-purchases-movement": "Reconciliar moviment de compres",
+    "reconcile-remittances": "Conciliar remeses",
+    "reconcile-sales-movement": "Reconciliar moviment de vendes",
+    "reconciled": "Reconciliat",
+    "reconciliate": "Reconciliar"
+}

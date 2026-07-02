@@ -1,0 +1,173 @@
+{#
+* Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+* Author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+<link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+
+<form id="fReportVerifactu" method="post" onsubmit="animateSpinner('add')">
+    {{ formToken() }}
+    <input type="hidden" name="action" value="search"/>
+    <input type="hidden" name="codcliente" {{ fsc.customer.codcliente }}/>
+    <input type="hidden" name="activetab" value="ListVerifactuRegistroFactura-2"/>
+    <div class="w-100 py-3" style="background-color: #F8F9FA; margin-top: -16px;">
+        <div class="container">
+            <h1 class="h3 mb-1">
+                <i class="{{ fsc.getPageData().icon }} me-2"></i> {{ fsc.title }}
+            </h1>
+            <p class="text-muted mb-4">{{ trans('report-verifactu-desc') }}.</p>
+            <div class="row align-items-end">
+                <div class="col-sm mb-3">
+                    {{ trans('company') }}/{{ trans('exercise') }}
+                    <select name="codejercicio" class="form-control" required>
+                        {% for company in fsc.getCompanies() %}
+                            <optgroup label="{{ company.nombrecorto }}">
+                                {% for exercise in fsc.getExercises(company.idempresa) %}
+                                    {% if fsc.codejercicio == exercise.codejercicio %}
+                                        <option value="{{ exercise.codejercicio }}" selected>
+                                            {{ exercise.nombre }}
+                                        </option>
+                                    {% else %}
+                                        <option value="{{ exercise.codejercicio }}">
+                                            {{ exercise.nombre }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm mb-3">
+                    {{ trans('from-date') }}
+                    <input type="date" name="desde" value="{{ fsc.desde | date('Y-m-d') }}"
+                           class="form-control" required/>
+                </div>
+                <div class="col-sm mb-3">
+                    {{ trans('until-date') }}
+                    <input type="date" name="hasta" value="{{ fsc.hasta | date('Y-m-d') }}"
+                           class="form-control" required/>
+                </div>
+                <div class="col-sm mb-3">
+                    {{ trans('customer') }}
+                    <div class="input-group">
+                        <!-- Ícono de búsqueda cuando no hay cliente -->
+                        <div class="input-group-prepend {{ fsc.customer.codcliente is empty ? 'd-block' : 'd-none' }}">
+                            <span class="input-group-text h-100" id="iconSearchCustomer">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+
+                        <!-- Botón de limpiar cuando hay cliente -->
+                        <div class="input-group-prepend {{ fsc.customer.codcliente is empty ? 'd-none' : 'd-block' }}">
+                            <button class="btn btn-warning" type="button" id="btnClearCustomer">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+
+                        <!-- Input -->
+                        <input type="text" id="searchCustomer" 
+                            value="{{ fsc.customer.nombre }}" 
+                            class="form-control" 
+                            placeholder="{{ trans('optional') }}">
+                    </div>
+                </div>
+                <div class="col-1 mb-3 me-3">
+                    <button type="submit"
+                            class="btn btn-primary btn-spin-action d-inline-flex align-items-center">
+                        <i class="fa-solid fa-search me-1"></i> {{ trans('search') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% if fsc.invoices is not empty %}
+    <div class="table-responsive mt-5">
+        <table class="table table-sm table-striped">
+            <thead>
+            <tr>
+                <th>{{ trans('serie') }} + {{ trans('number') }}</th>
+                <th>{{ trans('invoice') }}</th>
+                <th>{{ trans('customer') }}</th>
+                <th>{{ trans('cifnif') }}</th>
+                <th>{{ trans('status') }}</th>
+                <th>{{ trans('date-register') }}</th>
+                <th class="text-center">{{ trans('download-json') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for invoice in fsc.invoices %}
+                <tr>
+                    <td>
+                        {% if invoice.link_invoice is not empty %}
+                            <a href="{{ invoice.link_invoice }}" target="_blank">
+                                {{ invoice.NumSerieFactura }}
+                            </a>
+                        {% else %}
+                            {{ invoice.NumSerieFactura }}
+                        {% endif %}
+                    </td>
+                    <td>{{ invoice.FechaExpedicionFactura | date('d-m-Y') }}</td>
+                    <td>{{ invoice.NombreRazon }}</td>
+                    <td>{{ invoice.RefExterna }}</td>
+                    <td>{{ invoice.json_data }}</td>
+                    <td>{{ invoice.TimestampPresentacion | date('d-m-Y H:i:s') }}</td>
+                    <td class="text-center">
+                        <form method="post">
+                            <input type="hidden" name="action" value="download-json"/>
+                            <input type="hidden" name="ref_externa" value="{{ invoice.RefExterna }}"/>
+                            <input type="hidden" name="json_data" value="{{ invoice.json_data }}"/>
+                            <button type="submit" class="btn btn-sm btn-outline-info">
+                                <i class="fa-solid fa-download"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+<script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '#btnClearCustomer', function () {
+            $('#fReportVerifactu input[name="codcliente"]').val('');
+            $('#searchCustomer').val('');
+            $('#iconSearchCustomer').removeClass('d-none').addClass('d-block');
+            $('#btnClearCustomer').removeClass('d-block').addClass('d-none');
+        });
+
+        $("#searchCustomer").autocomplete({
+            source: function (request, response) {
+                let formData = {};
+                formData["action"] = "autocomplete-customer";
+                formData["query"] = $("#searchCustomer").val();
+
+                $.ajax({
+                    method: "POST",
+                    url: "{{ fsc.url() }}",
+                    data: formData,
+                    dataType: "json",
+                    success: function (results) {
+                        response(results);
+                    },
+                    error: function (msg) {
+                        alert(msg.status + " " + msg.responseText);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                if (ui.item.key !== null) {
+                    // añadimos el código del cliente al formulario
+                    $('#fReportVerifactu input[name="codcliente"]').val(ui.item.key);
+                    $('#iconSearchCustomer').removeClass('d-block').addClass('d-none');
+                    $('#btnClearCustomer').removeClass('d-none').addClass('d-block');
+                    $('#searchCustomer').val(ui.item.value);
+                }
+            }
+        });
+    });
+</script>

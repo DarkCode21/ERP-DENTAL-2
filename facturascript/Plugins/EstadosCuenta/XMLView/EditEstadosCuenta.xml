@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" description="optional" numcolumns="2" order="100" display="none">
+                <widget type="text" fieldname="codcliente" icon="fas fa-hashtag" maxlength="10" readonly="dinamic"/>
+            </column>
+            <column name="name" numcolumns="3" order="110">
+                <widget type="text" fieldname="nombre" maxlength="100" readonly="true"/>
+            </column>
+            <column name="fiscal-number" numcolumns="2" order="100">
+                <widget type="text" fieldname="cifnif" maxlength="30" icon="fas fa-id-card" readonly="true"/>
+            </column> 
+            <column name="payment-method" titleurl="ListFormaPago" numcolumns="2" order="120">
+                <widget type="select" fieldname="codpago" onclick="EditFormaPago" readonly="true">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

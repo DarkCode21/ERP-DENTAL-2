@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Erick Lizana <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="nombresoftware"/>
+        </column>
+        <column name="version" order="120">
+            <widget type="text" fieldname="version"/>
+        </column>
+        <column name="date" display="right" order="130">
+            <widget type="date" fieldname="fecha"/>
+        </column>
+		<column name="user" order="120">
+            <widget type="text" fieldname="nick"/>
+        </column>
+    </columns>
+	<rows>
+        <row type="status">
+            <option color="success" fieldname="estado" title="active">1</option>
+            <option color="danger" fieldname="estado" title="inactive">0</option>
+        </row>
+    </rows>
+
+</view>

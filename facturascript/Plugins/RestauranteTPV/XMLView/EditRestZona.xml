@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="6">
+            <column name="name" order="100">
+                <widget type="text" fieldname="nombre" required="true"/>
+            </column>
+            <column name="prefix" order="150">
+                <widget type="text" fieldname="prefijo"/>
+            </column>
+        </group>
+        <group name="observations" numcolumns="12">
+            <column name="description" order="100">
+                <widget type="textarea" fieldname="descripcion" rows="3"/>
+            </column>
+        </group>
+    </columns>
+</view>

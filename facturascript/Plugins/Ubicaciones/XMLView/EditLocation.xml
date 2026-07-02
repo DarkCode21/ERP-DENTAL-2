@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of Ubicaciones plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Ubicaciones    Copyright (C) 2019-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="warehouse" numcolumns="4" order="110">
+                <widget type="select" fieldname="codewarehouse">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre"></values>
+                </widget>
+            </column>
+            <column name="storage-type" title="type" numcolumns="3" order="120">
+                <widget type="select" fieldname="storagetype" translate="true" required="true">
+                    <values title="storage">0</values>
+                    <values title="picking">1</values>
+                </widget>
+            </column>
+            <column name="validation-code" numcolumns="2" order="130">
+                <widget type="text" fieldname="validationcode" />
+            </column>
+        </group>
+        <group name="location" numcolumns="12">
+            <column name="aisle" numcolumns="3" order="120">
+                <widget type="text" fieldname="aisle" />
+            </column>
+            <column name="rack" numcolumns="3" order="130">
+                <widget type="text" fieldname="rack" />
+            </column>
+            <column name="shelf" numcolumns="2" order="140">
+                <widget type="text" fieldname="shelf" />
+            </column>
+            <column name="drawer" numcolumns="2" order="140">
+                <widget type="text" fieldname="drawer" />
+            </column>
+        </group>
+    </columns>
+</view>

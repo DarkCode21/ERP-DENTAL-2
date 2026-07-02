@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="basic" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id"/>
+            </column>
+            <column name="name" order="110">
+                <widget type="text" fieldname="name" required="true"/>
+            </column>
+            <column name="company" titleurl="ListEmpresa" order="120">
+                <widget type="select" fieldname="idcompany" onclick="EditEmpresa">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>
+                </widget>
+            </column>
+            <column name="channel" display="none" order="130">
+                <widget type="number" fieldname="channel" decimal="0"/>
+            </column>
+            <column name="grouping-type" order="140">
+                <widget type="select" fieldname="groupingtype" translate="true" required="true">
+                    <values title="do-not-group">N</values>
+                    <values title="report-grouping-account">C</values>
+                    <values title="group-by-subaccount">S</values>
+                    <values title="group-by-month">M</values>
+                </widget>
+            </column>
+        </group>
+        <group name="filters" numcolumns="12">
+            <column name="from-date" order="100">
+                <widget type="date" fieldname="startdate" required="true"/>
+            </column>
+            <column name="until-date" order="110">
+                <widget type="date" fieldname="enddate" required="true"/>
+            </column>
+            <column name="from-subaccount" order="120">
+                <widget type="autocomplete" fieldname="startcodsubaccount" strict="false">
+                    <values source="subcuentas" fieldcode="codsubcuenta" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="until-subaccount" order="130">
+                <widget type="autocomplete" fieldname="endcodsubaccount" strict="false">
+                    <values source="subcuentas" fieldcode="codsubcuenta" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="from-accounting-entry" order="140">
+                <widget type="number" fieldname="startentry" decimal="0"/>
+            </column>
+            <column name="until-accounting-entry" order="150">
+                <widget type="number" fieldname="endentry" decimal="0"/>
+            </column>
+        </group>
+    </columns>
+</view>

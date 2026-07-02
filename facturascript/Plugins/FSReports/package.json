@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "luxon": "^3.3.0",
+    "tabulator-tables": "^5.6.1"
+  }
+}

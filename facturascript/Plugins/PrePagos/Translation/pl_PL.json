@@ -1,0 +1,11 @@
+{
+    "accounting-prepaid": "Prezent przedpłatny %code%",
+    "accounting-prepaid-customer-delivery-note": "Prepago albaran klienta %code%",
+    "accounting-prepaid-customer-estimation": "Szacowanie klienta z przedpłaty %code%",
+    "accounting-prepaid-customer-order": "Zaliczka na zamówienie klienta %code%",
+    "amount-greater-zero": "Kwota musi być większa niż zero",
+    "document-company-different-from-payment-method-company": "Firma dokumentu różni się od firmy metody płatności",
+    "document-not-found": "Dokument nie został znaleziony",
+    "no-editable": "Niedostępne do edycji",
+    "only-one-document-allowed": "Tylko jeden dokument jest dozwolony"
+}

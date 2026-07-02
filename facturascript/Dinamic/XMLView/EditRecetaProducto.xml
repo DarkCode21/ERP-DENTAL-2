@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditRecetaProducto.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la vista EditRecetaProducto.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12" valign="bottom">
+            <column name="code" numcolumns="1" display="none" order="100">
+                <widget type="number" fieldname="id" readonly="true"/>
+            </column>
+            <column name="recipe" numcolumns="2" display="none" order="110">
+                <widget type="number" fieldname="idreceta" readonly="true"/>
+            </column>
+            <column name="reference" numcolumns="2" order="120">
+                <widget type="autocomplete" fieldname="referencia" required="true">
+                    <values source="Variante" fieldcode="referencia" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="quantity" numcolumns="1" order="130">
+                <widget type="number" fieldname="cantidad" min="0" required="true"/>
+            </column>
+            <column name="product" order="140">
+                <widget type="text" fieldname="productname" readonly="true"/>
+            </column>
+            <column name="numserie" numcolumns="2" order="150">
+                <widget type="select" fieldname="numserietype" translate="true" required="true">
+                    <values title="none">0</values>
+                    <values title="counter">1</values>
+                    <values title="reference-counter">2</values>
+                    <values title="family-counter">3</values>
+                </widget>
+            </column>
+            <column name="share-cost" numcolumns="2" order="160">
+                <widget type="select" fieldname="repartircoste" translate="true" required="true">
+                    <values title="none">0</values>
+                    <values title="yes">1</values>
+                </widget>
+            </column>
+            <column name="main" numcolumns="1" order="170">
+                <widget type="select" fieldname="principal" translate="true" required="true">
+                    <values title="no">0</values>
+                    <values title="yes">1</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="actions">
+            <button type="js" label="product" color="info" action="showProduct(this.form)" icon="fa-solid fa-magnifying-glass-plus"/>
+        </row>
+    </rows>
+</view>

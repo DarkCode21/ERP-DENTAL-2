@@ -1,0 +1,162 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% set webTitle = settings('portalcliente','title','') %}
+{% set webUrl = settings('portalcliente','siteurl','') %}
+{% set webLang = fsc.contact.langcode ? fsc.contact.langcode : config('lang') %}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ webLang|replace({'_':'-'}) }}"
+      xml:lang="{{ webLang|replace({'_':'-'}) }}">
+<head>
+    {% for item in getIncludeViews('PortalTemplate', 'headBefore') %}
+        {% include item['path'] %}
+    {% endfor %}
+
+    {% block head %}
+
+        {% for item in getIncludeViews('PortalTemplate', 'metaBefore') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% block meta %}
+            <title>{{ fsc.title }}</title>
+            <meta name="description" content="{{ fsc.description }}"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <meta name="generator" content="PortalCliente"/>
+            <meta name="robots" content="noindex"/>
+        {% endblock %}
+
+        {% for item in getIncludeViews('PortalTemplate', 'metaAfter') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% for item in getIncludeViews('PortalTemplate', 'iconsBefore') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% block icons %}
+            <link rel="shortcut icon" href="{{ asset('Dinamic/Assets/Images/favicon.ico') }}"/>
+            <link rel="apple-touch-icon" sizes="180x180"
+                  href="{{ asset('Dinamic/Assets/Images/apple-icon-180x180.png') }}"/>
+        {% endblock %}
+
+        {% for item in getIncludeViews('PortalTemplate', 'iconsAfter') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% for item in getIncludeViews('PortalTemplate', 'cssBefore') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% block css %}
+            <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('node_modules/@fortawesome/fontawesome-free/css/all.min.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('Dinamic/Assets/CSS/custom.css') }}?v=2"/>
+
+            {% if fsc.user %}
+                {{ debugBarRender.renderHead()|raw }}
+            {% endif %}
+
+            {# Adds custom CSS assets #}
+            {% for css in assetManager.get('css') %}
+                <link rel="stylesheet" href="{{ css }}"/>
+            {% endfor %}
+        {% endblock %}
+
+        {% for item in getIncludeViews('PortalTemplate', 'cssAfter') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% for item in getIncludeViews('PortalTemplate', 'javascriptHeadBefore') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% block javascriptHead %}
+            <script type="text/javascript" src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+            <script src="{{ asset('node_modules/@fortawesome/fontawesome-free/js/all.min.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('Dinamic/Assets/JS/Custom.js') }}"></script>
+
+            {# Adds custom JS assets #}
+            {% for js in assetManager.get('js') %}
+                <script src="{{ js }}"></script>
+            {% endfor %}
+        {% endblock %}
+
+        {% for item in getIncludeViews('PortalTemplate', 'javascriptHeadAfter') %}
+            {% include item['path'] %}
+        {% endfor %}
+    {% endblock %}
+</head>
+
+<body>
+    {% for item in getIncludeViews('PortalTemplate', 'bodyBefore') %}
+        {% include item['path'] %}
+    {% endfor %}
+
+    {% block body %}
+        <main>
+            {% for item in getIncludeViews(template, 'mainBefore') %}
+                {% include item['path'] %}
+            {% endfor %}
+
+            {% block main %}
+            {% endblock %}
+
+            {% for item in getIncludeViews(template, 'mainAfter') %}
+                {% include item['path'] %}
+            {% endfor %}
+        </main>
+
+        <footer>
+            {% for item in getIncludeViews(template, 'footerBefore') %}
+                {% include item['path'] %}
+            {% endfor %}
+
+            {% block footer %}
+            {% endblock %}
+
+            {% for item in getIncludeViews(template, 'footerAfter') %}
+                {% include item['path'] %}
+            {% endfor %}
+        </footer>
+
+        {% for item in getIncludeViews(template, 'javascriptFooterBefore') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% block javascriptFooter %}
+        {% endblock %}
+
+        {% for item in getIncludeViews(template, 'javascriptFooterAfter') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% for item in getIncludeViews(template, 'messagesBefore') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% block messages %}
+            {% include 'Master/PortalMessages.html.twig' %}
+        {% endblock %}
+
+        {% for item in getIncludeViews(template, 'messagesAfter') %}
+            {% include item['path'] %}
+        {% endfor %}
+
+        {% if fsc.user %}
+            {{ debugBarRender.render()|raw }}
+        {% endif %}
+    {% endblock %}
+
+    {% for item in getIncludeViews(template, 'bodyAfter') %}
+        {% include item['path'] %}
+    {% endfor %}
+</body>
+</html>

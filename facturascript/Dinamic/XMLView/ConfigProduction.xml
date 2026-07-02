@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="recipes" title="recipes" icon="fa-solid fa-clipboard-list" numcolumns="12" valign="bottom">
+            <column name="duplicate-code" numcolumns="2" class="mt-2" order="100">
+                <widget type="select" fieldname="duplicatecode" translate="true" icon="fa-solid fa-copy" required="true">
+                    <values title="no-duplicate">1</values>
+                    <values title="duplicate-code">0</values>
+                </widget>
+            </column>
+            <column name="print-cost" title="print-recipe-cost" class="mt-2" order="110">
+                <widget type="checkbox" fieldname="printrecipecost"/>
+            </column>
+        </group>
+        <group name="products" title="production-orders" icon="fa-solid fa-puzzle-piece" numcolumns="12" valign="bottom">
+            <column name="cost-update-policy" numcolumns="3" order="200">
+                <widget type="select" fieldname="costupdatepolicy" translate="true" required="true">
+                    <values title="only-ingredient">1</values>
+                    <values title="ingredient-and-produced">2</values>
+                    <values title="none">0</values>
+                </widget>
+            </column>
+            <column name="confirm-production-order" class="mt-2" order="210">
+                <widget type="checkbox" fieldname="confirmproductionorder"/>
+            </column>
+            <column name="quantity-decimals-order" class="mt-2" order="220">
+                <widget type="checkbox" fieldname="quantitydecimalorder"/>
+            </column>
+        </group>
+        <group name="numserie" title="numserie" icon="fa-solid fa-barcode" numcolumns="12" valign="bottom">
+            <column name="separator" title="separator" numcolumns="1" order="300">
+                <widget type="text" fieldname="numserieseparator"/>"
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="actions">
+            <button type="js" label="help" color="info" action="$('#footer-info-product').toggle()" icon="fa-solid fa-question-circle"/>
+        </row>
+        <row type="footer">
+            <group name="footer-info" id="footer-info-product" class="" html="Block/ConfigProductionInfo.html.twig"/>
+        </row>
+    </rows>
+</view>

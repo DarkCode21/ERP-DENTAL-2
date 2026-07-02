@@ -1,0 +1,257 @@
+{% set firstView = fsc.views | first %}
+{% set doc = firstView.model %}
+{% set currentView = fsc.getCurrentView() %}
+
+<div class="container-fluid">
+    <div class="form-row">
+        <div class="col-sm-12">
+                    {% if fsc.permissions.allowUpdate %}
+                    <div class="row">
+                        <div class="col">
+                            <form action="{{ doc.url() }}" method="post" enctype="multipart/form-data" onsubmit="animateSpinner('add')">
+                                <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                                <input type="hidden" name="action" value="add-file"/>
+                                {{ formToken() }}
+                                <div class="card border-success shadow mb-3">
+                                    <div class="card-body p-3">
+                                        <h5 class="card-title">
+                                            <i class="fas fa-folder-plus fa-fw"></i> {{ trans('add') }}
+                                        </h5>
+                                        <div class="form-group">
+                                            <textarea name="observations" class="form-control" placeholder="{{ trans('observations') }}"></textarea>
+                                        </div>
+                                        <div class="form-row align-items-end">
+                                            <div class="col">
+                                                <input type="file" name="new-files[]" class="form-control-file" multiple required/>
+                                                <p class="text-muted mb-0">
+                                                    {{ trans('help-server-accepts-filesize', {'%size%': currentView.model.getMaxFileUpload()}) }}
+                                                </p>
+                                                {% for includeView in getIncludeViews('DocFiles', 'formAddBody') %}
+                                                    {% include includeView['path'] %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col text-right">
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    <i class="fas fa-save fa-fw" aria-hidden="true"></i> {{ trans('save') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form action="{{ doc.url() }}" method="post" enctype="multipart/form-data" onsubmit="return convertCanvasToImage();">
+                                <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}" />
+                                <input type="hidden" name="action" value="add-file" />
+                                {{ formToken() }}
+                                <input type="hidden" name="type-file" required value="canvas" />
+                                <div class="card border-success shadow mb-3">
+                                    <div class="card-body p-3">
+                                        <h5 class="card-title">
+                                            <i class="far fa-file"></i> {{ trans('signature') }}
+                                        </h5>
+                                        <div class="form-row align-items-end">
+                                            <div class="col">
+                                                <canvas id="draw-canvas" width="300" height="200">
+                                                    No tienes un buen navegador.
+                                                </canvas>
+                                                <input type="hidden" name="draw-dataUrl" id="draw-dataUrl" required />
+                                                <input type="hidden" name="new-file" id="new-signature" required />
+                                                <button type="button" class="btn btn-sm btn-info" id="draw-clearBtn">Borrar Firma</button>
+                                                <button type="button" style="display:none;" id="btn-generar"></button>
+                                                <div id="errorMsgs"></div>
+                                            </div>
+                                            <div class="col text-right">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-save fa-fw" aria-hidden="true"></i> {{ trans('save') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+<style>
+#draw-canvas {
+  border: 2px dotted #0E5CB9;
+  border-radius: 5px;
+  cursor: crosshair;
+}
+</style>
+<script>
+    function convertCanvasToImage() {
+        document.getElementById('btn-generar').click()
+        let el = document.getElementById("new-signature");
+        let ref = document.getElementById("draw-dataUrl");
+        el.value = ref.value;
+        return true;
+    }
+
+    (function() {
+        window.requestAnimFrame = (function (callback) {
+            return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimaitonFrame ||
+                function (callback) {
+                    window.setTimeout(callback, 1000/60);
+                };
+        })();
+        var canvas = document.getElementById("draw-canvas");
+        if (!canvas) return;
+        var ctx = canvas.getContext("2d");
+        var drawText = document.getElementById("draw-dataUrl");
+        var clearBtn = document.getElementById("draw-clearBtn");
+        var submitBtn = document.getElementById("btn-generar");
+        clearBtn.addEventListener("click", function (e) {
+            clearCanvas();
+        }, false);
+        submitBtn.addEventListener("click", function (e) {
+            document.getElementById('errorMsgs').innerHTML = ''
+            var dataUrl = canvas.toDataURL('image/png')
+            drawText.value = dataUrl
+        }, false);
+        var drawing = false;
+        var mousePos = { x:0, y:0 };
+        var lastPos = mousePos;
+        canvas.addEventListener("mousedown", function (e) {
+            drawing = true;
+            lastPos = getMousePos(canvas, e);
+        }, false);
+        canvas.addEventListener("mouseup", function (e) {
+            drawing = false;
+        }, false);
+        canvas.addEventListener("mousemove", function (e) {
+            mousePos = getMousePos(canvas, e);
+        }, false);
+        canvas.addEventListener("touchstart", function (e) {
+            mousePos = getTouchPos(canvas, e);
+            e.preventDefault();
+            var touch = e.touches[0];
+            var mouseEvent = new MouseEvent("mousedown", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }, false);
+        canvas.addEventListener("touchend", function (e) {
+            e.preventDefault();
+            var mouseEvent = new MouseEvent("mouseup", {});
+            canvas.dispatchEvent(mouseEvent);
+        }, false);
+        canvas.addEventListener("touchleave", function (e) {
+            e.preventDefault();
+            var mouseEvent = new MouseEvent("mouseup", {});
+            canvas.dispatchEvent(mouseEvent);
+        }, false);
+        canvas.addEventListener("touchmove", function (e) {
+            e.preventDefault();
+            var touch = e.touches[0];
+            var mouseEvent = new MouseEvent("mousemove", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }, false);
+        function getMousePos(canvasDom, mouseEvent) {
+            var rect = canvasDom.getBoundingClientRect();
+            return {
+                x: mouseEvent.clientX - rect.left,
+                y: mouseEvent.clientY - rect.top
+            };
+        }
+        function getTouchPos(canvasDom, touchEvent) {
+            var rect = canvasDom.getBoundingClientRect();
+            return {
+                x: touchEvent.touches[0].clientX - rect.left,
+                y: touchEvent.touches[0].clientY - rect.top
+            };
+        }
+        function renderCanvas() {
+            if (drawing) {
+                ctx.strokeStyle = '#060D7F';
+                ctx.beginPath();
+                ctx.moveTo(lastPos.x, lastPos.y);
+                ctx.lineTo(mousePos.x, mousePos.y);
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.closePath();
+                lastPos = mousePos;
+            }
+        }
+        function clearCanvas() {
+            canvas.width = canvas.width;
+        }
+        (function drawLoop () {
+            requestAnimFrame(drawLoop);
+            renderCanvas();
+        })();
+    })();
+</script>
+
+            <div class="row">
+                {% for docfile in currentView.cursor %}
+                    <div class="col-6 mx-auto mb-3">
+                        <form action="{{ doc.url() }}" method="post" enctype="multipart/form-data" onsubmit="animateSpinner('add')">
+                            <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                            <input type="hidden" name="id" value="{{ docfile.id }}"/>
+                            <input type="hidden" name="action" value=""/>
+                            {{ formToken() }}
+                            <div class="card shadow">
+                                <div class="card-body p-3">
+                                    <div class="form-group mb-2">
+                                        <textarea name="observations" class="form-control" placeholder="{{ trans('observations') }}">{{ docfile.observations | raw }}</textarea>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        {% set file = docfile.getFile() %}
+                                        <div>
+                                            <a href="{{ file.url('download-permanent') }}" target="_blank" class="btn btn-outline-primary">
+                                                <i class="far fa-file"></i> {{ file.filename | raw }}
+                                            </a>
+                                        </div>
+                                        <div class="ml-3 text-muted small">
+                                            {% if docfile.nick %}
+                                                <i class="fas fa-user"></i> {{ docfile.nick }}
+                                            {% endif %}
+                                            <i class="fas fa-calendar-alt ml-2"></i> {{ docfile.creationdate }}
+                                        </div>
+                                        <div class="ml-auto d-flex align-items-center">
+                                            {% if fsc.permissions.allowUpdate %}
+                                                <button type="button" class="btn btn-sm btn-primary mr-2" onclick="this.form.action.value='edit-file';this.form.onsubmit();this.form.submit();">
+                                                    <i class="fas fa-save fa-fw" aria-hidden="true"></i> {{ trans('save') }}
+                                                </button>
+                                            {% endif %}
+                                            {% if fsc.permissions.allowDelete %}
+                                                <div class="btn-group">
+                                                    <button class="btn btn-sm btn-danger dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <button type="button" onclick="this.form.action.value='unlink-file';this.form.onsubmit();this.form.submit();" class="dropdown-item">
+                                                            <i class="fas fa-unlink fa-fw"></i> {{ trans('unlink-file') }}
+                                                        </button>
+                                                        <div class="dropdown-divider"></div>
+                                                        <button type="button" onclick="this.form.action.value='delete-file';this.form.submit();" class="dropdown-item">
+                                                            <i class="far fa-trash-alt fa-fw"></i> {{ trans('delete-file') }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% for includeView in getIncludeViews('DocFiles', 'formEditBody') %}
+                                        {% include includeView['path'] %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

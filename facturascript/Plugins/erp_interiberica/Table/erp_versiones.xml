@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : erp_versiones.xml
+    Author     : Erick Lizana
+    Description:
+-->
+<table>
+    <column>
+        <name>nombresoftware</name>
+        <type>character varying(255)</type>
+        <null>NO</null>
+    </column>
+	<column>
+        <name>version</name>
+        <type>character varying(50)</type>
+    	<null>NO</null>
+	</column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+    	<null>NO</null>
+	</column>
+    <column>
+        <name>estado</name>
+        <type>integer</type>
+        <null>NO</null>
+		<default>1</default>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <constraint>
+        <name>versiones_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_versiones_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

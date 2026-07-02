@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gómez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : produccion_ordenes.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la tabla ordenes de produccion.
+-->
+<table>
+    <column>
+        <name>confirmar</name>
+        <type>boolean</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>coste</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fechafabricacion</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>hora</name>
+        <type>time</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>horafabricacion</name>
+        <type>time</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idreceta</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nickfabricacion</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>usarstock</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <column>
+        <name>vencimiento</name>
+        <type>date</type>
+    </column>
+
+    <constraint>
+        <name>produccion_ordenes_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenes_recetas</name>
+        <type>FOREIGN KEY (idreceta) REFERENCES produccion_recetas (idreceta) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenes_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenes_users_fabricacion</name>
+        <type>FOREIGN KEY (nickfabricacion) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

@@ -1,0 +1,17 @@
+{
+    "add-product": "Añadir producto",
+    "all-tags": "Denak",
+    "auto-generate-barcodes": "Barra kodeak automatikoki sortu",
+    "barcode-generate-ok": "Geratzen ziren %num% barra-kodeak sortuta",
+    "barcode-type": "Barra-kode mota",
+    "generate-barcodes": "Barra-kodeak sortu",
+    "initial-column": "Hasierako zutabea",
+    "initial-row": "Hasierako lerroa",
+    "no-tag": "Batez",
+    "number-labels-per-product": "Produktu bakoitzeko etiketa kopurua",
+    "one-per-product": "Produktu bakoitzeko bat",
+    "only-with-barcode": "Barra-kodeak dituzten produktuak bakarrik",
+    "print-barcodes": "Barra-kodeak",
+    "print-prices": "Prezioak",
+    "tags": "Etiketak"
+}

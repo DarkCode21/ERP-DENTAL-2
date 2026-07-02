@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditProducto.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+-->
+<view>
+    <columns>
+        <group name="options" numcolumns="12">
+            <column name="numserie" display="center" order="145">
+                <widget type="checkbox" fieldname="numserie"/>
+            </column>
+        </group>
+        <group name="advanced" numcolumns="12">
+            <column name="prefix" title="prefix-numserie" description="numserie-prefix-desc" numcolumns="3" order="300">
+                <widget type="text" fieldname="nsprefix" maxlength="20" />
+            </column>
+        </group>
+    </columns>
+</view>

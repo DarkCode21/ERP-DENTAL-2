@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples  Copyright (C) 2018-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : recibospagoscli.xml
+    Author     : Jose Antonio Cuello <yopli2000@gmail.com>
+    Description:
+        Add to model the multiple payment id.
+-->
+<table>
+    <column>
+        <name>idmultiple</name>
+        <type>integer</type>
+    </column>
+    <constraint>
+        <name>ca_recibospagoscli_multiple_payments</name>
+        <type>FOREIGN KEY (idmultiple) REFERENCES ppmm_customer_receipts (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

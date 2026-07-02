@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : rrhh_employeesworkperiods.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Structure for the employees work hours (periods) table.
+-->
+<table>
+    <column>
+        <name>dayweek</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>endtime</name>
+        <type>time without time zone</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idworkshift</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>starttime</name>
+        <type>time without time zone</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>rrhh_employeesworkperiods_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_employeesworkperiods_workshifts</name>
+        <type>FOREIGN KEY (idworkshift) REFERENCES rrhh_employeesworkshifts (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>uniq_employeesworkperiods_period</name>
+        <type>UNIQUE (idworkshift,dayweek,starttime)</type>
+    </constraint>
+</table>

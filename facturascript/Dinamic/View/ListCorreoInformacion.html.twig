@@ -1,0 +1,152 @@
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block css %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+
+	<style>
+		.table {
+			table-layout: fixed;
+			width: 100%;
+		}
+		.contenido-col {
+			width: 15%;
+			word-wrap: break-word;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+		}
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+document.getElementById('importButton').addEventListener('click', function () {
+var successMessage = document.getElementById('successMessage');
+successMessage.classList.remove('d-none');
+setTimeout(function () {
+successMessage.classList.add('d-none');
+}, 2000);
+});
+
+document.getElementById('selectAll').addEventListener('change', function () {
+let checkboxes = document.querySelectorAll('.message-checkbox');
+checkboxes.forEach(chk => chk.checked = this.checked);
+});
+
+document.getElementById('deleteButton').addEventListener('click', function () {
+let checkboxes = document.querySelectorAll('.message-checkbox:checked');
+if (checkboxes.length === 0) {
+alert('Por favor, selecciona al menos un correo para eliminar.');
+return;
+}
+
+if (!confirm('¿Estás seguro de que deseas eliminar ' + checkboxes.length + ' correo(s)?')) {
+return;
+}
+
+let ids = Array.from(checkboxes).map(chk => chk.value);
+
+let form = document.createElement('form');
+form.method = 'POST';
+form.action = '';
+
+let tokenInput = document.createElement('input');
+tokenInput.type = 'hidden';
+tokenInput.name = 'multireqtoken';
+tokenInput.value = '{{ formToken(false) }}';
+form.appendChild(tokenInput);
+
+let actionInput = document.createElement('input');
+actionInput.type = 'hidden';
+actionInput.name = 'action';
+actionInput.value = 'delete';
+form.appendChild(actionInput);
+
+ids.forEach(id => {
+let input = document.createElement('input');
+input.type = 'hidden';
+input.name = 'ids[]';
+input.value = id;
+form.appendChild(input);
+});
+document.body.appendChild(form);
+form.submit();
+});
+});
+	</script>
+{% endblock %}
+
+{% block body %}
+	<div class="row justify-content-center">
+		<div class="col-md-10">
+			<div id="successMessage" class="alert alert-success d-none" role="alert">
+				Se han importado correctamente las facturas.
+			</div>
+
+			<h2 class="mb-4 mt-2">Seleccione los correos  con facturas a importar</h2>
+
+			<div class="text-right mb-4 mt-2">
+				<button id="deleteButton" class="btn btn-danger">
+					<i class="fas fa-trash-alt"></i>
+					Eliminar</button>
+				<button id="importButton" class="btn btn-primary">
+					<i class="fas fa-file-import"></i>
+					Importar</button>
+			</div>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col" style="width: 2%;"><input type="checkbox" id="selectAll"></th>
+						<th scope="col" style="width: 15%;">Remitente</th>
+						<th scope="col" style="width: 10%;">Asunto</th>
+						<th scope="col" style="width: 12%;">Fecha de Recepción</th>
+						<th scope="col" class="contenido-col">Contenido</th>
+						<th scope="col" style="width: 13%;">Adjuntos</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if fsc.listarCorreos()|length > 0 %}
+						{% for value in fsc.listarCorreos() %}
+							<tr>
+								<td><input type="checkbox" class="message-checkbox" value="{{ value.idcorreo }}"></td>
+								<td>{{ value.remitente }}</td>
+								<td>
+									{% set asunto = value.asunto|replace({'***SPAM*** ': '', '***SPAM***': ''}) %}
+									{{ asunto ?: 'Sin Asunto' }}
+								</td>
+								<td>{{ value.fecha }}</td>
+								<td title="{{ value.contenido }}">
+									{% if value.contenido|length > 100 %}
+										{{ value.contenido|slice(0, 100) }}...
+									{% else %}
+										{{ value.contenido }}
+									{% endif %}
+								</td>
+								<td style="cursor: pointer; color: blue;">
+									{% if value.adjunto %}
+										<i class="fas fa-paperclip"></i>
+										{{ value.adjunto }}
+									{% else %}
+										Sin Adjunto
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="6" class="text-center text-muted">
+								Aún no se han obtenido los mensajes.
+							</td>
+						</tr>
+					{% endif %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

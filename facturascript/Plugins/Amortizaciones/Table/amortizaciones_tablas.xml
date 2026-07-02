@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : amortizaciones_tablas.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of the amortization groups help table.
+-->
+
+<table>
+    <column>
+        <name>coefficient</name>
+        <type>double precision</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>groupid</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>grouptype</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>name</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>period</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>amortizaciones_tablas_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+</table>

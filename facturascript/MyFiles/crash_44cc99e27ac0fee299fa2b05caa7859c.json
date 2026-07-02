@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Class &quot;FacturaScripts\\Plugins\\Dental\\Extension\\Controller\\EditPaciente&quot; not found in \/Plugins\/Dental\/Init.php:13\n\nStack trace:\n#0 \/Core\/Internal\/Plugin.php(235): FacturaScripts\\Plugins\\Dental\\Init-&gt;init()\n#1 \/Core\/Plugins.php(244): FacturaScripts\\Core\\Internal\\Plugin-&gt;init()\n#2 \/index.php(59): FacturaScripts\\Core\\Plugins::init()\n#3 {main}\n  thrown",
+    "file": "\/Plugins\/Dental\/Init.php",
+    "line": 13,
+    "fragment": "\n8\n9class Init extends \\FacturaScripts\\Core\\Base\\InitClass\n10{\n11    public function init(): void\n12    {\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">13        $this->loadExtension(new Extension\\Controller\\EditPaciente());<\/spam>\n14    }\n15\n16    public function update(): void\n17    {\n18        new Model\\Especialidad();",
+    "hash": "44cc99e27ac0fee299fa2b05caa7859c",
+    "url": "\/AdminPlugins",
+    "report_url": "https:\/\/facturascripts.com\/errores\/44cc99e27ac0fee299fa2b05caa7859c",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F44cc99e27ac0fee299fa2b05caa7859c",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

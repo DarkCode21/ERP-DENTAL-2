@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Class FacturaScripts\\Plugins\\Dental\\Controller\\Odontograma contains 1 abstract method and must therefore be declared abstract or implement the remaining methods (FacturaScripts\\Core\\Lib\\ExtendedController\\BaseController::loadData)",
+    "file": "\/Plugins\/Dental\/Controller\/Odontograma.php",
+    "line": 0,
+    "fragment": "<?php\n1<?php\n2\/**\n3 * Odontograma\n4 *\/\n5namespace FacturaScripts\\Plugins\\Dental\\Controller;\n6\n7use FacturaScripts\\Core\\Lib\\ExtendedController\\PanelController;\n8use FacturaScripts\\Dinamic\\Lib\\AssetManager;\n9\n10class Odontograma extends PanelController\n11{",
+    "hash": "49bf939b75f4e7a768f9bdbae3d3b52e",
+    "url": "\/AdminPlugins",
+    "report_url": "https:\/\/facturascripts.com\/errores\/49bf939b75f4e7a768f9bdbae3d3b52e",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F49bf939b75f4e7a768f9bdbae3d3b52e",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

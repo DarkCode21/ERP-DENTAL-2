@@ -1,0 +1,15 @@
+{
+    "code": 16384,
+    "message": "The default value of the &quot;$secure&quot; and &quot;$samesite&quot; arguments of &quot;Symfony\\Component\\HttpFoundation\\Cookie::__construct&quot;&#39;s constructor will respectively change from &quot;false&quot; to &quot;null&quot; and from &quot;null&quot; to &quot;lax&quot; in Symfony 5.0, you should define their values explicitly or use &quot;Cookie::create()&quot; instead.",
+    "file": "\/vendor\/symfony\/http-foundation\/Cookie.php",
+    "line": 97,
+    "fragment": "     * @throws \\InvalidArgumentException\n92     * @throws \\InvalidArgumentException\n93     *\/\n94    public function __construct(string $name, string $value = null, $expire = 0, ?string $path = '\/', string $domain = null, ?bool $secure = false, bool $httpOnly = true, bool $raw = false, string $sameSite = null)\n95    {\n96        if (9 > \\func_num_args()) {\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">97            @trigger_error(sprintf('The default value of the \"$secure\" and \"$samesite\" arguments of \"%s\"\\'s constructor will respectively change from \"false\" to \"null\" and from \"null\" to \"lax\" in Symfony 5.0, you should define their values explicitly or use \"Cookie::create()\" instead.', __METHOD__), \\E_USER_DEPRECATED);<\/spam>\n98        }\n99\n100        \/\/ from PHP source code\n101        if ($raw && false !== strpbrk($name, self::$reservedCharsList)) {\n102            throw new \\InvalidArgumentException(sprintf('The cookie name \"%s\" contains invalid characters.', $name));",
+    "hash": "d46bc720ffbfbe654dc49fc61204e4bf",
+    "url": "\/TPVneo",
+    "report_url": "https:\/\/facturascripts.com\/errores\/d46bc720ffbfbe654dc49fc61204e4bf",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2Fd46bc720ffbfbe654dc49fc61204e4bf",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,LogsFields,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,TPVneo,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,LoginScreen,ReportTaxesPivot,RestauranteTPV,Facturae,CRM,RemesasSEPA"
+}

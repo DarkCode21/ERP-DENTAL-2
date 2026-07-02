@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+   <columns>
+        <group name="default" numcolumns="12">
+            <column name="title-software" order="170" numcolumns="5">
+                <widget type="text" fieldname="nombrecrm"  />
+            </column>
+            <column name="extra-software" order="175" numcolumns="7">
+                <widget type="text" fieldname="infoextra"  />
+            </column>
+        </group>
+    </columns>
+</view>

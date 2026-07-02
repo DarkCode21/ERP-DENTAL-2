@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditAmortizacionPlantilla.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of the view for edit of templates for amortizations contabilization.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="template" order="100">
+                <widget type="text" fieldname="name" required="true"/>
+            </column>
+            <column name="period" description="number-years" numcolumns="2" order="120">
+                <widget type="number" fieldname="periods" step="1" min="1" max="200" required="true"/>
+            </column>
+            <column name="code" numcolumns="2" order="200">
+                <widget type="number" fieldname="id" readonly="true"/>
+            </column>
+        </group>
+        <group name="subaccounts" numcolumns="12">
+            <column name="codsubcuentacierre" title="subaccount-closing" order="100">
+                <widget type="autocomplete" fieldname="closing_subaccount">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentadebe" title="subaccount-debit" order="110">
+                <widget type="autocomplete" fieldname="debit_subaccount">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentahaber" title="subaccount-credit" order="120">
+                <widget type="autocomplete" fieldname="credit_subaccount">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentabeneficios" title="subaccount-benefits" order="130">
+                <widget type="autocomplete" fieldname="benefits_subaccount">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentaperdidas" title="subaccount-lost" order="140">
+                <widget type="autocomplete" fieldname="loss_subaccount">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gómez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : produccion_ordenesingredientes.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la tabla ordenes ingredientes.
+-->
+<table>
+    <column>
+        <name>cantidad</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>idlote</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idorden</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>referencia</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+
+    <constraint>
+        <name>produccion_ordenesingredientes_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenesingredientes_ordenes</name>
+        <type>FOREIGN KEY (idorden) REFERENCES produccion_ordenes (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenesingredientes_lote</name>
+        <type>FOREIGN KEY (idlote) REFERENCES productos_lotes (idlote) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenesingredientes_variantes</name>
+        <type>FOREIGN KEY (referencia) REFERENCES variantes (referencia) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

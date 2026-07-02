@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This file is part of AgruparProducto plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * AgruparProducto Copyright (C) 2022-2022 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * Initial description for List Product Grouping
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="name" />
+        </column>
+    </columns>
+</view>

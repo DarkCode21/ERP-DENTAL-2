@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data">
+            <column name="barcode-type" numcolumns="2" order="161">
+                <widget type="select" fieldname="tipocodbarras">
+                    <values title="C39">C39</values>
+                    <values title="C39+">C39+</values>
+                    <values title="C39E">C39E</values>
+                    <values title="C39E+">C39E+</values>
+                    <values title="C93">C93</values>
+                    <values title="S25">S25</values>
+                    <values title="S25+">S25+</values>
+                    <values title="I25">I25</values>
+                    <values title="I25+">I25+</values>
+                    <values title="C128">C128</values>
+                    <values title="C128A">C128A</values>
+                    <values title="C128B">C128B</values>
+                    <values title="C128C">C128C</values>
+                    <values title="EAN2">EAN2</values>
+                    <values title="EAN5">EAN5</values>
+                    <values title="EAN8">EAN8</values>
+                    <values title="EAN13">EAN13</values>
+                    <values title="UPCA">UPCA</values>
+                    <values title="UPCE">UPCE</values>
+                    <values title="CODABAR">CODABAR</values>
+                    <values title="CODE11">CODE11</values>
+                    <values title="PHARMA">PHARMA</values>
+                    <values title="PHARMA2T">PHARMA2T</values>
+                    <values title="DATAMATRIX">DATAMATRIX</values>
+                    <values title="PDF417">PDF417</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

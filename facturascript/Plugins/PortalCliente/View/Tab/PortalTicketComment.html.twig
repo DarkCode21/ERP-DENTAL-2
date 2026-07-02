@@ -1,0 +1,139 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% import 'Macro/PortalClienteTools.html.twig' as portal %}
+{% set firstView = fsc.views | first %}
+{% set ticket = firstView.model %}
+{% set comments = ticket.getComments() %}
+
+{% for comment in comments %}
+    {% set commentFiles = comment.getFiles() %}
+    {% set cardClass = comment.idcontacto == fsc.contact.idcontacto ? 'card shadow mb-3' : 'card border-primary shadow mb-3' %}
+    {% set cardClass = comment.read ? cardClass ~ ' read' : cardClass ~ ' unread' %}
+    {% set cardClass = loop.last and ticket.closed ? cardClass ~ ' mb-5' : cardClass %}
+    <div class="{{ cardClass }} comment-ticket" data-id="{{ comment.primaryColumnValue() }}">
+        <div class="card-body" id="comm{{ comment.primaryColumnValue() }}">
+            {{ comment.markdown() | raw }}
+            {% if commentFiles is not empty %}
+                <div class="row border p-0 mx-2">
+                    {% for file in commentFiles %}
+                        {{ portal.htmlFile(file) | raw }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        {% set footerClass = comment.idcontacto == fsc.contact.idcontacto ? 'card-footer' : 'card-footer bg-primary text-white' %}
+        <div class="{{ footerClass }}">
+            <i class="far fa-user fa-fw"></i> {{ comment.idcontacto == fsc.contact.idcontacto ? comment.getContact().fullName() : comment.nick }}
+            <span class="float-right">
+                {% if comment.read %}
+                    <i class="fas fa-eye mr-1" title="{{ trans('read-at', {'%date%' : comment.read}) }}"></i>
+                {% endif %}
+                {{ comment.creation_date }}
+            </span>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-warning mb-3">{{ trans('no-comments') }}</div>
+{% endfor %}
+
+{% if ticket.closed is same as(false) %}
+    <div class="card mb-5 shadow">
+        <form id="formComment" action="{{ ticket.url('public') }}" method="post" enctype="multipart/form-data">
+            <div class="card-body">
+                {{ formToken() }}
+                <input type="hidden" name="num_comments" value="{{ comments | length }}">
+                <input type="hidden" name="action" value="">
+                <textarea class="form-control markdown-editor"
+                          name="body" id="commentBody">{{ fsc.text | raw }}</textarea>
+            </div>
+            <div class="card-body">
+                <div class="row d-flex align-items-center">
+                    <div class="col text-center">
+                        <input type="file" name="uploads[]" class="form-control-file" multiple/>
+                    </div>
+                    <div class="col-auto text-right">
+                        <button type="button" class="btn btn-secondary btn-spin-action"
+                                onclick="sendComment('close-ticket');">
+                            <i class="fas fa-check"></i>
+                            {{ trans('close-ticket') }}
+                        </button>
+                        <button type="button" class="btn btn-success btn-spin-action"
+                                onclick="sendComment('add-comment');">
+                            <i class="fas fa-plus"></i>
+                            {{ trans('add-comment') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function sendComment(action) {
+            animateSpinner('add');
+            $('#formComment input[name="action"]').val(action);
+            $('#formComment').submit();
+        }
+
+        $(document).ready(function () {
+            const easyMDE = new EasyMDE({element: document.getElementById('commentBody')});
+        });
+    </script>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        function markCommentRead(id) {
+            let formData = new FormData();
+            formData.append('commID', id);
+            formData.append('ticketID', {{ ticket.primaryColumnValue() }});
+            sendForm(formData, 'markCommentRead');
+        }
+
+        function sendForm(formData, action) {
+            formData.append('action', action);
+            formData.append('ajax', true);
+
+            fetch('{{ asset(ticket.url('public')) }}', {
+                method: 'POST',
+                body: formData
+            }).then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                }
+                return Promise.reject(response);
+            }).then(function (data) {
+                if (data.markCommentRead) {
+                    // buscamos el comentario con el mismo data-id
+                    $('.comment-ticket[data-id="' + data.commID + '"]').removeClass('unread').addClass('read');
+                }
+            }).catch(function (error) {
+                console.warn(error);
+            });
+
+            return false;
+        }
+
+        // usamos IntersectionObserver para saber cuando el comentario
+        // está visible en pantalla y marcarlo como leído
+        let observer = new IntersectionObserver(function (entries) {
+            // leemos los comentarios en orden inverso
+            for (let i = entries.length - 1; i >= 0; i--) {
+                if (entries[i].isIntersecting) {
+                    // marcamos el comentario como leído
+                    markCommentRead(entries[i].target.dataset.id);
+                    // dejamos de observar el comentario
+                    observer.unobserve(entries[i].target);
+                }
+            }
+        }, {threshold: 1});
+
+        // observamos todos los comentarios de la issue que no estén leídos
+        $('.comment-ticket.unread').each(function () {
+            observer.observe(this);
+        });
+    });
+</script>

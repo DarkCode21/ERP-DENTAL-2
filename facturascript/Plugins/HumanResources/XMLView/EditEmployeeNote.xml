@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditEmployeeNote.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditEmployeeNote
+-->
+<view>
+    <columns>
+        <group name="info" numcolumns="12" title="observations" icon="far fa-sticky-note">
+            <column name="notes">
+                <widget type="textarea" fieldname="observaciones" />
+            </column>
+        </group>
+        <group name="discharge" numcolumns="12" title="discharge-title" icon="fa-solid fa-ban" >
+            <column name="date" numcolumns="3" order="350">
+                <widget type="date" fieldname="dischargedate" icon="fa-solid fa-sign-out-alt" />
+            </column>
+            <column name="cause" numcolumns="9" order="360">
+                <widget type="textarea" fieldname="dischargereason" />
+            </column>
+        </group>
+        <group name="hidden">
+            <column name="id" numcolumns="2" display="none" order="0" >
+                <widget type="number" fieldname="id" icon="fa-solid fa-globe" readonly="true" />
+            </column>
+        </group>
+    </columns>
+</view>

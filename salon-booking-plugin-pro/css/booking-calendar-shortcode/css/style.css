@@ -1,0 +1,481 @@
+/* ============================================================
+   Booking Calendar by Assistant
+   Figma: bg=#E7EDF2  surface=#F1F4F7  accent=#2171B1  text=#000  muted=#696969
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* ── Design tokens ─────────────────────────────────────────── */
+#sln-salon-booking-calendar-shortcode {
+    --sbc-bg:        #E7EDF2;
+    --sbc-surface:   #F1F4F7;
+    --sbc-btn:       #E2E8ED; /* slightly darker than surface for nav buttons */
+    --sbc-card:      #FFFFFF;
+    --sbc-accent:    #2171B1;
+    --sbc-border:    #E7EDF2;
+    --sbc-text:      #000000;
+    --sbc-muted:     #696969;
+    --sbc-icon:      #234C66;
+    --sbc-white:     #FFFFFF;
+
+    --sbc-radius-col:   16px;
+    --sbc-radius-card:  14px;
+    --sbc-radius-btn:   10px;
+    --sbc-radius-badge: 4px;
+    --sbc-radius-pill:  9999px;
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+
+    /* Figma: bg-[#e7edf2] pt-[32px] px-[53.5px] — adapted for responsive */
+    background: var(--sbc-bg);
+    padding: 32px;
+}
+
+/* box-sizing: always border-box inside the component */
+#sln-salon-booking-calendar-shortcode *,
+#sln-salon-booking-calendar-shortcode *::before,
+#sln-salon-booking-calendar-shortcode *::after {
+    box-sizing: border-box;
+}
+
+/* margin/padding reset — :where() has zero specificity so any class rule wins */
+:where(#sln-salon-booking-calendar-shortcode) *,
+:where(#sln-salon-booking-calendar-shortcode) *::before,
+:where(#sln-salon-booking-calendar-shortcode) *::after {
+    margin: 0;
+    padding: 0;
+}
+
+/* ── Header row: heading + live sync badge ──────────────────── */
+.sbc-header-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+/* ── Page heading ────────────────────────────────────────────
+   ID-prefixed selector gives (1,1,0) specificity — beats any
+   theme h2 rule such as .entry-content h2 (0,1,1) without !important
+   ──────────────────────────────────────────────────────────── */
+#sln-salon-booking-calendar-shortcode .sbc-heading {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 36px;
+    letter-spacing: 0.4px;
+    color: var(--sbc-text);
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    text-transform: none;
+}
+
+/* ── Sync badge ─────────────────────────────────────────────── */
+.sbc-sync-badge {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    line-height: 1;
+    color: var(--sbc-muted);
+    font-family: inherit;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-bottom: 5px;
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+.sbc-sync-badge.is-visible {
+    opacity: 0.6;
+}
+.sbc-sync-badge.is-updated {
+    animation: sbc-sync-flash 2.5s ease-out forwards;
+}
+@keyframes sbc-sync-flash {
+    0%   { color: var(--sbc-accent); opacity: 1; }
+    40%  { color: var(--sbc-accent); opacity: 1; }
+    100% { color: var(--sbc-muted);  opacity: 0.6; }
+}
+
+/* ── Outer calendar wrapper ─────────────────────────────────── */
+.sbc-calendar {
+    width: 100%;
+}
+
+/* ── Tab bar (mobile only) ──────────────────────────────────── */
+.sbc-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 8px;
+}
+.sbc-tabs::-webkit-scrollbar { display: none; }
+
+.sbc-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--sbc-radius-pill);
+    background: var(--sbc-card);
+    color: var(--sbc-muted);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+}
+#sln-salon-booking-calendar-shortcode .sbc-tab img,
+#sln-salon-booking-calendar-shortcode .sbc-tab-avatar {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
+    display: block;
+    flex-shrink: 0;
+}
+.sbc-tab.is-active {
+    background: var(--sbc-accent);
+    color: var(--sbc-white);
+}
+
+/* ── Grid ───────────────────────────────────────────────────── */
+.sbc-grid {
+    display: block;
+}
+
+/* ── Assistant column card ──────────────────────────────────── */
+.sbc-col {
+    display: none;
+    flex-direction: column;
+    background: var(--sbc-surface);
+    border-radius: var(--sbc-radius-col);
+    /* Figma: pt-[24px] px-[24px] — add pb for balance */
+    padding: 24px;
+    width: 100%;
+    /* Fix 4: subtle shadow so column reads as a card on non-blue-gray page backgrounds */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.sbc-col.is-active {
+    display: flex;
+}
+
+/* ── Assistant header ───────────────────────────────────────── */
+.sbc-att-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Figma: h-[48px] */
+    height: 48px;
+    /* Figma: gap-[24px] from parent, reproduced as margin here */
+    margin-bottom: 24px;
+    flex-shrink: 0;
+}
+
+.sbc-att-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+/* Figma: rounded-[16777200px] size-[48px] → circular 48px
+   ID-prefixed selector (1,1,0) beats any theme rule like .entry-content img (0,1,1) */
+#sln-salon-booking-calendar-shortcode .sbc-att-avatar {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: block;
+}
+.sbc-att-avatar--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sbc-accent);
+    color: var(--sbc-white);
+    font-size: 20px;
+    font-weight: 600;
+    border-radius: 50%;
+}
+
+/* Figma: Inter Medium 20px / tracking-[-0.4492px] / lh-[28px] */
+.sbc-att-name {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--sbc-text);
+    letter-spacing: -0.45px;
+    line-height: 28px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Nav buttons ─────────────────────────────────────────────── */
+.sbc-att-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+/* Figma: size-[36px] rounded-[10px] bg-[#f1f4f7]
+   Fix 3: use --sbc-btn (#E2E8ED) instead of surface so buttons
+   are visible against the #F1F4F7 column background            */
+.sbc-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    background: var(--sbc-btn);
+    border: none;
+    border-radius: var(--sbc-radius-btn);
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+.sbc-nav-btn:hover {
+    background: #d4dbe2;
+}
+.sbc-nav-btn svg {
+    display: block;
+    flex-shrink: 0;
+}
+
+/* ── Days container ─────────────────────────────────────────── */
+/* Fix 2: use gap on parent (was 0), remove double-spacing from .sbc-day */
+.sbc-days {
+    display: flex;
+    flex-direction: column;
+    /* Figma: gap-[24px] on the days container — was incorrectly 0 */
+    gap: 24px;
+}
+
+/* ── Hidden day (pagination) ────────────────────────────────── */
+#sln-salon-booking-calendar-shortcode .sbc-day--hidden {
+    display: none;
+}
+
+/* ── Single day section ─────────────────────────────────────── */
+.sbc-day {
+    display: flex;
+    flex-direction: column;
+    /* Figma: gap-[12px] between day-header and day-content */
+    gap: 12px;
+    /* 16px space between last content and the separator line */
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--sbc-border);
+}
+.sbc-day:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* ── Day header ─────────────────────────────────────────────── */
+.sbc-day-header {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Figma: h-[24px] row with day name + count badge */
+.sbc-day-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 24px;
+}
+
+/* Figma: Inter Medium 16px / tracking-[-0.3125px] / lh-[24px] */
+.sbc-day-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--sbc-text);
+    letter-spacing: -0.31px;
+    line-height: 24px;
+}
+
+/* Count badge — always shown
+   Fix 5: zero badge needs a visible border since bg = column surface */
+.sbc-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--sbc-radius-pill);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    background: var(--sbc-accent);
+    color: var(--sbc-white);
+}
+/* Figma: bg-[#f1f4f7] text-[#696969] for zero — add border for contrast */
+.sbc-count--zero {
+    background: var(--sbc-surface);
+    color: var(--sbc-muted);
+    border: 1px solid #D0D8DF;
+}
+
+/* Figma: Inter Regular 14px / tracking-[-0.1504px] / lh-[20px] / #696969 */
+.sbc-day-date {
+    /* Figma: h-[20px] directly below h-[24px] name row — NO gap, 24+20=44px total */
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--sbc-muted);
+    letter-spacing: -0.15px;
+    line-height: 20px;
+    margin-top: 0;
+}
+
+/* ── No bookings placeholder ────────────────────────────────── */
+.sbc-no-bookings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    border-radius: var(--sbc-radius-card);
+    background: transparent;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--sbc-muted);
+    letter-spacing: -0.15px;
+}
+
+/* ── Bookings list ───────────────────────────────────────────── */
+/* Figma: gap-[12px] between booking cards */
+.sbc-bookings {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ── Booking card ────────────────────────────────────────────── */
+/* Figma: bg-white rounded-[14px] shadow-[0px_4px_6px_rgba(0,0,0,0.1),0px_2px_4px_rgba(0,0,0,0.1)] */
+.sbc-booking-card {
+    background: var(--sbc-card);
+    border-radius: var(--sbc-radius-card);
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.10);
+    display: flex;
+    flex-direction: column;
+    /* Fix 6: use 0 gap + explicit margins for Figma's absolute-position spacing:
+       time-row → client: 12px,  client → services: 8px               */
+    gap: 0;
+}
+
+/* Figma: top-[16px] row with time (left) + badge (right) */
+.sbc-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+/* Figma: Inter Regular 14px / tracking-[-0.1504px] / lh-[20px] / #696969 */
+.sbc-time {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--sbc-muted);
+    letter-spacing: -0.15px;
+    line-height: 20px;
+}
+
+/* Status badges — Figma: rounded-[4px] (NOT pill) */
+.sbc-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: var(--sbc-radius-badge);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+/* Figma: bg-[#2171b1] text-white */
+.sbc-status--paid {
+    background: var(--sbc-accent);
+    color: var(--sbc-white);
+    border: none;
+}
+/* Figma: bg-white border-[#e7edf2] text-[#696969] */
+.sbc-status--pending {
+    background: var(--sbc-card);
+    color: var(--sbc-muted);
+    border: 1px solid var(--sbc-border);
+}
+
+/* Figma: top-[54px] = 16px padding + 26px top-row + 12px gap
+   Fix 6: margin-top 12px to match                             */
+.sbc-client {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--sbc-text);
+    letter-spacing: -0.44px;
+    line-height: 28px;
+    margin-top: 12px;
+}
+
+/* Figma: top-[90px] = 54px + 28px client height + 8px gap
+   Fix 6: margin-top 8px to match                             */
+.sbc-services {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 0;
+    margin: 8px 0 0;
+}
+.sbc-services li {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--sbc-muted);
+    letter-spacing: -0.15px;
+    line-height: 20px;
+}
+
+/* ============================================================
+   Desktop: hide tabs, switch to multi-column grid
+   Figma: 3 columns, gap-[32px]
+   ============================================================ */
+@media (min-width: 768px) {
+
+    .sbc-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+    }
+
+    /* All columns visible by default on desktop */
+    .sbc-col {
+        display: flex;
+    }
+
+    /* When a filter tab is active, hide non-selected columns */
+    .sbc-grid.is-filtered .sbc-col {
+        display: none;
+    }
+    .sbc-grid.is-filtered .sbc-col.is-active {
+        display: flex;
+    }
+}
+

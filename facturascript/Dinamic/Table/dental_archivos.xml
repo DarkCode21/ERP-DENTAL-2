@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idpaciente</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idespecialista</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idcita</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idtratamiento</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>categoria</name>
+        <type>character varying(50)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre_original</name>
+        <type>character varying(255)</type>
+    </column>
+    <column>
+        <name>nombre_archivo</name>
+        <type>character varying(255)</type>
+    </column>
+    <column>
+        <name>extension</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>mime_type</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>tamano</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>ruta</name>
+        <type>character varying(500)</type>
+    </column>
+    <column>
+        <name>hash_archivo</name>
+        <type>character varying(64)</type>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>character varying(20)</type>
+        <default>'activo'</default>
+    </column>
+    <column>
+        <name>created_by</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>created_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <column>
+        <name>updated_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <constraint>
+        <name>dental_archivos_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_archivos_fk_paciente</name>
+        <type>FOREIGN KEY (idpaciente) REFERENCES dental_pacientes(id) ON DELETE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>dental_archivos_fk_especialista</name>
+        <type>FOREIGN KEY (idespecialista) REFERENCES dental_especialistas(id) ON DELETE SET NULL</type>
+    </constraint>
+    <constraint>
+        <name>dental_archivos_fk_cita</name>
+        <type>FOREIGN KEY (idcita) REFERENCES dental_citas(id) ON DELETE SET NULL</type>
+    </constraint>
+    <constraint>
+        <name>dental_archivos_fk_tratamiento</name>
+        <type>FOREIGN KEY (idtratamiento) REFERENCES dental_tratamientos_paciente(id) ON DELETE SET NULL</type>
+    </constraint>
+</table>

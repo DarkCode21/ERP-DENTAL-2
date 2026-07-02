@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="id" display="none" order="0">
+            <widget type="text" fieldname="idlinea"/>
+        </column>
+        <column name="comanda" display="none" order="10">
+            <widget type="text" fieldname="idcomanda"/>
+        </column>
+        <column name="reference" order="100">
+            <widget type="autocomplete" fieldname="referencia">
+                <values source="variantes" fieldcode="referencia" fieldtitle="referencia"/>
+            </widget>
+        </column>
+        <column name="description" numcolumns="4" order="110">
+            <widget type="text" fieldname="descripcion" required="true"/>
+        </column>
+        <column name="quantity" order="120">
+            <widget type="number" fieldname="cantidad" required="true" decimal="2"/>
+        </column>
+        <column name="price" order="130">
+            <widget type="money" fieldname="pvpunitario"/>
+        </column>
+        <column name="state" order="140">
+            <widget type="select" fieldname="estado" translate="true">
+                <values title="pendiente">pendiente</values>
+                <values title="preparado">preparado</values>
+                <values title="servido">servido</values>
+                <values title="cancelado">cancelado</values>
+            </widget>
+        </column>
+        <column name="observations" order="150">
+            <widget type="text" fieldname="observaciones"/>
+        </column>
+    </columns>
+</view>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) Carlos García Gómez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="type" order="110">
+            <widget type="text" fieldname="docmodel"/>
+        </column>
+        <column name="id" display="center" order="120">
+            <widget type="text" fieldname="docid"/>
+        </column>
+        <column name="document" order="130">
+            <widget type="text" fieldname="documento"/>
+        </column>
+        <column name="movement" display="center" order="140">
+            <widget type="number" fieldname="movement" decimal="0"/>
+        </column>
+        <column name="quantity" display="center" order="140">
+            <widget type="number" fieldname="cantidad" decimal="0"/>
+        </column>
+        <column name="invoiced" display="center" order="150">
+            <widget type="number" fieldname="facturado" decimal="0"/>
+        </column>
+        <column name="returned" display="center" order="160">
+            <widget type="number" fieldname="devuelto" decimal="0"/>
+        </column>
+        <column name="date" display="right" order="170">
+            <widget type="datetime" fieldname="docfecha"/>
+        </column>
+    </columns>
+</view>

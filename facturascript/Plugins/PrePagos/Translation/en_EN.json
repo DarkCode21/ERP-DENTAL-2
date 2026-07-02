@@ -1,0 +1,11 @@
+{
+    "accounting-prepaid": "Prepayment %code%",
+    "accounting-prepaid-customer-delivery-note": "Prepayment Delivery Note for Customer %code%",
+    "accounting-prepaid-customer-estimation": "Prepayment estimate for customer %code%",
+    "accounting-prepaid-customer-order": "Prepayment of Customer Order %code%",
+    "amount-greater-zero": "The amount must be greater than zero",
+    "document-company-different-from-payment-method-company": "The document's company is different from the payment method's company.",
+    "document-not-found": "Document not found",
+    "no-editable": "Not Editable",
+    "only-one-document-allowed": "Only one document allowed"
+}

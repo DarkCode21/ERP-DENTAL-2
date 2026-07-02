@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : ListAmortizacionSubcuenta.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of the view for a list of subaccounts for amortizations.
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="type" order="110">
+            <widget type="text" fieldname="grouptypedesc"/>
+        </column>
+        <column name="group" order="120">
+            <widget type="text" fieldname="groupdesc"/>
+        </column>
+        <column name="account" order="130">
+            <widget type="text" fieldname="code"/>
+        </column>
+        <column name="description" order="140">
+            <widget type="autocomplete" fieldname="code">
+                <values source="cuentas" fieldcode="codcuenta" fieldtitle="descripcion"/>
+            </widget>
+        </column>
+    </columns>
+</view>

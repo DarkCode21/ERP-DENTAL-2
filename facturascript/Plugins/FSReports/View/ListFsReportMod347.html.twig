@@ -1,0 +1,146 @@
+{% extends "Master/MenuTemplate.html.twig" %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        [data-toggle="collapse"] i:before{
+            content: "\f139";
+        }
+
+        [data-toggle="collapse"].collapsed i:before{
+            content: "\f13a";
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% set refresh = i18n.trans('refresh-page') %}
+    {% set defaultT, defaultF = i18n.trans('mark-as-homepage'), i18n.trans('marked-as-homepage') %}
+    {% set title = i18n.trans(fsc.getPageData()['title']) | capitalize %}
+    {% set generate, generate_title = i18n.trans('generate'), i18n.trans('generate-title') %}
+    {% set dataSource, othersFilters = i18n.trans('data-source'), i18n.trans('others-filters') %}
+    {# -- Others Values -- #}
+    {% set exportOptions = fsc.exportManager.options() %}
+    {% set select_filter_attr = {onchange: 'this.form.submit()'} %}
+    {% set input_date_attr = {class: 'form-control datepicker', onchange: 'this.form.submit()', style: 'font-size: 90%;'} %}
+    {% set input_text_attr = {class: 'form-control ', onchange: 'this.form.submit()', style: 'font-size: 90%;'} %}
+    {% import 'Macro/Forms.html.twig' as forms %}
+    {# -- Visual macros -- #}
+    {% from 'Macro/Utils.html.twig' import popoverTitle as popoverTitle %}
+    {# -- Header Row -- #}
+    <div class="row">
+        <div class="col-sm-7 col-6">
+            <div class="btn-group d-xs-none">
+                <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}" {{ popoverTitle(refresh, 'bottom') }}>
+                    <i class="fas fa-sync" aria-hidden="true"></i>
+                </a>
+                {% if fsc.getPageData()['name'] == fsc.user.homepage %}
+                    <a class="btn btn-sm btn-outline-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE" {{ popoverTitle(defaultF, 'bottom') }}>
+                        <i class="fas fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                {% else %}
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}?defaultPage=TRUE" {{ popoverTitle(defaultT, 'bottom') }}>
+                        <i class="far fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-sm-5 col-6 text-right">
+            <h1 style="margin-top: 0px; margin-bottom: 0px;">
+                <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i> {{ title }}
+            </h1>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+
+            <form name="f_search" id="formSearch" action="{{ fsc.url() }}" method="post" class="form-inline col-12">
+                 <input type="hidden" name="action" value="reload"/>
+                <div class="form-group col-3">
+                    {{ forms.simpleInput('date-from' , 'date-from', fsc.filters.desdeFechaMostrar , 'text', 'Desde Fecha', 'fas fa-calendar',  input_date_attr) }}
+                </div>
+                <div class="form-group col-3">
+
+                    {{ forms.simpleInput('date-to' , 'date-to' , fsc.filters.hastaFechaMostrar, 'text', 'Hasta Fecha', 'fas fa-calendar', input_date_attr) }}
+
+                </div>
+                <div class="form-group col-2">
+
+                    {{ forms.simpleInput('cantidad' , 'cantidad' , fsc.filters.cantidad, 'text', 'Cantidad', 'fas fa-book fa-fw', input_text_attr) }}
+
+                </div>
+                <div class="form-group col-2">
+                    <button type="button" class="btn btn-primary" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content="Imprimir informe" onclick="console.log('enviamos');this.form.action.value='print-pdf';this.form.submit();">
+                        <i class="fas fa-print fa-fw" aria-hidden="true"></i> Imprimir
+                    </button>
+                </div> 
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th  class="text-center" colspan="7"> Ventas</th></tr>
+                            <tr>  
+                                <th>Cliente</th>
+                                <th class="text-left">NIF/CIF</th>
+                                <th class="text-right">T1</th>
+                                <th class="text-right">T2</th>
+                                <th class="text-right">T3</th>
+                                <th class="text-right">T4</th>
+                                <th class="text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for value in fsc.salesResume() %}
+                                <tr>
+                                    <td class="text-left">{{ value.nombrecliente }}</td>
+                                    <td class="text-left">{{ value.cifnif }}</td>
+                                    <td class="text-right">{{ value.T1|number_format(2, ',', '.') }}</td>
+                                    <td class="text-right">{{ value.T2|number_format(2, ',', '.') }}</td>
+                                    <td class="text-right">{{ value.T3|number_format(2, ',', '.') }}</td>
+                                    <td class="text-right">{{ value.T4|number_format(2, ',', '.') }}</td>
+                                    <td class="text-right">{{ value.total|number_format(2, ',', '.') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr><th class="text-center" colspan="7">Compras</th></tr>
+                        <tr> 
+                            <th>Proveedor</th>
+                            <th class="text-left">NIF/CIF</th>
+                            <th class="text-right">T1</th>
+                            <th class="text-right">T2</th>
+                            <th class="text-right">T3</th>
+                            <th class="text-right">T4</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for value in fsc.purchasesResume() %}
+                                <tr>
+                                    <td class="text-left">{{ value.nombre }}</td>
+                                    <td class="text-left">{{ value.cifnif }}</td>
+                                    <td class="text-right">{{ value.T1|number_format(2, ',', '.') }}</td>
+                                    <td class="text-right">{{ value.T2|number_format(2, ',', '.') }}</td>
+                                    <td class="text-right">{{ value.T3|number_format(2, ',', '.') }}</td>
+                                    <td class="text-right">{{ value.T4|number_format(2, ',', '.') }}</td>
+                                    <td class="text-right">{{ value.total|number_format(2, ',', '.') }}</td>
+                                </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{%  endblock %} {# Fin del body #}

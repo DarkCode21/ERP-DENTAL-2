@@ -1,0 +1,15 @@
+{
+    "bank-movement": "Bank movement",
+    "conciliate": "Conciliate",
+    "conciliate-bank-movements": "Conciliate bank movements",
+    "import-banking-movements": "Import bank movements",
+    "link-mov-with-acc": "Link movement with accounts",
+    "link-mov-with-acc-c": "Select the subaccounts to use in the accounting entry.",
+    "link-mov-with-acc-p": "Select the entries you want to link with this movement. Or create a new entry from the new tab.",
+    "link-up": "Link",
+    "reconcile-purchases-movement": "Reconcile purchases movements",
+    "reconcile-remittances": "Reconciling remittances",
+    "reconcile-sales-movement": "Reconcile sales movements",
+    "reconciled": "Reconciled",
+    "reconciliate": "Reconciliate"
+}

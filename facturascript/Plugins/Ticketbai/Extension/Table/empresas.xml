@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>tbai_annular</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>tbai_developer</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>tbai_license</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>tbai_password</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>tbai_signature</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>tbai_signature_nif</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>tbai_startdatesign</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>tbai_supplier</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>tbai_version</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>tbai_debugmode</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+</table>

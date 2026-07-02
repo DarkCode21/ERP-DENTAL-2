@@ -1,0 +1,110 @@
+{#
+/**
+ * This file is part of the Produccion plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ * All Rights Reserved.
+ */
+#}
+
+{#
+* Product mini card modal for Producción
+#}
+
+<div class="modal fade" id="productModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row w-100">
+                    <div class="col-12">
+                        {{ trans('reference') }}: <span id="pmReference" class="font-weight-bold"></span>
+                    </div>
+                    <div class="col-10">
+                        <h5 class="modal-title">
+                            <span id="pmName"></span>
+                        </h5>
+                    </div>
+                    <div class="col-2 text-right">
+                        <span id="pmForSellBadge" class="badge badge-success d-none" data-label="{{ trans('for-sale') }}">
+                            {{ trans('for-sale') }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    {# Image #}
+                    <div class="col-12 col-md-4">
+                        <div class="border rounded p-1 text-center bg-light">
+                            <img id="pmImage" src="" class="img-fluid rounded d-none" alt="">
+                            <div id="pmNoImage" class="text-muted small py-5">
+                                <i class="fa-regular fa-image mr-1"></i>{{ trans('no-image') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Product info #}
+                    <div class="col-12 col-md-8">
+
+                        {# Quick stats #}
+                        <div class="row mb-3">
+                            <div class="col-6 col-lg-3">
+                                <div class="border rounded p-2">
+                                    <div class="text-muted small">{{ trans('stock') }}</div>
+                                    <div class="font-weight-bold" id="pmStock"></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-3">
+                                <div class="border rounded p-2">
+                                    <div class="text-muted small">{{ trans('available') }}</div>
+                                    <div class="font-weight-bold" id="pmAvailable"></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-3">
+                                <div class="border rounded p-2">
+                                    <div class="text-muted small">{{ trans('cost') }}</div>
+                                    <div class="font-weight-bold" id="pmCost"></div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-lg-3">
+                                <div class="border rounded p-2">
+                                    <div class="text-muted small">{{ trans('price') }}</div>
+                                    <div class="font-weight-bold" id="pmPrice"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Details #}
+                        <ul class="list-group list-group-flush border rounded">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="text-muted">{{ trans('barcode') }}</span>
+                                <span class="font-weight-bold" id="pmBarcode"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="text-muted">{{ trans('manufacturer') }}</span>
+                                <span class="font-weight-bold" id="pmManufacturer"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span class="text-muted">{{ trans('family') }}</span>
+                                <span class="font-weight-bold" id="pmFamily"></span>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    {{ trans('close') }}
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+

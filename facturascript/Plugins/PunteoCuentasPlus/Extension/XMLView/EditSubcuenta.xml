@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PunteoCuentasPlus plugin for FacturaScripts.
+    FacturaScripts    Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PunteoCuentasPlus Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditSubcuenta.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Add statistics buttons to the subcuenta form.
+-->
+<view>
+    <rows>
+        <row type="statistics">
+            <datalabel icon="fas fa-check-double" label="checked" color="info" function="getChecked"/>
+            <datalabel icon="far fa-square" label="unchecked" color="warning" function="getUnChecked"/>
+        </row>
+    </rows>
+
+    <modals>
+        <group name="change-account" title="change-account" icon="fas fa-recycle">
+            <column name="old-subaccount" display="none">
+                <widget type="text" fieldname="codsubcuenta" />
+            </column>
+            <column name="new-account" title="new-subaccount" description="change-subaccount-description" numcolumns="12">
+                <widget type="autocomplete" fieldname="new_code" required="true">
+                    <values source="subcuentas" fieldcode="codsubcuenta" fieldtitle="descripcion" />
+                </widget>
+            </column>
+        </group>
+    </modals>
+</view>

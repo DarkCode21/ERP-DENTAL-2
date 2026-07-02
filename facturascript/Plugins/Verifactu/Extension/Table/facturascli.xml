@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<table>
+    <column>
+        <name>vf_intents_alta</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>vf_intents_anulacion</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>vf_intents_subsanacion</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>vf_manual_alta</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>vf_manual_anulacion</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>vf_sent</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+</table>

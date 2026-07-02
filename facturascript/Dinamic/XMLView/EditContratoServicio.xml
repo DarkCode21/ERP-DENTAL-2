@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column numcolumns="3" name="Cliente" order="100">
+                <widget type="autocomplete" fieldname="codcliente" onclick="EditCliente" required="true">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre"/>
+                </widget>
+            </column>
+
+            <column numcolumns="3" name="Título" order="101">
+                <widget type="text" fieldname="titulo" required="true"/>
+            </column>
+
+            <column numcolumns="2" name="Empleado" order="102">
+                <widget type="autocomplete" fieldname="codagente" onclick="EditAgente">
+                    <values source="agentes" fieldcode="codagente" fieldtitle="nombre"/>
+                </widget>
+            </column>
+
+            <column numcolumns="2" name="Alta" order="103">
+                <widget type="date" fieldname="fecha_alta" required="true"/>
+            </column>
+
+            <column numcolumns="2" name="Renovación" order="104">
+                <widget type="date" fieldname="fecha_renovacion" required="true"/>
+            </column>
+        </group>
+        <group name="data-pago" numcolumns="12">
+            <column numcolumns="2" name="Importe" order="105">
+                <widget type="number" fieldname="importe_anual"/>
+            </column>
+
+            <column numcolumns="2" name="Última factura" order="102">
+                <widget type="autocomplete" fieldname="idfactura" onclick="EditFacturaCliente">
+                    <values source="FacturaCliente" fieldcode="idfactura" fieldtitle="codigo"/>
+                </widget>
+            </column>
+
+            <column numcolumns="2" name="Forma de pago" order="106">
+                <widget type="select" fieldname="codpago" required="true">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+
+            <column numcolumns="2" name="Servicio cada:" order="106">
+                <widget type="select" fieldname="periodo" required="true">
+                    <values title="">------</values>
+                    <values title="día">+1day</values>
+                    <values title="2 días">+2days</values>
+                    <values title="3 días">+3days</values>
+                    <values title="4 días">+4days</values>
+                    <values title="5 días">+5days</values>
+                    <values title="6 días">+6days</values>
+                    <values title="7 días">+7days</values>
+                    <values title="10 días">+10days</values>
+                    <values title="15 días">+15days</values>
+                    <values title="mes">+1month</values>
+                    <values title="2 meses">+2months</values>
+                    <values title="3 meses">+3months</values>
+                    <values title="6 meses">+6months</values>
+                    <values title="12 meses">+12months</values>
+                </widget>
+            </column>
+
+            <column numcolumns="2" name="Siguiente servicio" order="107">
+                <widget type="date" fieldname="fsiguiente_servicio"/>
+            </column>
+
+            <column numcolumns="2" name="Agrupación" order="107">
+                <widget type="text" fieldname="agrupacion"/>
+            </column>
+
+            <column numcolumns="2" name="Producto" order="108">
+                <widget type="autocomplete" fieldname="idproducto" onclick="EditProducto">
+                    <values source="productos" fieldcode="idproducto" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+
+        </group>
+
+        <group name="data-observaciones" numcolumns="12">
+
+            <column numcolumns="2" name="Contrato suspendido" order="107">
+                <widget type="checkbox" fieldname="suspendido"/>
+            </column>
+
+            <column numcolumns="4" name="Mostrar próxima renovacion en la factura" order="107">
+                <widget type="checkbox" fieldname="mostrar_proxima_renovacion_en_factura"/>
+            </column>
+
+            <column numcolumns="12" name="Descripción del producto" order="108">
+                <widget type="textarea" fieldname="producto_descripcion"/>
+            </column>
+
+            <column numcolumns="12" name="Observaciones" order="109">
+                <widget type="textarea" fieldname="observaciones"/>
+            </column>
+
+        </group>
+
+    </columns>
+
+    <modals>
+        <group name="renew" title="Renovar Contrato y generar factura" icon="fas fa-calendar-alt">
+            <column name="Fecha para la factura">
+                <widget type="date" fieldname="date"/>
+            </column>
+        </group>
+    </modals>
+
+    <rows>
+        <row type="footer">
+            <group name="test" html="EditContratoServicioInfo.html.twig"/>
+        </row>
+    </rows>
+
+</view>

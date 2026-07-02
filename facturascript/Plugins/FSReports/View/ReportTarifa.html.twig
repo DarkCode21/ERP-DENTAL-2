@@ -1,0 +1,194 @@
+{#
+   /**
+     * Document Reports view template.
+     *
+     * Graphic statistics on the information of purchase and sale documents.
+     *
+     * This file is part of FacturaScripts
+     * Copyright (C) 2017-2019 Carlos Garcia Gomez <carlos@facturascripts.com>
+     *
+     * This program is free software: you can redistribute it and/or modify
+     * it under the terms of the GNU Lesser General Public License as
+     * published by the Free Software Foundation, either version 3 of the
+     * License, or (at your option) any later version.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     * GNU Lesser General Public License for more details.
+     *
+     * You should have received a copy of the GNU Lesser General Public License
+     * along with this program. If not, see <http://www.gnu.org/licenses/>.
+     *
+    */
+#}
+
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        [data-toggle="collapse"] i:before{
+            content: "\f139";
+        }
+
+        [data-toggle="collapse"].collapsed i:before{
+            content: "\f13a";
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/chart.js/dist/Chart.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    {# Calculate texts according to language #}
+    {% set refresh = i18n.trans('refresh-page') %}
+    {% set defaultT, defaultF = i18n.trans('mark-as-homepage'), i18n.trans('marked-as-homepage') %}
+    {% set title = i18n.trans(fsc.getPageData()['title']) | capitalize %}
+    {% set dataSource, Filters = i18n.trans('data-source'), i18n.trans('filters') %}
+
+    {# Macros Template Imports #}
+    {% from 'Macro/Utils.html.twig' import popoverTitle as popoverTitle %}
+    {% import 'Macro/Forms.html.twig' as forms %}
+
+    {# Others working values #}
+    {% set select_filter_attr = {onchange: 'this.form.submit()'} %}
+    {% set input_date_attr = {class: 'form-control datepicker', onchange: 'this.form.submit()', style: 'font-size: 90%;'} %}
+
+    {# Page Header #}
+    <div class="container-fluid d-print-none">
+        {{ parent() }}
+
+        {# Header Row #}
+        <div class="row">
+            <div class="col-sm-7 col-6">
+                <div class="btn-group d-xs-none">
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}" {{ popoverTitle(refresh, 'bottom') }}>
+                        <i class="fas fa-sync" aria-hidden="true"></i>
+                    </a>
+                    {% if fsc.getPageData()['name'] == fsc.user.homepage %}
+                        <a class="btn btn-sm btn-outline-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE" {{ popoverTitle(defaultF, 'bottom') }}>
+                            <i class="fas fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}?defaultPage=TRUE" {{ popoverTitle(defaultT, 'bottom') }}>
+                            <i class="far fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-5 col-6 text-right">
+                <h1 style="margin-top: 0px; margin-bottom: 0px;">
+                    <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i> {{ title }}
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+    <div class="container-fluid">
+        <div class="row">
+            {# Filters for Data #}
+            <div class="col-12">
+                <form name="f_search" id="formSearch" action="{{ fsc.url() }}" method="post" class="form">
+                    <input name="action" id="action" type="hidden" value="reload"/>
+                    {#Filters #}
+                    <div class="card">
+                        {# Header Card #}
+                        <div class="card-header" id="filters-header">
+                            <a class="collapsed" href="#filters-body" data-toggle="collapse" aria-controls="filters-body" aria-expanded="True">
+                                {{ Filters }}
+                            </a>
+                            <a class="pull-right collapsed" href="#filters-body" data-toggle="collapse" aria-expanded="True" role="button">
+                                <i class="fa" aria-hidden="true"></i>
+                            </a>
+                        </div>
+
+                        {# Body Card #}
+                        <div id="filters-body" class="collapse" aria-labelledby="filters-header">
+                            <div class="card-body pb-0">
+                                <div class="row">
+                                    {% for index, filter in fsc.filters %}
+                                        <div class="col-2">
+                                            <div class="form-group">
+                                                {{ forms.simpleSelect(index, index, filter.selectedValue, filter.listValues, i18n.trans(index), filter.icon, select_filter_attr) }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-6">
+                        <h3>{{ i18n.trans(fsc.grouped) }}</h3>
+                    </div>
+                </div>
+                {# -- Tab panes -- #}
+                <div class="tab-content" id="mainTabsContent">
+
+                    {# Data Table #}
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table tabl-hover">
+                                <thead>
+                                    <tr>
+                                        {%  for etiqueta in fsc.getLabels() %}
+                                            <th>
+                                                {{ etiqueta }}
+                                            </th>
+                                        {% endfor %}
+
+                                    </tr>
+                                </thead>
+
+                                {% for value in fsc.generateResults() %}
+
+                                    {% if codfamilia=='' or codfamilia!=value.codfamilia %}
+
+                                        {%  set codfamilia=  value.codfamilia  %}
+
+                                        <thead>
+                                            <tr>
+                                                <th><strong>Familia:</strong></th>
+                                                <th>{{ value.codfamilia }} - {{ value.nomFamilia }}</th>
+                                            </tr>
+
+                                        </thead>
+
+                                    {% endif %}
+
+                                    <tbody>
+
+                                        <tr class="table-light">
+
+                                            <td class="text-left">{{ value.referencia }}</td>
+                                            <td class="text-left">{{ value.nomProducto }}</td>
+                                            <td class="text-right">{{ value.precio|number_format(2, ',', '.') }}</td>
+                                        </tr>
+
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+

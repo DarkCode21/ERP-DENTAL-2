@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="main">
+			<column name="code" display="none" order="100">
+                <widget type="text" fieldname="id"/>
+            </column>
+            <column name="name-software" numcolumns="12" order="110">
+                <widget type="text" fieldname="nombresoftware" required="true"/>
+            </column>
+            <column name="version" order="120">
+                <widget type="text" fieldname="version" order="120" required="true"/>
+            </column>
+            <column name="date" order="130">
+                <widget type="date" fieldname="fecha" required="true"/>
+            </column>
+	        <column name="user" titleurl="ListUser" order="140">
+                <widget type="select" fieldname="nick" icon="fas fa-user-circle" onclick="EditUser" readonly="true" required="true">
+                    <values source="users" fieldcode="nick" fieldtitle="nick"/>
+                </widget>
+            </column>
+			<!-- 
+			<column name="status" order="160">
+                <widget type="select" fieldname="idestado" required="true">
+                    <values source="proyectos_estados" fieldcode="estado" fieldtitle="nombre"/>
+                </widget>
+            </column>
+			-->
+        </group>
+	</columns>
+</view>

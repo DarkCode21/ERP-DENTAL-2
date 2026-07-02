@@ -1,0 +1,64 @@
+{% extends "Master/MicroTemplate.html.twig" %}
+
+{% block body %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 d-print-none">
+        <ul class="navbar-nav mr-auto">
+            <li>
+                <a href="{{ fsc.getReturn() }}" class="btn btn-secondary">
+                    {{ trans('back') }}
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li>
+                <a href="#" class="btn btn-primary" onclick="print();
+                        return false;">
+                    {{ trans('print') }}
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            {% for tag in fsc.generateTags() %}
+                {% set px = random(0, 1) ? '86px' : '85px' %}
+                <div class="col-3" style="height: {{ px }}; max-height: {{ px }}; overflow: hidden; font-size: 11px; text-align: center;">
+                    <div>
+                        {% if tag.reference %}
+                            REF: {{ tag.reference }}
+                        {% endif %}
+                    </div>
+                    {% if tag.description %}
+                        {{ tag.description | raw }}
+                    {% endif %}
+                    {% if tag.price %}
+                        <div style="font-size: 16px; font-weight: bold;">{{ tag.price }}</div>
+                    {% endif %}
+                    {% if tag.barcode %}
+                        <img src="{{ asset(tag.barcodeimg) }}" alt="{{ tag.barcode }}"/>
+                        <div>{{ tag.barcode }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        @page {
+            size: auto;
+            margin: 6mm 7mm 5mm 7mm;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            print();
+        });
+    </script>
+{% endblock %}

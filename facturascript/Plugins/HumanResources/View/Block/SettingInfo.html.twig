@@ -1,0 +1,54 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ */
+#}
+{% set view = fsc.views | first %}
+{% set model = view.model %}
+<div class="col-12 p-0">
+    <div class="card">
+        <div class="card-header text-center text-white bg-danger">
+            <h4 class="m-0">Aviso sobre el Uso de Localización GPS</h4>
+        </div>
+        <div class="card-body">
+            <h5 class="card-subtitle mb-2 text-muted">Responsabilidad de la Empresa:</h5>
+            <p class="card-text">
+                Es responsabilidad exclusiva de la empresa usuaria de este software cumplir con todas las normativas legales aplicables relacionadas con el uso de la localización GPS en el ámbito laboral, incluyendo pero no limitado a:
+            </p>
+            <ul>
+                <li>Informar al empleado de forma clara y completa sobre el uso de la geolocalización.</li>
+                <li>Establecer y comunicar la finalidad del tratamiento de los datos de geolocalización.</li>
+                <li>Garantizar la base legal adecuada para el tratamiento de estos datos, ya sea mediante el consentimiento informado o cualquier otra base legal legítima.</li>
+                <li>
+                    <strong>Recoger un documento firmado por el empleado,</strong> donde este reconozca haber sido informado de la recogida y tratamiento de los datos de geolocalización y, en caso de que sea requerido, otorgue su consentimiento explícito.
+                </li>
+                <li>Respetar la normativa de protección de datos personales, como el RGPD y la LOPD.</li>
+            </ul>
+            <h6 class="card-subtitle mt-3 mb-2 text-danger">Exención de Responsabilidad:</h6>
+            <p class="card-text">
+                Este software, sus desarrolladores y los creadores de sus plugins asociados no serán responsables, bajo ninguna circunstancia, de las infracciones legales o sanciones administrativas derivadas del uso indebido de la funcionalidad de geolocalización.
+            </p>
+            <p class="card-text">
+                <strong>
+                    El cumplimiento de las normativas legales aplicables, así como las posibles sanciones derivadas de su incumplimiento, son responsabilidad exclusiva de la empresa usuaria.
+                </strong>
+            </p>
+            <p class="card-text">
+                Al habilitar esta funcionalidad, la empresa reconoce y acepta estas condiciones, exonerando completamente a los desarrolladores del software y plugins de cualquier responsabilidad.
+            </p>
+        </div>
+    </div>
+</div>
+
+{# Force max width to parent form #}
+<script>
+    const footerInfoDiv = document.getElementById('footer-info');
+    const form = footerInfoDiv.closest('form');
+    if (form) {
+        form.classList.add('w-100');
+    }
+</script>

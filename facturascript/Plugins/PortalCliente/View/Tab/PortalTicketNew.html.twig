@@ -1,0 +1,34 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+<div class="card mb-5 border-0">
+    <form action="{{ fsc.url() }}" method="post" enctype="multipart/form-data" onsubmit="animateSpinner('add')">
+        <div class="card-body p-0">
+            {{ formToken() }}
+            <input type="hidden" name="action" value="create">
+            <textarea class="form-control markdown-editor" name="body"
+                      id="ticketBody">{{ fsc.text | raw }}</textarea>
+        </div>
+        <div class="card-body p-0 text-right">
+            <div class="row d-flex align-items-center">
+                <div class="col">
+                    <input type="file" name="uploads[]" class="form-control-file" multiple/>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success btn-spin-action">
+                        <i class="fas fa-plus"></i>
+                        {{ trans('create-ticket') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const easyMDE = new EasyMDE({element: document.getElementById('ticketBody')});
+    });
+</script>

@@ -1,0 +1,17 @@
+{
+    "cant-delete-remittance-receipts": "Cant delete remittance receipts",
+    "charge-date": "Charge date",
+    "charges": "Charges",
+    "creditor-id": "Creditor ID",
+    "customer-have-no-iban": "%customer% customer has no bank account with an IBAN.",
+    "group-receipts-by-customer": "Group receipts by customer",
+    "ready": "Ready",
+    "receipt-inside-remittance": "You cannot delete a receipt that is within a remittance.",
+    "rectify": "Rectify",
+    "remittance": "Remittance",
+    "remittance-charged": "Remittance collected",
+    "remittance-paid": "Remesa pagada",
+    "remittance-ready-to-download": "Remittance ready to download",
+    "remittance-sent": "Remittance sent",
+    "remittances": "Remittances"
+}

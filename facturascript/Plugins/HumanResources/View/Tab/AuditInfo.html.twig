@@ -1,0 +1,69 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ */
+#}
+{% set view = fsc.views | first %}
+{% set model = view.model %}
+<div class="card">
+    <div class="card-body">
+        <div class="col-12 text-secondary" style="font-size: smaller">
+            <div class="row">
+                <div class="col-7">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group mb-2">
+                                <label class="mb-0">{{ trans('created') }}</label>
+                                <input type="datetime" name="creation_date" value="{{ model.creation_date }}" class="form-control" autocomplete="off" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-2">
+                                <label class="mb-0">{{ trans('location') }}</label>
+                                <input type="text" name="creation_ip" value="{{ model.creation_ip }}" class="form-control" autocomplete="off" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-2">
+                                <label class="mb-0">{{ trans('updated') }}</label>
+                                <input type="datetime" name="last_update" value="{{ model.last_update }}" class="form-control" autocomplete="off" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group mb-2">
+                                <label class="mb-0">{{ trans('user') }}</label>
+                                <input type="text" name="last_nick" value="{{ model.last_nick }}" class="form-control" autocomplete="off" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-2">
+                                <label class="mb-0">{{ trans('location') }}</label>
+                                <input type="text" name="location" value="{{ model.location }}" class="form-control" autocomplete="off" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if model.location is not empty %}
+    <style>
+        #map { height: 300px; }
+    </style>
+    <div class="card">
+        <div class="card-body">
+            <div id="map" class="w-100" data-location="{{ model.location }}">
+            </div>
+        </div>
+    </div>
+{% endif %}

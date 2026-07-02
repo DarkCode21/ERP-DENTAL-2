@@ -1,0 +1,20 @@
+{
+    "altas-rapidas": "Altas Rápidas",
+    "alta-rapida-productos": "Alta Rápida de Productos",
+    "product-name": "Nombre del Producto",
+    "product-name-required": "El nombre del producto es obligatorio",
+    "reference": "Referencia",
+    "barcode": "Código de Barras",
+    "price": "Precio",
+    "save-and-create-another": "Guardar y Crear Otro",
+    "record-saved-correctly": "Producto creado correctamente",
+    "record-save-error": "Error al guardar el producto",
+    "scan-barcode": "Escanear",
+    "mobile-optimized": "Optimizado para dispositivos móviles",
+    "automatic-reference": "Automática si se deja vacío",
+    "scan-or-type": "Escribe o escanea el código",
+    "price-without-tax": "sin IVA",
+    "quantity": "Cantidad",
+    "instructions": "Instrucciones de uso",
+    "not-allowed-modify": "No tienes permisos para crear productos"
+}

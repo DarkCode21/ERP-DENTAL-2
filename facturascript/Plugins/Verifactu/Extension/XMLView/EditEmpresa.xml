@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="verifactu" title="verifactu" icon="fa-solid fa-qrcode" numcolumns="12" valign="bottom">
+            <column name="vf_certificate" title="certificate" order="100">
+                <widget type="file" fieldname="vf_certificate" readonly="dinamic"/>
+            </column>
+            <column name="vf_password" title="password" order="110">
+                <widget type="password" fieldname="vf_password"/>
+            </column>
+            <column name="vf_debug_mode" title="debug-mode" order="130">
+                <widget type="checkbox" fieldname="vf_debug_mode"/>
+            </column>
+        </group>
+    </columns>
+    <modals>
+        <group name="vf-new-certificate" title="certificate" icon="fa-solid fa-file-upload">
+            <column name="vf_file" title="file" numcolumns="12" order="100">
+                <widget type="file" fieldname="vf_new_certificate" accept=".p12" required="true"/>
+            </column>
+            <column name="vf_password" title="password" numcolumns="12" order="110">
+                <widget type="password" fieldname="vf_new_password" required="true"/>
+            </column>
+        </group>
+    </modals>
+</view>

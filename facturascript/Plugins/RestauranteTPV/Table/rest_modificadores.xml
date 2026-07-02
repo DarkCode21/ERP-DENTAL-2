@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Tabla: rest_modificadores
+    Descripción: Catálogo de modificadores/agregados disponibles en el TPV
+    (ej: "Sin gluten", "Extra queso", "Con leche vegetal").
+-->
+<table>
+    <column>
+        <name>idmodificador</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(200)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>precio</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <constraint>
+        <name>pk_rest_modificadores</name>
+        <type>PRIMARY KEY (idmodificador)</type>
+    </constraint>
+</table>

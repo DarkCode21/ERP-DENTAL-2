@@ -1,0 +1,16 @@
+{
+    "accumulate-discount": "Acumular descuento",
+    "discounts": "Descuentos",
+    "fixed-price": "Precio fijo",
+    "formula-cost-price-alt": "Precio de coste + %x%% + %y%",
+    "formula-sale-price-alt": "Precio - %x%% - %y%",
+    "global-changes": "Globální změny",
+    "global-changes-desc": "Zde provedené změny budou použity na všechny níže uvedené varianty",
+    "level-tarifas-av": "Nivel mínimo para ver precios",
+    "prices": "Precios",
+    "reset-all-rates": "Obnovit všechny sazby",
+    "reset-rates": "Reiniciar tarifas",
+    "reset-rates-for-this-variant": "Obnovit sazby pro tuto variantu",
+    "save-all-variants": "Uložit všechny varianty",
+    "save-this-variant": "Uložit tuto variantu"
+}

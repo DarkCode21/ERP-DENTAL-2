@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Tabla: rest_estacion_familias
+    Relación entre estaciones y familias de producto.
+    Una estación puede tener varias familias; una familia solo pertenece a una estación.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idestacion</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codfamilia</name>
+        <type>character varying(25)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>pk_rest_estacion_familias</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>fk_rest_ef_estacion</name>
+        <type>FOREIGN KEY (idestacion) REFERENCES rest_estaciones (idestacion) ON DELETE CASCADE</type>
+    </constraint>
+</table>

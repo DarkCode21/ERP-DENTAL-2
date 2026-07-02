@@ -1,0 +1,63 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% set firstView = fsc.views | first %}
+{% set doc = firstView.model %}
+{% set currentView = fsc.getCurrentView() %}
+
+{% for item in getIncludeViews('PortalDocFiles', 'filesBefore') %}
+    {% include item['path'] %}
+{% endfor %}
+
+<div class="form-row">
+    <div class="col-sm-12">
+        <div class="card-columns">
+            {% for docfile in currentView.cursor %}
+                {% set file = docfile.getFile() %}
+                <div class="card shadow mb-3">
+                    {% if file.isImage() %}
+                        <a href="{{ asset(file.url('download-permanent')) }}" target="_blank">
+                            <img src="{{ asset(asset(file.url('download'))) }}" class="card-img-top"
+                                 alt="{{ file.filename }}">
+                        </a>
+                    {% else %}
+                        <div class="pl-3 pt-3 pr-3">
+                            <a href="{{ asset(file.url('download-permanent')) }}" target="_blank"
+                               class="btn btn-block btn-lg btn-secondary">
+                                {% if file.isPdf() %}
+                                    <i class="far fa-file-pdf fa-fw"></i>
+                                {% elseif file.isVideo() %}
+                                    <i class="far fa-file-video fa-fw"></i>
+                                {% elseif file.isArchive() %}
+                                    <i class="far fa-file-archive fa-fw"></i>
+                                {% else %}
+                                    <i class="far fa-file fa-fw"></i>
+                                {% endif %}
+                                {{ file.filename | raw }}
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="card-body p-3">
+                        <div class="form-group">
+                            <p>{{ docfile.observations | raw | nl2br }}</p>
+                        </div>
+                        <div class="form-row card-text text-muted">
+                            <div class="col">
+                                <i class="fas fa-calendar-alt"></i> {{ docfile.creationdate }}
+                            </div>
+                            <div class="col-auto">
+                                <i class="fa-solid fa-weight-hanging"></i> {{ bytes(file.size) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% for item in getIncludeViews('PortalDocFiles', 'filesAfter') %}
+    {% include item['path'] %}
+{% endfor %}

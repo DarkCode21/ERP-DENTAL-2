@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditOrdenProduccion.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la vista ListOrdenProduccion.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="id" numcolumns="1" order="100">
+                <widget type="text" fieldname="id" />
+            </column>
+            <column name="recipe-id" title="recipe" display="none" numcolumns="2" order="110">
+                <widget type="text" fieldname="idreceta" onclick="EditReceta" />
+            </column>
+            <column name="recipe-code" title="recipe" numcolumns="2" order="110">
+                <widget type="text" fieldname="codreceta" fieldclick="idreceta" onclick="EditReceta" />
+            </column>
+            <column name="name" numcolumns="2" order="120">
+                <widget type="text" fieldname="receta" />
+            </column>
+            <column name="reference" order="130">
+                <widget type="text" fieldname="referencia" />
+            </column>
+            <column name="quantity" order="140">
+                <widget type="number" fieldname="cantidad" />
+            </column>
+            <column name="date" numcolumns="2" order="150">
+                <widget type="date" fieldname="fecha" />
+            </column>
+            <column name="time" numcolumns="2" order="160">
+                <widget type="time" fieldname="hora" />
+            </column>
+            <column name="expiration" numcolumns="2" order="170">
+                <widget type="date" fieldname="vencimiento" />
+            </column>
+            <column name="user" numcolumns="2" order="180">
+                <widget type="text" fieldname="nick" />
+            </column>
+            <column name="status" numcolumns="3" order="190">
+                <widget type="select" fieldname="estado" translate="true">
+                    <values title="pending">0</values>
+                    <values title="started">10</values>
+                    <values title="verifying">15</values>
+                    <values title="finished">20</values>
+                    <values title="cancelled">99</values>
+                </widget>
+            </column>
+            <column name="manufactured-date" title="manufactured-date-short" display="center" order="200">
+                <widget type="date" fieldname="fechafabricacion"  />
+            </column>
+            <column name="manufactured-time" title="manufactured-time-short" display="center" order="210">
+                <widget type="time" fieldname="horafabricacion"  />
+            </column>
+            <column name="manufactured-by" display="center" order="220">
+                <widget type="text" fieldname="nickfabricacion"  />
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="status" fieldname="estado">
+            <option title="started" color="warning">10</option>
+            <option title="finished" color="success">20</option>
+            <option title="cancelled" color="danger">99</option>
+        </row>
+    </rows>
+    <modals>
+        <group name="insert" title="new-production-order" icon="fa-solid fa-puzzle-piece">
+            <column name="recipe" numcolumns="12" order="100">
+                <widget type="autocomplete" fieldname="coderecipe" required="true">
+                    <values source="produccion_recetas" fieldcode="codreceta" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="quantity" numcolumns="12" description="quantity-production-order" order="110">
+                <widget type="number" fieldname="quantity" min="0" required="true" />
+            </column>
+        </group>
+    </modals>
+</view>

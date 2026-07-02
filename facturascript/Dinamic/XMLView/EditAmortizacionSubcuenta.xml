@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditAmortizacionSubcuenta.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of edit subaccounts for amortizations.
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="type" order="110">
+            <widget type="select" fieldname="grouptype" translate="true" required="true">
+                <values title="intangible-assets">1</values>
+                <values title="material-immobilizations">2</values>
+                <values title="immobilization-real-estate">3</values>
+                <values title="material-immobilizations-in-progress">4</values>
+            </widget>
+        </column>
+        <column name="group" order="120">
+            <widget type="select" fieldname="group" translate="true" required="true">
+                <values title="subaccount-closing">1</values>
+                <values title="subaccount-debit">2</values>
+                <values title="subaccount-credit">3</values>
+                <values title="subaccount-lost">4</values>
+                <values title="subaccount-benefits">5</values>
+            </widget>
+        </column>
+        <column name="account" order="140">
+            <widget type="autocomplete" fieldname="code" required="true">
+                <values source="cuentas" fieldcode="codcuenta" fieldtitle="descripcion"/>
+            </widget>
+        </column>
+    </columns>
+</view>

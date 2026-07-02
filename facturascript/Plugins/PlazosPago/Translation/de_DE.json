@@ -1,0 +1,5 @@
+{
+    "cannot-mark-payment-as-paid-if-terms": "Sie können die Zahlungsart nicht als bezahlt markieren, wenn Zahlungsfristen festgelegt sind",
+    "payment-term": "Zahlungsfrist",
+    "terms-exceed-100p": "Die Fristen überschreiten 100%"
+}

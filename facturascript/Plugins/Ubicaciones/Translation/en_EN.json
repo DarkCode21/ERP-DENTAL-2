@@ -1,0 +1,14 @@
+{
+    "aisle": "Aisle",
+    "drawer": "Drawer",
+    "location-desc": "Physical location of the merchandise. You can enter the different values (Aisle\/Rack\/Shelf\/Drawer) separated by space. This will help you filter when selecting the location. <b>IMPORTANT:<\/b> Once a location is selected you must delete all the text to select another.",
+    "location-leyend": "Merchandise Location Legend",
+    "locations": "Locations",
+    "one-field-required": "You must report at least one value for the fields",
+    "rack": "Rack",
+    "shelf": "Shelf",
+    "storage": "Storage",
+    "validation-code": "Validation Code",
+    "variant-location": "Merchandise Location",
+    "warehouse-required": "You must report a warehouse"
+}

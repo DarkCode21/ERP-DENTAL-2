@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="id" display="none" order="100">
+                <widget type="text" fieldname="id" readonly="true"/>
+            </column>
+            <column name="company" order="110">
+                <widget type="select" fieldname="idempresa" readonly="dinamic" required="true" onclick="EditEmpresa">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>
+                </widget>
+            </column>
+            <column name="start-exercise" order="120">
+                <widget type="select" fieldname="start_codejercicio" readonly="dinamic" required="true" parent="idempresa">
+                    <values source="ejercicios" fieldcode="codejercicio" fieldtitle="nombre" fieldfilter="idempresa"/>
+                </widget>
+            </column>
+            <column name="end-exercise" order="130">
+                <widget type="select" fieldname="end_codejercicio" readonly="dinamic" required="true" parent="idempresa">
+                    <values source="ejercicios" fieldcode="codejercicio" fieldtitle="nombre" fieldfilter="idempresa"/>
+                </widget>
+            </column>
+            <column name="reference" order="140">
+                <widget type="text" fieldname="reference" readonly="dinamic" maxlength="18" required="true"/>
+            </column>
+            <column name="status" order="150">
+                <widget type="select" fieldname="status" readonly="true" translate="true" required="true">
+                    <values title="pending">pending</values>
+                    <values title="processing">processing</values>
+                    <values title="completed">completed</values>
+                </widget>
+            </column>
+        </group>
+        <group name="logs" numcolumns="12">
+            <column name="creation-date" display="none" order="100">
+                <widget type="datetime" fieldname="creation_date"/>
+            </column>
+            <column name="nick" display="none" order="110">
+                <widget type="select" fieldname="nick">
+                    <values source="users" fieldcode="nick" fieldtitle="nick"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

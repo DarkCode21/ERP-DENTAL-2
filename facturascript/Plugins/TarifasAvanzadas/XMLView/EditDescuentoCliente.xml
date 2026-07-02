@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="data" valign="bottom" numcolumns="12">
+            <column name="id" display="none" order="100">
+                <widget type="text" fieldname="id" />
+            </column>
+            <column name="percentage" order="110">
+                <widget type="number" decimal="0" fieldname="porcentaje" icon="fas fa-percentage" min="0" max="100" />
+            </column>
+            <column name="accumulate-discount" order="120">
+                <widget type="checkbox" fieldname="acumular" />
+            </column>
+            <column name="from-date" order="130">
+                <widget type="date" fieldname="fecha0" required="true" />
+            </column>
+            <column name="until-date" order="140">
+                <widget type="date" fieldname="fecha1" />
+            </column>
+            <column name="priority" order="150">
+                <widget type="number" decimal="0" fieldname="prioridad" icon="fas fa-sort-numeric-down-alt" />
+            </column>
+            <column name="observations" numcolumns="12" order="160">
+                <widget type="textarea" fieldname="observaciones" />
+            </column>
+        </group>
+        <group name="conditions" title="conditions" icon="fas fa-filter" numcolumns="12">
+            <column name="customer-group" titleurl="ListCliente?activetab=ListGrupoClientes" order="100">
+                <widget type="select" fieldname="codgrupo" onclick="EditGrupoClientes">
+                    <values source="gruposclientes" fieldcode="codgrupo" fieldtitle="nombre" />
+                </widget>
+            </column>
+            <column name="customer" titleurl="ListCliente" order="110">
+                <widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre" />
+                </widget>
+            </column>
+            <column name="family" titleurl="ListFamilia" order="120">
+                <widget type="select" fieldname="codfamilia" onclick="EditFamilia">
+                    <values source="familias" fieldcode="codfamilia" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="reference" order="130">
+                <widget type="autocomplete" fieldname="referencia">
+                    <values source="variantes" fieldcode="referencia" fieldtitle="referencia" />
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

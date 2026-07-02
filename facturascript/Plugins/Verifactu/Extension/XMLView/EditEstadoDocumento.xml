@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="config" valign="bottom" numcolumns="12">
+            <column name="send-verifactu" order="160">
+                <widget type="checkbox" fieldname="vf_send"/>
+            </column>
+        </group>
+    </columns>
+</view>

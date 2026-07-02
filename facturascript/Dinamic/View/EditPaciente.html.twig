@@ -1,0 +1,199 @@
+{% extends "Master/PanelController.html.twig" %}
+
+{% block body %}
+<div class="container-fluid">
+    <div id="odonto-toast" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#27ae60;color:#fff;padding:8px 20px;border-radius:6px;font-size:14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);"></div>
+    
+    {% set cliente = fsc.paciente.getCliente() %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0"><i class="fas fa-user-injured mr-2"></i>{{ cliente ? cliente.razonsocial : 'Paciente' }}</h4>
+        <a href="Paciente" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left mr-1"></i>Volver</a>
+    </div>
+
+    <ul class="nav nav-tabs mb-3" id="pacienteTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="archivo-tab" data-toggle="tab" href="#archivo-panel" role="tab">
+                <i class="fas fa-folder mr-1"></i>Archivo
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="cita-tab" data-toggle="tab" href="#cita-panel" role="tab">
+                <i class="fas fa-calendar-alt mr-1"></i>Cita
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="odonto-tab" data-toggle="tab" href="#odonto-panel" role="tab">
+                <i class="fas fa-tooth mr-1"></i>Odontograma
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="historial-tab" data-toggle="tab" href="#historial-panel" role="tab">
+                <i class="fas fa-history mr-1"></i>Historial
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="pacienteTabContent">
+        <div class="tab-pane fade show active" id="archivo-panel" role="tabpanel">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-folder mr-2"></i>Archivos</h5>
+                        <a href="EditArchivoFromPaciente?cod={{ fsc.paciente.id }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus mr-1"></i>Nuevo Archivo
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% set archivos = fsc.paciente.getArchivos() %}
+                    {% if archivos|length > 0 %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Fecha</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for archivo in archivos %}
+                            <tr>
+                                <td>{{ archivo.nombre }}</td>
+                                <td>{{ archivo.created_at }}</td>
+                                <td class="text-right">
+                                    <a href="EditArchivo?code={{ archivo.id }}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted mb-0">No hay archivos registrados.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="cita-panel" role="tabpanel">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-calendar-alt mr-2"></i>Citas</h5>
+                        <a href="EditCitaFromPaciente?cod={{ fsc.paciente.id }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus mr-1"></i>Nueva Cita
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% set citas = fsc.paciente.getCitas() %}
+                    {% if citas|length > 0 %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cita in citas %}
+                            <tr>
+                                <td>{{ cita.fecha }}</td>
+                                <td>{{ cita.hora_inicio }} - {{ cita.hora_fin }}</td>
+                                <td>{{ cita.tipo|default('Consulta') }}</td>
+                                <td>
+                                    <span class="badge badge-{{ cita.estado == 'completada' ? 'success' : (cita.estado == 'cancelada' ? 'danger' : 'warning') }}">
+                                        {{ cita.estado|default('pendiente') }}
+                                    </span>
+                                </td>
+                                <td class="text-right">
+                                    <a href="EditCita?code={{ cita.id }}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted mb-0">No hay citas registradas.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="odonto-panel" role="tabpanel">
+            <iframe 
+                id="odontograma-frame"
+                src="{{ asset('Plugins/Dental/Assets/odontograma/index.html') }}?idpaciente={{ fsc.paciente.id }}&t={{ "now"|date("YmdHis") }}"
+                style="width:100%; height:1200px; border:1px solid #dee2e6; border-radius:8px; background:#fff;">
+            </iframe>
+        </div>
+
+        <div class="tab-pane fade" id="historial-panel" role="tabpanel">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-history mr-2"></i>Historial</h5>
+                        <a href="EditHistorial?idpaciente={{ fsc.paciente.id }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus mr-1"></i>Nueva Entrada
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% set historial = fsc.paciente.getHistorial() %}
+                    {% if historial|length > 0 %}
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in historial %}
+                            <tr>
+                                <td>{{ item.fecha }}</td>
+                                <td>{{ item.tipo|default('Nota') }}</td>
+                                <td>{{ item.descripcion|slice(0, 100) }}{% if item.descripcion|length > 100 %}...{% endif %}</td>
+                                <td class="text-right">
+                                    <a href="EditHistorial?code={{ item.id }}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted mb-0">No hay historial registrado.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'odonto-toast') {
+        var toast = document.getElementById('odonto-toast');
+        toast.textContent = e.data.message;
+        toast.style.background = e.data.error ? '#c0392b' : '#27ae60';
+        toast.style.display = 'block';
+        setTimeout(function() {
+            toast.style.display = 'none';
+        }, 3000);
+    }
+});
+</script>
+{% endblock %}

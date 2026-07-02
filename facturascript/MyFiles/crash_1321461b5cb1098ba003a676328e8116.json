@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Call to undefined method Symfony\\Component\\HttpFoundation\\Response::json() in \/Plugins\/Produccion\/Controller\/EditOrdenProduccion.php:246\n\nStack trace:\n#0 \/Core\/Lib\/ExtendedController\/PanelController.php(81): FacturaScripts\\Plugins\\Produccion\\Controller\\EditOrdenProduccion-&gt;execPreviousAction(&#39;getProductData&#39;)\n#1 \/Core\/Base\/Controller.php(302): FacturaScripts\\Core\\Lib\\ExtendedController\\PanelController-&gt;privateCore(Object(Symfony\\Component\\HttpFoundation\\Response), Object(FacturaScripts\\Dinamic\\Model\\User), Object(FacturaScripts\\Core\\Base\\ControllerPermissions))\n#2 \/Core\/Kernel.php(372): FacturaScripts\\Core\\Base\\Controller-&gt;run()\n#3 \/Core\/Kernel.php(190): FacturaScripts\\Core\\Kernel::runController(&#39;\/EditOrdenProdu...&#39;)\n#4 \/index.php(63): FacturaScripts\\Core\\Kernel::run(&#39;\/EditOrdenProdu...&#39;)\n#5 {main}\n  thrown",
+    "file": "\/Plugins\/Produccion\/Controller\/EditOrdenProduccion.php",
+    "line": 246,
+    "fragment": "                return true;\n241                return true;\n242\n243            case 'getProductData':\n244                $data = $this->request->request->all();\n245                $this->setTemplate(false);\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">246                $this->response->json($this->getProductDataAction($data));<\/spam>\n247                return false;\n248\n249            case 'get-traceability':\n250                $data = $this->request->request->all();\n251                $this->setTemplate(false);",
+    "hash": "1321461b5cb1098ba003a676328e8116",
+    "url": "\/EditOrdenProduccion",
+    "report_url": "https:\/\/facturascripts.com\/errores\/1321461b5cb1098ba003a676328e8116",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F1321461b5cb1098ba003a676328e8116",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,RestauranteTPV,LogsFields,LoginScreen,TPVneo,Produccion"
+}

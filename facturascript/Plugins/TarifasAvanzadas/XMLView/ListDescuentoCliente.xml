@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <column name="id" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="customer" order="110">
+            <widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
+                <values source="clientes" fieldcode="codcliente" fieldtitle="nombre" />
+            </widget>
+        </column>
+        <column name="customer-group" order="120">
+            <widget type="select" fieldname="codgrupo" onclick="EditGrupoClientes">
+                <values source="gruposclientes" fieldcode="codgrupo" fieldtitle="nombre" />
+            </widget>
+        </column>
+        <column name="family" order="130">
+            <widget type="select" fieldname="codfamilia" onclick="EditFamilia">
+                <values source="familias" fieldcode="codfamilia" fieldtitle="descripcion" />
+            </widget>
+        </column>
+        <column name="reference" order="140">
+            <widget type="text" fieldname="referencia" />
+        </column>
+        <column name="percentage" display="right" order="150">
+            <widget type="percentage" decimal="0" fieldname="porcentaje" />
+        </column>
+        <column name="accumulate-discount" order="160">
+            <widget type="checkbox" fieldname="acumular" />
+        </column>
+        <column name="observations" order="170">
+            <widget type="text" fieldname="observaciones" />
+        </column>
+        <column name="from-date" display="right" order="180">
+            <widget type="date" fieldname="fecha0" />
+        </column>
+        <column name="until-date" order="190">
+            <widget type="date" fieldname="fecha1" />
+        </column>
+        <column name="priority" display="right" order="200">
+            <widget type="number" decimal="0" fieldname="prioridad" />
+        </column>
+    </columns>
+</view>

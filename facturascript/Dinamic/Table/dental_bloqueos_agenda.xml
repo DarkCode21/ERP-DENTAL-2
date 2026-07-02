@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idespecialista</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idgabinete</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>hora_inicio</name>
+        <type>time</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>hora_fin</name>
+        <type>time</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>motivo</name>
+        <type>character varying(200)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>tipo</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>created_by</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>created_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <column>
+        <name>updated_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <constraint>
+        <name>dental_bloqueos_agenda_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_bloqueos_agenda_fk_especialista</name>
+        <type>FOREIGN KEY (idespecialista) REFERENCES dental_especialistas(id) ON DELETE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>dental_bloqueos_agenda_fk_gabinete</name>
+        <type>FOREIGN KEY (idgabinete) REFERENCES dental_gabinetes(id) ON DELETE CASCADE</type>
+    </constraint>
+</table>

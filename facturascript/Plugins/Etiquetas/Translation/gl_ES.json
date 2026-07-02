@@ -1,0 +1,17 @@
+{
+    "add-product": "Engadir producto",
+    "all-tags": "Todas",
+    "auto-generate-barcodes": "Xerar códigos de barras automáticamente",
+    "barcode-generate-ok": "%num% códigos de barras restantes xerados",
+    "barcode-type": "Tipo cod. barras",
+    "generate-barcodes": "Xerar códigos de barras",
+    "initial-column": "Columna inicial",
+    "initial-row": "Fila inicial",
+    "no-tag": "Ningunha",
+    "number-labels-per-product": "Número de etiquetas por produto",
+    "one-per-product": "Unha por produto",
+    "only-with-barcode": "So produtos con código de barras",
+    "print-barcodes": "Códigos de barras",
+    "print-prices": "Prezos",
+    "tags": "Etiquetas"
+}

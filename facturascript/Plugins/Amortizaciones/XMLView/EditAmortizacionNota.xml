@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditAmortizacionNota.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of the view for a notes of amortization.
+-->
+<view>
+    <columns>
+        <group name="info" numcolumns="12" title="observations" icon="far fa-sticky-note">
+            <column name="notes">
+                <widget type="textarea" fieldname="observaciones" rows="6" />
+            </column>
+        </group>
+        <group name="hidden">
+            <column name="id" numcolumns="2" display="none" order="0" >
+                <widget type="number" fieldname="idamortizacion" readonly="true" />
+            </column>
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,113 @@
+{#
+/**
+ * This file is part of the Produccion plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ * All Rights Reserved.
+ */
+#}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="mb-3">{{ trans('produced-s') }}</h4>
+        </div>
+    </div>
+
+    {% for reference, values in cursor.produced %}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <strong>{{ values.reference }}</strong>
+                        <span class="text-muted ml-2">{{ values.name }}</span>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0">
+                                <thead>
+                                <tr>
+                                    <th>{{ trans('serial-number') }}</th>
+                                    <th>{{ trans('date') }}</th>
+                                    <th>{{ trans('nick') }}</th>
+                                    <th class="text-center">{{ trans('verified') }}</th>
+                                    <th class="text-right">{{ trans('actions') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in values.items %}
+                                    {% include 'Block/ProductionProducedNumSerieRow.html.twig' with {
+                                        fsc: fsc,
+                                        item: item
+                                    } %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{# Modal for traceability #}
+<div class="modal fade" id="numserie-traceability-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-sitemap mr-2"></i>{{ trans('numserie') }}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('close') }}"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="numserie-traceability-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary"
+                        onclick="window.Production.NumSerie.printTraceability()">
+                    <i class="fa-solid fa-print mr-1"></i>{{ trans('print') }}
+                </button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    {{ trans('close') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Modal for change num serie #}
+<div class="modal fade" id="change-numserie-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ trans('change-numserie') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('close') }}"><span aria-hidden="true">&times;</span></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="change-numserie-value">{{ trans('serial-number') }}</label>
+                        <input type="text" name="newNumSerie" id="change-numserie-value"
+                               class="form-control" required="required" autocomplete="off"
+                               data-id=""                   {# assigned by JS #}
+                               data-multireqtoken=""        {# assigned by JS #}
+                        />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        {{ trans('cancel') }}
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        {{ trans('save') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

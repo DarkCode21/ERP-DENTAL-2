@@ -1,0 +1,15 @@
+{
+    "bank-movement": "Mouvement bancaire",
+    "conciliate": "Concilier",
+    "conciliate-bank-movements": "Concilier les mouvements bancaires",
+    "import-banking-movements": "Importer des transactions bancaires",
+    "link-mov-with-acc": "Lien entre les transactions et les écritures comptables",
+    "link-mov-with-acc-c": "Sélectionner les sous-comptes à utiliser dans l'écriture comptable.",
+    "link-mov-with-acc-p": "Sélectionnez les écritures auxquelles vous souhaitez lier ce mouvement. Ou créez une nouvelle écriture de journal à partir du nouvel onglet.",
+    "link-up": "Lier",
+    "reconcile-purchases-movement": "Réconcilier le mouvement des achats",
+    "reconcile-remittances": "Concilier les virements",
+    "reconcile-sales-movement": "Réconcilier le mouvement des ventes",
+    "reconciled": "Réconcilié",
+    "reconciliate": "Réconcilier"
+}

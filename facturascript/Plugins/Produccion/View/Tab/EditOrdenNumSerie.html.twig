@@ -1,0 +1,41 @@
+{#
+/**
+ * This file is part of the Produccion plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ * All Rights Reserved.
+ */
+#}
+{% set mainView = fsc.views[fsc.getMainViewName()] %}
+{% set viewName = constant('VIEW_NUMSERIES', fsc) %}
+{% set view = fsc.views[viewName] %}
+{% set cursor = view.cursor %}
+
+{% if cursor.hasIngredients %}
+    <div class="card">
+        <div class="card-body">
+            {% include 'Block/ProductionRawNumSerie.html.twig' with {
+                fsc: fsc,
+                cursor: cursor
+            } %}
+        </div>
+    </div>
+{% endif %}
+
+{% if cursor.hasIngredients and cursor.hasProduced %}
+    <hr>
+{% endif %}
+
+
+{% if cursor.hasProduced %}
+    <div class="card">
+        <div class="card-body">
+            {% include 'Block/ProductionProducedNumSerie.html.twig' with {
+                fsc: fsc,
+                cursor: cursor
+            } %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,242 @@
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        function activeTab(tab) {
+            document.forms['modelo347']['activetab'].value = tab;
+            document.forms['modelo347'].submit();
+        }
+    </script>
+{% endblock %}
+
+{% block bodyHeaderOptions %}
+    {{ parent() }}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h1 class="h2">
+                    <i class="fa-solid fa-book fa-fw"></i> {{ fsc.title }}
+                </h1>
+                <p>{{ trans('model-347-p') }}</p>
+            </div>
+        </div>
+        <form method="post" name="modelo347">
+            <input type="hidden" name="activetab" value="{{ fsc.activetab }}">
+            <div class="row align-items-end">
+                <div class="col-sm">
+                    <div class="mb-2">
+                        {{ trans('exercise') }}
+                        <select name="codejercicio" class="custom-select" required onchange="this.form.submit()">
+                            {% for company in fsc.empresa.all() %}
+                                <optgroup label="{{ company.nombrecorto }}">
+                                    {% for exercise in fsc.allExercises(company.idempresa) %}
+                                        {% if exercise.codejercicio == fsc.codejercicio %}
+                                            <option value="{{ exercise.codejercicio }}" selected>{{ exercise.nombre }}</option>
+                                        {% else %}
+                                            <option value="{{ exercise.codejercicio }}">{{ exercise.nombre }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {# Examine Input #}
+                <div class="col-sm">
+                    <div class="mb-2">
+                        {{ trans('examine') }}
+                        <select name="examine" class="custom-select" required onchange="this.form.submit()">
+                            {% for type in fsc.allExamine() %}
+                                {% if type == fsc.examine %}
+                                    <option value="{{ type }}" selected>{{ trans(type) }}</option>
+                                {% else %}
+                                    <option value="{{ type }}">{{ trans(type) }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {# Amount Input #}
+                <div class="col-sm">
+                    <div class="mb-2">
+                        {{ trans('amount') }}
+                        <input type="number" min="0" step="any" name="amount" value="{{ fsc.amount }}"
+                               class="form-control" required/>
+                    </div>
+                </div>
+                {# Grouping Type Input #}
+                <div class="col-sm">
+                    <div class="mb-2">
+                        {{ trans('grouping-type') }}
+                        <select name="grouping" class="custom-select" required onchange="this.form.submit()">
+                            {% for groupby in fsc.allGroupBy() %}
+                                {% if groupby == fsc.grouping %}
+                                    <option value="{{ groupby }}" selected>{{ trans(groupby) }}</option>
+                                {% else %}
+                                    <option value="{{ groupby }}">{{ trans(groupby) }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {# Exclude IRPF Input #}
+                <div class="col-sm">
+                    <div class="mb-2 form-check">
+                        {% if fsc.excludeIrpf %}
+                            <input type="checkbox" name="excludeirpf" value="1" id="checkboxirpf"
+                                   class="form-check-input" checked/>
+                        {% else %}
+                            <input type="checkbox" name="excludeirpf" value="1" id="checkboxirpf"
+                                   class="form-check-input"/>
+                        {% endif %}
+                        <label for="checkboxirpf">{{ trans('exclude-irpf') }}</label>
+                    </div>
+                </div>
+                {# Buttons #}
+                <div class="col-sm-auto">
+                    <div class="btn-group" role="group">
+                        <button type="submit" name="action" value="show" class="btn btn-primary">
+                            <i class="fa-solid fa-eye fa-fw"></i> {{ trans('preview') }}
+                        </button>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                    aria-expanded="false">
+                                <i class="fa-solid fa-download fa-fw"></i> {{ trans('download') }}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <button type="submit" name="action" value="download-excel" class="dropdown-item">
+                                    <i class="fa-solid fa-file-excel fa-fw mr-1"></i> {{ trans('spreadsheet-xls') }}
+                                </button>
+                                <button type="submit" name="action" value="download-txt" class="dropdown-item">
+                                    <i class="fa-regular fa-file-alt fa-fw mr-1"></i> {{ trans('txt-for-treasury') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link {{ fsc.activetab == 'customers' ? 'active' : '' }}" onclick="activeTab('customers')"
+               id="customers-tab" data-toggle="tab" href="#customers" role="tab" aria-controls="customers"
+               aria-selected="true">
+                {{ trans('customers') }}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {{ fsc.activetab == 'suppliers' ? 'active' : '' }}" onclick="activeTab('suppliers')"
+               id="suppliers-tab" data-toggle="tab" href="#suppliers" role="tab" aria-controls="suppliers"
+               aria-selected="false">
+                {{ trans('suppliers') }}
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block body %}
+    <div class="tab-content">
+        <div class="tab-pane fade {{ fsc.activetab == 'customers' ? 'show active' : '' }}" id="customers"
+             role="tabpanel" aria-labelledby="customers-tab">
+            {{ _self.customersData(fsc) }}
+        </div>
+        <div class="tab-pane fade {{ fsc.activetab == 'suppliers' ? 'show active' : '' }}" id="suppliers"
+             role="tabpanel" aria-labelledby="suppliers-tab">
+            {{ _self.suppliersData(fsc) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% macro customersData(fsc) %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>{{ trans('cifnif') }}</th>
+                <th>{{ trans('customer') }}</th>
+                <th>{{ trans('zip-code') }}</th>
+                <th>{{ trans('city') }}</th>
+                <th>{{ trans('province') }}</th>
+                <th class="text-end">{{ trans('first-trimester') }}</th>
+                <th class="text-end">{{ trans('second-trimester') }}</th>
+                <th class="text-end">{{ trans('third-trimester') }}</th>
+                <th class="text-end">{{ trans('fourth-trimester') }}</th>
+                <th class="text-end">{{ trans('total') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in fsc.customersData %}
+                <tr>
+                    <td>{{ row.cifnif }}</td>
+                    <td>{{ row.cliente | raw }}</td>
+                    <td>{{ row.codpostal }}</td>
+                    <td>{{ row.ciudad | raw }}</td>
+                    <td>{{ row.provincia | raw }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.t1) }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.t2) }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.t3) }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.t4) }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.total) }}</td>
+                </tr>
+            {% endfor %}
+            <tr class="table-warning">
+                <td colspan="5"></td>
+                <td class="text-end text-nowrap">{{ money(fsc.customersTotals.t1) }}</td>
+                <td class="text-end text-nowrap">{{ money(fsc.customersTotals.t2) }}</td>
+                <td class="text-end text-nowrap">{{ money(fsc.customersTotals.t3) }}</td>
+                <td class="text-end text-nowrap">{{ money(fsc.customersTotals.t4) }}</td>
+                <td class="text-end text-nowrap">{{ money(fsc.customersTotals.total) }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endmacro %}
+
+{% macro suppliersData(fsc) %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>{{ trans('cifnif') }}</th>
+                <th>{{ trans('supplier') }}</th>
+                <th>{{ trans('zip-code') }}</th>
+                <th>{{ trans('city') }}</th>
+                <th>{{ trans('province') }}</th>
+                <th class="text-end">{{ trans('first-trimester') }}</th>
+                <th class="text-end">{{ trans('second-trimester') }}</th>
+                <th class="text-end">{{ trans('third-trimester') }}</th>
+                <th class="text-end">{{ trans('fourth-trimester') }}</th>
+                <th class="text-end">{{ trans('total') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in fsc.suppliersData %}
+                <tr>
+                    <td>{{ row.cifnif }}</td>
+                    <td>{{ row.proveedor | raw }}</td>
+                    <td>{{ row.codpostal }}</td>
+                    <td>{{ row.ciudad | raw }}</td>
+                    <td>{{ row.provincia | raw }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.t1) }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.t2) }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.t3) }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.t4) }}</td>
+                    <td class="text-end text-nowrap">{{ money(row.total) }}</td>
+                </tr>
+            {% endfor %}
+            <tr class="table-warning">
+                <td colspan="5"></td>
+                <td class="text-end text-nowrap">{{ money(fsc.suppliersTotals.t1) }}</td>
+                <td class="text-end text-nowrap">{{ money(fsc.suppliersTotals.t2) }}</td>
+                <td class="text-end text-nowrap">{{ money(fsc.suppliersTotals.t3) }}</td>
+                <td class="text-end text-nowrap">{{ money(fsc.suppliersTotals.t4) }}</td>
+                <td class="text-end text-nowrap">{{ money(fsc.suppliersTotals.total) }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endmacro %}

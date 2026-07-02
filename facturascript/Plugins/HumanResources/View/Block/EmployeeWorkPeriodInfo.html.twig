@@ -1,0 +1,57 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ */
+#}
+{% set view = fsc.views | first %}
+{% set model = view.model %}
+<div class="col-12 text-secondary" style="font-size: smaller">
+    <div class="row text-info">
+        <div class="col-12 text-center"><h4>{{ trans('schedule') }}</h4></div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+            {{ _self.dayOfWeekColumn(fsc, 'monday', 'center') }}
+            {{ _self.dayOfWeekColumn(fsc, 'tuesday', 'center') }}
+            {{ _self.dayOfWeekColumn(fsc, 'wednesday', 'center') }}
+            {{ _self.dayOfWeekColumn(fsc, 'thursday', 'center') }}
+            {{ _self.dayOfWeekColumn(fsc, 'friday', 'center') }}
+            {{ _self.dayOfWeekColumn(fsc, 'saturday', 'center') }}
+            {{ _self.dayOfWeekColumn(fsc, 'sunday', 'center') }}
+            <th scope="col"></th>
+            </thead>
+            <tbody>
+            <tr>
+                {% for day in 1..7 %}
+                    <td class="text-center">
+                        {% for workperiod in fsc.workperiods[day - 1] %}
+                            <span class="d-none d-md-block">
+                                {{ trans("from2") ~ " " ~ workperiod.starttime|date('H:i') }}
+                                {{ trans("to2") ~ " " ~ workperiod.endtime|date('H:i') }}
+                            </span>
+                            <span class="d-block d-md-none">
+                                {{ workperiod.starttime|date('H:i') }}<br>
+                                {{ workperiod.endtime|date('H:i') }}
+                            </span>
+                            {%  if false == loop.last %}<hr>{% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% macro dayOfWeekColumn(fsc, dayName, display) %}
+    {% set title = trans(dayName) %}
+    <th class="text-{{ display }}" scope="col">
+        <span class="d-none d-md-block">{{ title }}</span>
+        <span class="d-block d-md-none">{{ title|slice(0,3) }}</span>
+    </th>
+{% endmacro %}

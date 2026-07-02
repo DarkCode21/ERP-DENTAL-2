@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="user" order="110">
+            <widget type="text" fieldname="nick" />
+        </column>
+        <column name="contact" order="120">
+            <widget type="autocomplete" fieldname="idcontacto">
+                <values source="contactos" fieldcode="idcontacto" fieldtitle="nombre" />
+            </widget>
+        </column>
+        <column name="description" order="130">
+            <widget type="textarea" fieldname="descripcion" />
+        </column>
+        <column name="interest" order="140">
+            <widget type="select" fieldname="idinteres">
+                <values source="crm_intereses" fieldcode="id" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="estimation" order="150">
+            <widget type="autocomplete" fieldname="idpresupuesto" onclick="EditPresupuestoCliente">
+                <values source="presupuestoscli" fieldcode="idpresupuesto" fieldtitle="codigo"/>
+            </widget>
+        </column>
+        <column name="net" display="right" order="160">
+            <widget type="money" fieldname="neto" />
+        </column>
+        <column name="date" display="right" order="170">
+            <widget type="date" fieldname="fecha" />
+        </column>
+        <column name="last-update" display="right" order="180">
+            <widget type="datetime" fieldname="fechamod"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="danger" fieldname="rechazado" title="rejected">1</option>
+            <option color="success" fieldname="editable" title="accepted">0</option>
+        </row>
+    </rows>
+</view>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>id_ticket</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>id_ticket_comment</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>file_name</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>file_path</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>portal_tickets_files_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_portal_tickets_files_portal_tickets</name>
+        <type>FOREIGN KEY (id_ticket) REFERENCES portal_tickets (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_portal_tickets_files_portal_tickets_comments</name>
+        <type>FOREIGN KEY (id_ticket_comment) REFERENCES portal_tickets_comments (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

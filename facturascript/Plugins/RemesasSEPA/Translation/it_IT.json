@@ -1,0 +1,17 @@
+{
+    "cant-delete-remittance-receipts": "No se puede eliminar una remesa con recibos.",
+    "charge-date": "Fecha cargo",
+    "charges": "Cobros",
+    "creditor-id": "Creditor ID",
+    "customer-have-no-iban": "%customer% no tiene ninguna cuenta bancaria con IBAN.",
+    "group-receipts-by-customer": "Agrupar recibos por cliente",
+    "ready": "Preparada",
+    "receipt-inside-remittance": "No se puede eliminar un recibo que está dentro de una remesa.",
+    "rectify": "Rectificar",
+    "remittance": "Remesa",
+    "remittance-charged": "Remesa cobrada",
+    "remittance-paid": "Remesa pagada",
+    "remittance-ready-to-download": "Remesa lista para descargar",
+    "remittance-sent": "Remesa enviada",
+    "remittances": "Remesas"
+}

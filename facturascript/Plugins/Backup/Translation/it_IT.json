@@ -1,0 +1,18 @@
+{
+    "backup": "copia di sicurezza",
+    "backup-charset-error": "La codifica del backup è %db-charset%, mentre in config.php è %config-charset%. Premere il pulsante cambia codifica prima di ripristinare.",
+    "backup-file-too-big": "Il file di backup è troppo grande per essere caricato sul server. La dimensione massima è %size% MB",
+    "backup-memory-warning": "Avviso memoria: il backup occupa %size% MB, ma hai solo %memory% MB di memoria disponibile. Non sufficiente per eseguire il backup.",
+    "backup-port-warning": "La porta di MySQL deve essere 3306, ma stai utilizzando la %port%",
+    "download-backup": "scarica-il-backup",
+    "download-backup-p": "scarica-backup-p",
+    "file-ready-to-download": "File pronto per il download",
+    "last-backup-more-30d": "L'ultima copia di sicurezza ha più di 30 giorni. Fai una nuova copia dal menu Amministratore, Copie di sicurezza.",
+    "mysql-support-only": "Questo plugin funziona solo su MySQL",
+    "restore-backup": "Ripristina il database",
+    "restore-backup-p": "Se hai il backup del tuo database, seleziona il file sql e premi Ripristina",
+    "restore-backup-warning": "Avviso di ripristino del backup",
+    "restore-files": "Ripristina file",
+    "restore-files-p": "Se si dispone del file di backup dei file, selezionare tale file zip e fare clic sul pulsante Ripristina.",
+    "switch-db-charset": "Cambia charset DB"
+}

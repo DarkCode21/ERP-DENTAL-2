@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : rrhh_employeesholidays.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Structure for the employees holidays table.
+-->
+<table>
+    <column>
+        <name>authorized</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>automatic</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>totaldays</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>1</default>
+    </column>
+    <column>
+        <name>idemployee</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>note</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>startdate</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>enddate</name>
+        <type>date</type>
+    </column>
+    <constraint>
+        <name>rrhh_employeesholidays_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_employeesholidays_employees</name>
+        <type>FOREIGN KEY (idemployee) REFERENCES rrhh_employees (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2023 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="language" order="110">
+            <widget type="select" fieldname="idlang" required="true" onclick="EditLanguage">
+                <values source="languages" fieldcode="id" fieldtitle="name"/>
+            </widget>
+        </column>
+        <column name="value" order="120">
+            <widget type="text" fieldname="keytrans" required="true"/>
+        </column>
+        <column name="translate" order="130" numcolumns="12">
+            <widget type="textarea" fieldname="valuetrans" required="true"/>
+        </column>
+    </columns>
+    <modals>
+        <group name="copy-translate-to" title="copy-translate-to" icon="fas fa-copy">
+            <column name="language-copy" title="language" description="copy-translate-to-desc" order="100">
+                <widget type="select" fieldname="copylanguage" required="true">
+                    <values/>
+                </widget>
+            </column>
+        </group>
+    </modals>
+</view>

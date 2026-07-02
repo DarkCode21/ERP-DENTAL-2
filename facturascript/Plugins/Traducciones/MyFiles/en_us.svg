@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="18.520845mm"
+   height="12.435423mm"
+   viewBox="0 0 18.520845 12.435423"
+   version="1.1"
+   id="svg11070"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="en_us.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11072"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.914906"
+     inkscape:cx="196.19502"
+     inkscape:cy="75.964088"
+     inkscape:window-width="1706"
+     inkscape:window-height="1243"
+     inkscape:window-x="3107"
+     inkscape:window-y="220"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs11067">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1901">
+      <path
+         id="path1903"
+         d="M 1727.4838,-30.750004 V 569.25 h 1000 V -30.750004 Z"
+         inkscape:connector-curvature="0"
+         style="fill:#00247d;stroke-width:20" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1897">
+      <path
+         id="path1899"
+         d="M 1727.4838,-30.750004 V 569.25 h 1000 V -30.750004 Z"
+         inkscape:connector-curvature="0"
+         style="fill:#00247d;stroke-width:20" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-53.19245,-129.12389)">
+    <g
+       style="display:inline"
+       id="united_states"
+       transform="matrix(0.00318857,0,0,0.00318857,53.19245,129.12389)"
+       inkscape:label="united_states">
+      <rect
+         id="rect1784"
+         height="3900"
+         width="5808.5117"
+         x="0"
+         y="0"
+         style="fill:#ed5565;fill-opacity:1;stroke-width:0.885367" />
+      <path
+         id="path1786"
+         d="m 0,450 h 5808.5116 m 0,600 H 0 m 0,600 h 5808.5116 m 0,600 H 0 m 0,600 h 5808.5116 m 0,600 H 0"
+         inkscape:connector-curvature="0"
+         style="stroke:#f5f7fa;stroke-width:265.61;stroke-opacity:1" />
+      <rect
+         id="rect1788"
+         height="2117.1792"
+         width="2964"
+         x="0"
+         y="0"
+         style="fill:#4758a9;fill-opacity:1;stroke-width:1.00408" />
+      <g
+         id="g1813"
+         style="fill:#ffffff">
+        <g
+           id="s18">
+          <g
+             id="s9">
+            <g
+               id="s5">
+              <g
+                 id="s4-5">
+                <path
+                   d="M 247,90 317.53423,307.08204 132.87322,172.91796 H 361.12678 L 176.46577,307.08204 Z"
+                   id="s-8"
+                   inkscape:connector-curvature="0" />
+                <use
+                   id="use1791"
+                   y="420"
+                   xlink:href="#s-8"
+                   x="0"
+                   width="100%"
+                   height="100%" />
+                <use
+                   id="use1793"
+                   y="840"
+                   xlink:href="#s-8"
+                   x="0"
+                   width="100%"
+                   height="100%" />
+                <use
+                   id="use1795"
+                   y="1260"
+                   xlink:href="#s-8"
+                   x="0"
+                   width="100%"
+                   height="100%" />
+              </g>
+              <use
+                 id="use1798"
+                 y="1680"
+                 xlink:href="#s-8"
+                 x="0"
+                 width="100%"
+                 height="100%" />
+            </g>
+            <use
+               id="use1801"
+               y="210"
+               x="247"
+               xlink:href="#s4-5"
+               width="100%"
+               height="100%" />
+          </g>
+          <use
+             id="use1804"
+             x="494"
+             xlink:href="#s9"
+             y="0"
+             width="100%"
+             height="100%" />
+        </g>
+        <use
+           id="use1807"
+           x="988"
+           xlink:href="#s18"
+           y="0"
+           width="100%"
+           height="100%" />
+        <use
+           id="use1809"
+           x="1976"
+           xlink:href="#s9"
+           y="0"
+           width="100%"
+           height="100%" />
+        <use
+           id="use1811"
+           x="2470"
+           xlink:href="#s5"
+           y="0"
+           width="100%"
+           height="100%" />
+      </g>
+    </g>
+  </g>
+</svg>

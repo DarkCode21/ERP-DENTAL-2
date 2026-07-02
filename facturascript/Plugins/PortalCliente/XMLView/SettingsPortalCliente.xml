@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data" icon="fas fa-chalkboard-user" numcolumns="12">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true" />
+            </column>
+        </group>
+        <group name="estimations" title="estimations" icon="far fa-file-powerpoint" numcolumns="12">
+            <column name="approve-status-estimations" title="approve" description="approve-status-estimations-desc" numcolumns="6" order="100">
+                <widget type="select" fieldname="status_approve_estimations">
+                    <values/>
+                </widget>
+            </column>
+            <column name="approve-notify-estimations" title="approve-notify" description="approve-notify-estimations-desc" numcolumns="6" order="110">
+                <widget type="select" fieldname="group_approve_estimations">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="cancel-status-estimations" title="cancel" description="cancel-status-estimations-desc" numcolumns="6" order="120">
+                <widget type="select" fieldname="status_cancel_estimations">
+                    <values/>
+                </widget>
+            </column>
+            <column name="cancel-notify-estimations" title="cancel-notify" description="cancel-notify-estimations-desc" numcolumns="6" order="130">
+                <widget type="select" fieldname="group_cancel_estimations">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="payment-status-estimations" title="payment" description="payment-status-estimations-desc" numcolumns="6" order="140">
+                <widget type="select" fieldname="status_payment_estimations">
+                    <values/>
+                </widget>
+            </column>
+            <column name="payment-notify-estimations" title="payment-notify" description="payment-notify-estimations-desc" numcolumns="6" order="150">
+                <widget type="select" fieldname="group_payment_estimations">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+        <group name="orders" title="orders" icon="fas fa-file-powerpoint" numcolumns="12">
+            <column name="cancel-status-orders" title="cancel" description="cancel-status-orders-desc" numcolumns="6" order="100">
+                <widget type="select" fieldname="status_cancel_orders">
+                    <values/>
+                </widget>
+            </column>
+            <column name="cancel-notify-orders" title="cancel-notify" description="cancel-notify-orders-desc" numcolumns="6" order="110">
+                <widget type="select" fieldname="group_cancel_orders">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="payment-status-orders" title="payment" description="payment-status-orders-desc" numcolumns="6" order="120">
+                <widget type="select" fieldname="status_payment_orders">
+                    <values/>
+                </widget>
+            </column>
+            <column name="payment-notify-orders" title="payment-notify" description="payment-notify-orders-desc" numcolumns="6" order="130">
+                <widget type="select" fieldname="group_payment_orders">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+        <group name="delivery-notes" title="delivery-notes" icon="fas fa-dolly-flatbed" numcolumns="12">
+            <column name="payment-status-delivery-notes" title="payment" description="payment-status-delivery-notes-desc" numcolumns="6" order="100">
+                <widget type="select" fieldname="status_payment_delivery_notes">
+                    <values/>
+                </widget>
+            </column>
+            <column name="payment-notify-delivery-notes" title="payment-notify" description="payment-notify-delivery-notes-desc" numcolumns="6" order="110">
+                <widget type="select" fieldname="group_payment_delivery_notes">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+        <group name="invoices" title="invoices" icon="fas fa-file-invoice-dollar" numcolumns="12">
+            <column name="payment-status-invoices" title="payment" description="payment-status-invoices-desc" numcolumns="6" order="100">
+                <widget type="select" fieldname="status_payment_invoices">
+                    <values/>
+                </widget>
+            </column>
+            <column name="payment-notify-invoices" title="payment-notify" description="payment-notify-invoices-desc" numcolumns="6" order="110">
+                <widget type="select" fieldname="group_payment_invoices">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+        <group name="catalogue" title="catalogue" icon="fas fa-shop" numcolumns="12">
+            <column name="company-catalogue" title="company" description="catalogue-company-desc" order="100">
+                <widget type="select" fieldname="catalogue_company" required="true">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>
+                </widget>
+            </column>
+            <column name="warehouse-catalogue" title="warehouse" description="catalogue-warehouse-desc" order="110">
+                <widget type="select" fieldname="catalogue_warehouse" parent="catalogue_company">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre" fieldfilter="idempresa"/>
+                </widget>
+            </column>
+        </group>
+        <group name="shop" title="shop" icon="fas fa-cart-shopping" numcolumns="12">
+            <column name="warehouse-shop" title="warehouse" description="shop-warehouse-desc" order="100">
+                <widget type="select" fieldname="shop_warehouse" parent="catalogue_company" required="true">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre" fieldfilter="idempresa"/>
+                </widget>
+            </column>
+            <column name="document-shop" title="document" description="shop-document-desc" order="110">
+                <widget type="select" fieldname="shop_document" translate="true" required="true">
+                    <values title="PresupuestoCliente">PresupuestoCliente</values>
+                    <values title="PedidoCliente">PedidoCliente</values>
+                    <values title="AlbaranCliente">AlbaranCliente</values>
+                    <values title="FacturaCliente">FacturaCliente</values>
+                </widget>
+            </column>
+            <column name="serie-shop" title="serie" description="shop-serie-desc" order="120">
+                <widget type="select" fieldname="shop_serie">
+                    <values/>
+                </widget>
+            </column>
+        </group>
+        <group name="tickets" title="tickets" icon="far fa-comment-dots" numcolumns="12">
+            <column name="notify-tickets" description="notify-tickets-desc" numcolumns="4" order="100">
+                <widget type="select" fieldname="group_notify_tickets">
+                    <values source="roles" fieldcode="codrole" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

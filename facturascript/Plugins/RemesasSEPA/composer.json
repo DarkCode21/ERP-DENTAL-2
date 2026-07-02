@@ -1,0 +1,20 @@
+{
+    "name": "facturascripts/remesas-s-e-p-a",
+    "description": "Plugin de remesas bancarias SEPA para Interiberica Pyme.",
+    "homepage": "https://www.facturascripts.com/plugins/remesassepa",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Carlos García Gómez",
+            "email": "carlos@facturascripts.com"
+        }
+    ],
+    "config": {
+        "platform": {
+            "php": "7.3"
+        }
+    },
+    "require": {
+        "digitick/sepa-xml": "1.6.1"
+    }
+}

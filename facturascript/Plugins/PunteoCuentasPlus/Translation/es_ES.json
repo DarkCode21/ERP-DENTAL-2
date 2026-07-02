@@ -1,0 +1,8 @@
+{
+    "change-account": "Cambio de Subcuenta",
+    "change-subaccount-description": "<br><span class='text-danger'><b>Atención:<br>Este proceso sustituirá la subcuenta actual de las partidas seleccionadas por la nueva subcuenta. Este proceso no se puede cancelar una vez iniciado.</b></span>",
+    "new-subaccount": "Nueva Subcuenta",
+    "change-subaccount-data-error": "Faltan datos para completar el cambio de cuenta. Debe informar la nueva cuenta y la lista de partidas a modificar",
+    "partida-save-error": "Ha habido un error al guardar la partida con identificador %code%.",
+    "entry-save-error": "Ha habido un error al desbloquear el asiento %code%."
+}

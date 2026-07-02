@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="id" display="none" order="100">
+            <widget type="text" fieldname="idpedido"/>
+        </column>
+        <column name="code" order="110">
+            <widget type="text" fieldname="codigo"/>
+        </column>
+        <column name="observations" order="120">
+            <widget type="textarea" fieldname="observaciones"/>
+        </column>
+        <column name="total" display="right" order="130">
+            <widget type="money" fieldname="total">
+                <option color="danger">lt:0</option>
+            </widget>
+        </column>
+        <column name="date" display="right" order="140">
+            <widget type="date" fieldname="fecha"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="success" title="approved" fieldname="idestado">5</option>
+            <option color="success" title="invoiced" fieldname="idestado">25</option>
+            <option color="danger" title="cancelled" fieldname="idestado">6</option>
+        </row>
+    </rows>
+</view>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="sidebar-logo" title="logo" icon="fa-solid fa-image" numcolumns="12" description="sidebar-logo-desc">
+            <column name="logo" description="sidebar-logo" order="100" numcolumns="3">
+                <widget type="library" fieldname="lsfile" icon="fa-solid fa-image" onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+        </group>
+        <group name="sidebar-colors" title="colors" icon="fa-solid fa-palette" numcolumns="12">
+            <column name="sidebar-background-color" description="sbgcolor-desc" order="110" numcolumns="3">
+                <widget type="color" fieldname="sbgcolor" required="true"/>
+            </column>
+            <column name="submenu-background-color" description="subbgcolor-desc" order="120" numcolumns="3">
+                <widget type="color" fieldname="subbgcolor" required="true"/>
+            </column>
+            <column name="item-background-color" description="itembgcolor-desc" order="130" numcolumns="3">
+                <widget type="color" fieldname="itembgcolor" required="true"/>
+            </column>
+            <column name="accent-color" description="accentcolor-desc" order="140" numcolumns="3">
+                <widget type="color" fieldname="accentcolor" required="true"/>
+            </column>
+            <column name="text-color" description="stext-color-desc" order="140" numcolumns="3">
+                <widget type="color" fieldname="stxtcolor" required="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gómez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document: produccion_ordenesnumseries.xml
+    Author:   Jose Antonio Cuello <yopli2000@gmail.com>
+    Description:
+        Estructura de la tabla de número de serie de los productos fabricados por la orden de preparación.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idorden</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idusedinorder</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idline</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>iddelivery</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>numserie</name>
+        <type>character varying(50)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>reference</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>verified</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>verifydate</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>verifynick</name>
+        <type>character varying(50)</type>
+    </column>
+
+    <constraint>
+        <name>produccion_ordenesnumseries_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenesnumseries_ordenes</name>
+        <type>FOREIGN KEY (idorden) REFERENCES produccion_ordenes (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenesnumseries_ordenes2</name>
+        <type>FOREIGN KEY (idusedinorder) REFERENCES produccion_ordenes (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenesnumseries_productos</name>
+        <type>FOREIGN KEY (idline) REFERENCES produccion_ordenesproductos (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenesnumseries_users</name>
+        <type>FOREIGN KEY (verifynick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_produccion_ordenesnumseries_albaranescli</name>
+        <type>FOREIGN KEY (iddelivery) REFERENCES albaranescli (idalbaran) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

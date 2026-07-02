@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditCourseTraining.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditCourseTraining
+-->
+<view>
+    <columns>
+        <group name="id" numcolumns="12" >
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id" />
+            </column>
+            <column name="name" numcolumns="12" order="110">
+                <widget type="text" fieldname="name" required="true" />
+            </column>
+            <column name="area" numcolumns="3" order="120">
+                <widget type="select" fieldname="idarea" required="true">
+                    <values source="rrhh_coursesareas" fieldcode="id" fieldtitle="name" />
+                </widget>
+            </column>
+            <column name="cost" numcolumns="3" order="130">
+                <widget type="select" fieldname="idcost" required="true">
+                    <values source="rrhh_coursescosts" fieldcode="id" fieldtitle="name" />
+                </widget>
+            </column>
+            <column name="method" numcolumns="3" order="140">
+                <widget type="select" fieldname="idmethod" required="true">
+                    <values source="rrhh_coursesmethods" fieldcode="id" fieldtitle="name" />
+                </widget>
+            </column>
+            <column name="objective" numcolumns="3" order="150">
+                <widget type="select" fieldname="idobjective" required="true">
+                    <values source="rrhh_coursesobjectives" fieldcode="id" fieldtitle="name" />
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

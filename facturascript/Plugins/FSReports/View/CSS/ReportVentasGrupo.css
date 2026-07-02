@@ -1,0 +1,83 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 09-may-2019, 10:51:25
+    Author     : Raul
+*/
+/**
+ Cabecera del documento
+
+*/
+h3 {
+    text-align:center;
+}
+.datos-empresa{
+    width:90%;
+    font-size:10px;
+}
+.filters{
+     width:90%;
+    font-size:10px;
+}
+.title-company{
+    font-weight: bold;
+}
+.datos-fecha{
+    text-align:right;
+    width:50%;
+}
+.title-date{
+    font-weight: bold;
+}
+.title-text{
+    font-weight: bold;
+    padding-left:3mm;
+    padding-right:10mm;
+}
+/** Fin de la cabecera */
+.listado{
+    font-size:0.8em;
+    margin-bottom: 10px;
+}
+table.listado {
+  border: 3px solid lightgray;
+  width: 100%;
+  
+  border-collapse: collapse;
+}
+table.listado td, table.listado th {
+  border: 1px solid lightgray;
+  padding: 5px 4px;
+}
+table.listado tbody td {
+  font-size: 10px;
+}
+table.listado thead {
+  background-color: #C5C5C5;
+  background: -moz-linear-gradient(top, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+  background: -webkit-linear-gradient(top, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+  background: linear-gradient(to bottom, #dbdbdb 0%, #d3d3d3 66%, #CFCFCF 100%);
+  border-bottom: 3px solid #000000;
+  
+}
+table.listado thead th {
+  font-size: 12px;
+  font-weight: bold;
+  color: #000000;
+  background-color: #C5C5C5;
+}
+table.listado tfoot td {
+  font-size: 14px;
+}
+.text-right{
+    text-align: right;
+}
+.text-left{
+    text-align:left;
+}
+.text-center{
+    text-align:center;
+}

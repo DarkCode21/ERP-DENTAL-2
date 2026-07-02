@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples  Copyright (C) 2018-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ppmm_supplier_receipts.xml
+    Author     : Jose Antonio Cuello <yopli2000@gmail.com>
+    Description:
+        Structure for the group of receipts table.
+-->
+<table>
+    <column>
+        <name>concept</name>
+        <type>character varying(255)</type>
+    </column>
+
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+
+    <column>
+        <name>idbank</name>
+        <type>character varying(10)</type>
+    </column>
+
+    <column>
+        <name>idcompany</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+
+    <column>
+        <name>idcurrency</name>
+        <type>character varying(3)</type>
+    </column>
+
+    <column>
+        <name>identry</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>idserie</name>
+        <type>character varying(4)</type>
+    </column>
+
+    <column>
+        <name>groupreceipts</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+
+    <column>
+        <name>groupdate</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+
+    <column>
+        <name>rateconvconv</name>
+        <type>double precision</type>
+        <defecto>1</defecto>
+    </column>
+
+    <column>
+        <name>receipts</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+
+    <column>
+        <name>status</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+
+    <column>
+        <name>total</name>
+        <type>double precision</type>
+        <default>0</default>
+    </column>
+
+    <column>
+        <name>noentry</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+
+    <column>
+        <name>notes</name>
+        <type>text</type>
+    </column>
+
+    <constraint>
+        <name>ppmm_supplier_receipts_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_ppmm_supplier_receipts_company</name>
+        <type>FOREIGN KEY (idcompany) REFERENCES empresas (idempresa) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_ppmm_supplier_receipts_cuentasbanco</name>
+        <type>FOREIGN KEY (idbank) REFERENCES cuentasbanco (codcuenta) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_ppmm_supplier_receipts_entry</name>
+        <type>FOREIGN KEY (identry) REFERENCES asientos (idasiento) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_ppmm_supplier_receipts_series</name>
+        <type>FOREIGN KEY (idserie) REFERENCES series (codserie) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

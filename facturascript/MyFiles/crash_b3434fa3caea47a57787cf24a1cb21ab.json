@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Class &quot;\\FacturaScripts\\Dinamic\\Controller\\AdminPlugins&quot; not found in \/Core\/Kernel.php:371\n\nStack trace:\n#0 \/Core\/Kernel.php(190): FacturaScripts\\Core\\Kernel::runController(&#39;\/AdminPlugins&#39;)\n#1 \/index.php(63): FacturaScripts\\Core\\Kernel::run(&#39;\/AdminPlugins&#39;)\n#2 {main}\n  thrown",
+    "file": "\/Core\/Kernel.php",
+    "line": 371,
+    "fragment": "\n366\n367            $name = end($class);\n368\n369            \/\/ coincidencia exacta\n370            if ($url === $route) {\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">371                $app = new $controller($name, $url);<\/spam>\n372                $app->run();\n373                return;\n374            }\n375\n376            \/\/ coincidencia con comod\u00edn",
+    "hash": "b3434fa3caea47a57787cf24a1cb21ab",
+    "url": "\/AdminPlugins",
+    "report_url": "https:\/\/facturascripts.com\/errores\/b3434fa3caea47a57787cf24a1cb21ab",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2Fb3434fa3caea47a57787cf24a1cb21ab",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

@@ -1,0 +1,5 @@
+{
+    "taxes-pivot": "Taxes per invoice",
+    "taxes-pivot-p": "Tax report with one row per invoice and dynamic columns per VAT type (B0, B4, B10, B21..., VAT 4, VAT 10, VAT 21...).",
+    "taxes-pivot-info": "Columns B0, B4, B10, B21... show the net tax base per VAT type. Columns VAT 4, VAT 10, VAT 21... show the VAT amount. Types are generated dynamically based on data in the selected period."
+}

@@ -1,0 +1,79 @@
+{#
+* Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+* Author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="bg-light pt-3 pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-10">
+                    <h1 class="h2">
+                        <i class="fas fa-cash-register"></i> {{ i18n.trans('select-tpv') }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: -40px;">
+        <div class="row">
+            <div class="col-sm">
+                {% if fsc.tpvs is empty %}
+                    <div class="card shadow mb-4">
+                        <div class="card-body text-center">
+                            <div class="w-100 pb-4">
+                                <img src="{{ asset('Dinamic/Assets/Images/tpvneo-wizard.png') }}" class="img-fluid"
+                                     alt="tpv"/>
+                            </div>
+                            <div class="h3">{{ i18n.trans('no-tpv-terminal') }}</div>
+                            <p class="card-text">{{ i18n.trans('no-tpv-terminal-legend') }}</p>
+                        </div>
+                        <div class="card-footer text-center">
+                            {% if fsc.user.admin %}
+                                <a href="{{ asset('EditTpvTerminal') }}?action=fast-config"
+                                   class="btn btn-success btn-lg mr-2">
+                                    {{ i18n.trans('fast-tpv-config') }}
+                                </a>
+                                <a href="{{ asset('EditTpvTerminal') }}" class="btn btn-outline-success btn-lg">
+                                    {{ i18n.trans('add-tpv') }}
+                                </a>
+                            {% else %}
+                                <a href="{{ asset('EditTpvTerminal') }}" class="btn btn-success btn-lg">
+                                    {{ i18n.trans('add-tpv') }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="card shadow mb-4">
+                        <div class="card-body">
+                            <div class="w-100 text-center pb-4">
+                                <img src="{{ asset('Dinamic/Assets/Images/tpvneo-wizard.png') }}" class="img-fluid"
+                                     alt="tpv"/>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="form-row">
+                                {% for tpv in fsc.tpvs %}
+                                    <div class="col-sm">
+                                        <form action="{{ fsc.url() }}" method="post">
+                                            <input type="hidden" name="idtpv" value="{{ tpv.idtpv }}">
+                                            <button type="submit" name="action" value="select-tpv"
+                                                    class="btn btn-lg btn-block btn-primary">
+                                                <i class="fas fa-cash-register mr-1"></i> {{ tpv.name }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <iframe class="d-none" src="http://localhost:8089"></iframe>
+{% endblock %}

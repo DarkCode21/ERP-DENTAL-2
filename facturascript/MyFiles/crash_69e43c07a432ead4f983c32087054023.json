@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Class &quot;\\FacturaScripts\\Dinamic\\Model\\FacturaCliente&quot; not found in \/Core\/Template\/InitClass.php:146\n\nStack trace:\n#0 \/Core\/Template\/InitClass.php(71): FacturaScripts\\Core\\Template\\InitClass-&gt;loadBusinessDocumentExtension(Object(FacturaScripts\\Plugins\\Proyectos\\Extension\\Model\\Base\\BusinessDocument), Array)\n#1 \/Plugins\/Proyectos\/Init.php(69): FacturaScripts\\Core\\Template\\InitClass-&gt;loadExtension(Object(FacturaScripts\\Plugins\\Proyectos\\Extension\\Model\\Base\\BusinessDocument))\n#2 \/Core\/Internal\/Plugin.php(235): FacturaScripts\\Plugins\\Proyectos\\Init-&gt;init()\n#3 \/Core\/Plugins.php(244): FacturaScripts\\Core\\Internal\\Plugin-&gt;init()\n#4 \/index.php(59): FacturaScripts\\Core\\Plugins::init()\n#5 {main}\n  thrown",
+    "file": "\/Core\/Template\/InitClass.php",
+    "line": 146,
+    "fragment": "     *\/\n141     *\/\n142    private function loadBusinessDocumentExtension($extension, $models): bool\n143    {\n144        foreach ($models as $model) {\n145            $targetClass = '\\\\FacturaScripts\\\\Dinamic\\\\Model\\\\' . $model;\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">146            $targetClass::addExtension($extension);<\/spam>\n147        }\n148\n149        return true;\n150    }\n151",
+    "hash": "69e43c07a432ead4f983c32087054023",
+    "url": "\/PanelCamarero",
+    "report_url": "https:\/\/facturascripts.com\/errores\/69e43c07a432ead4f983c32087054023",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F69e43c07a432ead4f983c32087054023",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,TPVneo,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,RestauranteTPV,LogsFields,LoginScreen"
+}

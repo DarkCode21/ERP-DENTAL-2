@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="date" numcolumns="12">
+            <column name="date" numcolumns="2" order="100">
+                <widget type="date" fieldname="fecha" required="true"/>
+            </column>
+            <column name="description" order="110">
+                <widget type="text" fieldname="descripcion"/>
+            </column>
+            <column name="company" titleurl="ListEmpresa" numcolumns="2" order="120">
+                <widget type="select" fieldname="idempresa" required="true" onclick="EditEmpresa">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="name" numcolumns="2" order="130">
+                <widget type="text" fieldname="nombre" maxlength="100"/>
+            </column>
+            <column name="creditor-id" display="none" numcolumns="2" order="140">
+                <widget type="text" fieldname="creditorid"/>
+            </column>
+            <column name="bank-account" titleurl="ListFormaPago?activetab=ListCuentaBanco" numcolumns="2" order="150">
+                <widget type="select" fieldname="codcuenta" parent="idempresa" onclick="EditCuentaBanco" required="true">
+                    <values source="cuentasbanco" fieldcode="codcuenta" fieldfilter="idempresa" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+        <group name="payment" valign="bottom" numcolumns="12">
+            <column name="amount" order="100">
+                <widget type="money" fieldname="total" readonly="true"/>
+            </column>
+            <column name="charge-date" order="110">
+                <widget type="date" fieldname="fechacargo" required="true"/>
+            </column>
+            <column name="group-receipts-by-customer" order="120">
+                <widget type="checkbox" fieldname="agrupar"/>
+            </column>
+            <column name="accounting-entry" order="130">
+                <widget type="autocomplete" fieldname="idasiento" onclick="EditAsiento" readonly="true">
+                    <values source="asientos" fieldcode="idasiento" fieldtitle="numero"/>
+                </widget>
+            </column>
+            <column name="type" order="140">
+                <widget type="select" fieldname="tipo" required="true">
+                    <values title="B2B">B2B</values>
+                    <values title="CORE">CORE</values>
+                    <values title="COR1">COR1</values>
+                </widget>
+            </column>
+            <column name="user" numcolumns="2" order="150">
+                <widget type="select" fieldname="nick" readonly="true">
+                    <values source="users" fieldcode="nick" fieldtitle="nick"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

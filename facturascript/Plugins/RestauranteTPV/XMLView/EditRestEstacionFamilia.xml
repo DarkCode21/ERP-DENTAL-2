@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="id" display="none" order="0">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="idestacion" display="none" order="10">
+            <widget type="text" fieldname="idestacion"/>
+        </column>
+        <column name="family" order="100" numcolumns="6">
+            <widget type="select" fieldname="codfamilia" required="true" onclick="EditFamilia">
+                <values source="familias" fieldcode="codfamilia" fieldtitle="descripcion"/>
+            </widget>
+        </column>
+    </columns>
+</view>

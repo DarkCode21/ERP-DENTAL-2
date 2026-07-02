@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="checkbox" numcolumns="12">
+            <column name="pc_show" title="show-on-client-portal" order="100">
+                <widget type="checkbox" fieldname="pc_show"/>
+            </column>
+        </group>
+    </columns>
+</view>

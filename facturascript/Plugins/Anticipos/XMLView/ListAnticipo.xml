@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of Anticipos plugin for FacturaScripts
+ * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Jorge-Prebac <info@prebac.com>
+-->
+<view>
+    <columns>
+        <group name="basic" numcolumns="12">
+			<column name="company" display="left" order="100">
+                <widget type="select" fieldname= "idempresa" onclick="EditEmpresa">
+					<values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>
+				</widget>
+            </column>
+            <column name="date" order="110">
+                <widget type="date" fieldname="fecha"/>
+            </column>
+            <column name="note" order="120">
+                <widget type="text" fieldname="nota"/>
+            </column>
+            <column name="phase" title="phase" order="130">
+                <widget type="select" fieldname="fase" translate="true">
+                    <values title="user">Usuario</values>
+                    <values title="customer">Cliente</values>
+                    <values title="project">Proyecto</values>
+                    <values title="estimation">Presupuesto</values>
+                    <values title="order">Pedido</values>
+                    <values title="delivery-note">Albaran</values>
+                    <values title="invoice">Factura</values>
+                </widget>
+			</column>
+			<column name="payment" title="method-payment" order="135">
+                <widget type="select" fieldname="codpago" onclick="EditFormaPago">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="customer" order="140">
+                <widget type="select" fieldname="codcliente" onclick="EditCliente">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="project" order="150">
+                <widget type="autocomplete" fieldname="idproyecto" onclick="EditProyecto">
+                    <values source="proyectos" fieldcode="idproyecto" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="user" order="160">
+                <widget type="select" fieldname="nick" onclick="EditUser">
+                    <values source="users" fieldcode="nick" fieldtitle="nick"/>
+                </widget>
+            </column>
+            <column name="amount" display="right" order="170">
+                <widget type="money" fieldname="importe"/>
+            </column>
+        </group>
+    </columns>
+	<rows>
+        <row type="status">
+            <option color="success" title="generated-invoice" fieldname="idfactura">notnull:</option>
+			<option color="dark" title="no-invoice" fieldname="idfactura">null:</option>
+        </row>
+    </rows>
+</view>

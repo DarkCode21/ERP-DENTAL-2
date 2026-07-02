@@ -1,0 +1,131 @@
+{% set currentView = fsc.getCurrentView() %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            {% if currentView.cursor %}
+                <div class="card shadow mb-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>{{ i18n.trans('oportunity') }}</th>
+                                    <th>{{ i18n.trans('description') }}</th>
+                                    <th>{{ i18n.trans('agent') }}</th>
+                                    <th class="text-right">{{ i18n.trans('date') }}</th>
+                                    <th class="text-right">{{ i18n.trans('status') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for oportunity in currentView.cursor %}
+                                    {% set opoStatus = oportunity.getEstado() %}
+                                    {% set trClass = 'clickableRow' %}
+                                    {% if opoStatus.rechazado %}
+                                        {% set trClass = 'clickableRow table-danger' %}
+                                    {% elseif opoStatus.editable == false %}
+                                        {% set trClass = 'clickableRow table-success' %}
+                                    {% endif %}
+                                    <tr class="{{ trClass }}" data-href="{{ oportunity.url() }}">
+                                        <td>{{ oportunity.id }}</td>
+                                        <td>{{ oportunity.descripcion }}</td>
+                                        <td>{{ oportunity.codgante }}</td>
+                                        <td class="text-right">{{ oportunity.fecha }}</td>
+                                        <td class="text-right">{{ opoStatus.nombre }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr class="table-warning">
+                                        <td colspan="6">
+                                            {{ i18n.trans('no-data') }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+
+            <form method="post">
+                <input type="hidden" name="action" value="new-crm-note" />
+                <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}" />
+                {% for oportunity in currentView.cursor %}
+                    <input type="hidden" name="idoportunidad" value="{{ oportunity.id }}" />
+                {% endfor %}
+                <div class="card border-success shadow mb-4">
+                    <div class="card-body p-2">
+                        <button class="btn btn-sm btn-outline-success" type="button" data-toggle="collapse" data-target="#newNoteCollapse" aria-expanded="false">
+                            <i class="fas fa-plus-square fa-fw" aria-hidden="true"></i>
+                            {{ i18n.trans('add') }}
+                        </button>
+                        &nbsp;
+                        {{ i18n.trans('notes') }}
+                    </div>
+                    <div class="card-body border-top pb-0 collapse" id="newNoteCollapse">
+                        <div class="form-row align-items-end">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <textarea name="observaciones" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    {{ i18n.trans('notice-date') }}
+                                    <input type="date" name="fechaaviso" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col text-right">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="fas fa-save fa-fw"></i> {{ i18n.trans('save') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            {% for note in fsc.getCrmNotes() %}
+                <form method="post">
+                    <input type="hidden" name="action" value="edit-crm-note" />
+                    <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}" />
+                    <input type="hidden" name="id" value="{{ note.id }}" />
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <span class="float-right">
+                                {{ note.fecha }} {{ note.hora }}
+                            </span>
+                            <i class="fas fa-user"></i> {{ note.nick }}
+                        </div>
+                        <div class="card-body pb-0">
+                            <div class="form-row align-items-end">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <textarea name="observaciones" class="form-control">{{ note.observaciones | raw }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        {{ i18n.trans('notice-date') }}
+                                        {% if note.fechaaviso %}
+                                            <input type="date" name="fechaaviso" value="{{ note.fechaaviso | date('Y-m-d') }}" class="form-control" />
+                                        {% else %}
+                                            <input type="date" name="fechaaviso" class="form-control" />
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col text-right">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-save fa-fw"></i> {{ i18n.trans('save') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
+</div>

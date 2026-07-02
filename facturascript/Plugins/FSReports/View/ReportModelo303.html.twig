@@ -1,0 +1,131 @@
+<!DCOTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        {% block css %}
+            <link rel="stylesheet" href="./Plugins/FSReports/View/CSS/{{ fsc.Pdfparams.cssFile }}.css" media="all"/>
+        {% endblock %}
+
+    </head>
+    {% block body %}
+        {%  set sumBaseImponible = 0 %}
+        {%  set sumImporteIVA = 0 %}
+        {%  set sumBaseRE = 0 %}
+        {%  set sumImporteRE = 0 %}
+        {%  set sumBaseImponibleCompras = 0 %}
+        {%  set sumImporteIVACompras = 0 %}
+        {%  set sumBaseRECompras = 0 %}
+        {%  set sumImporteRECompras = 0 %}
+        <table class="listado">
+            <thead>
+                <tr>
+                    <th  class="text-center" colspan="7"> Ventas/Ingresos</th>
+                </tr>
+                <tr>
+
+                    <th class="text-left">Impuesto</th>
+                    <th class="text-right">Base Imponible</th>
+                    <th class="text-right">%IVA</th>
+                    <th class="text-right">Importe IVA</th>
+                    <th class="text-right">Base Recargo</th>
+                    <th class="text-right">%RE</th>
+                    <th class="text-right">Importe RE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in fsc.salesResume() %}
+                    <tr>
+                        <td class="text-left">{{ value.codimpuesto }} - {{ value.descripcion }}</td>
+                        <td class="text-right">{{ value.base_imponible|number_format(2, ',', '.') }} </td>
+                        <td class="text-right">{{ value.iva|number_format(2, ',', '.') }}%</td>
+                        <td class="text-right">{{ value.importe_iva|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.base_recargo|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.recargo|number_format(2, ',', '.') }}%</td>
+                        <td class="text-right">{{ value.importe_recargo|number_format(2, ',', '.') }}</td>
+                    </tr>
+                    {%  set sumBaseImponible = sumBaseImponible + value.base_imponible %}
+                    {%  set sumImporteIVA = sumImporteIVA + value.importe_iva %}
+                    {%  set sumBaseRE = sumBaseRE + value.base_recargo %}
+                    {%  set sumImporteRE = sumImporteRE + importe_recargo %}
+                {% endfor %}
+            </tbody>
+            <tfoot style="font-weight:bold">
+                <tr>
+                    <td>Sumas</td>
+                    <td class="text-right">{{ sumBaseImponible |number_format(2, ',', '.') }}</td>
+                    <td class="text-right" colspan="2">{{ sumImporteIVA |number_format(2, ',', '.') }}</td>
+                    <td class="text-right" >{{ sumBaseRE |number_format(2, ',', '.') }}</td>
+                    <td class="text-right" colspan="2">{{ sumImporteRE |number_format(2, ',', '.') }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        <table class="listado">
+            <thead>
+                <tr>
+                    <th  class="text-center" colspan="7"> Compras y gastos</th>
+                </tr>
+                <tr>
+
+                    <th class="text-left">Impuesto</th>
+                    <th class="text-right">Base Imponible</th>
+                    <th class="text-right">%IVA</th>
+                    <th class="text-right">Importe IVA</th>
+                    <th class="text-right">Base Recargo</th>
+                    <th class="text-right">%RE</th>
+                    <th class="text-right">Importe RE</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in fsc.purchasesResume() %}
+                    <tr>
+                        <td class="text-left">{{ value.codimpuesto }} - {{ value.descripcion }}</td>
+                        <td class="text-right">{{ value.base_imponible|number_format(2, ',', '.') }} </td>
+                        <td class="text-right">{{ value.iva|number_format(2, ',', '.') }}%</td>
+                        <td class="text-right">{{ value.importe_iva|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.base_recargo|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.recargo|number_format(2, ',', '.') }}%</td>
+                        <td class="text-right">{{ value.importe_recargo|number_format(2, ',', '.') }}</td>
+                    </tr>
+                    {%  set sumBaseImponibleCompras = sumBaseImponibleCompras + value.base_imponible %}
+                    {%  set sumImporteIVACompras = sumImporteIVACompras + value.importe_iva %}
+                    {%  set sumBaseRECompras = sumBaseRECompras + value.base_recargo %}
+                    {%  set sumImporteRECompras = sumImporteRECompras + importe_recargo %}
+                {% endfor %}
+
+            </tbody>
+            <tfoot style="font-weight:bold">
+                <tr>
+                    <td>Sumas</td>
+                    <td class="text-right">{{ sumBaseImponibleCompras |number_format(2, ',', '.') }}</td>
+                    <td class="text-right" colspan="2">{{ sumImporteIVACompras |number_format(2, ',', '.') }}</td>
+                    <td class="text-right" >{{ sumBaseRECompras |number_format(2, ',', '.') }}</td>
+                    <td class="text-right" colspan="2">{{ sumImporteRECompras |number_format(2, ',', '.') }}</td>
+                </tr>
+
+            </tfoot>
+        </table>
+        <table class="listado">
+            <thead>
+                <tr>
+                    <th colspan="4">Diferencia</th>
+                </tr>
+                <tr>
+                    <th>Diferencia Base imponible</th>
+                    <th >Diferencia IVA</th>
+                    <th > Diferencia Base Recargo</th>
+                    <th>Diferencia Recargo</th>
+                </tr>
+
+            </thead>
+            <tr>
+
+                <td class="text-right">{{ (sumBaseImponible-sumBaseImponibleCompras) |number_format(2, ',', '.') }}</td>
+                <td class="text-right" >{{ (sumImporteIVA-sumImporteIVACompras) |number_format(2, ',', '.') }}</td>
+                <td class="text-right" >{{ (sumBaseRE-sumBaseRECompras) |number_format(2, ',', '.') }}</td>
+                <td class="text-right" >{{ (sumImporteRE-sumImporteRECompras) |number_format(2, ',', '.') }}</td>
+            </tr>
+        </tr>
+    </table>
+{% endblock %}{#Block body#}
+</html>

@@ -1,0 +1,186 @@
+{#
+/**
+ * This file is part of the Produccion plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ * All Rights Reserved.
+ */
+#}
+{# ---- Serial number title ---- #}
+<div class="d-flex align-items-center mb-3">
+    <i class="fa-solid fa-barcode fa-lg text-primary"></i>
+    <h5 class="mb-0 font-weight-bold">{{ data.numserie.numserie }}</h5>
+    {% if data.numserie.verified %}
+        <span class="badge badge-success ml-1">
+            <i class="fa-solid fa-check mr-1"></i>{{ trans('verified') }}
+        </span>
+    {% else %}
+        <span class="badge badge-warning text-dark ml-1">{{ trans('pending') }}</span>
+    {% endif %}
+</div>
+
+{# ---- Product section ---- #}
+<h6 class="text-primary border-bottom pb-1 mb-2">{{ trans('product') }}</h6>
+<div class="row mb-3 small">
+    {# Left: data fields #}
+    <div class="col-8">
+        <div class="row">
+            <div class="col-5 font-weight-bold">{{ trans('reference') }}</div>
+            <div class="col-7">{{ data.product.reference }}</div>
+
+            <div class="col-5 font-weight-bold">{{ trans('description') }}</div>
+            <div class="col-7">{{ data.product.name }}</div>
+
+            <div class="col-5 font-weight-bold">{{ trans('manufacturer') }}</div>
+            <div class="col-7">{{ data.product.manufacturer }}</div>
+
+            <div class="col-5 font-weight-bold">{{ trans('family') }}</div>
+            <div class="col-7">{{ data.product.family }}</div>
+
+            <div class="col-5 font-weight-bold">{{ trans('barcode') }}</div>
+            <div class="col-7">{{ data.product.barcode }}</div>
+
+            <div class="col-5 font-weight-bold">{{ trans('cost-price') }}</div>
+            <div class="col-7">{{ data.product.cost }}</div>
+
+            <div class="col-5 font-weight-bold">{{ trans('price') }}</div>
+            <div class="col-7">{{ data.product.price }}</div>
+        </div>
+    </div>
+
+    {# Right: image #}
+    <div class="col-4 d-flex align-items-center justify-content-center">
+        {% if data.product.imageUrl %}
+            <img src="{{ data.product.imageUrl }}"
+                 class="img-fluid rounded shadow-sm"
+                 style="max-height: 140px; object-fit: contain;"
+                 alt="{{ data.product.name }}">
+        {% else %}
+            <div class="text-center text-muted">
+                <i class="fa-solid fa-image fa-3x mb-1"></i>
+                <div class="small">{{ trans('no-image') }}</div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{# ---- Origin: production order ---- #}
+<h6 class="text-primary border-bottom pb-1 mb-2">{{ trans('origin') }}</h6>
+<div class="row mb-3 small">
+    <div class="col-4 font-weight-bold">{{ trans('number') }}</div>
+    <div class="col-8">
+        <a href="EditOrdenProduccion?code={{ data.origin.order.id }}" target="_blank">
+            {{ data.origin.order.id }}
+        </a>
+    </div>
+
+    <div class="col-4 font-weight-bold">{{ trans('date') }}</div>
+    <div class="col-8">{{ data.origin.order.fecha|date('d-m-Y') }} {{ data.origin.order.hora }}</div>
+
+    {% if data.origin.order.fechafabricacion %}
+        <div class="col-4 font-weight-bold">{{ trans('manufactured-date') }}</div>
+        <div class="col-8">{{ data.origin.order.fechafabricacion|date('d-m-Y') }}</div>
+    {% endif %}
+
+    <div class="col-4 font-weight-bold">{{ trans('user') }}</div>
+    <div class="col-8">{{ data.origin.order.nick }}</div>
+
+    <div class="col-4 font-weight-bold">{{ trans('status') }}</div>
+    <div class="col-8">
+        {% if data.origin.order.estado == 0 %}
+            <span class="badge badge-secondary">{{ trans('pending') }}</span>
+        {% elseif data.origin.order.estado == 10 %}
+            <span class="badge badge-info text-dark">{{ trans('started') }}</span>
+        {% elseif data.origin.order.estado == 15 %}
+            <span class="badge badge-warning text-dark">{{ trans('verifying') }}</span>
+        {% elseif data.origin.order.estado == 20 %}
+            <span class="badge badge-success">{{ trans('finished') }}</span>
+        {% else %}
+            <span class="badge badge-danger">{{ trans('cancelled') }}</span>
+        {% endif %}
+    </div>
+</div>
+
+{# ---- Origin: ingredients ---- #}
+{% if data.origin.ingredients %}
+    <h6 class="text-primary border-bottom pb-1 mb-2">{{ trans('ingredients') }}</h6>
+    <div class="table-responsive mb-3">
+        <table class="table table-sm table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>{{ trans('reference') }}</th>
+                    <th>{{ trans('description') }}</th>
+                    <th class="text-right">{{ trans('quantity') }}</th>
+                    <th>{{ trans('lote-serial-number') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in data.origin.ingredients %}
+                    <tr>
+                        <td>{{ ingredient.reference }}</td>
+                        <td>{{ ingredient.name }}</td>
+                        <td class="text-right">{{ ingredient.quantity }}</td>
+                        <td>
+                            {% if ingredient.numseries %}
+                                {% for nsNode in ingredient.numseries %}
+                                    <span class="badge badge-light text-dark border mr-1">
+                                        {{ nsNode.numserie.numserie }}
+                                        {% if nsNode.numserie.verified %}
+                                            <i class="fa-solid fa-check text-success ml-1"></i>
+                                        {% endif %}
+                                    </span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-muted">--</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{# ---- Destination section ---- #}
+<h6 class="text-primary border-bottom pb-1 mb-2">{{ trans('destination') }}</h6>
+<div class="row mb-3 small">
+    {% if data.destination.type == 'sale' %}
+        <div class="col-4 font-weight-bold">{{ trans('type') }}</div>
+        <div class="col-8">
+            <span class="badge badge-info text-dark">
+                <i class="fa-solid fa-file-invoice mr-1"></i>{{ trans('customer-delivery-note') }}
+            </span>
+        </div>
+        <div class="col-4 font-weight-bold">{{ trans('number') }}</div>
+        <div class="col-8">
+            <a href="EditAlbaranCliente?code={{ data.destination.data.idalbaranc }}" target="_blank">
+                {{ data.destination.data.codigo }}
+            </a>
+        </div>
+        <div class="col-4 font-weight-bold">{{ trans('customer') }}</div>
+        <div class="col-8">{{ data.destination.data.nombrecliente }}</div>
+        <div class="col-4 font-weight-bold">{{ trans('date') }}</div>
+        <div class="col-8">{{ data.destination.data.fecha|date('d-m-Y') }}</div>
+    {% elseif data.destination.type == 'order' %}
+        <div class="col-4 font-weight-bold">{{ trans('type') }}</div>
+        <div class="col-8">
+            <span class="badge badge-warning text-dark">
+                <i class="fa-solid fa-industry mr-1"></i>{{ trans('production-order') }}
+            </span>
+        </div>
+        <div class="col-4 font-weight-bold">{{ trans('number') }}</div>
+        <div class="col-8">
+            <a href="EditOrdenProduccion?code={{ data.destination.data.id }}" target="_blank">
+                {{ data.destination.data.id }}
+            </a>
+        </div>
+        <div class="col-4 font-weight-bold">{{ trans('date') }}</div>
+        <div class="col-8">{{ data.destination.data.fecha|date('d-m-Y') }}</div>
+    {% else %}
+        <div class="col-12 text-muted font-italic">
+            <i class="fa-solid fa-box mr-1"></i>{{ trans('in-stock') }}
+        </div>
+    {% endif %}
+</div>

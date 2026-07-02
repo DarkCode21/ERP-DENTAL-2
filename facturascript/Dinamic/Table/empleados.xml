@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : empleados.xml
+    Author     : Erick Lizana
+    Description:
+-->
+<table>
+    <column>
+        <name>idfiscal</name>
+        <type>character varying(25)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>numfiscal</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>direccion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>cccss</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>naf</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>grupocotizacion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>idempleado</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>localidad</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+		<null>NO</null>
+    </column>
+	<column>
+        <name>activo</name>
+        <type>integer</type>
+		<default>1</default>
+		<null>NO</null>
+    </column>
+    <constraint>
+        <name>empleados_pkey</name>
+        <type>PRIMARY KEY (idempleado)</type>
+    </constraint>
+</table>

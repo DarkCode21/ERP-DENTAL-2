@@ -1,0 +1,193 @@
+{% set currentView = fsc.getCurrentView() %}
+{% set firstView = fsc.views | first %}
+{% set invoice = firstView.model %}
+{% set registrosFactura = invoice.verifactuGetRegistroFactura() %}
+
+<div class="container-fluid">
+    <div class="card-group">
+        {% if invoice.verifactuCheckAlta() and invoice.verifactuCheckAnulacion() is same as(false) %}
+            {{ _self.renderQR(fsc, invoice) }}
+        {% endif %}
+        {% if invoice.verifactuCheckAlta() is same as(false) %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{{ trans('invoice-high') }}</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ trans('invoice-high-desc') }}.</p>
+                </div>
+                {% if fsc.user.admin %}
+                    <div class="card-footer">
+                        <p class="small">* {{ trans('invoice-high-third-desc') }}.</p>
+                        <form action="{{ invoice.url() }}" method="post" onsubmit="animateSpinner('add')"
+                              class="d-grid">
+                            {{ formToken() }}
+                            <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                            <input type="hidden" name="action" value="verifactu-alta-manual"/>
+                            <button type="submit" class="btn btn-secondary btn-block">
+                                <i class="fa-solid fa-check mr-1"></i>
+                                {{ trans('mark-invoice-high-third') }}
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+                <div class="card-footer">
+                    <form action="{{ invoice.url() }}" method="post" onsubmit="animateSpinner('add')" class="d-grid">
+                        {{ formToken() }}
+                        <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                        <input type="hidden" name="action" value="verifactu-alta"/>
+                        <button type="submit" class="btn btn-success btn-block">
+                            <i class="fa-solid fa-upload mr-1"></i>
+                            {{ trans('send-high') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        {% if invoice.verifactuCheckAlta() and invoice.verifactuCheckAnulacion() is same as(false) %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{{ trans('invoice-remedy') }}</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ trans('invoice-remedy-desc-1') }}.</p>
+                    <p class="mb-0 font-italic small">* {{ trans('invoice-remedy-desc-1') }}.</p>
+                </div>
+                <div class="card-footer">
+                    <form action="{{ invoice.url() }}" method="post" onsubmit="animateSpinner('add')" class="d-grid">
+                        {{ formToken() }}
+                        <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                        <input type="hidden" name="action" value="verifactu-subsanacion"/>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fa-solid fa-pencil mr-1"></i>
+                            {{ trans('send-remedy') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        {% if invoice.verifactuCheckAlta() and invoice.verifactuCheckAnulacion() is same as(false) %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{{ trans('invoice-annulment') }}</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ trans('invoice-annulment-desc-1') }}.</p>
+                    <p class="mb-0 font-italic small">* {{ trans('invoice-annulment-desc-2') }}.</p>
+                </div>
+                {% if invoice.verifactuCheckAlta() %}
+                    {% if fsc.user.admin and invoice.verifactuCheckAlta() is same as(true) %}
+                        <div class="card-footer">
+                            <p class="small">* {{ trans('mark-annulment-high-third') }}.</p>
+                            <form action="{{ invoice.url() }}" method="post" onsubmit="animateSpinner('add')"
+                                  class="d-grid">
+                                {{ formToken() }}
+                                <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                                <input type="hidden" name="action" value="verifactu-anulacion-manual"/>
+                                <button type="submit" class="btn btn-secondary btn-block">
+                                    <i class="fa-solid fa-check mr-1"></i>
+                                    {{ trans('mark-invoice-annulment-high-third') }}
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                    <div class="card-footer">
+                        <div class="d-grid">
+                            <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#anulacionModal">
+                                <i class="fa-solid fa-times mr-1"></i>
+                                {{ trans('send-annulment') }}
+                            </button>
+                        </div>
+                        <div class="modal fade" id="anulacionModal" tabindex="-1"
+                             aria-labelledby="anulacionModalLabel"
+                             aria-hidden="true"
+                             role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"
+                                            id="anulacionModalLabel">{{ trans('invoice-annulment') }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ trans('invoice-annulment-modal') }}.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            {{ trans('cancel') }}
+                                        </button>
+                                        <form action="{{ invoice.url() }}" method="post"
+                                              onsubmit="animateSpinner('add')">
+                                            {{ formToken() }}
+                                            <input type="hidden" name="activetab"
+                                                   value="{{ currentView.getViewName() }}"/>
+                                            <input type="hidden" name="action" value="verifactu-anulacion"/>
+                                            <button type="submit" class="btn btn-danger btn-block">
+                                                {{ trans('confirm') }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    {% if registrosFactura|length > 0 %}
+        <div class="row">
+            {% if invoice.verifactuCheckAnulacion() %}
+                <div class="col-md-2">
+                    {{ _self.renderQR(fsc, invoice) }}
+                </div>
+            {% endif %}
+            <div class="col-md">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">{{ trans('invoice-records') }}</h5>
+                    </div>
+                    <table class="table table-sm table-striped table-bordered align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>{{ trans('date') }}</th>
+                            <th>{{ trans('type') }}</th>
+                            <th>{{ trans('nick') }}</th>
+                            <th>{{ trans('status') }}</th>
+                            <th class="text-center">{{ trans('json') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for registro in registrosFactura %}
+                            <tr>
+                                <td>{{ registro.creation_date }}</td>
+                                <td>{{ registro.event }}</td>
+                                <td>{{ registro.nick }}</td>
+                                <td>{{ registro.status }}</td>
+                                <td class="text-center">
+                                    <a href="{{ myFilesUrl(registro.file_json) }}" class="btn btn-info btn-sm"
+                                       download>
+                                        <i class="fa-solid fa-download"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% macro renderQR(fsc, invoice) %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="card-title mb-0">{{ trans('qr') }}</h5>
+        </div>
+        <div class="card-body text-center">
+            <img src="{{ invoice.verifactuGetQr() }}" alt="{{ trans('qr') }}" class="img-fluid"/>
+        </div>
+    </div>
+{% endmacro %}

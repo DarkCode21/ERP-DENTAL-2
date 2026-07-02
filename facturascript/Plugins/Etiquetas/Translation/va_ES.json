@@ -1,0 +1,17 @@
+{
+    "add-product": "Añadir producto",
+    "all-tags": "Todas",
+    "auto-generate-barcodes": "Generar els codis de barres automaticament",
+    "barcode-generate-ok": "%num% códigos de barras restantes generados",
+    "barcode-type": "Tipus cod. barres",
+    "generate-barcodes": "Generar códigos de barras",
+    "initial-column": "Columna inicial",
+    "initial-row": "Fila inicial",
+    "no-tag": "Ninguna",
+    "number-labels-per-product": "Número de etiquetas por producto",
+    "one-per-product": "Una por producto",
+    "only-with-barcode": "Sólo productos con código de barras",
+    "print-barcodes": "Códigos de barras",
+    "print-prices": "Precios",
+    "tags": "Etiquetas"
+}

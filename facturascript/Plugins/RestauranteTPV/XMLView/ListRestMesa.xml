@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="id" display="none" order="0">
+            <widget type="text" fieldname="idmesa"/>
+        </column>
+        <column name="name" order="100">
+            <widget type="text" fieldname="nombre"/>
+        </column>
+        <column name="zone" order="200">
+            <widget type="select" fieldname="idzona">
+                <values source="rest_zonas" fieldcode="idzona" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="capacity" order="300">
+            <widget type="number" fieldname="capacidad"/>
+        </column>
+        <column name="state" order="400">
+            <widget type="text" fieldname="estado"/>
+        </column>
+    </columns>
+    <rows/>
+</view>

@@ -1,0 +1,5 @@
+{
+    "taxes-pivot": "Impuestos por factura",
+    "taxes-pivot-p": "Informe de impuestos con una fila por factura y columnas dinámicas por tipo de IVA (B0, B4, B10, B21..., IVA 4, IVA 10, IVA 21...).",
+    "taxes-pivot-info": "Las columnas B0, B4, B10, B21... muestran la base imponible neta por tipo de IVA. Las columnas IVA 4, IVA 10, IVA 21... muestran la cuota de IVA. Los tipos se generan dinámicamente según los datos del período seleccionado."
+}

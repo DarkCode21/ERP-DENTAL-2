@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>idiae</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codpais</name>
+        <type>character varying(20)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idprovincia</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>iae</name>
+        <type>character varying(50)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>character varying(500)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>codigos_iae_pkey</name>
+        <type>PRIMARY KEY (idiae)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_codigos_iae</name>
+        <type>UNIQUE (codpais, idprovincia, iae)</type>
+    </constraint>
+    <constraint>
+        <name>fk_codigos_iae_paises</name>
+        <type>FOREIGN KEY (codpais) REFERENCES paises (codpais) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>fk_codigos_iae_provincias</name>
+        <type>FOREIGN KEY (idprovincia) REFERENCES provincias (idprovincia) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

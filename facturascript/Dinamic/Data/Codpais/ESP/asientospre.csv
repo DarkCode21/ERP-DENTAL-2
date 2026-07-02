@@ -1,0 +1,5 @@
+"id","descripcion","concepto"
+"1","Asiento de una nómina","Nómina {NOMBREMES}"
+"2","Cuota de autónomo","Cuota de autónomo {NOMBREMES}"
+"3","Pago cuota de autónomo","Pago cuota autónomo {NOMBREMES}"
+"4","Pago nómina","Pago nómina {NOMBREMES}"

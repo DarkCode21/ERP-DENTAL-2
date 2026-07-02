@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="idiae" display="none" order="100">
+                <widget type="text" fieldname="id" readonly="true"/>
+            </column>
+            <column name="country" order="110">
+                <widget type="select" fieldname="codpais" required="true">
+                    <values source="paises" fieldcode="codpais" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="province" order="120">
+                <widget type="select" fieldname="idprovincia" parent="codpais">
+                    <values source="provincias" fieldcode="idprovincia" fieldtitle="provincia" fieldfilter="codpais"/>
+                </widget>
+            </column>
+            <column name="code-iae" order="130">
+                <widget type="text" fieldname="iae" maxlength="50" required="true"/>
+            </column>
+            <column name="description" order="140" numcolumns="12">
+                <widget type="textarea" fieldname="descripcion" maxlength="500" required="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

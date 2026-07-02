@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12" valign="bottom">
+            <column name="id" order="100">
+                <widget type="text" fieldname="id" readonly="true"/>
+            </column>
+            <column name="codcuenta" title="bank-account" order="110">
+                <widget type="select" fieldname="codcuenta" onclick="EditCuentaBanco" readonly="true">
+                    <values source="cuentasbanco" fieldcode="codcuenta" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="amount" display="right" order="120">
+                <widget type="number" fieldname="amount" readonly="true"/>
+            </column>
+            <column name="date" order="130">
+                <widget type="date" fieldname="date" readonly="true"/>
+            </column>
+            <column name="reconciled" display="center" order="140">
+                <widget type="checkbox" fieldname="reconciled" readonly="true"/>
+            </column>
+            <column name="observations" numcolumns="12" order="150">
+                <widget type="textarea" fieldname="observations" readonly="true"/>
+            </column>
+        </group>
+        <group name="logs" numcolumns="12">
+            <column name="creation-date" order="100">
+                <widget type="datetime" fieldname="creationdate" readonly="true"/>
+            </column>
+            <column name="user" order="110">
+                <widget type="text" fieldname="nick" readonly="true"/>
+            </column>
+            <column name="last-update" order="120">
+                <widget type="datetime" fieldname="lastupdate" readonly="true"/>
+            </column>
+            <column name="last-user" order="130">
+                <widget type="text" fieldname="lastnick" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

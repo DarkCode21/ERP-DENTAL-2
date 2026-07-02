@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <modals>
+        <group name="upload-customers" title="import-customers" icon="fas fa-file-import">
+            <column name="file" numcolumns="12" order="100">
+                <widget type="file" fieldname="customersfile" accept=".csv,.ods,.xls,.xlsx" required="true"/>
+            </column>
+            <column name="template" numcolumns="12" order="110">
+                <widget type="select" fieldname="template" required="true">
+                    <values/>
+                </widget>
+            </column>
+            <column name="import-mode" numcolumns="12" order="120">
+                <widget type="select" fieldname="mode" translate="true" required="true">
+                    <values title="default">automatic</values>
+                    <values title="only-insert">insert</values>
+                    <values title="only-update">update</values>
+                    <values title="insert-update">insert-update</values>
+                </widget>
+            </column>
+        </group>
+    </modals>
+</view>

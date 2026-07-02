@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples Copyright (C) 2022-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditCustomerReceiptGroup.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the edit view of CustomerReceiptGroup model
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="9">
+            <column name="code" display="none" numcolumns="1" order="100">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="company" numcolumns="2" order="110">
+                <widget type="select" fieldname="idcompany" required="true">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"></values>
+                </widget>
+            </column>
+            <column name="date" numcolumns="2" order="120" required="true">
+                <widget type="date" fieldname="groupdate" />
+            </column>
+            <column name="bank-account" titleurl="ListFormaPago?activetab=ListCuentaBanco" order="130">
+                <widget type="select" fieldname="idbank" required="true" onclick="EditCuentaBanco">
+                    <values source="cuentasbanco" fieldcode="codcuenta" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="agent" order="140">
+                <widget type="autocomplete" fieldname="idagent" onclick="EditAgente">
+                    <values source="agentes" fieldcode="codagente" fieldtitle="nombre"></values>
+                </widget>
+            </column>
+        </group>
+        <group name="total" numcolumns="3">
+            <column name="receipts" numcolumns="4" order="100">
+                <widget type="number" fieldname="receipts" decimal="0" readonly="true" />
+            </column>
+            <column name="total" order="110">
+                <widget type="money" fieldname="total" class="group-total" readonly="true" />
+            </column>
+        </group>
+        <group name="data2" numcolumns="12">
+            <column name="serie" numcolumns="2" description="optional" order="100">
+                <widget type="select" fieldname="idserie">
+                    <values source="series" fieldcode="codserie" fieldtitle="descripcion"></values>
+                </widget>
+            </column>
+            <column name="concept" description="receipt-group-concept" order="110">
+                <widget type="text" fieldname="concept" />
+            </column>
+            <column name="group-by-customer" numcolumns="2" order="120">
+                <widget type="select" fieldname="groupreceipts" translate="true" required="true">
+                    <values title="no">0</values>
+                    <values title="yes">1</values>
+                </widget>
+            </column>
+            <column name="generate-accounting-entry" numcolumns="2" order="130">
+                <widget type="select" fieldname="noentry" translate="true" required="true">
+                    <values title="yes">0</values>
+                    <values title="no">1</values>
+                </widget>
+            </column>
+            <column name="currency" numcolumns="2" display="none" order="140">
+                <widget type="select" fieldname="idcurrency" required="true">
+                    <values source="divisas" fieldcode="coddivisa" fieldtitle="descripcion"></values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,23 @@
+
+<div id="encabezado-pagina" class="encabezado-pagina">
+    <div class="title-report">
+        <h3 class="title-report">
+           {{ fsc.params.title }}
+
+        </h3>
+    </div>
+    <div class="empresa-fecha">
+        <div class="datos-empresa">
+
+            <span class="title-company">Empresa: </span>
+            <span class="company" >{{ fsc.pdfParams.companyName }}</span>
+            <span class="title-date">Fecha:</span>
+            <span class="date">{{ "now"|date("d/m/Y") }}</span>
+        </div>
+        
+    </div>
+    <div class="filters">
+
+        {%  include 'Block/filters.html.twig' %}
+    </div>
+</div>

@@ -1,0 +1,220 @@
+{% extends "Master/MenuBgTemplate.html.twig" %}
+
+{% block body %}
+<style>
+    .mapa-wrap {
+        overflow: auto;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #fff;
+        width: fit-content;
+        margin-inline: auto;
+    }
+    .mapa-canvas {
+        position: relative;
+        width: 800px;
+        height: 600px;
+        background-color: #f5f2ea;
+        background-image:
+            linear-gradient(rgba(0,0,0,.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,0,0,.07) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+    .mapa-mesa {
+        position: absolute;
+        width: 86px;
+        height: 72px;
+        border-radius: 8px;
+        cursor: move;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid;
+        box-shadow: 0 2px 6px rgba(0,0,0,.2);
+        user-select: none;
+        transition: box-shadow .1s;
+        background: #fff;
+    }
+    .mapa-mesa:active {
+        box-shadow: 0 6px 18px rgba(0,0,0,.35);
+        opacity: .85;
+    }
+    .mapa-mesa.estado-libre     { border-color:#28a745; color:#28a745; background:rgba(40,167,69,.1); }
+    .mapa-mesa.estado-ocupada   { border-color:#dc3545; color:#dc3545; background:rgba(220,53,69,.1); }
+    .mapa-mesa.estado-reservada { border-color:#ffc107; color:#ffc107; background:rgba(255,193,7,.1); }
+    .mapa-leyenda span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: .78rem;
+        margin-right: 12px;
+    }
+    .mapa-leyenda .dot {
+        width: 12px; height: 12px; border-radius: 50%; display: inline-block;
+    }
+    #save-badge {
+        display: none;
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #28a745;
+        color: #fff;
+        padding: 7px 18px;
+        border-radius: 22px;
+        font-size: .82rem;
+        z-index: 9999;
+        box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    }
+</style>
+
+<div class="container-fluid mt-3">
+
+    <div class="row mb-3 align-items-center">
+        <div class="col">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-map-location-dot mr-2"></i>Mapa de mesas
+            </h4>
+            <small class="text-muted">Arrastra las mesas para colocarlas en su posición real. Se guarda automáticamente.</small>
+        </div>
+        <div class="col-auto d-flex align-items-center gap-2">
+            <div class="mapa-leyenda">
+                <span><span class="dot" style="background:#28a745;"></span>Libre</span>
+                <span><span class="dot" style="background:#dc3545;"></span>Ocupada</span>
+                <span><span class="dot" style="background:#ffc107;"></span>Reservada</span>
+            </div>
+            <a href="AjustesRestauranteTPV" class="btn btn-sm btn-outline-secondary ml-2">
+                <i class="fa-solid fa-arrow-left mr-1"></i>Volver a Ajustes
+            </a>
+        </div>
+    </div>
+
+    {% if fsc.mesas is empty %}
+        <div class="card text-center py-5">
+            <div class="card-body text-muted">
+                <i class="fa-solid fa-chair fa-3x mb-3"></i>
+                <h5>No hay mesas creadas</h5>
+                <p>Crea mesas desde <a href="AjustesRestauranteTPV">Ajustes</a> para poder posicionarlas.</p>
+            </div>
+        </div>
+    {% else %}
+        <div class="mapa-wrap">
+            <div class="mapa-canvas" id="mapaCanvas">
+                {% for mesa in fsc.mesas %}
+                    <div class="mapa-mesa estado-{{ mesa.estado }}"
+                         data-idmesa="{{ mesa.idmesa }}"
+                         style="left:{{ mesa.pos_x }}%; top:{{ mesa.pos_y }}%;">
+                        <i class="fa-solid fa-chair" style="font-size:1.2rem;"></i>
+                        <div style="font-size:.68rem; font-weight:700; margin-top:4px;">{{ mesa.nombre }}</div>
+                        <div style="font-size:.58rem; opacity:.75;">{{ mesa.estado }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+<div id="save-badge"><i class="fa-solid fa-check mr-1"></i>Posición guardada</div>
+
+<script>
+(function () {
+    var _drag = null;
+    var _saveUrl = '{{ fsc.url() }}';
+
+    function saveMesaPos(idmesa, x, y) {
+        var fd = new FormData();
+        fd.append('action', 'save-mesa-pos');
+        fd.append('idmesa', idmesa);
+        fd.append('pos_x', x);
+        fd.append('pos_y', y);
+        fetch(_saveUrl, { method: 'POST', body: fd })
+            .then(function () {
+                var badge = document.getElementById('save-badge');
+                badge.style.display = 'block';
+                clearTimeout(badge._t);
+                badge._t = setTimeout(function () { badge.style.display = 'none'; }, 1600);
+            })
+            .catch(function () {});
+    }
+
+    // ── Mouse ──────────────────────────────────────────────────────
+    document.addEventListener('mousedown', function (e) {
+        var mesa = e.target.closest('.mapa-mesa');
+        if (!mesa) return;
+        var canvas = document.getElementById('mapaCanvas');
+        if (!canvas) return;
+        e.preventDefault();
+        _drag = {
+            el:   mesa,
+            offX: e.clientX - mesa.getBoundingClientRect().left,
+            offY: e.clientY - mesa.getBoundingClientRect().top
+        };
+        mesa.style.zIndex = 100;
+    }, true);
+
+    document.addEventListener('mousemove', function (e) {
+        if (!_drag) return;
+        var canvas = document.getElementById('mapaCanvas');
+        var rect   = canvas.getBoundingClientRect();
+        var wrap   = canvas.parentElement;
+        var xPx = Math.max(0, e.clientX - rect.left - _drag.offX + wrap.scrollLeft);
+        var yPx = Math.max(0, e.clientY - rect.top  - _drag.offY + wrap.scrollTop);
+        var maxXpct = Math.floor((canvas.offsetWidth  - _drag.el.offsetWidth)  / canvas.offsetWidth  * 100);
+        var maxYpct = Math.floor((canvas.offsetHeight - _drag.el.offsetHeight) / canvas.offsetHeight * 100);
+        var xPct = Math.min(maxXpct, Math.round(xPx / canvas.offsetWidth  * 100));
+        var yPct = Math.min(maxYpct, Math.round(yPx / canvas.offsetHeight * 100));
+        _drag.el.style.left = xPct + '%';
+        _drag.el.style.top  = yPct + '%';
+    }, true);
+
+    document.addEventListener('mouseup', function () {
+        if (!_drag) return;
+        var el = _drag.el;
+        var xPct = parseFloat(el.style.left)  || 0;
+        var yPct = parseFloat(el.style.top)   || 0;
+        el.style.zIndex = '';
+        saveMesaPos(parseInt(el.dataset.idmesa), xPct, yPct);
+        _drag = null;
+    }, true);
+
+    // ── Touch ──────────────────────────────────────────────────────
+    document.addEventListener('touchstart', function (e) {
+        var mesa = e.target.closest('.mapa-mesa');
+        if (!mesa) return;
+        var touch = e.touches[0];
+        _drag = {
+            el:   mesa,
+            offX: touch.clientX - mesa.getBoundingClientRect().left,
+            offY: touch.clientY - mesa.getBoundingClientRect().top
+        };
+        mesa.style.zIndex = 100;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function (e) {
+        if (!_drag) return;
+        var touch  = e.touches[0];
+        var canvas = document.getElementById('mapaCanvas');
+        var rect   = canvas.getBoundingClientRect();
+        var xPx = Math.max(0, touch.clientX - rect.left - _drag.offX);
+        var yPx = Math.max(0, touch.clientY - rect.top  - _drag.offY);
+        var maxXpct = Math.floor((canvas.offsetWidth  - _drag.el.offsetWidth)  / canvas.offsetWidth  * 100);
+        var maxYpct = Math.floor((canvas.offsetHeight - _drag.el.offsetHeight) / canvas.offsetHeight * 100);
+        var xPct = Math.min(maxXpct, Math.round(xPx / canvas.offsetWidth  * 100));
+        var yPct = Math.min(maxYpct, Math.round(yPx / canvas.offsetHeight * 100));
+        _drag.el.style.left = xPct + '%';
+        _drag.el.style.top  = yPct + '%';
+    }, { passive: true });
+
+    document.addEventListener('touchend', function () {
+        if (!_drag) return;
+        var el = _drag.el;
+        var xPct = parseFloat(el.style.left)  || 0;
+        var yPct = parseFloat(el.style.top)   || 0;
+        el.style.zIndex = '';
+        saveMesaPos(parseInt(el.dataset.idmesa), xPct, yPct);
+        _drag = null;
+    }, { passive: true });
+})();
+</script>
+{% endblock %}

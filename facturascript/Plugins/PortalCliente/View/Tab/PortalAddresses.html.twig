@@ -1,0 +1,295 @@
+{% set mainView = fsc.views | first %}
+{% set currentViewName = fsc.getCurrentView().getViewName() %}
+{% set cities = fsc.getCities() %}
+{% set provinces = fsc.getProvinces() %}
+
+{% for address in fsc.addresses %}
+    <form class="mb-3" method="post" class="form-address">
+        {{ formToken() }}
+        <input type="hidden" name="action" value="edit-address">
+        <input type="hidden" name="activetab" value="{{ currentViewName }}">
+        <input type="hidden" name="idcontacto" value="{{ address.idcontacto }}">
+        {% set cardClass = address.idcontacto == fsc.instance.idcontactofact ? 'card border-primary shadow-sm' : 'card shadow-sm' %}
+        <div class="{{ cardClass }}">
+            {% if address.idcontacto is same as(fsc.customer.idcontactofact) %}
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-file-invoice-dollar mr-1"></i>
+                    {{ trans('address') }} {{ loop.index }}: {{ trans('billing') }}
+                </div>
+            {% else %}
+                <div class="card-header">
+                    <i class="fas fa-address-book mr-1"></i>
+                    {{ trans('address') }} {{ loop.index }}
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="col-12">
+                        {{ trans('description') }}
+                        <input type="text" class="form-control mb-3" name="descripcion" maxlength="100"
+                               value="{{ address.descripcion | raw }}" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('name') }}
+                        <input type="text" class="form-control mb-3" name="nombre" maxlength="100"
+                               value="{{ address.nombre | raw }}" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('surname') }}
+                        <input type="text" class="form-control mb-3" name="apellidos" maxlength="150"
+                               value="{{ address.apellidos | raw }}"/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('email') }}
+                        <input type="email" class="form-control mb-3" name="email" maxlength="100"
+                               value="{{ address.email }}" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('phone') }}
+                        <input type="text" class="form-control mb-3" name="telefono1" maxlength="30"
+                               value="{{ address.telefono1 }}"/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        {{ trans('company') }}
+                        <input type="text" class="form-control mb-3" name="empresa" maxlength="100"
+                               value="{{ address.empresa | raw }}"/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('fiscal-id') }}
+                        <select class="form-control mb-3" name="tipoidfiscal" required>
+                            {% for item in fsc.codeModel.all('idsfiscales', 'tipoidfiscal', 'tipoidfiscal', false) %}
+                                {% if address.tipoidfiscal == item.code %}
+                                    <option value="{{ item.code }}" selected>{{ item.description }}</option>
+                                {% else %}
+                                    <option value="{{ item.code }}">{{ item.description }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('cifnif') }}
+                        <input type="text" class="form-control mb-3" name="cifnif" maxlength="30"
+                               value="{{ address.cifnif }}" required/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        {{ trans('address') }}
+                        <input type="text" class="form-control mb-3" name="direccion" maxlength="100"
+                               value="{{ address.direccion | raw }}" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('post-office-box') }}
+                        <input type="text" class="form-control mb-3" name="apartado" maxlength="10"
+                               value="{{ address.apartado }}"/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('zip-code') }}
+                        <input type="text" class="form-control mb-3" name="codpostal" maxlength="10"
+                               value="{{ address.codpostal }}"/>
+                    </div>
+                </div>
+                <div class="form-row align-items-end">
+                    <div class="col-sm-4">
+                        {{ trans('city') }}
+                        <input type="text" class="form-control mb-3" name="ciudad" maxlength="100"
+                               list="dataListCity{{ address.idcontacto }}" value="{{ address.ciudad | raw }}" required/>
+                        <datalist id="dataListCity{{ address.idcontacto }}">
+                            {% for item in cities %}
+                                <option value="{{ item.ciudad }}"></option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <div class="col-sm-4">
+                        {{ trans('province') }}
+                        <input type="text" class="form-control mb-3" name="provincia" maxlength="100"
+                               list="dataListProvince{{ address.idcontacto }}" value="{{ address.provincia | raw }}"
+                               required/>
+                        <datalist id="dataListProvince{{ address.idcontacto }}">
+                            {% for item in provinces %}
+                                <option value="{{ item.provincia }}"></option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <div class="col-sm">
+                        {{ trans('country') }}
+                        <select class="form-control mb-3" name="codpais" required>
+                            {% for item in fsc.codeModel.all('paises', 'codpais', 'nombre', false) %}
+                                {% if address.codpais == item.code %}
+                                    <option value="{{ item.code }}" selected>{{ item.description }}</option>
+                                {% else %}
+                                    <option value="{{ item.code }}">{{ item.description }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm">
+                        {{ trans('language') }}
+                        <select class="form-control mb-3" name="langcode">
+                            <option value="">------</option>
+                            {% for item in fsc.languages %}
+                                <option value="{{ item.value }}" {{ item.value is same as(address.langcode) ? 'selected' : '' }}>{{ item.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row align-items-end">
+                    {% if address.idcontacto is same as(fsc.customer.idcontactofact) %}
+                        <div class="col-sm text-right">
+                            <button type="submit" class="btn btn-primary">{{ trans('save') }}</button>
+                        </div>
+                    {% else %}
+                        <div class="col-sm">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="billing" value="1"
+                                       id="billingAddress{{ address.idcontacto }}"
+                                        {{ address.idcontacto is same as(fsc.customer.idcontactofact) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="billingAddress{{ address.idcontacto }}">
+                                    {{ trans('use-this-address-as-billing-address') }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <button type="submit" class="btn btn-primary">{{ trans('save') }}</button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endfor %}
+
+{% if fsc.customer.exists() %}
+    <form class="mb-5" method="post">
+        {{ formToken() }}
+        <input type="hidden" name="action" value="new-address">
+        <input type="hidden" name="activetab" value="{{ currentViewName }}">
+        <div class="card border-success shadow-sm">
+            <div class="card-header p-0">
+                <a class="btn btn-block btn-success" data-toggle="collapse" href="#collapseNewAddress" role="button">
+                    <i class="fas fa-plus-square mr-1"></i> {{ trans('new-address') }}
+                </a>
+            </div>
+            <div class="card-body collapse" id="collapseNewAddress">
+                <div class="form-row">
+                    <div class="col-12">
+                        {{ trans('description') }}
+                        <input type="text" class="form-control mb-3" name="descripcion" maxlength="100"
+                               value="" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('name') }}
+                        <input type="text" class="form-control mb-3" name="nombre" maxlength="100"
+                               value="{{ fsc.contact.nombre | raw }}" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('surname') }}
+                        <input type="text" class="form-control mb-3" name="apellidos" maxlength="150"
+                               value="{{ fsc.contact.apellidos | raw }}"/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('email') }}
+                        <input type="email" class="form-control mb-3" name="email" maxlength="100"
+                               value="{{ fsc.contact.email }}" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('phone') }}
+                        <input type="text" class="form-control mb-3" name="telefono1" maxlength="30"
+                               value="{{ fsc.contact.telefono1 }}" required/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        {{ trans('company') }}
+                        <input type="text" class="form-control mb-3" name="empresa" maxlength="100"
+                               value="{{ fsc.contact.empresa | raw }}"/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('fiscal-id') }}
+                        <select class="form-control mb-3" name="tipoidfiscal" required>
+                            {% for item in fsc.codeModel.all('idsfiscales', 'tipoidfiscal', 'tipoidfiscal', false) %}
+                                {% if fsc.contact.tipoidfiscal == item.code %}
+                                    <option value="{{ item.code }}" selected>{{ item.description }}</option>
+                                {% else %}
+                                    <option value="{{ item.code }}">{{ item.description }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('cifnif') }}
+                        <input type="text" class="form-control mb-3" name="cifnif" maxlength="30"
+                               value="{{ fsc.contact.cifnif }}" required/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        {{ trans('address') }}
+                        <input type="text" class="form-control mb-3" name="direccion" maxlength="100"
+                               value="{{ fsc.contact.direccion | raw }}" required/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('post-office-box') }}
+                        <input type="text" class="form-control mb-3" name="apartado" maxlength="10"
+                               value="{{ fsc.contact.apartado }}"/>
+                    </div>
+                    <div class="col-sm-3">
+                        {{ trans('zip-code') }}
+                        <input type="text" class="form-control mb-3" name="codpostal" maxlength="10"
+                               value="{{ fsc.contact.codpostal }}"/>
+                    </div>
+                </div>
+                <div class="form-row align-items-end">
+                    <div class="col-sm-4">
+                        {{ trans('city') }}
+                        <input type="text" class="form-control" name="ciudad" maxlength="100"
+                               list="dataListCity" value="{{ fsc.contact.ciudad | raw }}" required/>
+                        <datalist id="dataListCity">
+                            {% for item in cities %}
+                                <option value="{{ item.ciudad }}"></option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <div class="col-sm-4">
+                        {{ trans('province') }}
+                        <input type="text" class="form-control" name="provincia" maxlength="100"
+                               list="dataListProvince" value="{{ fsc.contact.provincia | raw }}" required/>
+                        <datalist id="dataListProvince">
+                            {% for item in provinces %}
+                                <option value="{{ item.provincia }}"></option>
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <div class="col-sm">
+                        {{ trans('country') }}
+                        <select class="form-control" name="codpais" required>
+                            {% for item in fsc.codeModel.all('paises', 'codpais', 'nombre', false) %}
+                                {% if fsc.contact.codpais == item.code %}
+                                    <option value="{{ item.code }}" selected>{{ item.description }}</option>
+                                {% else %}
+                                    <option value="{{ item.code }}">{{ item.description }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm">
+                        {{ trans('language') }}
+                        <select class="form-control" name="langcode">
+                            <option value="">------</option>
+                            {% for item in fsc.languages %}
+                                <option value="{{ item.value }}" {{ item.value is same as(fsc.contact.langcode) ? 'selected' : '' }}>{{ item.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm text-right">
+                        <button type="submit" class="btn btn-success mt-3">{{ trans('save') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endif %}

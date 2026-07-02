@@ -1,0 +1,9 @@
+{
+  "loginscreen": "Login Screen",
+  "login-primary-color": "Color Principal login",
+  "login-secondary-color": "Color Secundario login",
+  "login-image": "Imagen del login",
+  "login-background-image": "Imagen de fondo del login",
+  "login-footer-content": "Contenido en el pie del login",
+  "favicon-installed": "Favicon instalado correctamente, reconstruye los plugins  para que se apliquen los cambios."
+}

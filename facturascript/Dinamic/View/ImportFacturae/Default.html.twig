@@ -1,0 +1,155 @@
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+{% endblock %}
+
+{% block bodyHeaderOptions %}
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container" style="margin-top: -80px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h1 class="card-title">
+                            <i class="fa-solid fa-qrcode mr-2"></i> {{ trans('import-factura-e') }}
+                        </h1>
+                        <p class="card-text">{{ trans('import-factura-e-p') }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-row">
+                            <div class="col">
+                                <button type="button" class="btn btn-lg btn-block btn-primary" data-toggle="modal"
+                                        data-target="#importFeModal">
+                                    <i class="fa-solid fa-file-arrow-up mr-2"></i> {{ trans('file') }}
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-lg btn-block btn-secondary" data-toggle="modal"
+                                        data-target="#mailFeModal">
+                                    <i class="fa-solid fa-envelope mr-2"></i> {{ trans('email') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {{ formToken() }}
+        <input type="hidden" name="action" value="upload-file">
+        <div class="modal fade" id="importFeModal" tabindex="-1" aria-labelledby="importFeModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importFeModalLabel">
+                            <i class="fa-solid fa-file-arrow-up mr-2"></i> {{ trans('import-factura-e') }}
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="mb-1" for="file_warehouse">{{ trans('warehouse') }}</label>
+                            <select name="codalmacen" class="form-control" id="file_warehouse" required>
+                                {% for company in fsc.empresa.all() %}
+                                    <optgroup label="{{ company.nombre }}">
+                                        {% for warehouse in company.getWarehouses() %}
+                                            {% if warehouse.isDefault() %}
+                                                <option value="{{ warehouse.codalmacen }}" selected>
+                                                    {{ warehouse.nombre }}
+                                                </option>
+                                            {% else %}
+                                                <option value="{{ warehouse.codalmacen }}">
+                                                    {{ warehouse.nombre }}
+                                                </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </optgroup>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="mb-1" for="file_serie">{{ trans('serie') }}</label>
+                            <select name="codserie" class="form-control" id="file_serie" required>
+                                {% for serie in fsc.serie.all() %}
+                                    {% if serie.isDefault() %}
+                                        <option value="{{ serie.codserie }}" selected>{{ serie.descripcion }}</option>
+                                    {% else %}
+                                        <option value="{{ serie.codserie }}">{{ serie.descripcion }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="mb-1" for="file_item">{{ trans('file') }}</label>
+                            <input type="file" name="file" accept=".xml,.xsig" class="form-control-file" id="file_item"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-lg btn-block btn-primary">{{ trans('import') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form method="post">
+        {{ formToken() }}
+        <input type="hidden" name="action" value="read-emails">
+        <div class="modal fade" id="mailFeModal" tabindex="-1" aria-labelledby="mailFeModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mailFeModalLabel">
+                            <i class="fa-solid fa-envelope mr-2"></i> {{ trans('email') }}
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="mb-1" for="mail_user">{{ trans('user') }}</label>
+                            <input type="text" name="mail_user" value="{{ settings('email','ife_mail_user') }}"
+                                   class="form-control" id="mail_user" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="mb-1" for="mail_password">{{ trans('password') }}</label>
+                            <input type="password" name="mail_pass" value="{{ settings('email','ife_mail_pass') }}"
+                                   class="form-control" id="mail_password" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="mb-1" for="mail_server">{{ trans('server') }}</label>
+                            <input type="text" name="mail_server" value="{{ settings('email','ife_mail_server') }}"
+                                   class="form-control" id="mail_server" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-lg btn-block btn-primary">
+                            {{ trans('read-mails') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

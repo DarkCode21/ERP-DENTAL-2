@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : ListAmortizacion.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of the view for a list of amortizations.
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="idamortizacion" />
+        </column>
+        <column name="company" display="none" order="110">
+            <widget type="text" fieldname="nombrecorto" />
+        </column>
+        <column name="channel" display="none" order="115">
+            <widget type="text" fieldname="canal" />
+        </column>
+        <column name="product" order="120">
+            <widget type="text" fieldname="descripcion" />
+        </column>
+        <column name="invoice" order="130">
+            <widget type="select" fieldname="idfactura" onclick="EditFacturaProveedor">
+                <values source="facturasprov" fieldcode="idfactura" fieldtitle="codigo" />
+            </widget>
+        </column>
+        <column name="type" numcolumns="2" order="140">
+            <widget type="select" fieldname="tipo" translate="true">
+                <values title="constant">constante</values>
+                <values title="banking">bancario</values>
+                <values title="lineal">lineak</values>
+            </widget>
+        </column>
+        <column name="contabilization" numcolumns="2" order="150">
+            <widget type="select" fieldname="contabilizacion" translate="true">
+                <values title="annual">anual</values>
+                <values title="quarterly">trimestral</values>
+                <values title="monthly">mensual</values>
+            </widget>
+        </column>
+        <column name="amount" display="right" order="160">
+            <widget type="money" decimal="2" fieldname="valor" />
+        </column>
+        <column name="annual-rate" display="right" order="170">
+            <widget type="number" decimal="3" fieldname="tasaanual" />
+        </column>
+        <column name="residual" display="right" order="180">
+            <widget type="money" decimal="2" fieldname="residual" />
+        </column>
+        <column name="currency" display="none" order="190">
+            <widget type="text" fieldname="coddivisa" />
+        </column>
+        <column name="period" display="center" order="200">
+            <widget type="text" fieldname="periodDescription" />
+        </column>
+        <column name="start-date" display="center" order="210">
+            <widget type="date" fieldname="fechainicio" />
+        </column>
+        <column name="end-date" display="center" order="220">
+            <widget type="date" fieldname="fechafin" />
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option title="sold" fieldname="idfacturaventa" color="success">notnull:</option>
+            <option title="finished" fieldname="fechafinvidautil" color="info">notnull:</option>
+            <option title="amortizing" fieldname="fechafinvidautil" color="white">null:</option>
+        </row>
+    </rows>
+</view>

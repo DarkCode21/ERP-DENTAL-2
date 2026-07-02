@@ -1,0 +1,11 @@
+{
+    "accounting-prepaid": "Předplacené %code%",
+    "accounting-prepaid-customer-delivery-note": "Předplacený dodací list zákazníka %code%",
+    "accounting-prepaid-customer-estimation": "Předplacený rozpočet zákazníka %code%",
+    "accounting-prepaid-customer-order": "Předplacená objednávka zákazníka %code%",
+    "amount-greater-zero": "Částka musí být větší než nula",
+    "document-company-different-from-payment-method-company": "Společnost dokumentu se liší od společnosti způsobu platby",
+    "document-not-found": "Dokument nebyl nalezen",
+    "no-editable": "Nejde editoovat",
+    "only-one-document-allowed": "Je povolen pouze jeden dokument"
+}

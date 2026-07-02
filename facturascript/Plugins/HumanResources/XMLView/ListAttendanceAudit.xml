@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ListAttendanceAudit.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller ListAttendanceAudit
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="date" order="110">
+            <widget type="datetime" fieldname="dateaction" />
+        </column>
+        <column name="action" order="120">
+            <widget type="select" fieldname="action" translate="true">
+                <values title="update">1</values>
+                <values title="delete">2</values>
+            </widget>
+        </column>
+        <column name="reason" order="130">
+            <widget type="text" fieldname="reason" />
+        </column>
+        <column name="user" order="140">
+            <widget type="text" fieldname="nick" />
+        </column>
+        <column name="attendance" order="150">
+            <widget type="text" fieldname="idattendance" />
+        </column>
+    </columns>
+</view>

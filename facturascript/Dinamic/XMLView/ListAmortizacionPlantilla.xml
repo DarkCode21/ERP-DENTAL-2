@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : ListAmortizacionPlantilla.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of the view for a list of templates for amortizations contabilization.
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="template" order="110">
+            <widget type="text" fieldname="name"/>
+        </column>
+        <column name="years" display="center" order="140">
+            <widget type="text" fieldname="periods"/>
+        </column>
+        <column name="codsubcuentacierre" title="subaccount-closing" order="160">
+            <widget type="text" fieldname="closing_subaccount"/>
+        </column>
+        <column name="codsubcuentadebe" title="subaccount-debit" order="170">
+            <widget type="text" fieldname="debit_subaccount"/>
+        </column>
+        <column name="codsubcuentahaber" title="subaccount-credit" order="180">
+            <widget type="text" fieldname="credit_subaccount"/>
+        </column>
+        <column name="codsubcuentabeneficios" title="subaccount-benefits" order="190">
+            <widget type="text" fieldname="benefits_subaccount"/>
+        </column>
+        <column name="codsubcuentaperdidas" title="subaccount-lost" order="200">
+            <widget type="text" fieldname="loss_subaccount"/>
+        </column>
+    </columns>
+</view>

@@ -1,0 +1,23 @@
+{% extends "Master/ListController.html.twig" %}
+
+{% block bodyHeaderOptions %}
+    {{ parent() }}
+    {% if fsc.vistaMesas == 'posicion' %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var optBtn = document.querySelector('.btn-group .dropdown-toggle');
+        var ref = optBtn ? optBtn.closest('.btn-group') : null;
+        if (!ref) {
+            ref = document.querySelector('.btn-group');
+        }
+        if (ref) {
+            var btn = document.createElement('a');
+            btn.href = 'MapaMesas';
+            btn.className = 'btn btn-sm btn-warning ml-1';
+            btn.innerHTML = '<i class="fa-solid fa-map-location-dot mr-1"></i>Mapa de mesas';
+            ref.parentNode.insertBefore(btn, ref.nextSibling);
+        }
+    });
+    </script>
+    {% endif %}
+{% endblock %}

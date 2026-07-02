@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="patient" order="105">
+            <widget type="text" fieldname="paciente_nombre"/>
+        </column>
+        <column name="start-date" order="110">
+            <widget type="date" fieldname="fecha_inicio"/>
+        </column>
+        <column name="end-date" order="120">
+            <widget type="date" fieldname="fecha_fin"/>
+        </column>
+        <column name="clinical-status" order="130">
+            <widget type="text" fieldname="estado_clinico"/>
+        </column>
+        <column name="economic-status" order="140">
+            <widget type="text" fieldname="estado_economico"/>
+        </column>
+        <column name="price" display="right" order="150">
+            <widget type="money" fieldname="precio"/>
+        </column>
+    </columns>
+</view>

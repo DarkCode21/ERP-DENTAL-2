@@ -1,0 +1,362 @@
+<link rel="stylesheet"
+      href="{{ asset('Plugins/PortalCliente/node_modules/@fancyapps/ui/dist/fancybox/fancybox.css') }}"/>
+<link rel="stylesheet" href="{{ asset('Plugins/PortalCliente/node_modules/select2/dist/css/select2.min.css') }}"/>
+<link rel="stylesheet"
+      href="{{ asset('Plugins/PortalCliente/node_modules/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css') }}"/>
+<style>
+    .product .favorite {
+        position: absolute;
+        z-index: 1;
+    }
+
+    .product .photo {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%; /* Esta línea ajusta la altura del contenedor según su ancho */
+    }
+
+    .product .photo img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+    }
+
+    .product .title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .product .description {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Limita el número de líneas a mostrar */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2em; /* Altura de una línea */
+        height: 2.4em; /* Dos líneas completas */
+    }
+
+    .select2-container .select2-search--inline:first-child {
+        float: none;
+    }
+
+    .select2-container .select2-search--inline:first-child .select2-search__field {
+        width: 100% !important;
+    }
+</style>
+
+<div class="card shadow mb-3">
+    <div class="card-body pb-0">
+        <div class="form-row" id="product-filter">
+            <div class="col">
+                <div class="form-group">
+                    <input type="text" id="searchProductFilter" class="form-control"
+                           placeholder="{{ trans('search-product-catalogue-abbr') }}"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <select id="familiesProductFilter" class="form-control select2" multiple>
+                        {% for key,value in fsc.getFamilies() %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group">
+                    <input type="number" id="priceMinProductFilter" class="form-control">
+                    <div class="input-group-prepend input-group-append">
+                        <span class="input-group-text">-</span>
+                    </div>
+                    <input type="number" id="priceMaxProductFilter" class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-select">
+                    <select id="favoriteProductFilter" class="form-control">
+                        <option value="0">{{ trans('see-all-products') }}</option>
+                        <option value="1">{{ trans('see-my-favorite-products') }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="form-group">
+                    <button type="button" class="btn btn-block btn-primary btn-spin-action" onclick="getCatalogue()">
+                        <i class="fas fa-filter fa-fw"></i> {{ trans('filter') }}
+                    </button>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="form-group">
+                    <input type="hidden" id="orderProductFilter" value="ref-asc">
+                    <div class="dropdown">
+                        <button id="btnOrderProductFilter" class="btn btn-light dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-sort-amount-up"></i> {{ trans('reference') }}
+                        </button>
+                        <div class="dropdown-menu">
+                            <button type="button" class="dropdown-item" onclick="orderProductFilter(this, 'ref-asc');">
+                                <i class="fas fa-sort-amount-up"></i> {{ trans('reference') }}
+                            </button>
+                            <button type="button" class="dropdown-item" onclick="orderProductFilter(this, 'ref-desc');">
+                                <i class="fas fa-sort-amount-down"></i> {{ trans('reference') }}
+                            </button>
+                            <button type="button" class="dropdown-item"
+                                    onclick="orderProductFilter(this, 'price-asc');">
+                                <i class="fas fa-sort-amount-up"></i> {{ trans('price') }}
+                            </button>
+                            <button type="button" class="dropdown-item"
+                                    onclick="orderProductFilter(this, 'price-desc');">
+                                <i class="fas fa-sort-amount-down"></i> {{ trans('price') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-row mb-3" id="product-list"></div>
+<div class="mb-5" id="product-paginate"></div>
+
+<script src="{{ asset('Plugins/PortalCliente/node_modules/@fancyapps/ui/dist/fancybox/fancybox.umd.js') }}"></script>
+<script src="{{ asset('Plugins/PortalCliente/node_modules/select2/dist/js/select2.min.js') }}"></script>
+<script>
+    function addProductToCart(idvariante, nameModal) {
+        let formData = new FormData();
+        formData.append('action', 'addProductToCart');
+        formData.append('idvariante', idvariante);
+        formData.append('nameModal', nameModal);
+        sendFormCatalogue(formData);
+    }
+
+    function changeQtyPrompt(idlinecart) {
+        const qty = parseFloat(prompt('{{ trans('quantity') }}').replace(',', '.')) || 0;
+        let formData = new FormData();
+        formData.append('action', 'updateProductToCart');
+        formData.append('idlinecart', idlinecart);
+        formData.append('quantity', qty);
+        sendFormCatalogue(formData);
+    }
+
+    function checkPriceMinMax() {
+        let inputPriceMin = $('#priceMinProductFilter');
+        if (parseFloat(inputPriceMin.val()) < parseFloat(inputPriceMin.attr('min'))) {
+            inputPriceMin.val(inputPriceMin.attr('min'));
+        } else if (parseFloat(inputPriceMin.val()) > parseFloat(inputPriceMin.attr('max'))) {
+            inputPriceMin.val(inputPriceMin.attr('max'));
+        }
+
+        let inputPriceMax = $('#priceMaxProductFilter');
+        if (parseFloat(inputPriceMax.val()) > parseFloat(inputPriceMax.attr('max'))) {
+            inputPriceMax.val(inputPriceMax.attr('max'));
+        } else if (parseFloat(inputPriceMax.val()) < parseFloat(inputPriceMax.attr('min'))) {
+            inputPriceMax.val(inputPriceMax.attr('min'));
+        }
+    }
+
+    function finalizePurchase() {
+        // si hay líneas en el carrito, se finaliza la compra
+        if ($('#cartHtml tr').length > 0) {
+            let formData = new FormData();
+            formData.append('action', 'finalizePurchase');
+            formData.append('observations', $('#cartNote').val());
+            sendFormCatalogue(formData);
+        }
+    }
+
+    function getCatalogue(currentPage = 1) {
+        checkPriceMinMax();
+        let formData = new FormData();
+        formData.append('action', 'getCatalogue');
+        formData.append('searchProductFilter', $('#searchProductFilter').val());
+        formData.append('familiesProductFilter', $('#familiesProductFilter').val());
+        formData.append('priceMinProductFilter', $('#priceMinProductFilter').val());
+        formData.append('priceMaxProductFilter', $('#priceMaxProductFilter').val());
+        formData.append('favoriteProductFilter', $('#favoriteProductFilter').val());
+        formData.append('orderProductFilter', $('#orderProductFilter').val());
+        formData.append('currentPageFilter', currentPage);
+        sendFormCatalogue(formData);
+    }
+
+    function getCart() {
+        let formData = new FormData();
+        formData.append('action', 'getCart');
+        sendFormCatalogue(formData);
+    }
+
+    function markAsFavorite(idproducto) {
+        event.stopPropagation();
+
+        let formData = new FormData();
+        formData.append('action', 'markAsFavorite');
+        formData.append('idproducto', idproducto);
+        sendFormCatalogue(formData);
+    }
+
+    function orderProductFilter(button, order) {
+        $('#orderProductFilter').val(order);
+        $('#btnOrderProductFilter').html($(button).html());
+        getCatalogue();
+    }
+
+    function removeLineCart(idlinecart) {
+        let formData = new FormData();
+        formData.append('action', 'removeLineCart');
+        formData.append('idlinecart', idlinecart);
+        sendFormCatalogue(formData);
+    }
+
+    function sendFormCatalogue(formData) {
+        animateSpinner('add');
+        formData.append('ajax', true);
+
+        fetch('{{ fsc.url() }}', {
+            method: 'POST',
+            body: formData
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json();
+            }
+            animateSpinner('remove', false);
+            return Promise.reject(response);
+        }).then(function (data) {
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            }
+
+            if (data.addProductToCart) {
+                getCart();
+                $('#' + data.nameModal).modal('hide');
+            }
+
+            if (data.getCart) {
+                $('#subtotalCart').html(data.totalSubtotalLabel);
+
+                if (data.totalDto > 0) {
+                    $('#dtoCart').html(data.totalDtoLabel);
+                    $('#dtoCart').show();
+                    $('#dtoCart').prev().show();
+                } else {
+                    $('#dtoCart').html('');
+                    $('#dtoCart').hide();
+                    $('#dtoCart').prev().hide();
+                }
+
+                if (data.totalDto2 > 0) {
+                    $('#dto2Cart').html(data.totalDto2Label);
+                    $('#dto2Cart').show();
+                    $('#dto2Cart').prev().show();
+                } else {
+                    $('#dto2Cart').html('');
+                    $('#dto2Cart').hide();
+                    $('#dto2Cart').prev().hide();
+                }
+
+                $('#netCart').html(data.totalNetLabel);
+                $('#taxesCart').html(data.totalTaxesLabel);
+                $('#btnTotalCart, #totalCart').html(data.totalCartLabel);
+                $('#cartHtml').html(data.cartHtml);
+
+                if (data.totalSubtotal != data.totalNet) {
+                    $('#subtotalCart').show();
+                    $('#subtotalCart').prev().show();
+                } else {
+                    $('#subtotalCart').hide();
+                    $('#subtotalCart').prev().hide();
+                }
+
+                if (data.totalLines > 0) {
+                    $('#btnSaveCart, #cartResume').show();
+                } else {
+                    $('#btnSaveCart, #cartResume').hide();
+                }
+            }
+
+            if (data.getCatalogue) {
+                $('#product-list').html(data.productList);
+                $('#product-paginate').html(data.productPaginate);
+                $('#priceMinProductFilter').attr('placeholder', data.priceMinLabel).attr('min', data.priceMin).attr('max', data.priceMax);
+                $('#priceMaxProductFilter').attr('placeholder', data.priceMaxLabel).attr('min', data.priceMin).attr('max', data.priceMax);
+                checkPriceMinMax();
+            }
+
+            if (data.markAsFavorite) {
+                $('.product[data-idproducto="' + data.idproducto + '"] .favorite .markAsFavorite').removeClass('d-block').addClass('d-none');
+                $('.product[data-idproducto="' + data.idproducto + '"] .favorite .unmarkAsFavorite').removeClass('d-none').addClass('d-block');
+            }
+
+            if (data.removeLineCart) {
+                getCart();
+            }
+
+            if (data.unmarkAsFavorite) {
+                $('.product[data-idproducto="' + data.idproducto + '"] .favorite .unmarkAsFavorite').removeClass('d-block').addClass('d-none');
+                $('.product[data-idproducto="' + data.idproducto + '"] .favorite .markAsFavorite').removeClass('d-none').addClass('d-block');
+            }
+
+            if (data.updateProductToCart) {
+                getCart();
+            }
+
+            // si hay mensajes de error
+            if (data.messages) {
+                data.messages.forEach(function (msg) {
+                    if (msg.level === 'danger') {
+                        setToast(msg.message, msg.level, '', 0);
+                    } else {
+                        setToast(msg.message, msg.level);
+                    }
+                });
+            }
+
+            animateSpinner('remove', true);
+        }).catch(function (error) {
+            animateSpinner('remove', false);
+            alert('error portalCatalogue');
+            console.warn(error);
+        });
+    }
+
+    function showProductModal(nameModal) {
+        $('#' + nameModal).modal('show');
+        $('#' + nameModal + 'Tab .nav-item:first button').click();
+    }
+
+    function unmarkAsFavorite(idproducto) {
+        event.stopPropagation();
+
+        let formData = new FormData();
+        formData.append('action', 'unmarkAsFavorite');
+        formData.append('idproducto', idproducto);
+        sendFormCatalogue(formData);
+    }
+
+    Fancybox.bind('[data-fancybox]');
+
+    $('#familiesProductFilter').select2({
+        width: 'style',
+        theme: 'bootstrap4',
+        placeholder: '{{ trans('families') }}',
+    });
+
+    // al pulsar enter sobre searchProductFilter se lanza la búsqueda
+    $('#searchProductFilter, #priceMinProductFilter, #priceMaxProductFilter').keypress(function (e) {
+        if (e.which === 13) {
+            getCatalogue();
+        }
+    });
+
+    $(document).ready(function () {
+        getCatalogue();
+        getCart();
+    });
+</script>

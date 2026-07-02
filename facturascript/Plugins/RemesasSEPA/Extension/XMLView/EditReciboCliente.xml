@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="payment" numcolumns="12">
+            <column name="remittance" titleurl="ListRemesaSEPA" order="131">
+                <widget type="autocomplete" fieldname="idremesa" onclick="EditRemesaSEPA" readonly="true">
+                    <values source="remesas_sepa" fieldcode="idremesa" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="iban" order="132">
+                <widget type="select" fieldname="iban"/>
+            </column>
+            <column name="swift" order="133">
+                <widget type="select" fieldname="swift"/>
+            </column>
+        </group>
+    </columns>
+</view>

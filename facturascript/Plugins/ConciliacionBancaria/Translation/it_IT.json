@@ -1,0 +1,15 @@
+{
+    "bank-movement": "Movimento bancario",
+    "conciliate": "Conciliare",
+    "conciliate-bank-movements": "Conciliare movimenti bancari",
+    "import-banking-movements": "Importazione movimenti bancari",
+    "link-mov-with-acc": "Collegare il movimento ai sedili",
+    "link-mov-with-acc-c": "Selezionare i sottoconti da utilizzare nella registrazione contabile.",
+    "link-mov-with-acc-p": "Selecciona los asientos con los que quieras vincular este movimiento. O bien crea un asiento nuevo desde la pestaña nuevo.",
+    "link-up": "Vincolare",
+    "reconcile-purchases-movement": "Reconciliar movimiento de compras",
+    "reconcile-remittances": "Conciliare le rimesse",
+    "reconcile-sales-movement": "Reconciliar movimiento de ventas",
+    "reconciled": "conciliato",
+    "reconciliate": "Reconciliar"
+}

@@ -1,0 +1,83 @@
+{#
+/**
+ * This file is part of the Produccion plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ * All Rights Reserved.
+ */
+#}
+<tr id="produced-row-{{ item.id }}">
+    <td>
+        {% if item.verified %}
+            {{ item.numserie ?: '--' }}
+        {% else %}
+            <input type="text"
+                   id="numserie-{{ item.id }}"
+                   value="{{ item.numserie }}"
+                   class="form-control form-control-sm"
+                   required="required"
+                   autocomplete="off">
+        {% endif %}
+    </td>
+
+    <td>
+        {% if item.verifydate %}
+            {{ item.verifydate|date("d-m-Y H:i:s") }}
+        {% else %}
+            <span class="text-muted">--</span>
+        {% endif %}
+    </td>
+
+    <td>
+        {% if item.verifynick %}
+            {{ item.verifynick }}
+        {% else %}
+            <span class="text-muted">--</span>
+        {% endif %}
+    </td>
+
+    <td class="text-center">
+        {% if item.verified %}
+            <i class="fa-solid fa-check text-success"></i>
+        {% else %}
+            <i class="fa-solid fa-xmark text-danger"></i>
+        {% endif %}
+    </td>
+
+    <td class="text-right">
+        <button type="button"
+                class="btn btn-sm btn-outline-info mr-1"
+                data-id="{{ item.id }}"
+                data-numserie="{{ item.numserie }}"
+                title="{{ trans('numserie-traceability') }}"
+                onclick="window.Production.NumSerie.showTraceability(this)">
+            <i class="fa-solid fa-sitemap"></i>
+        </button>
+
+        {% if item.verified %}
+            <button type="button"
+                    class="btn btn-sm btn-spin-action btn-warning"
+                    data-toggle="modal"
+                    data-target="#change-numserie-modal"
+                    data-id="{{ item.id }}"
+                    data-numserie="{{ item.numserie }}"
+                    data-multireqtoken="{{ fsc.multiRequestProtection.newToken() }}"
+                >
+                <i class="fa-solid fa-recycle mr-1"></i>
+                {{ trans('numserie') }}
+            </button>
+        {% else %}
+            <button type="button"
+                    class="btn btn-sm btn-spin-action btn-success"
+                    data-id="{{ item.id }}"
+                    data-target="numserie-{{ item.id }}"
+                    data-multireqtoken="{{ fsc.multiRequestProtection.newToken() }}"
+                    onclick="window.Production.NumSerie.confirm(this)">
+                <i class="fa-solid fa-check mr-1"></i>
+                {{ trans('verify') }}
+            </button>
+        {% endif %}
+    </td>
+</tr>

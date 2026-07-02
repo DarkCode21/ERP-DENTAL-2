@@ -1,0 +1,136 @@
+{#
+/**
+ * This file is part of the Produccion plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ * All Rights Reserved.
+ */
+#}
+{% set mainView = fsc.views[fsc.getMainViewName()] %}
+{% set numSerieView = fsc.views['EditAlbaranClienteNumSerie'] %}
+{% set seriesUnassigned = numSerieView.cursor.unassigned %}
+{% set seriesAssigned  = numSerieView.cursor.assigned %}
+
+{% if seriesUnassigned is not empty %}
+    <form method="post" action="{{ fsc.url() }}?code={{ mainView.model.primaryColumnValue() }}#EditAlbaranClienteNumSerie" id="formAssignNumSeries">
+        <input type="hidden" name="action" value="saveNumSeries">
+        <div class="card shadow-sm mb-3" id="NumSerieList-Unasigned">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <strong>{{ trans('serial-numbers-unasigned') }}</strong>
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-barcode"></i> {{ trans('assign') }}
+                </button>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0 align-middle">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col" class="col-2">{{ trans('reference') }}</th>
+                            <th scope="col" class="col-4">{{ trans('product') }}</th>
+                            <th scope="col" class="col-3">{{ trans('numserie') }}</th>
+                            <th class="col-2"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in seriesUnassigned %}
+                            <tr>
+                                <td class="col-2">
+                                    <input type="hidden" name="iddoc[{{ item.iddocument }}]" value="{{ item.document }}">
+                                    <input type="text"
+                                           name="reference"
+                                           value="{{ item.reference }}"
+                                           class="form-control form-control-sm"
+                                           readonly>
+                                </td>
+                                <td class="col-4">
+                                    <input type="text"
+                                           name="product[{{ item.idline }}]"
+                                           value="{{ item.product }}"
+                                           class="form-control form-control-sm"
+                                           readonly>
+                                </td>
+                                <td class="col-3">
+                                    <select name="numserie[{{ item.reference ~ '_' ~ loop.index }}]"
+                                            class="custom-select custom-select-sm select2 fs-select2"
+                                            data-placeholder="{{ trans('select-numserie') }}">
+                                        <option value="">{{ trans('select-numserie') }}</option>
+                                        {% for serie in item.availables %}
+                                            <option value="{{ serie.id }}">{{ serie.numserie }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td class="col-2"></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-footer bg-light d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-barcode"></i> {{ trans('assign') }}
+                </button>
+            </div>
+        </div>
+    </form>
+{% endif %}
+
+{% if seriesAssigned is not empty %}
+    <form method="post" action="{{ fsc.url() }}?code={{ mainView.model.primaryColumnValue() }}#NumSerieList-Assigned" id="formUnAssignNumSeries">
+        <input type="hidden" name="action" value="unassignNumSeries">
+        <div class="card shadow-sm mb-3" id="NumSerieList-Assigned">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <strong>{{ trans('serial-numbers') }}</strong>
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                    <i class="fa-solid fa-trash"></i> {{ trans('unassign') }}
+                </button>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0 align-middle">
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="col-2">{{ trans('reference') }}</th>
+                            <th class="col-4">{{ trans('product') }}</th>
+                            <th class="col-3">{{ trans('numserie') }}</th>
+                            <th class="col-2 text-center">{{ trans('select') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in seriesAssigned %}
+                            <tr>
+                                <td class="col-2">
+                                    <input type="hidden" name="iddoc[{{ item.iddocument }}]" value="{{ item.document }}">
+                                    <input type="text" value="{{ item.reference }}" class="form-control form-control-sm" readonly>
+                                </td>
+                                <td class="col-4">
+                                    <input type="text" value="{{ item.product }}" class="form-control form-control-sm" readonly>
+                                </td>
+                                <td class="col-3">
+                                    <input type="text" value="{{ item.numserie }}" class="form-control form-control-sm font-weight-bold text-dark" readonly>
+                                </td>
+                                <td class="col-2 text-center">
+                                    <input type="checkbox" class="form-check-input" name="idnumserie[]" value="{{ item.idnumserie }}">
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-footer bg-light d-flex justify-content-end">
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                    <i class="fa-solid fa-trash"></i> {{ trans('unassign') }}
+                </button>
+            </div>
+        </div>
+    </form>
+{% endif %}
+

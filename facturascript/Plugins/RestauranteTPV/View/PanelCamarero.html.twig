@@ -1,0 +1,5076 @@
+{% extends "Master/MenuBgTemplate.html.twig" %}
+
+{% block body %}
+	<style>
+		/* Escritorio xl: dos columnas */
+		@media(min-width:1200px) {
+			.tpv-topbar,
+			.tpv-ordertype,
+			.tpv-selectors {
+				display: none !important;
+			}
+		}
+		* {
+			box-sizing: border-box;
+		}
+		.tpv-wrap {
+			background: #f0f2f5;
+			min-height: 88vh;
+		}
+		@media(min-width:1200px) {
+			.tpv-wrap {
+				padding-bottom: 5px;
+			}
+		}
+
+		/* Barra top móvil — 4 botones colores */
+		.tpv-topbar {
+			display: flex;
+			gap: 4px;
+			padding: 5px 5px 0;
+			background: #f0f2f5;
+		}
+		.tpv-topbar .tb-btn {
+			flex: 1;
+			border: 0;
+			border-radius: 5px;
+			padding: 8px 2px;
+			font-size: 0.72rem;
+			font-weight: 600;
+			color: #fff;
+			cursor: pointer;
+			white-space: nowrap;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+		}
+		#tab-comanda-link {
+			flex: 2;
+		}
+		.tb-red {
+			background: #e74c3c;
+		}
+		.tb-purple {
+			background: #8e44ad;
+		}
+		.tb-grey {
+			background: #7f8c8d;
+		}
+		.tb-green {
+			background: #27ae60;
+		}
+
+		/* Botones tipo de orden — globales (mobile y desktop) */
+		.ot-btn {
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			padding: 8px 4px;
+			font-size: 0.75rem;
+			font-weight: 500;
+			background: #fff;
+			color: #444;
+			cursor: pointer;
+			text-align: center;
+		}
+		.ot-btn.active {
+			background: #d6eaf8;
+			border-color: #2980b9;
+			color: #1a6fa8;
+			font-weight: 700;
+		}
+		.ot-btn.mesa-active {
+			color: #c0392b;
+			border-color: #c0392b;
+			background: #fdf2f0;
+		}
+		.ot-btn.mesa-active:disabled {
+			color: #aaa;
+			border-color: #ccc;
+			background: #f5f5f5;
+			cursor: not-allowed;
+			opacity: .6;
+		}
+
+		/* Selector tipo de orden (móvil: grid 2×2) */
+		.tpv-ordertype {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 4px;
+			padding: 5px;
+		}
+
+		/* Escritorio: tipo orden en fila + selectores dentro del panel-comanda */
+		.xl-ot-row {
+			display: none;
+		}
+		.xl-sel-row {
+			display: none;
+		}
+		@media(min-width:1200px) {
+			.xl-ot-row {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 6px;
+				padding: 8px;
+				border-bottom: 1px solid #dee2e6;
+				background: #fff;
+				flex-shrink: 0;
+			}
+			.xl-sel-row {
+				display: flex;
+				gap: 6px;
+				padding: 4px 8px 8px;
+				border-bottom: 1px solid #dee2e6;
+				background: #fff;
+				align-items: center;
+				flex-shrink: 0;
+			}
+			.xl-sel-row select {
+				flex: 1;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				padding: 5px 6px;
+				font-size: 0.78rem;
+				background: #fff;
+			}
+			.xl-sel-row .sel-btn {
+				border: 1px solid #bbb;
+				border-radius: 4px;
+				padding: 5px 8px;
+				background: #fff;
+				color: #555;
+				font-size: 0.85rem;
+				cursor: pointer;
+			}
+		}
+
+		/* Fila waiter + cliente */
+		.tpv-selectors {
+			display: flex;
+			gap: 4px;
+			padding: 0 5px 5px;
+			align-items: center;
+		}
+		.tpv-selectors select {
+			flex: 1;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			padding: 5px 6px;
+			font-size: 0.78rem;
+			background: #fff;
+		}
+		.tpv-selectors .sel-btn {
+			border: 1px solid #bbb;
+			border-radius: 4px;
+			padding: 5px 8px;
+			background: #fff;
+			color: #555;
+			font-size: 0.85rem;
+			cursor: pointer;
+		}
+
+		/* Tabs catálogo / comanda — estilo oscuro como Restora */
+		.tpv-tabs-dark {
+			display: flex;
+			border-bottom: 2px solid #333;
+		}
+		.tpv-tabs-dark .ttd-btn {
+			flex: 1;
+			padding: 9px 4px;
+			font-size: 0.78rem;
+			font-weight: 600;
+			text-align: center;
+			background: #222;
+			color: #aaa;
+			border: 0;
+			border-right: 1px solid #444;
+			cursor: pointer;
+		}
+		.tpv-tabs-dark .ttd-btn:last-child {
+			border-right: 0;
+		}
+		.tpv-tabs-dark .ttd-btn.active {
+			background: #333;
+			color: #fff;
+		}
+		.tpv-tabs-dark .ttd-badge {
+			background: #28a745;
+			color: #fff;
+			border-radius: 10px;
+			padding: 1px 6px;
+			font-size: 0.65rem;
+			margin-left: 4px;
+		}
+
+		/* Familias scroll */
+		.tpv-fams {
+			display: flex;
+			overflow-x: auto;
+			gap: 3px;
+			padding: 4px 5px;
+			background: #fff;
+			border-bottom: 1px solid #dee2e6;
+			flex-wrap: nowrap;
+		}
+		.tpv-fams::-webkit-scrollbar {
+			height: 3px;
+		}
+		.tpv-fams::-webkit-scrollbar-thumb {
+			background: #ccc;
+		}
+		.fam-btn {
+			flex-shrink: 0;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			padding: 3px 9px;
+			font-size: 0.72rem;
+			background: #fff;
+			cursor: pointer;
+			white-space: nowrap;
+			color: #444;
+		}
+		.fam-btn.active {
+			background: #2980b9;
+			color: #fff;
+			border-color: #2980b9;
+		}
+
+		/* Sidebar familias (xl) */
+		#cat-sidebar {
+			display: none;
+		}
+		#cat-main {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+		}
+		.cat-sidebar-btn {
+			width: 100%;
+			text-align: left;
+			border: 1px solid #dee2e6;
+			border-radius: 4px;
+			padding: 6px 8px;
+			font-size: 0.75rem;
+			background: #fff;
+			cursor: pointer;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			color: #444;
+			transition: background 0.15s;
+		}
+		.cat-sidebar-btn:hover {
+			background: #e9f0fb;
+			border-color: #aac4f0;
+		}
+		.cat-sidebar-btn.active {
+			background: #0d6efd;
+			color: #fff;
+			border-color: #0d6efd;
+		}
+		.cat-sidebar-btn.active-est {
+			background: #e67e22;
+			color: #fff;
+			border-color: #e67e22;
+		}
+		.cat-sidebar-sep {
+			height: 1px;
+			background: #dee2e6;
+			margin: 4px 0;
+		}
+
+		/* Buscador */
+		.tpv-search {
+			padding: 4px 5px;
+			background: #fff;
+		}
+		.tpv-search input {
+			width: 100%;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			padding: 5px 8px;
+			font-size: 0.78rem;
+		}
+
+		/* Grid productos */
+		.tpv-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 3px;
+			padding: 4px 5px;
+			overflow-y: auto;
+			background: #f0f2f5;
+		}
+		.prod-card {
+			background: #fff;
+			border: 1px solid #ddd;
+			border-radius: 6px;
+			padding: 0;
+			cursor: pointer;
+			height: 142px;
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+		}
+		.prod-card:active {
+			background: #e8f4fd;
+		}
+		.prod-img-wrap {
+			width: 100%;
+			height: 94px;
+			overflow: hidden;
+			background: #f5f5f5;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+		.prod-img-wrap img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.prod-no-img {
+			color: #ccc;
+			font-size: 1.4rem;
+		}
+		.prod-info {
+			padding: 3px 4px 4px;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			overflow: hidden;
+		}
+		.prod-nombre {
+			font-size: 0.68rem;
+			font-weight: 600;
+			line-height: 1.2;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
+		.prod-precio {
+			font-size: 0.63rem;
+			color: #2980b9;
+			font-weight: 700;
+			white-space: nowrap;
+		}
+
+		/* Tabla comanda */
+		.tpv-table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 0.78rem;
+		}
+		.tpv-table th {
+			background: #e9ecef;
+			padding: 4px 5px;
+			text-align: left;
+			font-weight: 600;
+			border-bottom: 2px solid #dee2e6;
+		}
+		.tpv-table td {
+			padding: 4px 5px;
+			border-bottom: 1px solid #f0f0f0;
+			vertical-align: middle;
+		}
+		.tpv-table tr:hover td {
+			background: #f8f9fa;
+		}
+		.qty-ctrl {
+			display: flex;
+			align-items: center;
+			gap: 2px;
+		}
+		.qty-ctrl button {
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			background: #fff;
+			width: 22px;
+			height: 22px;
+			font-size: 0.7rem;
+			cursor: pointer;
+			padding: 0;
+			line-height: 1;
+		}
+		.qty-ctrl span {
+			min-width: 18px;
+			text-align: center;
+			font-weight: 700;
+			font-size: 0.78rem;
+		}
+		.tpv-del-btn {
+			border: 1px solid #e74c3c;
+			background: #fff;
+			color: #e74c3c;
+			border-radius: 50%;
+			width: 22px;
+			height: 22px;
+			font-size: 0.7rem;
+			cursor: pointer;
+			padding: 0;
+			line-height: 1;
+		}
+
+		/* Footer total + botones */
+		.tpv-footer {
+			background: #fff;
+			border-top: 2px solid #dee2e6;
+			padding: 6px 8px;
+		}
+		.tpv-total-row {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			padding: 6px 0;
+		}
+		.tpv-total-row .ico {
+			color: #888;
+			font-size: 1.1rem;
+			cursor: pointer;
+		}
+		.tpv-total-label {
+			font-size: 1.3rem;
+			font-weight: 700;
+			flex: 1;
+			color: #222;
+		}
+		.tpv-total-val {
+			font-size: 1.5rem;
+			font-weight: 800;
+			color: #27ae60;
+		}
+		.tpv-actions {
+			display: flex;
+			gap: 4px;
+			padding-top: 2px;
+		}
+		.tpv-actions .ta-btn {
+			flex: 1;
+			border: 0;
+			border-radius: 5px;
+			padding: 9px 2px;
+			font-size: 0.72rem;
+			font-weight: 700;
+			color: #fff;
+			cursor: pointer;
+		}
+		.ta-cancel {
+			background: #e74c3c;
+		}
+		.ta-kitchen {
+			background: #8e44ad;
+		}
+		.ta-invoice {
+			background: #e67e22;
+		}
+		.ta-charge {
+			background: #27ae60;
+		}
+
+		/* Carrito móvil — estirar hasta el fondo */
+		@media(max-width:1199px) {
+			.tpv-wrap {
+				height: 88vh;
+				min-height: 0;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+			}
+			.tpv-topbar,
+			.tpv-ordertype,
+			.tpv-selectors {
+				flex-shrink: 0;
+			}
+			.tpv-wrap > .row {
+				flex: 1;
+				min-height: 0;
+				overflow: hidden;
+			}
+			/* Catálogo en móvil: ocupa el espacio restante y permite scroll */
+			#panel-catalogo:not(.d-none) {
+				flex: 1;
+				min-height: 0;
+				display: flex !important;
+				flex-direction: column;
+				overflow: hidden;
+			}
+			#cat-topbar {
+				flex-shrink: 0;
+			}
+			#catalogo-grid-wrap {
+				flex: 1;
+				min-height: 0;
+				overflow-y: auto !important;
+			}
+			#panel-comanda-tab:not(.d-none) {
+				height: 100%;
+				display: flex !important;
+				flex-direction: column;
+				overflow: hidden;
+			}
+			#panel-comanda-tab > .overflow-auto {
+				flex: 1;
+				min-height: 0;
+				overflow-y: auto;
+				max-height: none !important;
+			}
+			#panel-comanda-tab > .tpv-footer {
+				flex-shrink: 0;
+			}
+			#panel-ordenes-tab:not(.d-none) {
+				flex: 1;
+				min-height: 0;
+				overflow-y: auto;
+			}
+		}
+
+		/* Estilos modal mesas */
+		.mm-zona-tab {
+			cursor: pointer;
+			padding: 8px 6px;
+			font-size: 0.78rem;
+			color: #aaa;
+			border-bottom: 1px solid #444;
+			text-align: center;
+		}
+		.mm-zona-tab.active {
+			background: #555;
+			color: #fff;
+			font-weight: 700;
+		}
+		.mm-mesa-thumb {
+			width: 82px;
+			height: 68px;
+			border-radius: 6px;
+			cursor: pointer;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid;
+			margin: 4px;
+		}
+		.mm-mesa-thumb.estado-libre {
+			border-color: #28a745;
+			color: #28a745;
+			background: rgba(40, 167, 69, 0.12);
+		}
+		.mm-mesa-thumb.estado-ocupada {
+			border-color: #dc3545;
+			color: #dc3545;
+			background: rgba(220, 53, 69, 0.12);
+		}
+		.mm-mesa-thumb.estado-reservada {
+			border-color: #ffc107;
+			color: #ffc107;
+			background: rgba(255, 193, 7, 0.12);
+		}
+		.mm-mesa-thumb:hover {
+			opacity: .8;
+		}
+		/* Mapa de mesas */
+		.mesas-mapa-wrap {
+			position: relative;
+			overflow: hidden;
+			flex: 1;
+			width: 100%;
+		}
+		.mesas-mapa {
+			position: relative;
+			background-color: #f5f2ea;
+			background-image: linear-gradient(rgba(0,0,0,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+			background-size: 40px 40px;
+			transform-origin: top left;
+		}
+		.mesas-mapa .mm-mesa-thumb {
+			position: absolute;
+			margin: 0;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+			user-select: none;
+		}
+		/* Menú contextual mesas */
+		.tpv-ctx-menu {
+			position: fixed;
+			z-index: 9999;
+			background: #fff;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+			min-width: 160px;
+			display: none;
+			overflow: hidden;
+		}
+		.tpv-ctx-menu.show {
+			display: block;
+		}
+		.tpv-ctx-item {
+			padding: 10px 16px;
+			font-size: 0.82rem;
+			cursor: pointer;
+			white-space: nowrap;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+		.tpv-ctx-item:hover {
+			background: #f0f4f8;
+		}
+		.tpv-ctx-sep {
+			height: 1px;
+			background: #eee;
+			margin: 2px 0;
+		}
+
+		/* Sidebar Órdenes (escritorio) */
+		.tpv-orders-sidebar {
+			width: 185px;
+			flex-shrink: 0;
+			border-right: 1px solid #dee2e6;
+			background: #fff;
+			display: none;
+			flex-direction: column;
+		}
+		@media(min-width:1200px) {
+			.tpv-orders-sidebar {
+				display: flex;
+				align-self: stretch;
+			}
+		}
+		.tpv-orders-hdr {
+			background: #222;
+			color: #fff;
+			padding: 7px 8px;
+			font-size: 0.74rem;
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-shrink: 0;
+		}
+		.tpv-orders-hdr a {
+			color: #aaa;
+			font-size: 0.8rem;
+		}
+		.tpv-orders-hdr a:hover {
+			color: #fff;
+		}
+		.tpv-order-card {
+			padding: 6px 8px;
+			border-bottom: 1px solid #eee;
+			cursor: pointer;
+			font-size: 0.72rem;
+		}
+		.tpv-order-card:hover {
+			background: #f0f4f8;
+		}
+		.tpv-order-card.selected {
+			background: #d6eaf8;
+			border-left: 3px solid #2980b9;
+		}
+		.tpv-oc-top {
+			font-weight: 600;
+			color: #222;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.tpv-oc-sub {
+			color: #666;
+		}
+		.tpv-oc-extra {
+			color: #555;
+			margin-top: 3px;
+			display: none;
+		}
+		.tpv-order-card.selected .tpv-oc-extra {
+			display: block;
+		}
+		.tpv-orders-actions {
+			flex-shrink: 0;
+			border-top: 2px solid #dee2e6;
+			padding: 5px;
+		}
+		.tpv-act-btn {
+			display: block;
+			width: 100%;
+			text-align: left;
+			padding: 6px 8px;
+			font-size: 0.72rem;
+			background: #f8f9fa;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			margin-bottom: 3px;
+			cursor: pointer;
+			color: #333;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.tpv-act-btn:hover {
+			background: #e9ecef;
+		}
+		.tpv-act-btn.tpv-act-factura {
+			background: #e67e22;
+			color: #fff;
+			border-color: #e67e22;
+		}
+		.tpv-act-btn.tpv-act-cancel {
+			background: #e74c3c;
+			color: #fff;
+			border-color: #e74c3c;
+		}
+
+		/* Buscador clientes */
+		.tpv-cli-wrap {
+			flex: 1;
+			position: relative;
+		}
+		.tpv-cli-drop {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			max-height: 220px;
+			overflow-y: auto;
+			background: #fff;
+			border: 1px solid #ccc;
+			border-radius: 0 0 4px 4px;
+			z-index: 9999;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+			display: none;
+		}
+		.tpv-cli-opt {
+			padding: 6px 10px;
+			font-size: 0.76rem;
+			cursor: pointer;
+			border-bottom: 1px solid #f0f0f0;
+		}
+		.tpv-cli-opt:hover {
+			background: #d6eaf8;
+		}
+		.tpv-cli-opt .cli-sub {
+			font-size: 0.68rem;
+			color: #888;
+		}
+
+		/* Layout escritorio 3 columnas */
+		@media(min-width:1200px) {
+			.tpv-wrap {
+				display: flex;
+				flex-wrap: nowrap;
+				height: calc(92vh - 55px);
+				overflow: hidden;
+				align-items: stretch;
+			}
+			.tpv-xl-cart-group {
+				flex: 1;
+				display: flex;
+				overflow: hidden;
+			}
+			#panel-comanda {
+				flex: 1;
+				overflow: hidden;
+			}
+			#panel-catalogo {
+				flex: 1;
+				overflow: hidden;
+				display: flex;
+				flex-direction: row;
+			}
+			#cat-sidebar {
+				display: flex !important;
+				flex-direction: column;
+				width: 140px;
+				flex-shrink: 0;
+				overflow-y: auto;
+				border-right: 1px solid #dee2e6;
+				padding: 6px 5px;
+				gap: 3px;
+				background: #fafafa;
+			}
+			#cat-sidebar::-webkit-scrollbar {
+				width: 3px;
+			}
+			#cat-sidebar::-webkit-scrollbar-thumb {
+				background: #ccc;
+			}
+		}
+	</style>
+
+	{% set cajaContextUrl = fsc.url() ~ (fsc.mesa ? '?idmesa=' ~ fsc.mesa.idmesa : (fsc.vistaOrdenes ? '?vista=ordenes' : '')) %}
+
+	{% if not fsc.vistaOrdenes %}
+		<div
+			class="tpv-wrap">
+
+			{# ── Barra superior móvil: 4 botones ── #}
+			<div class="tpv-topbar d-xl-none">
+				<button class="tb-btn tb-red" id="tab-ordenes-link" onclick="tpvTab('ordenes')">
+					<i class="fa-solid fa-list-check"></i>
+					Ordenes
+				</button>
+				<button class="tb-btn tb-purple" id="tab-comanda-link" onclick="tpvTab('comanda')">
+					<i class="fa-solid fa-cart-shopping"></i>
+					Carrito<span id="tpv-cart-badge" style="background:#e74c3c;color:#fff;border-radius:10px;font-size:.6rem;font-weight:700;padding:0 5px;line-height:1.6;display:{{ fsc.lineas|length > 0 ? 'inline-block' : 'none' }};min-width:16px;text-align:center;vertical-align:middle;margin-left:3px;">{{ fsc.lineas|length }}</span>
+				</button>
+				<button class="tb-btn tb-grey" id="tab-catalogo-link" onclick="tpvTab('catalogo')">
+					<i class="fa-solid fa-burger"></i>
+					{{ i18n.trans('catalog') }}
+				</button>
+
+			</div>
+
+			{# ── Selector tipo orden (móvil) ── #}
+			<div class="tpv-ordertype d-xl-none">
+				<button type="button" class="ot-btn {{ ((fsc.comanda and fsc.comanda.tipo == 'in-table') or (not fsc.comanda and fsc.settingServicioDefecto == 'in-table')) ? 'active' : '' }}" onclick="tpvTipoOrden(this,'in-table')">
+					<i class="fa-solid fa-table-cells mr-1"></i>
+					{{ i18n.trans('dine-in') }}</button>
+				<button type="button" class="ot-btn {{ ((fsc.comanda and fsc.comanda.tipo == 'take-away') or (not fsc.comanda and fsc.settingServicioDefecto == 'take-away')) ? 'active' : '' }}" onclick="tpvTipoOrden(this,'take-away')">
+					<i class="fa-solid fa-bag-shopping mr-1"></i>
+					{{ i18n.trans('take-away') }}</button>
+				<button type="button" class="ot-btn {{ ((fsc.comanda and fsc.comanda.tipo == 'delivery') or (not fsc.comanda and fsc.settingServicioDefecto == 'delivery')) ? 'active' : '' }}" onclick="tpvTipoOrden(this,'delivery')">
+					<i class="fa-solid fa-truck mr-1"></i>
+					{{ i18n.trans('delivery') }}</button>
+				<button type="button" class="ot-btn mesa-active" id="btn-mesa-mobile" onclick="$('#modalMesas').modal('show')" {{ ((fsc.comanda and fsc.comanda.tipo != 'in-table') or (not fsc.comanda and fsc.settingServicioDefecto != 'in-table')) ? 'disabled' : '' }}>
+					<i class="fa-solid fa-right-left mr-1"></i>
+					{{ i18n.trans('table') }}:
+					{{ fsc.mesa ? fsc.mesa.nombre : '---' }}
+				</button>
+			</div>
+
+			{# ── Selectores waiter + cliente (móvil) ── #}
+			{% set tpvNomClienteActual = '' %}
+			{% for c in fsc.clientes %}
+				{% if c.codcliente == fsc.codClienteDefault %}
+					{% set tpvNomClienteActual = c.nombre %}
+				{% endif %}
+			{% endfor %}
+			<div class="tpv-selectors d-xl-none">
+				{% if fsc.empresas|length > 1 %}
+					<input type="hidden" id="tpv-empresa-token" value="{{ formToken(false) }}">
+					<select class="tpv-empresa-sel" onchange="tpvSetEmpresa(this.value)" style="flex:1;width:100%;border:1px solid #ccc;border-radius:4px;padding:5px 6px;font-size:.78rem;background:#fff;">
+						{% for emp in fsc.empresas %}
+							<option value="{{ emp.idempresa }}" {{ fsc.idempresaActual == emp.idempresa ? 'selected' : '' }}>{{ emp.nombre }}</option>
+						{% endfor %}
+					</select>
+				{% endif %}
+				{% if fsc.user.admin and fsc.usuarios|length > 1 %}
+					<select style="flex:1;border:1px solid #ccc;border-radius:4px;padding:5px 6px;font-size:.78rem;background:#fff;">
+						{% for u in fsc.usuarios %}
+							<option value="{{ u.nick }}" {{ u.nick == fsc.user.nick ? 'selected' : '' }}>{{ u.nick }}</option>
+						{% endfor %}
+					</select>
+				{% else %}
+					<div style="flex:1;border:1px solid #ccc;border-radius:4px;padding:5px 6px;font-size:.78rem;background:#f8f9fa;color:#555;">
+						<i class="fa-solid fa-user mr-1"></i>
+						{{ fsc.user.nick }}
+					</div>
+				{% endif %}
+				<div class="tpv-cli-wrap">
+					<input type="text" class="tpv-cli-input" id="sel-cliente-mobile-input" autocomplete="off" placeholder="Buscar por nombre, teléfono..." value="{{ tpvNomClienteActual|e('html_attr') }}" style="width:100%;border:1px solid #ccc;border-radius:4px;padding:5px 6px;font-size:.78rem;background:#fff;" oninput="tpvFiltrarCliente(this,'sel-cliente-mobile')" onfocus="tpvFiltrarCliente(this,'sel-cliente-mobile')"/>
+					<input type="hidden" id="sel-cliente-mobile" value="{{ fsc.codClienteDefault }}"/>
+					<div id="sel-cliente-mobile-drop" class="tpv-cli-drop"></div>
+				</div>
+				<button class="sel-btn" onclick="tpvAbrirEditarCliente()">
+					<i class="fa-solid fa-pencil"></i>
+				</button>
+				<button class="sel-btn" onclick="tpvAbrirNuevoCliente()">
+					<i class="fa-solid fa-plus"></i>
+				</button>
+				{% if fsc.cashSerie and not fsc.cashBox %}
+					<form action="{{ cajaContextUrl }}" method="post" class="mb-0" data-no-ajax="true">
+						{{ formToken() }}
+						<button type="submit" name="action" value="cash-open-start" class="btn btn-success btn-sm text-nowrap">
+							<i class="fas fa-lock-open mr-1"></i>Abrir caja
+						</button>
+					</form>
+				{% else %}
+					<div class="btn-group dropdown">
+						<button class="sel-btn dropdown-toggle" type="button" id="dropdownCashMobile" data-toggle="dropdown" aria-expanded="false" title="Caja">
+							<i class="fa-solid fa-cash-register {{ fsc.cashBox ? 'text-success' : 'text-danger' }}"></i>
+						</button>
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownCashMobile">
+							{% if fsc.cashSerie %}
+								<button type="button" class="dropdown-item p-3" onclick="return modalCashMovement('cash-in')">
+									<i class="fas fa-level-down-alt fa-fw"></i>
+									Entrada de caja
+								</button>
+								<button type="button" class="dropdown-item p-3" onclick="return modalCashMovement('cash-out')">
+									<i class="fas fa-level-up-alt fa-fw"></i>
+									Salida de caja
+								</button>
+								<form action="{{ cajaContextUrl }}" method="post" data-no-ajax="true">
+									{{ formToken() }}
+									<button type="submit" name="action" value="cash-close-start" class="dropdown-item p-3 text-danger">
+										<i class="fas fa-times fa-fw"></i>
+										Cerrar caja
+									</button>
+								</form>
+							{% else %}
+								<span class="dropdown-item-text text-muted p-3">Sin serie configurada</span>
+							{% endif %}
+						</div>
+					</div>
+				{% endif %}
+			</div>
+
+			<div
+				class="tpv-xl-cart-group d-none d-xl-flex">
+
+				{# ════ SIDEBAR ÓRDENES (xl) ════ #}
+				<div class="tpv-orders-sidebar" id="tpv-orders-sidebar">
+					<div class="tpv-orders-hdr">
+						<span>
+							<i class="fa-solid fa-list-check mr-1"></i>Órdenes de
+							{{ fsc.user.nick }}</span>
+						<a href="{{ fsc.url() }}{{ fsc.mesa ? '?idmesa=' ~ fsc.mesa.idmesa : '' }}" title="Actualizar">
+							<i class="fa-solid fa-arrows-rotate"></i>
+						</a>
+					</div>
+					{% if fsc.ordenesAbiertas|length > 1 %}
+						<div style="padding:4px 6px;border-bottom:1px solid #dee2e6;">
+							<input type="search" id="sidebarOrdenesSearch" class="form-control form-control-sm" placeholder="Buscar orden..." oninput="filtrarSidebar(this.value)">
+						</div>
+					{% endif %}
+					<div class="flex-fill overflow-auto" id="tpv-orders-list">
+						{% if fsc.ordenesAbiertas is empty %}
+							<div class="text-center text-muted small py-3">Sin pedidos</div>
+						{% endif %}
+						{% for ord in fsc.ordenesAbiertas %}
+							<div class="tpv-order-card" data-id="{{ ord.idcomanda }}" data-idpedido="{{ ord.idpedido }}" data-idmesa="{{ ord.idmesa|default(0) }}" data-tipo="{{ ord.tipo|capitalize }}" data-num="{{ ord.codigo_pedido|default(ord.idpedido) }}" data-cam="{{ ord.codcamarero|e }}" data-cl="{{ ord.cliente_nombre|default('')|e }}" data-mesa="{{ ord.mesa_nombre|default('None')|e }}" data-total="{{ ord.total }}" data-tax="{{ ord.totaliva|default(0) }}" data-totalpedido="{{ ord.total_pedido|default(ord.total) }}" data-dt="{{ ord.fecha }} {{ ord.hora }}" data-ls="{{ (ord.lineas|map(l => l.estado != 'cancelado' ? [l.descripcion, l.pvpunitario, l.cantidad] : null)|filter(v => v is not null))|json_encode|e }}" data-lsf="{{ (ord.lineas|map(l => l.estado != 'cancelado' ? [l.idlinea, l.descripcion, l.cantidad, l.pvpunitario] : null)|filter(v => v is not null))|json_encode|e }}" onclick="tpvSelectOrder(this)">
+								<div class="tpv-oc-top">{{ ord.cliente_nombre|default('Sin cliente')|slice(0,22) }}</div>
+								<div class="tpv-oc-sub">Pedido:
+									{{ ord.codigo_pedido|default(ord.idpedido) }}</div>
+								<div class="tpv-oc-extra">
+									<div>Tipo:
+										{{ ord.tipo|capitalize }}</div>
+									{% if ord.mesa_nombre %}
+										<div>Mesa:
+											{{ ord.mesa_nombre }}</div>
+									{% endif %}
+									<div>GARZÓN:
+										{{ ord.codcamarero }}</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+					<div style="flex-shrink:0;border-top:2px solid #dee2e6;padding:5px;">
+						<button type="button" class="tpv-act-btn" onclick="tpvSideCuenta()">
+							<i class="fa-solid fa-receipt mr-1"></i>Cuenta
+						</button>
+					</div>
+					<div class="tpv-orders-actions" id="tpv-orders-actions" style="display:none;">
+						<a id="tpv-act-modificar" href="#" class="tpv-act-btn">
+							<i class="fa-solid fa-pen mr-1"></i>Modificar pedido
+						</a>
+						<button type="button" class="tpv-act-btn" onclick="tpvSideDetalles()">
+							<i class="fa-solid fa-circle-info mr-1"></i>Detalles del pedido
+						</button>
+						<div id="tpv-side-form-fac">
+							<input type="hidden" id="tpv-side-fac-id" value="">
+							<input type="hidden" id="tpv-side-fac-total" value="">
+							<button type="button" class="tpv-act-btn tpv-act-factura" onclick="tpvAbrirModalFactura(document.getElementById('tpv-side-fac-id').value, parseFloat(document.getElementById('tpv-side-fac-total').value) || 0)">
+								<i class="fa-solid fa-file-invoice mr-1"></i>
+								{{ i18n.trans('invoice') }}
+							</button>
+						</div>
+						<form method="post" action="{{ fsc.url() }}" id="tpv-side-form-can" onsubmit="return confirm('¿Está seguro?')">
+							<input type="hidden" name="multireqtoken" value="{{ formToken(false) }}">
+							<input type="hidden" name="action" value="cancel-pedido">
+							<input type="hidden" name="idcomanda" id="tpv-side-can-id" value="">
+							<button type="submit" class="tpv-act-btn tpv-act-cancel">
+								<i class="fa-solid fa-xmark mr-1"></i>Cancelar pedido
+							</button>
+						</form>
+					</div>
+				</div>
+
+				{# plit: cart + catalog on xl #}
+				<div
+					class="d-flex flex-column" style="border-right:1px solid #dee2e6;" id="panel-comanda">
+
+					{# Tipo de orden — escritorio #}
+					<div class="xl-ot-row" id="xl-ordertype">
+						<button type="button" class="ot-btn {{ ((fsc.comanda and fsc.comanda.tipo == 'in-table') or (not fsc.comanda and fsc.settingServicioDefecto == 'in-table')) ? 'active' : '' }}" onclick="tpvTipoOrden(this,'in-table')">
+							<i class="fa-solid fa-table-cells mr-1"></i>
+							{{ i18n.trans('dine-in') }}</button>
+						<button type="button" class="ot-btn {{ ((fsc.comanda and fsc.comanda.tipo == 'take-away') or (not fsc.comanda and fsc.settingServicioDefecto == 'take-away')) ? 'active' : '' }}" onclick="tpvTipoOrden(this,'take-away')">
+							<i class="fa-solid fa-bag-shopping mr-1"></i>
+							{{ i18n.trans('take-away') }}</button>
+						<button type="button" class="ot-btn {{ ((fsc.comanda and fsc.comanda.tipo == 'delivery') or (not fsc.comanda and fsc.settingServicioDefecto == 'delivery')) ? 'active' : '' }}" onclick="tpvTipoOrden(this,'delivery')">
+							<i class="fa-solid fa-truck mr-1"></i>
+							{{ i18n.trans('delivery') }}</button>
+						<button type="button" class="ot-btn mesa-active" id="btn-mesa-desktop" onclick="$('#modalMesas').modal('show')" {{ ((fsc.comanda and fsc.comanda.tipo != 'in-table') or (not fsc.comanda and fsc.settingServicioDefecto != 'in-table')) ? 'disabled' : '' }}>
+							<i class="fa-solid fa-right-left mr-1"></i>
+							{{ i18n.trans('table') }}:
+							{{ fsc.mesa ? fsc.mesa.nombre : '---' }}
+						</button>
+					</div>
+
+					{# Selectores waiter + cliente — escritorio #}
+					<div class="xl-sel-row">
+						{% if fsc.empresas|length > 1 %}
+							<select class="tpv-empresa-sel" onchange="tpvSetEmpresa(this.value)" style="flex:1;width:100%;border:1px solid #ccc;border-radius:4px;padding:5px 6px;font-size:.78rem;background:#fff;">
+								{% for emp in fsc.empresas %}
+									<option value="{{ emp.idempresa }}" {{ fsc.idempresaActual == emp.idempresa ? 'selected' : '' }}>{{ emp.nombre }}</option>
+								{% endfor %}
+							</select>
+						{% endif %}
+						{% if fsc.user.admin and fsc.usuarios|length > 1 %}
+							<select>
+								{% for u in fsc.usuarios %}
+									<option value="{{ u.nick }}" {{ u.nick == fsc.user.nick ? 'selected' : '' }}>{{ u.nick }}</option>
+								{% endfor %}
+							</select>
+						{% else %}
+							<div style="flex:1;border:1px solid #ccc;border-radius:4px;padding:5px 6px;font-size:.78rem;background:#f8f9fa;color:#555;">
+								<i class="fa-solid fa-user mr-1"></i>
+								{{ fsc.user.nick }}
+							</div>
+						{% endif %}
+						<div class="tpv-cli-wrap">
+							<input type="text" class="tpv-cli-input" id="sel-cliente-desktop-input" autocomplete="off" placeholder="Buscar por nombre, teléfono..." value="{{ tpvNomClienteActual|e('html_attr') }}" style="width:100%;border:1px solid #ccc;border-radius:4px;padding:5px 6px;font-size:.78rem;background:#fff;" oninput="tpvFiltrarCliente(this,'sel-cliente-desktop')" onfocus="tpvFiltrarCliente(this,'sel-cliente-desktop')"/>
+							<input type="hidden" id="sel-cliente-desktop" value="{{ fsc.codClienteDefault }}"/>
+							<div id="sel-cliente-desktop-drop" class="tpv-cli-drop"></div>
+						</div>
+						<button type="button" class="sel-btn" onclick="tpvAbrirEditarCliente()">
+							<i class="fa-solid fa-pencil"></i>
+						</button>
+						<button type="button" class="sel-btn" onclick="tpvAbrirNuevoCliente()">
+							<i class="fa-solid fa-plus"></i>
+						</button>
+						{% if fsc.cashSerie and not fsc.cashBox %}
+							<form action="{{ cajaContextUrl }}" method="post" class="mb-0" data-no-ajax="true">
+								{{ formToken() }}
+								<button type="submit" name="action" value="cash-open-start" class="btn btn-success btn-sm text-nowrap">
+									<i class="fas fa-lock-open mr-1"></i>Abrir caja
+								</button>
+							</form>
+						{% else %}
+							<div class="btn-group dropdown">
+								<button class="sel-btn dropdown-toggle" type="button" id="dropdownCashDesktop" data-toggle="dropdown" aria-expanded="false" title="Caja">
+									<i class="fa-solid fa-cash-register {{ fsc.cashBox ? 'text-success' : 'text-danger' }}"></i>
+								</button>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownCashDesktop">
+									{% if fsc.cashSerie %}
+										<button type="button" class="dropdown-item p-3" onclick="return modalCashMovement('cash-in')">
+											<i class="fas fa-level-down-alt fa-fw"></i>
+											Entrada de caja
+										</button>
+										<button type="button" class="dropdown-item p-3" onclick="return modalCashMovement('cash-out')">
+											<i class="fas fa-level-up-alt fa-fw"></i>
+											Salida de caja
+										</button>
+										<form action="{{ cajaContextUrl }}" method="post" data-no-ajax="true">
+											{{ formToken() }}
+											<button type="submit" name="action" value="cash-close-start" class="dropdown-item p-3 text-danger">
+												<i class="fas fa-times fa-fw"></i>
+												Cerrar caja
+											</button>
+										</form>
+									{% else %}
+										<span class="dropdown-item-text text-muted p-3">Sin serie configurada</span>
+									{% endif %}
+								</div>
+							</div>
+						{% endif %}
+					</div>
+
+					<div class="bg-dark text-white px-2 py-1 small font-weight-bold flex-shrink-0">
+						<i class="fa-solid fa-receipt mr-1"></i>
+						{{ i18n.trans('current-order') }}
+					</div>
+					<div class="flex-fill overflow-auto">
+						{% if fsc.lineas is empty %}
+							<p class="text-muted text-center p-3 small">{{ i18n.trans('no-lines-yet') }}</p>
+						{% else %}
+							<table class="table table-sm table-hover tpv-table mb-0">
+								<thead class="thead-light">
+									<tr>
+										<th>{{ i18n.trans('description') }}</th>
+										<th class="text-center">{{ i18n.trans('quantity') }}</th>
+										<th class="text-right">{{ i18n.trans('price') }}</th>
+										<th class="text-right">Sub.</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for linea in fsc.lineas %}
+										{% if linea.idlinea_padre %}
+											<tr data-idlineapadre="{{ linea.idlinea_padre }}" data-desclinea="{{ linea.descripcion|e('html_attr') }}" class="tpv-modif-row {{ linea.estado == 'cancelado' ? 'table-danger' : '' }}">
+												<td>
+													<div class="d-flex align-items-center" style="padding-left:20px;gap:4px;">
+														<span class="text-muted" style="font-size:.8em;">↳</span>
+														<span class="text-muted" style="font-style:italic;font-size:.88em;">{{ linea.descripcion }}</span>
+													</div>
+													{% if linea.estado != 'pendiente' %}
+														<span class="badge badge-{{ linea.estado == 'preparado' ? 'success' : (linea.estado == 'servido' ? 'primary' : 'danger') }}" style="font-size:.58rem;margin-left:20px;">{{ i18n.trans(linea.estado) }}</span>
+													{% endif %}
+												</td>
+												<td class="text-center">
+													<span class="text-muted small">{{ linea.cantidad|number_format(0) }}</span>
+												</td>
+												<td class="text-right">
+													<span class="text-muted small">+{{ linea.pvpunitario|number_format(2) }}</span>
+												</td>
+												<td class="text-right">
+													<span class="text-muted small">+{{ linea.subtotal()|number_format(2) }}</span>
+												</td>
+												<td>
+													<span data-url="{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}" data-idlinea="{{ linea.idlinea }}" data-token="{{ formToken(false) }}" class="tpv-del-wrap">
+														<button type="button" onclick="tpvDelLinea(this)" class="btn btn-sm btn-outline-danger" style="padding:1px 5px;opacity:.55;">
+															<i class="fa-solid fa-xmark"></i>
+														</button>
+													</span>
+												</td>
+											</tr>
+										{% else %}
+											<tr class="{{ linea.estado == 'preparado' ? 'table-success' : (linea.estado == 'cancelado' ? 'table-danger' : '') }}">
+												<td>
+													<div class="d-flex align-items-center" style="gap:4px;">
+														<button type="button" class="btn btn-sm btn-outline-secondary" style="padding:1px 5px;flex-shrink:0;" onclick="tpvAbrirEditarLinea({{ linea.idlinea }},{{ linea.descripcion|json_encode|e('html_attr') }},{{ linea.cantidad }},{{ linea.observaciones|default('')|json_encode|e('html_attr') }},{{ linea.referencia|default('')|json_encode|e('html_attr') }})">
+															<i class="fa-solid fa-pencil"></i>
+														</button>
+														<span class="font-weight-bold">{{ linea.descripcion }}</span>
+													</div>
+													{% if linea.observaciones %}
+														<div class="font-italic text-muted" style="font-size:.82em;padding-left:28px;">{{ linea.observaciones }}</div>
+													{% endif %}
+													{% if linea.estado != 'pendiente' %}
+														<span class="badge badge-{{ linea.estado == 'preparado' ? 'success' : (linea.estado == 'servido' ? 'primary' : 'danger') }}" style="font-size:.58rem;">{{ i18n.trans(linea.estado) }}</span>
+													{% endif %}
+												</td>
+												<td class="text-center" style="white-space:nowrap;">
+													<div class="d-flex align-items-center justify-content-center" style="gap:2px;">
+														<button type="button" onclick="tpvQty(this,'{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}',{{ linea.idlinea }},{{ linea.cantidad - 1 }},'{{ formToken(false) }}')" class="btn btn-outline-secondary btn-sm px-1" style="padding:1px 5px;">
+															<i class="fa-solid fa-minus"></i>
+														</button>
+														<span style="min-width:20px;text-align:center;font-weight:700;">{{ linea.cantidad|number_format(0) }}</span>
+														<button type="button" onclick="tpvQty(this,'{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}',{{ linea.idlinea }},{{ linea.cantidad + 1 }},'{{ formToken(false) }}')" class="btn btn-outline-secondary btn-sm px-1" style="padding:1px 5px;">
+															<i class="fa-solid fa-plus"></i>
+														</button>
+													</div>
+												</td>
+												<td class="text-right">{{ linea.pvpunitario|number_format(2) }}</td>
+												<td class="text-right font-weight-bold">{{ linea.subtotal()|number_format(2) }}</td>
+												<td>
+													<span data-url="{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}" data-idlinea="{{ linea.idlinea }}" data-token="{{ formToken(false) }}" class="tpv-del-wrap">
+														<button type="button" onclick="tpvDelLinea(this)" class="btn btn-sm btn-outline-danger" style="padding:1px 5px;">
+															<i class="fa-solid fa-xmark"></i>
+														</button>
+													</span>
+												</td>
+											</tr>
+										{% endif %}
+									{% endfor %}
+								</tbody>
+							</table>
+						{% endif %}
+					</div>
+					<div class="tpv-footer flex-shrink-0">
+						<div class="tpv-total-row">
+							<span class="tpv-total-label">{{ i18n.trans('total') }}
+								a pagar:</span>
+							<span class="tpv-total-val">{{ fsc.comanda ? fsc.comanda.total|number_format(2) : '0.00' }}
+								€</span>
+						</div>
+						<div class="tpv-actions">
+							<a href="{{ fsc.url() ~ '?action=cancel-order&idmesa=' ~ (fsc.mesa ? fsc.mesa.idmesa : 0) }}" class="ta-btn ta-cancel text-center text-decoration-none">
+								<i class="fa-solid fa-xmark mr-1"></i>
+								{{ i18n.trans('cancel') }}
+							</a>
+							<button type="button" class="ta-btn ta-invoice" onclick="tpvCobrar('factura')">
+								<i class="fa-solid fa-file-invoice mr-1"></i>Factura rápida
+							</button>
+							<button type="button" class="ta-btn ta-charge" onclick="tpvRealizarPedido()">
+								<i class="fa-solid fa-paper-plane mr-1"></i>Realizar pedido
+							</button>
+						</div>
+					</div>
+				</div>
+				{# /panel-comanda xl #}
+
+			</div>
+			{# /tpv-xl-cart-group #}
+
+			{# ════ CATÁLOGO (móvil + xl) ════ #}
+			<div
+				id="panel-catalogo">
+
+				{# ── Sidebar vertical familias/estaciones (xl) ── #}
+				<div id="cat-sidebar">
+					<button type="button" onclick="tpvFiltrarSidebar(this, '{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}', '{{ i18n.trans('all') }}')" class="cat-sidebar-btn{{ fsc.codfamiliaActiva == '' and fsc.idestacionActiva is null ? ' active' : '' }}">
+						{{ i18n.trans('all') }}
+					</button>
+					{% for fam in fsc.familias %}
+						<button type="button" onclick="tpvFiltrarSidebar(this, '{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}&familia={{ fam.codfamilia }}', '{{ fam.descripcion|e('js') }}')" class="cat-sidebar-btn{{ fsc.codfamiliaActiva == fam.codfamilia ? ' active' : '' }}">
+							{{ fam.descripcion }}
+						</button>
+					{% endfor %}
+				</div>
+
+				{# ── Área principal: topbar + grid ── #}
+				<div
+					id="cat-main">
+
+					{# Topbar: dropdown (mobile) + buscador (siempre) #}
+					<div
+						id="cat-topbar" class="d-flex px-1 pt-1 pb-1" style="gap:5px;border-bottom:1px solid #dee2e6;flex-shrink:0;align-items:center;">
+						{# Dropdown selector — solo móvil/tablet #}
+						<div class="dropdown flex-shrink-0 d-xl-none">
+							<button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownFamiliaBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								{% if fsc.codfamiliaActiva != '' %}
+									{% for fam in fsc.familias %}
+										{% if fam.codfamilia == fsc.codfamiliaActiva %}
+											{{ fam.descripcion }}
+										{% endif %}
+									{% endfor %}
+								{% else %}
+									{{ i18n.trans('all') }}
+								{% endif %}
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownFamiliaBtn">
+								<a class="dropdown-item" href="#" onclick="tpvFiltrarDropdown(this, '{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}', '{{ i18n.trans('all') }}'); return false;">
+									{{ i18n.trans('all') }}
+								</a>
+								{% for fam in fsc.familias %}
+									<a class="dropdown-item" href="#" onclick="tpvFiltrarDropdown(this, '{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}&familia={{ fam.codfamilia }}', '{{ fam.descripcion|e('js') }}'); return false;">
+										{{ fam.descripcion }}
+									</a>
+								{% endfor %}
+							</div>
+						</div>
+						<input
+						type="text" id="buscador-productos" class="form-control form-control-sm" style="flex:1;min-width:0;" placeholder="Buscar...">
+						{# Accesos rápidos: solo estaciones configuradas #}
+						{% if fsc.estaciones|length > 0 %}
+							<div class="d-flex flex-shrink-0" style="gap:3px;">
+								{% for est in fsc.estaciones %}
+									<a href="{{ asset('PanelCocina') }}?idestacion={{ est.idestacion }}" target="_blank" class="btn btn-sm btn-outline-secondary p-1" title="{{ est.nombre }}" style="height:30px;padding:0 6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;white-space:nowrap;">
+										{{ est.nombre }}
+									</a>
+								{% endfor %}
+							</div>
+						{% endif %}
+					</div>
+
+					{# Grid productos #}
+					<div class="overflow-auto px-1 pt-2" id="catalogo-grid-wrap" style="flex:1;">
+						{% if fsc.productos is empty %}
+							<p class="text-muted text-center p-3 small">{{ i18n.trans('no-products') }}</p>
+						{% else %}
+							<div class="row no-gutters" id="grid-productos">
+								{% for prod in fsc.productos %}
+									<div class="col-4 col-md-3 pr-1 pb-1 col-producto">
+										<button type="button" data-modif="{{ prod.modificadores|json_encode|e('html_attr') }}" data-precio="{{ prod.precio }}" onclick="tpvClickProducto(this,'{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}','{{ prod.referencia }}','{{ formToken(false) }}')" class="prod-card w-100 border-0">
+											<div class="prod-img-wrap{% if not prod.imagen_url %} prod-no-img{% endif %}">
+												{% if prod.imagen_url %}
+													<img src="{{ prod.imagen_url }}" alt="{{ prod.descripcion }}" loading="lazy">
+												{% else %}
+													<i class="fa-solid fa-image"></i>
+												{% endif %}
+											</div>
+											<div class="prod-info">
+												<div class="prod-nombre">{{ prod.descripcion }}</div>
+												<div class="prod-precio">{{ prod.precio|number_format(2) }}
+													€</div>
+											</div>
+										</button>
+									</div>
+								{% endfor %}
+							</div>
+						{% endif %}
+					</div>
+					{# /catalogo-grid-wrap #}
+
+				</div>
+				{# /cat-main #}
+
+			</div>
+			{# /panel-catalogo #}
+
+			{# ════ COMANDA TAB MÓVIL/TABLET ════ #}
+			<div class="d-xl-none d-none flex-column" id="panel-comanda-tab">
+				<div class="overflow-auto">
+					{% if fsc.lineas is empty %}
+						<p class="text-muted text-center p-3 small">{{ i18n.trans('no-lines-yet') }}</p>
+					{% else %}
+						<table class="table table-sm table-hover tpv-table mb-0">
+							<thead class="thead-light">
+								<tr>
+									<th>{{ i18n.trans('description') }}</th>
+									<th class="text-center">Cant.</th>
+									<th class="text-right">€</th>
+									<th class="text-right">Sub.</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for linea in fsc.lineas %}
+									{% if linea.idlinea_padre %}
+										<tr data-idlineapadre="{{ linea.idlinea_padre }}" data-desclinea="{{ linea.descripcion|e('html_attr') }}" class="tpv-modif-row {{ linea.estado == 'cancelado' ? 'table-danger' : '' }}">
+											<td>
+												<div class="d-flex align-items-center" style="padding-left:20px;gap:4px;">
+													<span class="text-muted" style="font-size:.8em;">↳</span>
+													<span class="text-muted" style="font-style:italic;font-size:.88em;">{{ linea.descripcion }}</span>
+												</div>
+												{% if linea.estado != 'pendiente' %}
+													<span class="badge badge-{{ linea.estado == 'preparado' ? 'success' : (linea.estado == 'servido' ? 'primary' : 'danger') }}" style="font-size:.58rem;margin-left:20px;">{{ i18n.trans(linea.estado) }}</span>
+												{% endif %}
+											</td>
+											<td class="text-center" style="white-space:nowrap;">
+												<div class="d-flex align-items-center justify-content-center" style="gap:2px;">
+													<button type="button" onclick="tpvQty(this,'{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}',{{ linea.idlinea }},{{ linea.cantidad - 1 }},'{{ formToken(false) }}')" class="btn btn-outline-secondary btn-sm px-1" style="padding:1px 5px;opacity:.7;">
+														<i class="fa-solid fa-minus"></i>
+													</button>
+													<span class="text-muted" style="min-width:20px;text-align:center;">{{ linea.cantidad|number_format(0) }}</span>
+													<button type="button" onclick="tpvQty(this,'{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}',{{ linea.idlinea }},{{ linea.cantidad + 1 }},'{{ formToken(false) }}')" class="btn btn-outline-secondary btn-sm px-1" style="padding:1px 5px;opacity:.7;">
+														<i class="fa-solid fa-plus"></i>
+													</button>
+												</div>
+											</td>
+											<td class="text-right">
+												<span class="text-muted small">+{{ linea.pvpunitario|number_format(2) }}</span>
+											</td>
+											<td class="text-right">
+												<span class="text-muted small">+{{ linea.subtotal()|number_format(2) }}</span>
+											</td>
+											<td>
+												<span data-url="{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}" data-idlinea="{{ linea.idlinea }}" data-token="{{ formToken(false) }}" class="tpv-del-wrap">
+													<button type="button" onclick="tpvDelLinea(this)" class="btn btn-sm btn-outline-danger" style="padding:1px 5px;opacity:.55;">
+														<i class="fa-solid fa-xmark"></i>
+													</button>
+												</span>
+											</td>
+										</tr>
+									{% else %}
+										<tr class="{{ linea.estado == 'preparado' ? 'table-success' : (linea.estado == 'cancelado' ? 'table-danger' : '') }}">
+											<td>
+												<div class="d-flex align-items-center" style="gap:4px;">
+													<button type="button" class="btn btn-sm btn-outline-secondary" style="padding:1px 5px;flex-shrink:0;" onclick="tpvAbrirEditarLinea({{ linea.idlinea }},{{ linea.descripcion|json_encode|e('html_attr') }},{{ linea.cantidad }},{{ linea.observaciones|default('')|json_encode|e('html_attr') }},{{ linea.referencia|default('')|json_encode|e('html_attr') }})">
+														<i class="fa-solid fa-pencil"></i>
+													</button>
+													<span class="font-weight-bold">{{ linea.descripcion }}</span>
+												</div>
+												{% if linea.observaciones %}
+													<div class="font-italic text-muted" style="font-size:.82em;padding-left:28px;">{{ linea.observaciones }}</div>
+												{% endif %}
+												{% if linea.estado != 'pendiente' %}
+													<span class="badge badge-{{ linea.estado == 'preparado' ? 'success' : (linea.estado == 'servido' ? 'primary' : 'danger') }}" style="font-size:.58rem;">{{ i18n.trans(linea.estado) }}</span>
+												{% endif %}
+											</td>
+											<td class="text-center" style="white-space:nowrap;">
+												<div class="d-flex align-items-center justify-content-center" style="gap:2px;">
+													<button type="button" onclick="tpvQty(this,'{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}',{{ linea.idlinea }},{{ linea.cantidad - 1 }},'{{ formToken(false) }}')" class="btn btn-outline-secondary btn-sm px-1" style="padding:1px 5px;">
+														<i class="fa-solid fa-minus"></i>
+													</button>
+													<span style="min-width:20px;text-align:center;font-weight:700;">{{ linea.cantidad|number_format(0) }}</span>
+													<button type="button" onclick="tpvQty(this,'{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}',{{ linea.idlinea }},{{ linea.cantidad + 1 }},'{{ formToken(false) }}')" class="btn btn-outline-secondary btn-sm px-1" style="padding:1px 5px;">
+														<i class="fa-solid fa-plus"></i>
+													</button>
+												</div>
+											</td>
+											<td class="text-right">{{ linea.pvpunitario|number_format(2) }}</td>
+											<td class="text-right font-weight-bold">{{ linea.subtotal()|number_format(2) }}</td>
+											<td>
+												<span data-url="{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}" data-idlinea="{{ linea.idlinea }}" data-token="{{ formToken(false) }}" class="tpv-del-wrap">
+													<button type="button" onclick="tpvDelLinea(this)" class="btn btn-sm btn-outline-danger" style="padding:1px 5px;">
+														<i class="fa-solid fa-xmark"></i>
+													</button>
+												</span>
+											</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+							</tbody>
+						</table>
+					{% endif %}
+				</div>
+				<div class="tpv-footer">
+					<div class="tpv-total-row">
+						<span class="tpv-total-label">{{ i18n.trans('total') }}
+							a pagar:</span>
+						<span class="tpv-total-val">{{ fsc.comanda ? fsc.comanda.total|number_format(2) : '0.00' }}
+							€</span>
+					</div>
+					<div class="tpv-actions">
+						<a href="{{ fsc.url() ~ '?action=cancel-order&idmesa=' ~ (fsc.mesa ? fsc.mesa.idmesa : 0) }}" class="ta-btn ta-cancel text-center text-decoration-none">
+							<i class="fa-solid fa-xmark mr-1"></i>
+							{{ i18n.trans('cancel') }}
+						</a>
+						<button type="button" class="ta-btn ta-invoice" onclick="tpvCobrar('factura')">
+							<i class="fa-solid fa-file-invoice mr-1"></i>Factura rápida
+						</button>
+						<button type="button" class="ta-btn ta-charge" onclick="tpvRealizarPedido()">
+							<i class="fa-solid fa-paper-plane mr-1"></i>Realizar pedido
+						</button>
+					</div>
+				</div>
+			</div>
+			{# /panel-comanda-tab #}
+
+			{# ════ PANEL ÓRDENES (móvil) ════ #}
+			<div id="panel-ordenes-tab" class="d-none flex-column" style="overflow:hidden;">
+				<div style="flex:1;overflow-y:auto;padding:8px;">
+					{% if fsc.ordenesAbiertas is empty %}
+						<div class="text-center text-muted py-5">
+							<i class="fa-solid fa-circle-check fa-3x mb-2 d-block"></i>
+							No hay pedidos en curso.
+						</div>
+					{% else %}
+						{% if fsc.ordenesAbiertas|length > 1 %}
+							<div class="mb-2">
+								<input type="search" class="form-control form-control-sm" placeholder="Buscar orden..." oninput="filtrarMovil(this.value)">
+							</div>
+						{% endif %}
+						{% for orden in fsc.ordenesAbiertas %}
+							<div class="card mb-3 orden-movil-card" data-search="{{ orden.idcomanda }} {{ orden.mesa_nombre|default('')|lower }} {{ orden.cliente_nombre|default('')|lower }} {{ orden.codcamarero|lower }} {{ orden.tipo|lower }}">
+								<div class="card-header d-flex justify-content-between align-items-center py-2">
+									<span>
+										<strong>#{{ orden.idcomanda }}</strong>
+										{% if orden.tipo == 'in-table' %}
+											<span class="badge badge-info ml-1">{{ i18n.trans('dine-in') }}</span>
+										{% elseif orden.tipo == 'take-away' %}
+											<span class="badge badge-secondary ml-1">{{ i18n.trans('take-away') }}</span>
+										{% else %}
+											<span class="badge badge-warning ml-1">{{ i18n.trans('delivery') }}</span>
+										{% endif %}
+									</span>
+									<small class="text-muted">{{ orden.fecha }}
+										{{ orden.hora }}</small>
+								</div>
+								<div class="card-body py-2">
+									{% if orden.mesa_nombre %}
+										<div class="small">
+											<i class="fa-solid fa-table-cells mr-1 text-muted"></i>
+											<strong>Mesa:</strong>
+											{{ orden.mesa_nombre }}</div>
+									{% endif %}
+									{% if orden.cliente_nombre %}
+										<div class="small">
+											<i class="fa-solid fa-user mr-1 text-muted"></i>
+											<strong>Cliente:</strong>
+											{{ orden.cliente_nombre }}</div>
+									{% endif %}
+									<div class="small">
+										<i class="fa-solid fa-utensils mr-1 text-muted"></i>
+										<strong>Garzón:</strong>
+										{{ orden.codcamarero }}</div>
+									<div class="mt-2 border-top pt-1" style="max-height:120px;overflow-y:auto;">
+										{% for linea in orden.lineas %}
+											{% if linea.estado != 'cancelado' %}
+												<div class="d-flex justify-content-between" style="font-size:.82rem;">
+													<span>{{ linea.descripcion }}</span>
+													<span class="font-weight-bold ml-2">&times;
+														{{ linea.cantidad|number_format(0) }}</span>
+												</div>
+											{% endif %}
+										{% endfor %}
+									</div>
+									<div class="text-right font-weight-bold mt-1">{{ orden.total|number_format(2) }}
+										&euro;</div>
+								</div>
+								<div class="card-footer py-2">
+									<div class="d-flex flex-wrap" style="gap:4px;">
+										<form method="post" action="{{ fsc.url() }}" style="flex:1 1 auto;">
+											<input type="hidden" name="multireqtoken" value="{{ formToken(false) }}">
+											<input type="hidden" name="action" value="reabrir-comanda">
+											<input type="hidden" name="idcomanda" value="{{ orden.idcomanda }}">
+											<button type="submit" class="btn btn-sm btn-outline-secondary w-100">
+												<i class="fa-solid fa-pen mr-1"></i>Modificar
+											</button>
+										</form>
+										{% set _lsfsc = [] %}
+										{% for _li in orden.lineas %}
+											{% if _li.estado != 'cancelado' %}
+												{% set _lsfsc = _lsfsc|merge([[_li.idlinea, _li.descripcion, _li.cantidad, _li.pvpunitario]]) %}
+											{% endif %}
+										{% endfor %}
+										<div style="flex:1 1 auto;">
+											<button type="button" class="btn btn-sm btn-warning w-100" data-lsf="{{ _lsfsc|json_encode|e }}" onclick="tpvAbrirModalFactura('{{ orden.idcomanda }}', this)">
+												<i class="fa-solid fa-file-invoice mr-1"></i>
+												{{ i18n.trans('invoice') }}
+											</button>
+										</div>
+										<form method="post" action="{{ fsc.url() }}" style="flex:1 1 auto;" onsubmit="return confirm('\u00bfEst\u00e1 seguro?')">
+											<input type="hidden" name="multireqtoken" value="{{ formToken(false) }}">
+											<input type="hidden" name="action" value="cancel-pedido">
+											<input type="hidden" name="idcomanda" value="{{ orden.idcomanda }}">
+											<button type="submit" class="btn btn-sm btn-danger w-100">
+												<i class="fa-solid fa-xmark mr-1"></i>
+												{{ i18n.trans('cancel') }}
+											</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					{% endif %}
+				</div>
+				<div style="flex-shrink:0;border-top:2px solid #dee2e6;padding:5px;background:#fff;">
+					<button type="button" class="tpv-act-btn w-100" onclick="tpvSideCuenta()">
+						<i class="fa-solid fa-receipt mr-1"></i>Cuenta
+					</button>
+				</div>
+			</div>
+			{# /panel-ordenes-tab #}
+
+		</div>
+		{# /tpv-wrap #}
+
+	{% else %}
+		{# ── Vista: pedidos en curso ── #}
+		<div
+			class="container-fluid py-3">
+
+			{# Cabecera #}
+			<div class="row mb-3 align-items-center">
+				<div class="col">
+					<h5 class="mb-0">
+						<i class="fa-solid fa-list-check mr-2"></i>Pedidos en curso
+						<span class="badge badge-primary ml-1" id="ordenesCount">{{ fsc.ordenesAbiertas|length }}</span>
+					</h5>
+				</div>
+				<div class="col-auto">
+					<a href="{{ fsc.url() }}" class="btn btn-sm btn-outline-secondary mr-2">
+						<i class="fa-solid fa-arrow-left mr-1"></i>Volver
+					</a>
+					<a href="{{ fsc.url() }}" class="btn btn-sm btn-success">
+						<i class="fa-solid fa-plus mr-1"></i>Nueva orden
+					</a>
+				</div>
+			</div>
+
+			{# Buscador #}
+			{% if fsc.ordenesAbiertas|length > 1 %}
+				<div class="row mb-3">
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="input-group input-group-sm">
+							<div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="fa-solid fa-magnifying-glass"></i>
+								</span>
+							</div>
+							<input type="search" id="ordenesSearch" class="form-control" placeholder="Buscar por mesa, cliente, camarero o nº..." oninput="filtrarOrdenes(this.value)">
+						</div>
+					</div>
+				</div>
+			{% endif %}
+
+			{% if fsc.ordenesAbiertas is empty %}
+				<div class="text-center text-muted py-5">
+					<i class="fa-solid fa-circle-check fa-3x mb-2 d-block"></i>
+					No hay pedidos en curso.
+				</div>
+			{% else %}
+				<div class="row" id="ordenesGrid">
+					{% for orden in fsc.ordenesAbiertas %}
+						<div class="col-12 col-md-6 col-xl-4 mb-3 orden-card" data-search="{{ orden.idcomanda }} {{ orden.mesa_nombre|default('')|lower }} {{ orden.cliente_nombre|default('')|lower }} {{ orden.codcamarero|lower }} {{ orden.tipo|lower }}">
+							<div
+								class="card h-100">
+
+								{# Cabecera de la tarjeta #}
+								<div class="card-header d-flex justify-content-between align-items-center py-2">
+									<span>
+										<strong>#{{ orden.idcomanda }}</strong>
+										{% if orden.tipo == 'in-table' %}
+											<span class="badge badge-info ml-1">{{ i18n.trans('dine-in') }}</span>
+										{% elseif orden.tipo == 'take-away' %}
+											<span class="badge badge-secondary ml-1">{{ i18n.trans('take-away') }}</span>
+										{% else %}
+											<span class="badge badge-warning ml-1">{{ i18n.trans('delivery') }}</span>
+										{% endif %}
+									</span>
+									<small class="text-muted">{{ orden.fecha }}
+										{{ orden.hora }}</small>
+								</div>
+
+								{# Cuerpo #}
+								<div class="card-body py-2">
+									{% if orden.mesa_nombre %}
+										<div class="small">
+											<i class="fa-solid fa-table-cells mr-1 text-muted"></i>
+											<strong>Mesa:</strong>
+											{{ orden.mesa_nombre }}</div>
+									{% endif %}
+									{% if orden.cliente_nombre %}
+										<div class="small">
+											<i class="fa-solid fa-user mr-1 text-muted"></i>
+											<strong>Cliente:</strong>
+											{{ orden.cliente_nombre }}</div>
+									{% endif %}
+									<div class="small">
+										<i class="fa-solid fa-utensils mr-1 text-muted"></i>
+										<strong>Garzón:</strong>
+										{{ orden.codcamarero }}</div>
+									<div class="mt-2 border-top pt-1" style="max-height:130px;overflow-y:auto;">
+										{% for linea in orden.lineas %}
+											{% if linea.estado != 'cancelado' %}
+												<div class="d-flex justify-content-between" style="font-size:.82rem;">
+													<span>{{ linea.descripcion }}</span>
+													<span class="font-weight-bold ml-2">×
+														{{ linea.cantidad|number_format(0) }}</span>
+												</div>
+											{% endif %}
+										{% endfor %}
+									</div>
+									<div class="text-right font-weight-bold mt-1">{{ orden.total|number_format(2) }}
+										€</div>
+								</div>
+
+								{# Botón footer: 5 acciones #}
+								<div class="card-footer py-2">
+									<div
+										class="d-flex flex-wrap" style="gap:4px;">
+
+										{# Modificar pedido: recarga líneas del pedido al carrito #}
+										<form method="post" action="{{ fsc.url() }}" style="flex:1 1 auto;min-width:80px;">
+											<input type="hidden" name="multireqtoken" value="{{ formToken(false) }}">
+											<input type="hidden" name="action" value="reabrir-comanda">
+											<input type="hidden" name="idcomanda" value="{{ orden.idcomanda }}">
+											<button type="submit" class="btn btn-sm btn-outline-secondary w-100">
+												<i class="fa-solid fa-pen mr-1"></i>Modificar
+											</button>
+										</form>
+
+										{# Detalles del pedido #}
+										{% set ls2 = [] %}
+										{% for li in orden.lineas %}
+											{% if li.estado != 'cancelado' %}
+												{% set ls2 = ls2|merge([[li.descripcion, li.pvpunitario, li.cantidad, 0]]) %}
+											{% endif %}
+										{% endfor %}
+										<button type="button" class="btn btn-sm btn-outline-info" style="flex:1 1 auto;min-width:80px;" data-id="{{ orden.idcomanda }}" data-tipo="{{ orden.tipo|capitalize }}" data-num="{{ orden.idpedido }}" data-cam="{{ orden.codcamarero|e }}" data-cl="{{ orden.cliente_nombre|default('')|e }}" data-mesa="{{ orden.mesa_nombre|default('None')|e }}" data-total="{{ orden.total }}" data-ls="{{ ls2|json_encode|e }}" onclick="tpvAbrirDetalles(this)">
+											<i class="fa-solid fa-circle-info mr-1"></i>Detalles
+										</button>
+
+										{# Imprimir cuenta #}
+										{% set ls = [] %}
+										{% for li in orden.lineas %}
+											{% if li.estado != 'cancelado' %}
+												{% set ls = ls|merge([[li.descripcion, li.cantidad, li.pvpunitario]]) %}
+											{% endif %}
+										{% endfor %}
+										<button type="button" class="btn btn-sm btn-outline-dark" style="flex:1 1 auto;min-width:80px;" data-id="{{ orden.idcomanda }}" data-total="{{ orden.total }}" data-dt="{{ orden.fecha }} {{ orden.hora }}" data-cam="{{ orden.codcamarero|e }}" data-cl="{{ orden.cliente_nombre|default('')|e }}" data-ls="{{ ls|json_encode|e }}" onclick="tpvImprimirCuentaBtn(this)">
+											<i class="fa-solid fa-print mr-1"></i>Cuenta
+										</button>
+
+										{# Generar factura #}
+										<div style="flex:1 1 auto;min-width:80px;">
+											<button type="button" class="btn btn-sm btn-warning w-100" data-lsf="{{ lsf2|json_encode|e }}" data-total="{{ orden.total }}" onclick="tpvAbrirModalFactura('{{ orden.idcomanda }}', this)">
+												<i class="fa-solid fa-file-invoice mr-1"></i>
+												{{ i18n.trans('invoice') }}
+											</button>
+										</div>
+
+										{# Cancelar pedido #}
+										<form method="post" action="{{ fsc.url() }}" style="flex:1 1 auto;min-width:80px;" onsubmit="return confirm('\u00bfEst\u00e1 seguro?')">
+											<input type="hidden" name="multireqtoken" value="{{ formToken(false) }}">
+											<input type="hidden" name="action" value="cancel-pedido">
+											<input type="hidden" name="idcomanda" value="{{ orden.idcomanda }}">
+											<button type="submit" class="btn btn-sm btn-danger w-100">
+												<i class="fa-solid fa-xmark mr-1"></i>
+												{{ i18n.trans('cancel') }}
+											</button>
+										</form>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+
+		</div>
+	{% endif %}
+	{# /vistaOrdenes #}
+
+	<script>
+		function filtrarOrdenes(q) {
+var term = q.toLowerCase().trim();
+var cards = document.querySelectorAll('.orden-card');
+var visible = 0;
+cards.forEach(function (card) {
+var hay = ! term || card.dataset.search.indexOf(term) !== -1;
+card.style.display = hay ? '' : 'none';
+if (hay) 
+visible++;
+
+
+
+});
+var badge = document.getElementById('ordenesCount');
+if (badge) 
+badge.textContent = visible;
+
+
+
+}
+function filtrarSidebar(q) {
+var term = q.toLowerCase().trim();
+document.querySelectorAll('.tpv-order-card').forEach(function (card) {
+var txt = [
+card.dataset.id,
+card.dataset.num,
+card.dataset.mesa,
+card.dataset.cam,
+card.dataset.cl,
+card.dataset.tipo
+].join(' ').toLowerCase();
+card.style.display = (! term || txt.indexOf(term) !== -1) ? '' : 'none';
+});
+}
+function filtrarMovil(q) {
+var term = q.toLowerCase().trim();
+document.querySelectorAll('.orden-movil-card').forEach(function (card) {
+card.style.display = (! term || card.dataset.search.indexOf(term) !== -1) ? '' : 'none';
+});
+}
+	</script>
+
+	{# ── Modal Detalles del pedido ── #}
+	<div class="modal fade" id="modalDetallesPedido" tabindex="-1" role="dialog" aria-modal="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header py-2">
+					<h5 class="modal-title">Detalles del pedido</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div
+					class="modal-body pt-2 pb-1">
+					{# Meta row #}
+					<div class="row mb-2 small">
+						<div class="col-6">
+							<strong>Tipo de pedido:</strong>
+							<span id="mdp-tipo" class="text-primary"></span>
+						</div>
+						<div class="col-6">
+							<strong>Número de pedido:</strong>
+							<span id="mdp-num" class="text-primary"></span>
+						</div>
+						<div class="col-4">
+							<strong>Por:</strong>
+							<span id="mdp-cam" class="text-primary"></span>
+						</div>
+						<div class="col-4">
+							<strong>Cliente:</strong>
+							<span id="mdp-cl" class="text-primary"></span>
+						</div>
+						<div class="col-4" id="mdp-mesa-wrap">
+							<strong>Mesa:</strong>
+							<span id="mdp-mesa" class="text-primary"></span>
+						</div>
+					</div>
+					{# Tabla de líneas #}
+					<table class="table table-sm table-bordered mb-2" style="font-size:.85rem;">
+						<thead class="thead-light">
+							<tr>
+								<th>Producto</th>
+								<th class="text-right">Precio</th>
+								<th class="text-right">Cant.</th>
+								<th class="text-right">Descuento</th>
+								<th class="text-right">Total</th>
+							</tr>
+						</thead>
+						<tbody id="mdp-lineas"></tbody>
+					</table>
+					{# Totales #}
+					<div class="row small border-top pt-2">
+						<div class="col-4">Total de productos:
+							<span id="mdp-qty"></span>
+						</div>
+						<div class="col-4 text-center">Sub total:
+							<span id="mdp-sub"></span>
+						</div>
+						<div class="col-4 text-right">Descuento: 0.00</div>
+						<div class="col-4">Descuento total: 0.00</div>
+						<div class="col-4 text-center">Impuesto:
+							<span id="mdp-tax">0.00</span>
+						</div>
+						<div class="col-4 text-right">Consejos: 0.00</div>
+					</div>
+					<div class="text-center mt-2 py-2 border-top">
+						<strong style="font-size:1.1rem;">Total a pagar
+							<span id="mdp-total" class="text-dark"></span>
+						</strong>
+					</div>
+				</div>
+				<div class="modal-footer py-2">
+					<form method="post" action="{{ fsc.url() }}" id="mdp-form-factura">
+						<input type="hidden" name="multireqtoken" value="{{ formToken(false) }}">
+						<input type="hidden" name="action" value="factura-pedido">
+						<input type="hidden" name="idcomanda" id="mdp-idcomanda" value="">
+						<input type="hidden" name="codpago" id="mdp-codpago" value="">
+						<input type="hidden" name="importedado" id="mdp-importedado" value="0">
+					</form>
+					<button type="button" class="btn btn-primary" onclick="tpvAbrirModalFactura(document.getElementById('mdp-idcomanda').value)">
+						<i class="fa-solid fa-file-invoice mr-1"></i>Crear factura y cerrar
+					</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		/* ═══════════════════════════════════════════════════════
+   TPV — Tabs, AJAX actions, buscador de productos
+   ═══════════════════════════════════════════════════════ */
+
+// ── Tabs ──────────────────────────────────────────────
+var TAB_KEY = 'tpv_tab_       {{ fsc.mesa ? fsc.mesa.idmesa : 0 }}';
+
+function tpvTab(tab, save) {
+var elCatalogo = document.getElementById('panel-catalogo');
+var elComandaTab = document.getElementById('panel-comanda-tab');
+var elOrdenesTab = document.getElementById('panel-ordenes-tab');
+var lnkCatalogo = document.getElementById('tab-catalogo-link');
+var lnkComanda = document.getElementById('tab-comanda-link');
+var lnkOrdenes = document.getElementById('tab-ordenes-link');
+if (! elCatalogo) 
+return;
+
+
+
+// Ocultar todo
+elCatalogo.classList.add('d-none');
+if (elComandaTab) 
+elComandaTab.classList.add('d-none');
+
+
+
+if (elOrdenesTab) {
+elOrdenesTab.classList.add('d-none');
+elOrdenesTab.style.display = '';
+}
+
+
+if (lnkCatalogo) 
+lnkCatalogo.classList.remove('active');
+
+
+
+if (lnkComanda) 
+lnkComanda.classList.remove('active');
+
+
+
+if (lnkOrdenes) 
+lnkOrdenes.classList.remove('active');
+
+
+
+if (tab === 'catalogo') {
+elCatalogo.classList.remove('d-none');
+if (lnkCatalogo) 
+lnkCatalogo.classList.add('active');
+
+
+
+} else if (tab === 'ordenes') {
+if (elOrdenesTab) {
+elOrdenesTab.classList.remove('d-none');
+elOrdenesTab.style.display = 'flex';
+}
+if (lnkOrdenes) 
+lnkOrdenes.classList.add('active');
+
+
+
+} else {
+if (elComandaTab) 
+elComandaTab.classList.remove('d-none');
+
+
+
+if (lnkComanda) 
+lnkComanda.classList.add('active');
+
+
+
+}
+if (save !== false) {
+try {
+localStorage.setItem(TAB_KEY, tab);
+} catch (e) {}
+}
+}
+
+function restoreTab() {
+if (window.innerWidth >= 1200) 
+return;
+
+
+
+// xl: no tabs
+try {
+var saved = localStorage.getItem(TAB_KEY) || 'catalogo';
+tpvTab(saved, false);
+} catch (e) {}
+}
+
+// En xl+ siempre mostrar catálogo, ocultar panel-comanda-tab y panel-ordenes-tab
+function checkWidth() {
+var catEl = document.getElementById('panel-catalogo');
+var comEl = document.getElementById('panel-comanda-tab');
+var ordEl = document.getElementById('panel-ordenes-tab');
+if (! catEl || ! comEl) 
+return;
+
+
+
+if (window.innerWidth >= 1200) {
+catEl.classList.remove('d-none');
+comEl.classList.add('d-none');
+if (ordEl) 
+ordEl.classList.add('d-none');
+
+
+
+} else {
+restoreTab();
+}
+}
+window.addEventListener('resize', checkWidth);
+
+// ── Familias AJAX ────────────────────────────────────
+function _tpvFiltrarGrid(url) {
+fetch(url).then(function (r) {
+return r.text();
+}).then(function (html) {
+var doc = new DOMParser().parseFromString(html, 'text/html');
+var newGrid = doc.getElementById('grid-productos');
+var curGrid = document.getElementById('grid-productos');
+if (newGrid && curGrid) 
+curGrid.innerHTML = newGrid.innerHTML;
+
+
+
+var inp = document.getElementById('buscador-productos');
+if (inp) 
+inp.value = '';
+
+
+
+}).catch(function () {});
+}
+
+// Sidebar xl: marcar activo y cargar
+function tpvFiltrarSidebar(btn, url, label) {
+document.querySelectorAll('.cat-sidebar-btn').forEach(function (b) {
+b.classList.remove('active', 'active-est');
+});
+var isEst = url.indexOf('&estacion=') !== -1;
+btn.classList.add(isEst ? 'active-est' : 'active');
+// actualizar dropdown label (por si se usa en mobile también)
+var dropdBtn = document.getElementById('dropdownFamiliaBtn');
+if (dropdBtn) 
+dropdBtn.firstChild.textContent = label;
+
+
+
+_tpvFiltrarGrid(url);
+}
+
+// Dropdown mobile: actualizar label y cargar
+function tpvFiltrarDropdown(item, url, label) {
+var dropdBtn = document.getElementById('dropdownFamiliaBtn');
+if (dropdBtn) 
+dropdBtn.firstChild.textContent = label;
+
+
+
+if (dropdBtn && typeof $ !== 'undefined') 
+$(dropdBtn).dropdown('hide');
+
+
+
+_tpvFiltrarGrid(url);
+}
+
+function modalCashMovement(actionType) {
+$('#cashMovementAmount').val('');
+$('#cashMovementConcept').val('');
+
+if (actionType === 'cash-out') {
+$('#cashMovementTitle').text('Salida de caja');
+} else {
+$('#cashMovementTitle').text('Entrada de caja');
+}
+
+$('#cashMovementAction').val(actionType);
+$('#modalCashMovement').off('shown.bs.modal').on('shown.bs.modal', function () {
+$('#cashMovementAmount').focus();
+});
+$('#modalCashMovement').modal('show');
+return false;
+}
+
+// ── Buscador de facturas en modal ─────────────────────
+var _busFacturasTimer = null;
+var _busFacturasQ = '';
+var _busFacturasPag = 1;
+
+function tpvFiltrarFacturas(q) {
+clearTimeout(_busFacturasTimer);
+_busFacturasQ = q.trim();
+_busFacturasPag = 1;
+_busFacturasTimer = setTimeout(function () {
+_busFacturasAjax(_busFacturasQ, _busFacturasPag);
+}, 350);
+}
+
+function _busFacturasAjax(q, page) {
+var tbody = document.querySelector('#modalCuenta tbody');
+if (! tbody) 
+return;
+
+
+
+tbody.innerHTML = '<tr><td colspan="5" class="text-center py-3"><i class="fa-solid fa-spinner fa-spin"></i></td></tr>';
+fetch('{{ fsc.url() }}?action=search-facturas&q=' + encodeURIComponent(q) + '&page=' + page + '&_t=' + Date.now()).then(function (r) {
+return r.json();
+}).then(function (d) {
+if (! d.rows || d.rows.length === 0) {
+tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">No se encontraron facturas.</td></tr>';
+_busFacturasRenderPag(0, 0, 0, 20);
+return;
+}
+tbody.innerHTML = d.rows.map(function (fac) {
+var cambio = parseFloat(fac.tpv_cambio || 0);
+var cambioHtml = cambio > 0 ? cambio.toFixed(2) + ' \u20ac' : '-';
+return '<tr>' + '<td class="font-weight-bold">' + _escHtml(fac.codigo) + '</td>' + '<td>' + _escHtml(fac.fecha) + '</td>' + '<td>' + _escHtml(fac.nombrecliente) + '</td>' + '<td class="text-right">' + parseFloat(fac.total).toFixed(2) + ' \u20ac</td>' + '<td class="text-right" style="white-space:nowrap;">' + '<button type="button" class="btn btn-sm btn-outline-primary" style="padding:2px 7px;" onclick="tpvVerFactura(' + fac.idfactura + ')"><i class="fa-solid fa-eye"></i></button>' + '</td>' + '</tr>';
+}).join('');
+_busFacturasRenderPag(d.total, d.page, d.limit, d.limit);
+}).catch(function () {
+tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger py-3">Error al buscar.</td></tr>';
+});
+}
+
+function _busFacturasRenderPag(total, page, limit) {
+var cont = document.getElementById('facturas-paginacion');
+var info = document.getElementById('facturas-info');
+var pages = document.getElementById('facturas-pages');
+if (! cont) 
+return;
+
+
+
+if (total <= (limit || 20)) {
+cont.style.display = 'none';
+return;
+}
+cont.style.display = 'flex';
+var totalPages = Math.ceil(total / limit);
+var from = (page - 1) * limit + 1;
+var to = Math.min(page * limit, total);
+info.textContent = 'Mostrando ' + from + '-' + to + ' de ' + total;
+var html = '';
+// Anterior
+html += '<button type="button" class="btn btn-outline-secondary btn-sm' + (
+page <= 1 ? ' disabled' : ''
+) + '" onclick="_busFacturasIrPag(' + (
+page - 1
+) + ')">&laquo;</button>';
+// Páginas cercanas
+var start = Math.max(1, page - 2);
+var end = Math.min(totalPages, page + 2);
+if (start > 1) 
+html += '<button type="button" class="btn btn-outline-secondary btn-sm" onclick="_busFacturasIrPag(1)">1</button>';
+
+
+
+if (start > 2) 
+html += '<span class="btn btn-sm disabled">…</span>';
+
+
+
+for (var i = start; i <= end; i++) {
+html += '<button type="button" class="btn btn-sm ' + (
+i === page ? 'btn-secondary' : 'btn-outline-secondary'
+) + '" onclick="_busFacturasIrPag(' + i + ')">' + i + '</button>';
+}
+if (end < totalPages - 1) 
+html += '<span class="btn btn-sm disabled">…</span>';
+
+
+
+if (end < totalPages) 
+html += '<button type="button" class="btn btn-outline-secondary btn-sm" onclick="_busFacturasIrPag(' + totalPages + ')">' + totalPages + '</button>';
+
+
+
+// Siguiente
+html += '<button type="button" class="btn btn-outline-secondary btn-sm' + (
+page >= totalPages ? ' disabled' : ''
+) + '" onclick="_busFacturasIrPag(' + (
+page + 1
+) + ')">&raquo;</button>';
+pages.innerHTML = html;
+}
+
+function _busFacturasIrPag(p) {
+_busFacturasPag = p;
+_busFacturasAjax(_busFacturasQ, p);
+}
+
+function _escHtml(s) {
+return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// ── Buscador de productos ─────────────────────────────
+function initBuscador() {
+var input = document.getElementById('buscador-productos');
+if (! input) 
+return;
+
+
+
+input.addEventListener('input', function () {
+var q = this.value.toLowerCase().trim();
+document.querySelectorAll('#grid-productos .col-producto').forEach(function (col) {
+var txt = col.querySelector('.prod-nombre');
+if (! txt) 
+return;
+
+
+
+col.style.display = (! q || txt.textContent.toLowerCase().indexOf(q) !== -1) ? '' : 'none';
+});
+});
+}
+
+// ── AJAX — actualizar comanda sin recargar ────────────
+function refreshComanda(responseHtml) {
+var parser = new DOMParser();
+var doc = parser.parseFromString(responseHtml, 'text/html');
+
+// Reemplazar paneles de comanda (su HTML ya trae tokens frescos)
+['panel-comanda', 'panel-comanda-tab'].forEach(function (id) {
+var n = doc.getElementById(id);
+var c = document.getElementById(id);
+if (n && c) 
+c.innerHTML = n.innerHTML;
+
+
+
+});
+
+// Reconstruir tpvSubLineas desde el DOM recién actualizado (para pre-checkboxes en modal editar)
+tpvSubLineas = {};
+document.querySelectorAll('.tpv-modif-row[data-idlineapadre]').forEach(function (tr) {
+var padre = tr.getAttribute('data-idlineapadre');
+var desc = tr.getAttribute('data-desclinea');
+if (! padre || ! desc) 
+return;
+
+
+
+if (!tpvSubLineas[padre]) 
+tpvSubLineas[padre] = [];
+
+
+
+tpvSubLineas[padre].push(desc);
+});
+
+// Actualizar tokens de los formularios del catálogo por posición
+var newToks = doc.querySelectorAll('#panel-catalogo .col-producto form input[name="multireqtoken"]');
+var curToks = document.querySelectorAll('#panel-catalogo .col-producto form input[name="multireqtoken"]');
+for (var i = 0; i < newToks.length && i < curToks.length; i++) {
+curToks[i].value = newToks[i].value;
+}
+
+// Re-enganchar handlers a los nuevos forms de cantidad
+attachAjaxForms();
+
+// Actualizar badge del carrito
+var _badgeRows = document.querySelectorAll('.tpv-table tbody tr:not(.tpv-modif-row)').length;
+var _badge = document.getElementById('tpv-cart-badge');
+if (_badge) {
+_badge.textContent = _badgeRows;
+_badge.style.display = _badgeRows > 0 ? 'inline' : 'none';
+}
+}
+
+function attachAjaxForms() { // Forms de comanda y catálogo (no el modal de cobro)
+var sel = '#panel-comanda form, #panel-comanda-tab form, #panel-catalogo .col-producto form';
+document.querySelectorAll(sel).forEach(function (form) {
+if (form._tpvAjax) 
+return;
+
+
+
+if (form.hasAttribute('data-no-ajax')) 
+return;
+
+
+
+form._tpvAjax = true;
+form.addEventListener('submit', handleAjaxSubmit);
+
+// Para inputs de precio: submit al cambiar
+var priceInput = form.querySelector('input[name="precio"]');
+if (priceInput && ! priceInput._tpvAjax) {
+priceInput._tpvAjax = true;
+priceInput.addEventListener('change', function () {
+form.dispatchEvent(new Event('submit'));
+});
+}
+});
+}
+
+// ── Modificadores de producto ──────────────────────────
+var _modBtn,
+_modUrl,
+_modRef,
+_modToken,
+_modBase;
+
+function tpvClickProducto(btn, url, referencia, token) {
+var modifData = [];
+try {
+modifData = JSON.parse(btn.getAttribute('data-modif') || '[]');
+} catch (e) {}
+if (modifData && modifData.length > 0) {
+var base = parseFloat(btn.getAttribute('data-precio') || '0') || 0;
+tpvAbrirModificadores(btn, url, referencia, token, modifData, base);
+} else {
+tpvAddProducto(btn, url, referencia, token);
+}
+}
+
+function tpvAbrirModificadores(btn, url, referencia, token, modificadores, base) {
+_modBtn = btn;
+_modUrl = url;
+_modRef = referencia;
+_modToken = token;
+_modBase = base;
+
+document.getElementById('mod-titulo').innerHTML = '<i class="fa-solid fa-sliders mr-2"></i>' + btn.querySelector('.prod-nombre').textContent.trim();
+document.getElementById('mod-cantidad').value = 1;
+document.getElementById('mod-nota').value = '';
+document.getElementById('mod-confirmar').disabled = false;
+
+var lista = document.getElementById('mod-lista');
+lista.innerHTML = '';
+modificadores.forEach(function (m) {
+var item = document.createElement('div');
+item.className = 'form-check border rounded px-3 py-2 mb-1';
+item.innerHTML = '<label class="form-check-label d-flex justify-content-between w-100 mb-0" style="cursor:pointer;">' + '<span><input type="checkbox" class="form-check-input mr-2 mod-chk"' + ' data-nombre="' + m.nombre.replace(/"/g, '&quot;') + '"' + ' data-precio="' + m.precio + '"' + ' onchange="modActualizarTotal()"> ' + m.nombre + '</span>' + '<span class="text-muted small">+' + parseFloat(m.precio).toFixed(2) + '\u00a0\u20ac</span>' + '</label>';
+lista.appendChild(item);
+});
+
+modActualizarTotal();
+$('#modalModificadores').modal('show');
+}
+
+function modActualizarTotal() {
+var cant = Math.max(1, parseInt(document.getElementById('mod-cantidad').value) || 1);
+var extra = 0;
+document.querySelectorAll('#mod-lista .mod-chk:checked').forEach(function (c) {
+extra += parseFloat(c.dataset.precio) || 0;
+});
+document.getElementById('mod-total-unit').textContent = (_modBase + extra).toFixed(2) + ' \u20ac';
+document.getElementById('mod-total').textContent = 'Total: ' + (
+(_modBase + extra) * cant
+).toFixed(2) + ' \u20ac';
+}
+
+function modCambiarCantidad(delta) {
+var inp = document.getElementById('mod-cantidad');
+inp.value = Math.max(1, (parseInt(inp.value) || 1) + delta);
+modActualizarTotal();
+}
+
+function tpvConfirmarModificadores() {
+var btn = document.getElementById('mod-confirmar');
+if (tipoActual === 'in-table' && tpvIdMesa === 0) {
+alert('Selecciona una mesa antes de añadir productos.');
+$('#modalModificadores').modal('hide');
+return;
+}
+btn.disabled = true;
+var selModifs = [];
+document.querySelectorAll('#mod-lista .mod-chk:checked').forEach(function (c) {
+selModifs.push({nombre: c.dataset.nombre, precio: c.dataset.precio});
+});
+var body = new URLSearchParams();
+body.append('multireqtoken', _modToken);
+body.append('action', 'add-producto-con-modif');
+body.append('referencia', _modRef);
+body.append('cantidad', document.getElementById('mod-cantidad').value);
+body.append('nota', document.getElementById('mod-nota').value.trim());
+body.append('modificadores', JSON.stringify(selModifs));
+fetch(_modUrl, {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+}).then(function (r) {
+return r.text();
+}).then(function (html) {
+refreshComanda(html);
+// Refrescar tokens de los botones de catálogo
+var parser = new DOMParser();
+var doc = parser.parseFromString(html, 'text/html');
+var newBtns = doc.querySelectorAll('#grid-productos .col-producto button');
+var curBtns = document.querySelectorAll('#grid-productos .col-producto button');
+for (var i = 0; i < newBtns.length && i < curBtns.length; i++) {
+var m = newBtns[i].getAttribute('onclick').match(/'([^']{30,})'\s*\)/);
+var mc = curBtns[i].getAttribute('onclick').match(/'([^']{30,})'\s*\)/);
+if (m && mc) {
+curBtns[i].setAttribute('onclick', curBtns[i].getAttribute('onclick').replace(mc[1], m[1]));
+if (_modBtn === curBtns[i]) 
+_modToken = m[1];
+
+
+
+}
+}
+$('#modalModificadores').modal('hide');
+btn.disabled = false;
+}).catch(function () {
+window.location.reload();
+});
+}
+
+// ── Añadir producto al carrito (AJAX directo) ──
+function tpvAddProducto(btn, url, referencia, token) {
+if (tipoActual === 'in-table' && tpvIdMesa === 0) {
+alert('Selecciona una mesa antes de añadir productos.');
+return;
+}
+btn.disabled = true;
+var rowsBefore = document.querySelectorAll('.tpv-table tbody tr').length;
+var body = new URLSearchParams();
+body.append('multireqtoken', token);
+body.append('action', 'add-producto');
+body.append('referencia', referencia);
+fetch(url, {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+}).then(function (r) {
+return r.text();
+}).then(function (html) {
+refreshComanda(html);
+var rowsAfter = document.querySelectorAll('.tpv-table tbody tr').length;
+tpvPlaySound();
+// Refrescar token del botón desde la respuesta
+var parser = new DOMParser();
+var doc = parser.parseFromString(html, 'text/html');
+var btns = doc.querySelectorAll('#grid-productos .col-producto button');
+var curBtns = document.querySelectorAll('#grid-productos .col-producto button');
+for (var i = 0; i < btns.length && i < curBtns.length; i++) {
+var m = btns[i].getAttribute('onclick').match(/'([^']{20,})'\s*\)/);
+var mc = curBtns[i].getAttribute('onclick').match(/'([^']{20,})'\s*\)/);
+if (m && mc) {
+curBtns[i].setAttribute('onclick', curBtns[i].getAttribute('onclick').replace(mc[1], m[1]));
+}
+}
+btn.disabled = false;
+}).catch(function () {
+window.location.reload();
+});
+}
+
+// ── Cambiar cantidad (AJAX directo) ──
+function tpvQty(btn, url, idlinea, cantidad, token) {
+btn.disabled = true;
+var body = new URLSearchParams();
+body.append('multireqtoken', token);
+body.append('action', 'update-cantidad');
+body.append('idlinea', idlinea);
+body.append('cantidad', cantidad);
+fetch(url, {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+}).then(function (r) {
+return r.text();
+}).then(function (html) {
+refreshComanda(html);
+tpvPlaySound2();
+}).catch(function () {
+window.location.reload();
+});
+}
+
+// ── Eliminar línea (AJAX directo, sin form submit) ──
+function tpvDelLinea(btn) {
+if (!confirm('{{ i18n.trans("are-you-sure") }}')) 
+return;
+
+
+
+var wrap = btn.closest('.tpv-del-wrap');
+var url = wrap.getAttribute('data-url');
+var idlinea = wrap.getAttribute('data-idlinea');
+var token = wrap.getAttribute('data-token');
+
+btn.disabled = true;
+
+var body = new URLSearchParams();
+body.append('multireqtoken', token);
+body.append('action', 'remove-linea');
+body.append('idlinea', idlinea);
+
+fetch(url, {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+}).then(function (r) {
+return r.text();
+}).then(function (html) {
+refreshComanda(html);
+}).catch(function () {
+window.location.reload();
+});
+}
+
+function handleAjaxSubmit(e) {
+e.preventDefault();
+var form = this;
+
+var formData = new FormData(form);
+var url = form.getAttribute('action') || window.location.href;
+
+// Deshabilitar botón para evitar doble click
+var submitBtn = form.querySelector('[type=submit]');
+if (submitBtn) 
+submitBtn.disabled = true;
+
+
+
+fetch(url, {
+method: 'POST',
+body: formData
+}).then(function (r) {
+if (r.redirected) { // cobrar redirige a otro sitio, dejamos que navegue
+window.location.href = r.url;
+return null;
+}
+return r.text();
+}).then(function (html) {
+if (! html) 
+return;
+
+
+
+refreshComanda(html);
+if (submitBtn) 
+submitBtn.disabled = false;
+
+
+
+}).catch(function () { // Fallback: recarga normal
+form._tpvAjax = false;
+form.submit();
+});
+}
+
+// ── Init ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+checkWidth();
+initBuscador();
+attachAjaxForms();
+
+// Sincronizar los dos selectores de cliente (mobile ↔ desktop)
+['sel-cliente-mobile', 'sel-cliente-desktop'].forEach(function (id) {
+var el = document.getElementById(id);
+if (! el) 
+return;
+
+
+
+el.addEventListener('change', function () {
+var other = id === 'sel-cliente-mobile' ? 'sel-cliente-desktop' : 'sel-cliente-mobile';
+var otherEl = document.getElementById(other);
+if (otherEl) 
+otherEl.value = this.value;
+
+
+
+});
+});
+});
+
+	</script>
+	{# ════════════════════════════════════════════
+							   Modal selección de mesa
+							════════════════════════════════════════════ #}
+	<div class="modal fade" id="modalMesas" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<i class="fa-solid fa-table-cells-large mr-2"></i>Mesas
+					</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-0">
+
+					{% if fsc.settingVistaMesas == 'posicion' %}
+						<div style="overflow:auto;">
+							<div style="width:798px;height:600px;position:relative;background-color:#f5f2ea;background-image:linear-gradient(rgba(0,0,0,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.08) 1px,transparent 1px);background-size:40px 40px;">
+								{% for zona in fsc.zonas %}
+									{% for mesa in zona.mesas %}
+										<div class="mm-mesa-thumb estado-{{ mesa.estado }}" data-idmesa="{{ mesa.idmesa }}" data-estado="{{ mesa.estado }}" data-nombre="{{ mesa.nombre }}" style="position:absolute;left:{{ mesa.pos_x }}%;top:{{ mesa.pos_y }}%;margin:0;width:86px;height:72px;" onclick="tpvMesaClick(event, this)" oncontextmenu="tpvMesaCtx(event, this)">
+											<i class="fa-solid fa-chair" style="font-size:1.1rem;"></i>
+											<div style="font-size:.65rem;font-weight:700;margin-top:3px;">{{ mesa.nombre }}</div>
+											<div style="font-size:.55rem;opacity:.8;">{{ mesa.estado }}</div>
+										</div>
+									{% endfor %}
+								{% endfor %}
+							</div>
+						</div>
+
+					{% else %}
+						{# ── Modo clásico: pestañas de zona + grid de mesas ── #}
+						<div style="display:flex;flex-direction:row;">
+							<div style="width:110px;flex-shrink:0;border-right:1px solid #444;">
+								<div class="p-2 text-center" style="font-size:.7rem;border-bottom:1px solid #444;">Área/Piso</div>
+								{% for zona in fsc.zonas %}
+									<div class="mm-zona-tab {{ loop.first ? 'active' : '' }}" onclick="tpvZonaTab(this, {{ loop.index0 }})">
+										{{ zona.nombre }}
+									</div>
+								{% endfor %}
+							</div>
+							<div class="flex-fill p-2 overflow-auto">
+								{% for zona in fsc.zonas %}
+									<div class="mesas-zona-panel" style="{{ loop.first ? 'display:flex;flex-wrap:wrap;' : 'display:none;' }}" data-zona-idx="{{ loop.index0 }}">
+										{% if zona.mesas is empty %}
+											<p class="text-muted small p-3 w-100">Sin mesas en esta zona</p>
+										{% else %}
+											{% for mesa in zona.mesas %}
+												<div class="mm-mesa-thumb estado-{{ mesa.estado }}" data-idmesa="{{ mesa.idmesa }}" data-estado="{{ mesa.estado }}" data-nombre="{{ mesa.nombre }}" onclick="tpvMesaClick(event, this)" oncontextmenu="tpvMesaCtx(event, this)">
+													<i class="fa-solid fa-chair" style="font-size:1.1rem;"></i>
+													<div style="font-size:.65rem;font-weight:700;margin-top:3px;">{{ mesa.nombre }}</div>
+													<div style="font-size:.55rem;opacity:.8;">{{ mesa.estado }}</div>
+												</div>
+											{% endfor %}
+										{% endif %}
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						{# fin flex row #}
+					{% endif %}
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# Menú contextual mesas (flotante, fuera del modal) #}
+	<div id="tpvCtxMenu" class="tpv-ctx-menu">
+		<div class="tpv-ctx-item" id="ctx-abrir">
+			<i class="fa-solid fa-door-open text-success"></i>Abrir comanda</div>
+		<div class="tpv-ctx-sep" id="ctx-sep-mover" style="display:none;"></div>
+		<div class="tpv-ctx-item" id="ctx-mover" style="display:none;">
+			<i class="fa-solid fa-right-left text-info"></i>Mover comanda aquí</div>
+		<div class="tpv-ctx-sep" id="ctx-sep-juntar" style="display:none;"></div>
+		<div class="tpv-ctx-item" id="ctx-juntar" style="display:none;">
+			<i class="fa-solid fa-object-group text-warning"></i>Juntar con esta mesa</div>
+		<div class="tpv-ctx-sep"></div>
+		<div class="tpv-ctx-item" id="ctx-reservar">
+			<i class="fa-solid fa-bookmark text-warning"></i>
+			<span id="ctx-reservar-txt">Reservar</span>
+		</div>
+	</div>
+
+	{# ════════════════════════════════════════════
+							   Modal nuevo cliente
+							════════════════════════════════════════════ #}
+	<div class="modal fade" id="modalNuevoCliente" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<i class="fa-solid fa-user-plus mr-2"></i>Nuevo Cliente</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body py-2">
+					<input type="hidden" id="nc-token" value="{{ formToken(false) }}">
+					<div class="form-group mb-2">
+						<label class="small font-weight-bold mb-1">Nombre
+							<span class="text-danger">*</span>
+						</label>
+						<input type="text" id="nc-nombre" class="form-control form-control-sm" placeholder="Nombre completo">
+					</div>
+					<div class="form-group mb-2">
+						<label class="small mb-1">NIF / CIF</label>
+						<input type="text" id="nc-cifnif" class="form-control form-control-sm" placeholder="NIF o CIF">
+					</div>
+					<div class="form-row">
+						<div class="form-group col-6 mb-2">
+							<label class="small mb-1">Email</label>
+							<input type="email" id="nc-email" class="form-control form-control-sm" placeholder="email@ejemplo.com">
+						</div>
+						<div class="form-group col-6 mb-2">
+							<label class="small mb-1">Teléfono</label>
+							<input type="tel" id="nc-telefono" class="form-control form-control-sm" placeholder="600000000">
+						</div>
+					</div>
+					<div class="form-group mb-2">
+						<label class="small mb-1">Dirección</label>
+						<input type="text" id="nc-direccion" class="form-control form-control-sm" placeholder="Calle, número...">
+					</div>
+					<div class="form-row">
+						<div class="form-group col-4 mb-2">
+							<label class="small mb-1">C.P.</label>
+							<input type="text" id="nc-codpostal" class="form-control form-control-sm" placeholder="00000">
+						</div>
+						<div class="form-group col-8 mb-2">
+							<label class="small mb-1">Ciudad</label>
+							<input type="text" id="nc-ciudad" class="form-control form-control-sm">
+						</div>
+					</div>
+					<div id="nc-error" class="alert alert-danger alert-sm d-none mb-0 py-1 small"></div>
+				</div>
+				<div class="modal-footer py-2">
+					<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-success btn-sm" id="nc-guardar" onclick="tpvCrearCliente()">
+						<i class="fa-solid fa-check mr-1"></i>Guardar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# ════════════════════════════════════════════
+							   Modal modificadores de producto
+							════════════════════════════════════════════ #}
+	<div class="modal fade" id="modalModificadores" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="mod-titulo">
+						<i class="fa-solid fa-sliders mr-2"></i>Modificadores</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body py-2">
+					<div class="d-flex align-items-center justify-content-between mb-3">
+						<label class="font-weight-bold mb-0">Cantidad</label>
+						<div class="d-flex align-items-center" style="gap:10px;">
+							<button type="button" class="btn btn-danger btn-sm" onclick="modCambiarCantidad(-1)">
+								<i class="fa-solid fa-minus"></i>
+							</button>
+							<input type="number" id="mod-cantidad" class="form-control form-control-sm text-center font-weight-bold" value="1" min="1" step="1" style="max-width:64px;font-size:1.1rem;" oninput="modActualizarTotal()">
+							<button type="button" class="btn btn-primary btn-sm" onclick="modCambiarCantidad(1)">
+								<i class="fa-solid fa-plus"></i>
+							</button>
+							<span class="font-weight-bold ml-2" id="mod-total-unit" style="min-width:60px;text-align:right;"></span>
+						</div>
+					</div>
+					<div id="mod-lista" class="mb-3"></div>
+					<div class="form-group mb-0">
+						<label class="small font-weight-bold mb-1">Nota de preparación</label>
+						<input type="text" id="mod-nota" class="form-control form-control-sm" placeholder="Opcional">
+					</div>
+				</div>
+				<div class="modal-footer d-flex justify-content-between py-2">
+					<span class="font-weight-bold" id="mod-total">Total: 0.00 €</span>
+					<div>
+						<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-success btn-sm" id="mod-confirmar" onclick="tpvConfirmarModificadores()">
+							<i class="fa-solid fa-cart-plus mr-1"></i>Añadir a comanda
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# Mapa JS: referencia → modificadores disponibles, para usar en el modal editar #}
+	<script>
+		var tpvModifByRef = {};{% for prod in fsc.productos %}{% if prod.modificadores|length > 0 %}tpvModifByRef[{{ prod.referencia|json_encode|raw }}] = {{ prod.modificadores|json_encode|raw }};{% endif %}{% endfor %}var tpvSubLineas = {};{% for linea in fsc.lineas %}{% if linea.idlinea_padre %}if (! tpvSubLineas[{{ linea.idlinea_padre }}]) 
+tpvSubLineas[{{ linea.idlinea_padre }}] = [];
+
+
+
+tpvSubLineas[{{ linea.idlinea_padre }}].push({{ linea.descripcion|json_encode|raw }});{% endif %}{% endfor %}
+	</script>
+
+	{# ════════════════════════════════════════════
+							   Modal editar línea de comanda
+							════════════════════════════════════════════ #}
+	<div class="modal fade" id="modalEditarLinea" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="el-titulo">
+						<i class="fa-solid fa-pencil mr-2"></i>Editar línea</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body py-2">
+					<input type="hidden" id="el-token" value="{{ formToken(false) }}">
+					<input type="hidden" id="el-idlinea" value="">
+					<div class="form-group mb-3">
+						<label class="small font-weight-bold mb-1">Cantidad</label>
+						<div class="d-flex align-items-center" style="gap:10px;">
+							<button type="button" class="btn btn-danger" onclick="elCambiarCantidad(-1)">
+								<i class="fa-solid fa-minus"></i>
+							</button>
+							<input type="number" id="el-cantidad" class="form-control text-center font-weight-bold" step="1" min="1" style="max-width:80px;font-size:1.2rem;">
+							<button type="button" class="btn btn-primary" onclick="elCambiarCantidad(1)">
+								<i class="fa-solid fa-plus"></i>
+							</button>
+						</div>
+					</div>
+					<div class="form-group mb-0">
+						<label class="small font-weight-bold mb-1">Nota de preparación</label>
+						<input type="text" id="el-nota" class="form-control form-control-sm" placeholder="Opcional">
+					</div>
+					<div id="el-mod-section" class="form-group mt-3 mb-0" style="display:none;">
+						<label class="small font-weight-bold mb-1">
+							<i class="fa-solid fa-sliders mr-1"></i>Modificadores</label>
+						<div id="el-modlist"></div>
+					</div>
+				</div>
+				<div class="modal-footer py-2">
+					<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary btn-sm" id="el-guardar" onclick="tpvGuardarLinea()">
+						<i class="fa-solid fa-check mr-1"></i>Guardar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# ════════════════════════════════════════════
+							   Modal Cuenta (Facturas S)
+							════════════════════════════════════════════ #}
+	<div class="modal fade" id="modalCuenta" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<i class="fa-solid fa-receipt mr-2"></i>Facturas</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-0">
+					<div class="px-3 pt-2 pb-1 border-bottom">
+						<div class="input-group input-group-sm">
+							<div class="input-group-prepend">
+								<span class="input-group-text">
+									<i class="fa-solid fa-search"></i>
+								</span>
+							</div>
+							<input type="text" id="buscador-facturas" class="form-control" placeholder="Escribe el número de factura para buscar..." oninput="tpvFiltrarFacturas(this.value)">
+						</div>
+					</div>
+					<table class="table table-sm table-hover mb-0">
+						<thead class="thead-light">
+							<tr>
+								<th>Nº Fact</th>
+								<th>Fecha</th>
+								<th>Cliente</th>
+								<th class="text-right">Total</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td colspan="5" class="text-center py-3">
+									<i class="fa-solid fa-spinner fa-spin"></i>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="facturas-paginacion" class="d-flex justify-content-between align-items-center px-3 py-2 border-top" style="display:none;">
+					<small id="facturas-info" class="text-muted"></small>
+					<div id="facturas-pages" class="d-flex" style="gap:4px;"></div>
+				</div>
+				<div class="modal-footer py-2">
+					<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# ════════════════════════════════════════════
+							   Modal previsualizar factura
+							════════════════════════════════════════════ #}
+	<div class="modal fade" id="modalFacturaPreview" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<i class="fa-solid fa-receipt mr-2"></i>Previsualizar Ticket</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="factura-preview-body" style="max-height:70vh;overflow-y:auto;font-family:monospace;font-size:13px;"></div>
+				<div class="modal-footer py-2">
+					<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+					<button type="button" class="btn btn-primary btn-sm" id="fp-imprimir-btn" data-idfactura="" onclick="tpvImprimirFactura(this.getAttribute('data-idfactura'))">
+						<i class="fa-solid fa-print mr-1"></i>Imprimir PDF
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# ════════════════════════════════════════════
+							   Modal editar cliente
+							════════════════════════════════════════════ #}
+	<div class="modal fade" id="modalEditarCliente" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<i class="fa-solid fa-user-pen mr-2"></i>Editar Cliente</h5>
+					<button type="button" class="close" data-dismiss="modal">
+						<span>&times;</span>
+					</button>
+				</div>
+				<div class="modal-body py-2">
+					<input type="hidden" id="ec-token" value="{{ formToken(false) }}">
+					<input type="hidden" id="ec-codcliente" value="">
+					<div class="form-group mb-2">
+						<label class="small font-weight-bold mb-1">Nombre
+							<span class="text-danger">*</span>
+						</label>
+						<input type="text" id="ec-nombre" class="form-control form-control-sm">
+					</div>
+					<div class="form-group mb-2">
+						<label class="small mb-1">NIF / CIF</label>
+						<input type="text" id="ec-cifnif" class="form-control form-control-sm">
+					</div>
+					<div class="form-row">
+						<div class="form-group col-6 mb-2">
+							<label class="small mb-1">Email</label>
+							<input type="email" id="ec-email" class="form-control form-control-sm">
+						</div>
+						<div class="form-group col-6 mb-2">
+							<label class="small mb-1">Teléfono</label>
+							<input type="tel" id="ec-telefono" class="form-control form-control-sm">
+						</div>
+					</div>
+					<div class="form-group mb-2">
+						<label class="small mb-1">Dirección</label>
+						<input type="text" id="ec-direccion" class="form-control form-control-sm">
+					</div>
+					<div class="form-row">
+						<div class="form-group col-4 mb-2">
+							<label class="small mb-1">C.P.</label>
+							<input type="text" id="ec-codpostal" class="form-control form-control-sm">
+						</div>
+						<div class="form-group col-8 mb-2">
+							<label class="small mb-1">Ciudad</label>
+							<input type="text" id="ec-ciudad" class="form-control form-control-sm">
+						</div>
+					</div>
+					<div id="ec-error" class="alert alert-danger alert-sm d-none mb-0 py-1 small"></div>
+				</div>
+				<div class="modal-footer py-2">
+					<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary btn-sm" id="ec-guardar" onclick="tpvGuardarCliente()">
+						<i class="fa-solid fa-check mr-1"></i>Guardar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// ── Datos de clientes para modal editar ───────────────
+var TPV_CLIENTES = {
+{% for c in fsc.clientes %}
+'{{ c.codcliente }}' : {
+nombre: {{ c.nombre|json_encode|raw }},
+cifnif: {{ c.cifnif|json_encode|raw }},
+email: {{ c.email|json_encode|raw }},
+telefono1: {{ c.telefono1|json_encode|raw }},
+direccion: {{ c.direccion|json_encode|raw }},
+codpostal: {{ c.codpostal|json_encode|raw }},
+ciudad: {{ c.ciudad|json_encode|raw }}
+}
+{{ loop.last ? '' : ',' }}
+{% endfor %}
+};
+
+// ── Buscador de cliente ──────────────────────────────────
+function tpvFiltrarCliente(inputEl, hiddenId) {
+var q = inputEl.value.toLowerCase().trim();
+var drop = document.getElementById(hiddenId + '-drop');
+drop.innerHTML = '';
+var results = [];
+Object.keys(TPV_CLIENTES).forEach(function (cod) {
+var c = TPV_CLIENTES[cod];
+var haystack = ((c.nombre || '') + ' ' + (
+c.telefono1 || ''
+) + ' ' + (
+c.direccion || ''
+) + ' ' + (
+c.ciudad || ''
+)).toLowerCase();
+if (q === '' || haystack.indexOf(q) !== -1) {
+results.push({cod: cod, nombre: c.nombre, tel: c.telefono1, dir: c.direccion});
+}
+});
+if (results.length === 0) {
+drop.style.display = 'none';
+return;
+}
+results.slice(0, 60).forEach(function (r) {
+var div = document.createElement('div');
+div.className = 'tpv-cli-opt';
+var sub = [];
+if (r.tel) 
+sub.push(r.tel);
+
+
+
+if (r.dir) 
+sub.push(r.dir);
+
+
+
+var esc = function (s) {
+return(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+};
+div.innerHTML = '<div>' + esc(r.nombre) + '</div>' + (
+sub.length ? '<div class="cli-sub">' + esc(sub.join(' · ')) + '</div>' : ''
+);
+div.addEventListener('mousedown', function (e) {
+e.preventDefault();
+inputEl.value = r.nombre;
+document.getElementById(hiddenId).value = r.cod;
+drop.style.display = 'none';
+var otherId = hiddenId === 'sel-cliente-mobile' ? 'sel-cliente-desktop' : 'sel-cliente-mobile';
+var otherHidden = document.getElementById(otherId);
+if (otherHidden) 
+otherHidden.value = r.cod;
+
+
+
+var otherInput = document.getElementById(otherId + '-input');
+if (otherInput) 
+otherInput.value = r.nombre;
+
+
+
+});
+drop.appendChild(div);
+});
+drop.style.display = 'block';
+}
+document.addEventListener('click', function (e) {
+if (! e.target.classList.contains('tpv-cli-input')) {
+document.querySelectorAll('.tpv-cli-drop').forEach(function (d) {
+d.style.display = 'none';
+});
+}
+});
+
+var TPV_CURRENT_MESA = {{ fsc.mesa ? fsc.mesa.idmesa : 0 }};
+var TPV_TIENE_COMANDA_MESA = {{ (fsc.comanda and fsc.comanda.idmesa) ? 'true' : 'false' }};
+
+// ── Cambio de empresa por AJAX (sin recargar página) ─────
+function tpvSetEmpresa(val) {
+var token = document.getElementById('tpv-empresa-token');
+if (! token) 
+return;
+
+
+var body = new URLSearchParams();
+body.append('multireqtoken', token.value);
+body.append('action', 'set-empresa');
+body.append('idempresa', val);
+fetch('{{ fsc.url() }}', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+},
+body: body.toString(),
+redirect: 'manual'
+}).then(function (r) {
+return r.json();
+}).then(function (d) { // Sincronizar todos los selects de empresa
+document.querySelectorAll('.tpv-empresa-sel').forEach(function (s) {
+s.value = val;
+});
+// Actualizar select de formas de pago del modal cobro
+var sel = document.getElementById('cobro-codpago');
+if (sel && d.formasPago) {
+sel.innerHTML = '';
+d.formasPago.forEach(function (fp) {
+var opt = document.createElement('option');
+opt.value = fp.codpago;
+opt.textContent = fp.descripcion;
+sel.appendChild(opt);
+});
+}
+}).catch(function () {});
+}
+
+// ── Modal mesas ─────────────────────────────────────────
+function tpvZonaTab(el, idx) {
+document.querySelectorAll('.mm-zona-tab').forEach(function (t) {
+t.classList.remove('active');
+});
+el.classList.add('active');
+document.querySelectorAll('.mesas-zona-panel').forEach(function (p) {
+p.style.display = 'none';
+});
+var panel = document.querySelector('[data-zona-idx="' + idx + '"]');
+if (panel) {
+panel.style.display = 'flex';
+panel.style.flexWrap = 'wrap';
+}
+}
+
+var panelCamarero = '{{ asset("PanelCamarero") }}';
+var settingSonidos = {{ fsc.settingSonidos ? 'true' : 'false' }};
+var tpvEscposEnabled = {{ (fsc.settingEscposTipo == 'usb' and fsc.settingEscposUsb) or (fsc.settingEscposTipo != 'usb' and fsc.settingEscposIp) ? 'true' : 'false' }};
+var tpvRelayUrl = {{ fsc.settingEscposRelayUrl|json_encode|raw }};
+var tpvIdComandaGlobal = {{ fsc.comanda ? fsc.comanda.idcomanda : 0 }};
+var tpvMesaNombreGlobal = {{ fsc.mesa ? fsc.mesa.nombre|json_encode|raw : '""' }};
+function escHtml(s) {
+return(s || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+var _tpvBeep = new Audio(panelCamarero.replace(/\/[^\/]+$/, '') + '/Plugins/RestauranteTPV/Assets/Sound/' + {{ fsc.settingAudioBeep1|json_encode|raw }});
+var _tpvBeep2 = new Audio(panelCamarero.replace(/\/[^\/]+$/, '') + '/Plugins/RestauranteTPV/Assets/Sound/' + {{ fsc.settingAudioBeep2|json_encode|raw }});
+function tpvPlaySound() {
+if (! settingSonidos) 
+return;
+
+
+
+try {
+_tpvBeep.cloneNode().play().catch(function () {});
+} catch (e) {}
+}
+function tpvPlaySound2() {
+if (! settingSonidos) 
+return;
+
+
+
+try {
+_tpvBeep2.cloneNode().play().catch(function () {});
+} catch (e) {}
+}
+
+// ── Imprimir comanda de cocina (auto o manual) ───────
+function tpvPrintComanda() {
+var table = document.querySelector('#panel-comanda .tpv-table, #panel-comanda-tab .tpv-table');
+if (! table) 
+return;
+
+
+
+var rows = table.querySelectorAll('tbody tr');
+if (! rows.length) 
+return;
+
+
+
+var lineasHtml = '';
+rows.forEach(function (tr) {
+var esModif = tr.classList.contains('tpv-modif-row');
+if (esModif) {
+var descSpan = tr.querySelector('td:first-child span[style*="padding-left"] span');
+if (! descSpan) 
+descSpan = tr.querySelector('td:first-child span[style*="padding-left"]');
+
+
+
+var desc = descSpan ? descSpan.textContent.trim() : '';
+var cantSpan = tr.querySelector('td:nth-child(2) span');
+var cant = cantSpan ? cantSpan.textContent.trim() : '';
+lineasHtml += '<tr><td style="padding-left:18px;color:#555;font-size:.9em;">&#8627; ' + escHtml(desc) + '</td><td style="text-align:center;color:#555;">' + escHtml(cant) + '</td></tr>';
+} else {
+var boldSpan = tr.querySelector('td:first-child .font-weight-bold');
+var desc = boldSpan ? boldSpan.textContent.trim() : '';
+var cantSpan = tr.querySelector('td:nth-child(2) span[style*="min-width"]');
+var cant = cantSpan ? cantSpan.textContent.trim() : '1';
+var notaEl = tr.querySelector('td:first-child .font-italic');
+var nota = notaEl ? notaEl.textContent.trim() : '';
+lineasHtml += '<tr><td style="font-weight:bold;padding:3px 4px;">' + escHtml(desc) + (nota ? '<div style="font-size:.85em;color:#555;font-style:italic;padding-left:4px;">' + escHtml(nota) + '</div>' : '') + '</td><td style="text-align:center;font-weight:bold;padding:3px 4px;">' + escHtml(cant) + '</td></tr>';
+}
+});
+var hora = new Date().toLocaleTimeString('es-ES', {
+hour: '2-digit',
+minute: '2-digit'
+});
+var infoMesa = tpvMesaNombreGlobal ? 'Mesa: <strong>' + escHtml(tpvMesaNombreGlobal) + '</strong>' : escHtml(tipoActual === 'take-away' ? 'Para llevar' : (tipoActual === 'delivery' ? 'Delivery' : ''));
+var html = '<!DOCTYPE html><html><head><meta charset="utf-8">' + '<style>@page{margin:0;}body{font-family:monospace;font-size:14px;max-width:380px;margin:0 auto;padding:0;}' + 'h1{text-align:center;font-size:17px;margin:0 0 2px;}' + '.sep{border-top:1px dashed #000;margin:5px 0;}' + 'table{width:100%;border-collapse:collapse;}' + 'td{vertical-align:top;}' + '</style></head><body>';
+html += '<h1>COMANDA</h1>';
+html += '<div class="sep"></div>';
+if (tpvIdComandaGlobal) 
+html += '<div>Comanda #<strong>' + tpvIdComandaGlobal + '</strong> &mdash; ' + hora + '</div>';
+
+
+
+if (infoMesa) 
+html += '<div>' + infoMesa + '</div>';
+
+
+
+html += '<div class="sep"></div>';
+html += '<table>' + lineasHtml + '</table>';
+html += '<div class="sep"></div>';
+html += '</body></html>';
+var w = window.open('', '_blank', 'width=400,height=520');
+if (w) {
+w.document.write(html);
+w.document.close();
+w.focus();
+setTimeout(function () {
+w.print();
+}, 350);
+}
+}
+
+function tpvSelectMesa(idmesa, estado) {
+$('#modalMesas').modal('hide');
+if (estado === 'ocupada') {
+window.location.href = panelCamarero + '?idmesa=' + idmesa;
+} else {
+window.location.href = panelCamarero + '?action=open-mesa&idmesa=' + idmesa;
+}
+}
+
+
+// ── Menú contextual mesas ────────────────────────────
+var _ctxMesa = {
+el: null,
+idmesa: 0,
+estado: ''
+};
+var _longPressTimer = null;
+
+function tpvMesaClick(e, el) { // click normal: comportamiento estándar solo si NO viene de long-press
+if (el._longPressed) {
+el._longPressed = false;
+return;
+}
+var idmesa = parseInt(el.dataset.idmesa);
+var estado = el.dataset.estado;
+tpvSelectMesa(idmesa, estado);
+}
+
+function tpvMesaCtx(e, el) {
+e.preventDefault();
+tpvAbrirCtxMenu(e.clientX, e.clientY, el);
+}
+
+// long-press en touch
+document.addEventListener('DOMContentLoaded', function () {
+document.getElementById('modalMesas').addEventListener('touchstart', function (e) {
+var thumb = e.target.closest('.mm-mesa-thumb');
+if (! thumb) 
+return;
+
+
+
+_longPressTimer = setTimeout(function () {
+thumb._longPressed = true;
+var touch = e.touches[0];
+tpvAbrirCtxMenu(touch.clientX, touch.clientY, thumb);
+}, 600);
+}, {passive: true});
+document.getElementById('modalMesas').addEventListener('touchend', function () {
+clearTimeout(_longPressTimer);
+}, {passive: true});
+document.getElementById('modalMesas').addEventListener('touchmove', function () {
+clearTimeout(_longPressTimer);
+}, {passive: true});
+
+// Cerrar menú al clicar fuera
+document.addEventListener('click', function (e) {
+var menu = document.getElementById('tpvCtxMenu');
+if (menu && ! menu.contains(e.target)) {
+menu.classList.remove('show');
+}
+});
+});
+
+function tpvAbrirCtxMenu(x, y, el) {
+_ctxMesa.el = el;
+_ctxMesa.idmesa = parseInt(el.dataset.idmesa);
+_ctxMesa.estado = el.dataset.estado;
+
+var reservarTxt = document.getElementById('ctx-reservar-txt');
+var ctxAbrir = document.getElementById('ctx-abrir');
+var ctxMover = document.getElementById('ctx-mover');
+var sepMover = document.getElementById('ctx-sep-mover');
+var ctxJuntar = document.getElementById('ctx-juntar');
+var sepJuntar = document.getElementById('ctx-sep-juntar');
+if (_ctxMesa.estado === 'ocupada') { // mesa ocupada: solo "Abrir comanda", sin opción reservar ni mover
+ctxAbrir.style.display = '';
+document.querySelector('.tpv-ctx-sep').style.display = 'none';
+document.getElementById('ctx-reservar').style.display = 'none';
+ctxMover.style.display = 'none';
+sepMover.style.display = 'none';
+// Juntar: solo si la mesa actual tiene comanda y es una mesa diferente
+var puedeJuntar = TPV_TIENE_COMANDA_MESA && _ctxMesa.idmesa !== TPV_CURRENT_MESA;
+ctxJuntar.style.display = puedeJuntar ? '' : 'none';
+sepJuntar.style.display = puedeJuntar ? '' : 'none';
+} else {
+ctxAbrir.style.display = '';
+document.querySelector('.tpv-ctx-sep').style.display = '';
+document.getElementById('ctx-reservar').style.display = '';
+ctxJuntar.style.display = 'none';
+sepJuntar.style.display = 'none';
+reservarTxt.textContent = (_ctxMesa.estado === 'reservada') ? 'Quitar reserva' : 'Reservar';
+// Mostrar "Mover comanda aquí" solo si hay comanda en otra mesa
+var puedeMoverse = TPV_TIENE_COMANDA_MESA && _ctxMesa.idmesa !== TPV_CURRENT_MESA;
+ctxMover.style.display = puedeMoverse ? '' : 'none';
+sepMover.style.display = puedeMoverse ? '' : 'none';
+}
+
+var menu = document.getElementById('tpvCtxMenu');
+// Ajustar posición para que no salga de la pantalla
+menu.style.left = x + 'px';
+menu.style.top = y + 'px';
+menu.classList.add('show');
+
+// Corregir si se sale por la derecha/abajo
+requestAnimationFrame(function () {
+var rect = menu.getBoundingClientRect();
+if (rect.right > window.innerWidth) 
+menu.style.left = (x - rect.width) + 'px';
+
+
+
+if (rect.bottom > window.innerHeight) 
+menu.style.top = (y - rect.height) + 'px';
+
+
+
+});
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+document.getElementById('ctx-abrir').addEventListener('click', function () {
+document.getElementById('tpvCtxMenu').classList.remove('show');
+tpvSelectMesa(_ctxMesa.idmesa, _ctxMesa.estado);
+});
+document.getElementById('ctx-reservar').addEventListener('click', function () {
+document.getElementById('tpvCtxMenu').classList.remove('show');
+tpvToggleReserva(_ctxMesa.idmesa, _ctxMesa.el);
+});
+document.getElementById('ctx-mover').addEventListener('click', function () {
+document.getElementById('tpvCtxMenu').classList.remove('show');
+tpvMoverComanda(_ctxMesa.idmesa, _ctxMesa.el.dataset.nombre);
+});
+document.getElementById('ctx-juntar').addEventListener('click', function () {
+document.getElementById('tpvCtxMenu').classList.remove('show');
+tpvJuntarMesas(_ctxMesa.idmesa, _ctxMesa.el.dataset.nombre);
+});
+});
+
+function tpvToggleReserva(idmesa, el) { // Actualización optimista: cambio visual inmediato
+var nuevoEstado = (el.dataset.estado === 'reservada') ? 'libre' : 'reservada';
+el.classList.remove('estado-libre', 'estado-reservada');
+el.classList.add('estado-' + nuevoEstado);
+el.dataset.estado = nuevoEstado;
+el.querySelector('div:last-child').textContent = nuevoEstado;
+
+var body = new URLSearchParams();
+body.append('multireqtoken', '{{ formToken(false) }}');
+body.append('action', 'toggle-reserva');
+body.append('idmesa', idmesa);
+fetch('{{ fsc.url() }}', {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+}).catch(function () {
+window.location.reload();
+});
+}
+
+function tpvMoverComanda(idmesaNueva, nombreMesa) {
+if (!confirm('¿Mover la comanda a la mesa "' + nombreMesa + '"?')) 
+return;
+
+
+
+var form = document.createElement('form');
+form.method = 'POST';
+form.action = '{{ fsc.url() }}?idmesa=       {{ fsc.mesa ? fsc.mesa.idmesa : 0 }}';
+var fields = {
+'multireqtoken': '{{ formToken(false) }}',
+'action': 'mover-comanda',
+'idmesa_nueva': idmesaNueva
+};
+Object.keys(fields).forEach(function (k) {
+var inp = document.createElement('input');
+inp.type = 'hidden';
+inp.name = k;
+inp.value = fields[k];
+form.appendChild(inp);
+});
+document.body.appendChild(form);
+form.submit();
+}
+
+function tpvJuntarMesas(idmesaSecundaria, nombreMesa) {
+if (!confirm('¿Juntar la comanda actual con la mesa "' + nombreMesa + '"?\nLas líneas de esa mesa se añadirán a esta comanda.')) 
+return;
+
+
+
+var form = document.createElement('form');
+form.method = 'POST';
+form.action = '{{ fsc.url() }}?idmesa=   {{ fsc.mesa ? fsc.mesa.idmesa : 0 }}';
+var fields = {
+'multireqtoken': '{{ formToken(false) }}',
+'action': 'juntar-mesas',
+'idmesa_secundaria': idmesaSecundaria
+};
+Object.keys(fields).forEach(function (k) {
+var inp = document.createElement('input');
+inp.type = 'hidden';
+inp.name = k;
+inp.value = fields[k];
+form.appendChild(inp);
+});
+document.body.appendChild(form);
+form.submit();
+}
+
+// ── Modal nuevo cliente ───────────────────────────────
+function tpvAbrirNuevoCliente() {
+document.getElementById('nc-nombre').value = '';
+document.getElementById('nc-cifnif').value = '';
+document.getElementById('nc-email').value = '';
+document.getElementById('nc-telefono').value = '';
+document.getElementById('nc-direccion').value = '';
+document.getElementById('nc-codpostal').value = '';
+document.getElementById('nc-ciudad').value = '';
+document.getElementById('nc-error').classList.add('d-none');
+$('#modalNuevoCliente').modal('show');
+}
+
+function tpvCrearCliente() {
+var nombre = document.getElementById('nc-nombre').value.trim();
+var errEl = document.getElementById('nc-error');
+if (! nombre) {
+errEl.textContent = 'El nombre es obligatorio';
+errEl.classList.remove('d-none');
+return;
+}
+errEl.classList.add('d-none');
+
+var btn = document.getElementById('nc-guardar');
+btn.disabled = true;
+
+var body = new URLSearchParams();
+body.append('multireqtoken', document.getElementById('nc-token').value);
+body.append('action', 'create-cliente');
+body.append('nombre', nombre);
+body.append('cifnif', document.getElementById('nc-cifnif').value.trim());
+body.append('email', document.getElementById('nc-email').value.trim());
+body.append('telefono1', document.getElementById('nc-telefono').value.trim());
+body.append('direccion', document.getElementById('nc-direccion').value.trim());
+body.append('codpostal', document.getElementById('nc-codpostal').value.trim());
+body.append('ciudad', document.getElementById('nc-ciudad').value.trim());
+
+fetch('{{ fsc.url() }}?idmesa=       {{ fsc.mesa ? fsc.mesa.idmesa : 0 }}', {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+}).then(function (r) {
+return r.json();
+}).then(function (data) {
+if (data.ok) { // Añadir al selector de cliente (mobile y desktop) y seleccionarlo
+['sel-cliente-mobile', 'sel-cliente-desktop'].forEach(function (id) {
+var s = document.getElementById(id);
+if (! s) 
+return;
+
+
+
+var opt = new Option(data.nombre, data.codcliente, false, false);
+s.appendChild(opt);
+});
+var selMobile = document.getElementById('sel-cliente-mobile');
+var selDesktop = document.getElementById('sel-cliente-desktop');
+if (selMobile) 
+selMobile.value = data.codcliente;
+
+
+
+if (selDesktop) 
+selDesktop.value = data.codcliente;
+
+
+
+$('#modalNuevoCliente').modal('hide');
+} else {
+errEl.textContent = data.error || 'Error al guardar';
+errEl.classList.remove('d-none');
+} btn.disabled = false;
+}).catch(function () {
+errEl.textContent = 'Error de conexión';
+errEl.classList.remove('d-none');
+btn.disabled = false;
+});
+}
+
+// ── Modal editar línea ────────────────────────────────
+function tpvAbrirEditarLinea(idlinea, descripcion, cantidad, nota, referencia) {
+document.getElementById('el-idlinea').value = idlinea;
+document.getElementById('el-titulo').innerHTML = '<i class="fa-solid fa-pencil mr-2"></i>' + descripcion;
+document.getElementById('el-cantidad').value = cantidad;
+document.getElementById('el-nota').value = nota || '';
+document.getElementById('el-guardar').disabled = false;
+
+var mods = (referencia && tpvModifByRef[referencia]) ? tpvModifByRef[referencia] : [];
+var lista = document.getElementById('el-modlist');
+var section = document.getElementById('el-mod-section');
+if (mods.length > 0) {
+var existing = tpvSubLineas[idlinea] || [];
+lista.innerHTML = '';
+mods.forEach(function (m) {
+var checked = existing.some(function (n) {
+return n === '+ ' + m.nombre;
+});
+var item = document.createElement('div');
+item.className = 'form-check border rounded px-3 py-2 mb-1';
+item.innerHTML = '<label class="form-check-label d-flex justify-content-between w-100 mb-0" style="cursor:pointer;">' + '<span><input type="checkbox" class="form-check-input mr-2 el-mod-chk"' + ' data-nombre="' + m.nombre.replace(/"/g, '&quot;') + '"' + ' data-precio="' + m.precio + '"' + (
+checked ? ' checked' : ''
+) + '> ' + m.nombre + '</span>' + '<span class="text-muted small">+' + parseFloat(m.precio).toFixed(2) + '\u00a0\u20ac</span>' + '</label>';
+lista.appendChild(item);
+});
+section.style.display = '';
+} else {
+section.style.display = 'none';
+lista.innerHTML = '';
+}
+$('#modalEditarLinea').modal('show');
+}
+
+function elCambiarCantidad(delta) {
+var input = document.getElementById('el-cantidad');
+var val = Math.max(1, (parseFloat(input.value) || 1) + delta);
+input.value = val;
+}
+
+function tpvGuardarLinea() {
+var btn = document.getElementById('el-guardar');
+btn.disabled = true;
+var hasModifs = document.getElementById('el-mod-section').style.display !== 'none';
+var selModifs = [];
+if (hasModifs) {
+document.querySelectorAll('#el-modlist .el-mod-chk:checked').forEach(function (c) {
+selModifs.push({nombre: c.dataset.nombre, precio: c.dataset.precio});
+});
+}
+var body = new URLSearchParams();
+body.append('multireqtoken', document.getElementById('el-token').value);
+body.append('action', hasModifs ? 'update-linea-con-modif' : 'update-linea');
+body.append('idlinea', document.getElementById('el-idlinea').value);
+body.append('cantidad', document.getElementById('el-cantidad').value);
+body.append('nota', document.getElementById('el-nota').value.trim());
+if (hasModifs) {
+body.append('modificadores', JSON.stringify(selModifs));
+}
+fetch('{{ fsc.url() }}?idmesa=       {{ fsc.mesa ? fsc.mesa.idmesa : 0 }}', {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+}).then(function () {
+$('#modalEditarLinea').modal('hide');
+window.location.reload();
+}).catch(function () {
+btn.disabled = false;
+});
+}
+
+// ── Modal editar cliente ──────────────────────────────
+function tpvGetSelCliente() {
+var selMobile = document.getElementById('sel-cliente-mobile');
+var selDesktop = document.getElementById('sel-cliente-desktop');
+// offsetParent es null cuando el elemento o cualquier padre tiene display:none
+return(selMobile && selMobile.offsetParent !== null) ? selMobile : selDesktop;
+}
+function tpvAbrirEditarCliente() {
+var sel = tpvGetSelCliente();
+var cod = sel ? sel.value : '';
+if (! cod) {
+alert('Selecciona un cliente primero');
+return;
+}
+// Bloquear edición del cliente por defecto
+var codDefault = {{ fsc.codClienteDefault|json_encode|raw }};
+if (codDefault && cod === codDefault) {
+alert('No se puede editar el cliente por defecto');
+return;
+}
+var c = TPV_CLIENTES[cod];
+if (! c) 
+return;
+
+
+
+document.getElementById('ec-codcliente').value = cod;
+document.getElementById('ec-nombre').value = c.nombre || '';
+document.getElementById('ec-cifnif').value = c.cifnif || '';
+document.getElementById('ec-email').value = c.email || '';
+document.getElementById('ec-telefono').value = c.telefono1 || '';
+document.getElementById('ec-direccion').value = c.direccion || '';
+document.getElementById('ec-codpostal').value = c.codpostal || '';
+document.getElementById('ec-ciudad').value = c.ciudad || '';
+document.getElementById('ec-error').classList.add('d-none');
+$('#modalEditarCliente').modal('show');
+}
+
+function tpvGuardarCliente() {
+var nombre = document.getElementById('ec-nombre').value.trim();
+var errEl = document.getElementById('ec-error');
+if (! nombre) {
+errEl.textContent = 'El nombre es obligatorio';
+errEl.classList.remove('d-none');
+return;
+}
+errEl.classList.add('d-none');
+var btn = document.getElementById('ec-guardar');
+btn.disabled = true;
+
+var cod = document.getElementById('ec-codcliente').value;
+var body = new URLSearchParams();
+body.append('multireqtoken', document.getElementById('ec-token').value);
+body.append('action', 'update-cliente');
+body.append('codcliente', cod);
+body.append('nombre', nombre);
+body.append('cifnif', document.getElementById('ec-cifnif').value.trim());
+body.append('email', document.getElementById('ec-email').value.trim());
+body.append('telefono1', document.getElementById('ec-telefono').value.trim());
+body.append('direccion', document.getElementById('ec-direccion').value.trim());
+body.append('codpostal', document.getElementById('ec-codpostal').value.trim());
+body.append('ciudad', document.getElementById('ec-ciudad').value.trim());
+
+fetch('{{ fsc.url() }}?idmesa=       {{ fsc.mesa ? fsc.mesa.idmesa : 0 }}', {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+}).then(function (r) {
+return r.json();
+}).then(function (data) {
+if (data.ok) { // Actualizar caché local
+if (TPV_CLIENTES[data.codcliente]) 
+TPV_CLIENTES[data.codcliente].nombre = data.nombre;
+
+
+
+// Actualizar texto en ambos selectores
+['sel-cliente-mobile', 'sel-cliente-desktop'].forEach(function (id) {
+var s = document.getElementById(id);
+if (! s) 
+return;
+
+
+
+var opt = s.querySelector('option[value="' + data.codcliente + '"]');
+if (opt) 
+opt.textContent = data.nombre;
+
+
+
+});
+$('#modalEditarCliente').modal('hide');
+} else {
+errEl.textContent = data.error || 'Error al guardar';
+errEl.classList.remove('d-none');
+} btn.disabled = false;
+}).catch(function () {
+errEl.textContent = 'Error de conexión';
+errEl.classList.remove('d-none');
+btn.disabled = false;
+});
+}
+
+// ── Sidebar: seleccionar orden ─────────────────────────────
+var tpvSelectedOrderEl = null;
+function tpvSelectOrder(card) {
+document.querySelectorAll('.tpv-order-card.selected').forEach(function (c) {
+c.classList.remove('selected');
+});
+if (tpvSelectedOrderEl === card) {
+tpvSelectedOrderEl = null;
+document.getElementById('tpv-orders-actions').style.display = 'none';
+return;
+}
+card.classList.add('selected');
+tpvSelectedOrderEl = card;
+var idcomanda = card.getAttribute('data-id');
+var modLink = document.getElementById('tpv-act-modificar');
+modLink.href = '{{ fsc.url() }}?idcomanda=' + idcomanda;
+document.getElementById('tpv-side-fac-id').value = idcomanda;
+document.getElementById('tpv-side-can-id').value = idcomanda;
+document.getElementById('tpv-orders-actions').style.display = 'block';
+}
+function tpvSideDetalles() {
+if (! tpvSelectedOrderEl) 
+return;
+
+
+
+tpvAbrirDetalles(tpvSelectedOrderEl);
+}
+function tpvSideCuenta() {
+var inp = document.getElementById('buscador-facturas');
+if (inp) {
+inp.value = '';
+}
+_busFacturasQ = '';
+_busFacturasPag = 1;
+$('#modalCuenta').one('shown.bs.modal', function () {
+_busFacturasAjax('', 1);
+});
+$('#modalCuenta').modal('show');
+}
+function tpvVerFactura(idfactura) {
+var body = document.getElementById('factura-preview-body');
+body.innerHTML = '<div class="text-center py-4"><i class="fa-solid fa-spinner fa-spin fa-2x"></i></div>';
+document.getElementById('fp-imprimir-btn').setAttribute('data-idfactura', idfactura);
+$('#modalCuenta').modal('hide');
+$('#modalFacturaPreview').modal('show');
+fetch('{{ fsc.url() }}?action=get-factura-html&mode=preview&idfactura=' + idfactura).then(function (r) {
+return r.json();
+}).then(function (d) {
+body.innerHTML = d.html || '<p class="text-danger">Error al cargar.</p>';
+}).catch(function () {
+body.innerHTML = '<p class="text-danger">Error de red.</p>';
+});
+}
+function tpvImprimirFactura(idfactura) {
+if (tpvEscposEnabled && idfactura) {
+fetch('{{ fsc.url() }}?action=print-escpos&idfactura=' + idfactura).then(function (r) {
+return r.json();
+}).then(function (d) {
+if (! d.ok || ! d.buffer) {
+console.warn('ESC/POS buffer error:', d.error);
+tpvImprimirFacturaPDF(idfactura);
+return;
+}
+// Enviar buffer al relay local (corre en el PC con la impresora)
+var payload = {
+buffer: d.buffer
+};
+if (d.tipo === 'usb') {
+payload.usb = d.usb;
+} else {
+payload.ip = d.ip;
+payload.port = d.port;
+}
+return fetch(tpvRelayUrl, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(payload)
+}).then(function (r) {
+return r.json();
+}).then(function (rd) {
+if (rd.ok) {
+var toast = document.createElement('div');
+toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#27ae60;color:#fff;padding:8px 20px;border-radius:6px;font-size:14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+toast.textContent = 'Enviado a impresora';
+document.body.appendChild(toast);
+setTimeout(function () {
+toast.remove();
+}, 3000);
+} else {
+var toast2 = document.createElement('div');
+toast2.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:8px 20px;border-radius:6px;font-size:14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+toast2.textContent = 'Relay error: ' + rd.error;
+document.body.appendChild(toast2);
+setTimeout(function () {
+toast2.remove();
+}, 6000);
+}
+}).catch(function (e) {
+var toast3 = document.createElement('div');
+toast3.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:8px 20px;border-radius:6px;font-size:14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+toast3.textContent = 'No se pudo conectar con el relay: ' + e.message;
+document.body.appendChild(toast3);
+setTimeout(function () {
+toast3.remove();
+}, 6000);
+});
+}).catch(function (e) {
+console.warn('ESC/POS catch:', e);
+tpvImprimirFacturaPDF(idfactura);
+});
+return;
+}
+tpvImprimirFacturaPDF(idfactura);
+}
+function tpvImprimirFacturaPDF(idfactura) {
+fetch('{{ fsc.url() }}?action=get-factura-html&mode=pdf&idfactura=' + idfactura).then(function (r) {
+return r.json();
+}).then(function (d) {
+var w = window.open('', '_blank', 'width=420,height=620');
+if (w) {
+var hasBc = !! d.docCodigo;
+w.document.write('<html><head><meta charset="utf-8"><style>@page{margin:0;}body{font-size:16px;margin:0;padding:0;}.sec-doc{font-size:14px !important;}</style></head><body>');
+w.document.write(d.html);
+if (hasBc) {
+w.document.write('<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script>');
+w.document.write('<script>window.onload=function(){try{JsBarcode(\'#ticket-barcode\',\'' + d.docCodigo.replace(/'/g, "\\'") + '\',{format:\'CODE128\',width:1.5,height:50,displayValue:false,margin:5});}catch(e){ }};<\/script>');
+}
+w.document.write('</body></html>');
+w.document.close();
+w.focus();
+setTimeout(function () {
+w.print();
+}, hasBc ? 900 : 400);
+}
+}).catch(function () {
+alert('Error al generar PDF.');
+});
+}
+
+// ── Detalles del pedido (modal) ─────────────────────────────
+function tpvAbrirDetalles(btn) {
+var lineas = JSON.parse(btn.getAttribute('data-ls') || '[]');
+var totalPedido = parseFloat(btn.getAttribute('data-totalpedido') || btn.getAttribute('data-total'));
+var qty = lineas.reduce(function (s, l) {
+return s + parseFloat(l[2]);
+}, 0);
+var sub = lineas.reduce(function (s, l) {
+return s + parseFloat(l[1]) * parseFloat(l[2]);
+}, 0);
+
+var mesa = btn.getAttribute('data-mesa') || '';
+var tax = parseFloat(btn.getAttribute('data-tax') || '0');
+document.getElementById('mdp-tipo').textContent = btn.getAttribute('data-tipo');
+document.getElementById('mdp-num').textContent = btn.getAttribute('data-num');
+document.getElementById('mdp-cam').textContent = btn.getAttribute('data-cam');
+document.getElementById('mdp-cl').textContent = btn.getAttribute('data-cl') || '—';
+var mesaWrap = document.getElementById('mdp-mesa-wrap');
+if (mesa && mesa !== 'None') {
+document.getElementById('mdp-mesa').textContent = mesa;
+mesaWrap.style.display = '';
+} else {
+mesaWrap.style.display = 'none';
+}
+document.getElementById('mdp-qty').textContent = qty.toFixed(0);
+document.getElementById('mdp-sub').textContent = sub.toFixed(2);
+document.getElementById('mdp-tax').textContent = tax.toFixed(2);
+document.getElementById('mdp-total').textContent = totalPedido.toFixed(2);
+document.getElementById('mdp-idcomanda').value = btn.getAttribute('data-id');
+var _lsfRawD = btn.getAttribute('data-lsf');
+if (_lsfRawD) {
+try {
+_tpvPedidoLineas = JSON.parse(_lsfRawD);
+} catch (e) {
+_tpvPedidoLineas = [];
+}
+} else {
+_tpvPedidoLineas = [];
+}
+
+var tbody = document.getElementById('mdp-lineas');
+tbody.innerHTML = '';
+lineas.forEach(function (l) {
+var lineTotal = (parseFloat(l[1]) * parseFloat(l[2])).toFixed(2);
+var tr = document.createElement('tr');
+tr.innerHTML = '<td>' + l[0] + '</td>' + '<td class="text-right">' + parseFloat(l[1]).toFixed(2) + '</td>' + '<td class="text-right">' + parseFloat(l[2]).toFixed(0) + '</td>' + '<td class="text-right">0.00</td>' + '<td class="text-right">' + lineTotal + '</td>';
+tbody.appendChild(tr);
+});
+
+$('#modalDetallesPedido').modal('show');
+}
+
+// ── Imprimir cuenta (desde vista de órdenes) ────────────────
+function tpvImprimirCuentaBtn(btn) {
+var idcomanda = btn.getAttribute('data-id');
+var total = parseFloat(btn.getAttribute('data-total'));
+var fechahora = btn.getAttribute('data-dt');
+var camarero = btn.getAttribute('data-cam');
+var cliente = btn.getAttribute('data-cl');
+var lineas = JSON.parse(btn.getAttribute('data-ls') || '[]');
+var empresa = {{ fsc.ticketEmpresa|json_encode|raw }};
+
+var html = '<!DOCTYPE html><html><head><meta charset="utf-8">' + '<style>@page{margin:0;}body{font-family:monospace;font-size:13px;max-width:380px;margin:0 auto;padding:0;}' + 'h1{text-align:center;font-size:16px;margin:0 0 4px;}' + 'h2{text-align:center;font-size:13px;font-weight:normal;margin:0 0 6px;}' + '.sep{border-top:1px dashed #000;margin:6px 0;}' + '.row{display:flex;justify-content:space-between;padding:2px 0;}' + '.bold{font-weight:bold;}' + '.total{font-size:16px;}</style></head><body>';
+html += '<h1>' + empresa + '</h1>';
+html += '<h2>CUENTA</h2>';
+html += '<div class="sep"></div>';
+html += '<div class="row"><span>Comanda:</span><span class="bold">#' + idcomanda + '</span></div>';
+if (camarero) 
+html += '<div class="row"><span>Garz\u00f3n:</span><span>' + camarero + '</span></div>';
+
+
+
+if (cliente) 
+html += '<div class="row"><span>Cliente:</span><span>' + cliente + '</span></div>';
+
+
+
+html += '<div class="row"><span>Fecha:</span><span>' + fechahora + '</span></div>';
+html += '<div class="sep"></div>';
+lineas.forEach(function (l) {
+var sub = (parseFloat(l[1]) * parseFloat(l[2])).toFixed(2);
+html += '<div class="row"><span>' + l[0] + ' x' + parseFloat(l[1]).toFixed(0) + '</span><span>' + sub + ' \u20ac</span></div>';
+});
+html += '<div class="sep"></div>';
+html += '<div class="row total"><span class="bold">TOTAL</span><span class="bold">' + total.toFixed(2) + ' \u20ac</span></div>';
+html += '<div class="sep"></div>';
+html += '</body></html>';
+
+var w = window.open('', '_blank', 'width=420,height=580');
+if (w) {
+w.document.write(html);
+w.document.close();
+w.focus();
+setTimeout(function () {
+w.print();
+}, 400);
+}
+}
+
+// ── Cobrar: submite directamente con el cliente seleccionado ──
+function tpvCobrar(tipodoc) {
+var hayLineas = document.querySelector('#panel-comanda .tpv-table, #panel-comanda-tab .tpv-table');
+if (! hayLineas) {
+alert('{{ i18n.trans("no-lines-yet") }}');
+return;
+}
+var tipoBtn = document.querySelector('.ot-btn.active:not(.mesa-active)');
+var tipoDOM = tipoBtn ? tipoBtn.getAttribute('onclick').replace(/.*'([^']+)'.*/, '$1') : '';
+if (tipoDOM === 'in-table' && tpvIdMesa === 0) {
+alert('Selecciona una mesa antes de continuar.');
+return;
+}
+// Abrir modal de cobro
+_cobroTipodoc = tipodoc;
+var totalEl = document.querySelector('.tpv-total-val');
+_cobroTotal = totalEl ? parseFloat(totalEl.textContent.replace(',', '.').replace(/[^\d.]/g, '')) : 0;
+document.getElementById('cobro-total-val').textContent = _cobroTotal.toFixed(2) + ' €';
+document.getElementById('cobro-dado').value = '';
+document.getElementById('cobro-cambio').textContent = '0.00 €';
+cobroLimpiarBadges();
+_cobroPersonas = 1;
+document.getElementById('cobro-personas-val').textContent = '1';
+document.getElementById('cobro-perpersona-row').style.display = 'none';
+document.getElementById('cobro-perpersona-val').textContent = _cobroTotal.toFixed(2) + ' €';
+var _lbl = document.getElementById('cobro-dado-label2');
+if (_lbl) 
+_lbl.textContent = 'Importe entregado';
+
+
+
+_tpvLineasSplit = [];
+var _cartTable = document.querySelector('#panel-comanda .tpv-table, #panel-comanda-tab .tpv-table');
+if (_cartTable) {
+_cartTable.querySelectorAll('tbody tr').forEach(function (row) {
+if (row.classList.contains('tpv-modif-row') || row.classList.contains('table-danger')) 
+return;
+
+
+
+var _iEl = row.querySelector('[data-idlinea]');
+if (! _iEl) 
+return;
+
+
+
+var _idl = parseInt(_iEl.getAttribute('data-idlinea'));
+var _dEl = row.cells[0] ? row.cells[0].querySelector('.font-weight-bold') : null;
+var _desc = _dEl ? _dEl.textContent.trim() : '';
+var _qEl = row.cells[1] ? row.cells[1].querySelector('span[style]') : null;
+var _qty = _qEl ? (parseFloat(_qEl.textContent) || 1) : 1;
+var _sub = parseFloat((row.cells[3] ? row.cells[3].textContent.trim() : '0').replace(',', '.').replace(/[^\d.]/g, '')) || 0;
+_tpvLineasSplit.push({idlinea: _idl, descripcion: _desc, cantidad: _qty, subtotal: _sub});
+});
+}
+$('#modalCobro').modal('show');
+setTimeout(function () {
+document.getElementById('cobro-dado').focus();
+}, 500);
+}
+
+// ── Realizar pedido: envía a cocina sin cobrar (no abre modal de pago) ──
+function tpvRealizarPedido() {
+var hayLineas = document.querySelector('#panel-comanda .tpv-table, #panel-comanda-tab .tpv-table');
+if (! hayLineas) {
+alert('{{ i18n.trans("no-lines-yet") }}');
+return;
+}
+var tipoBtn = document.querySelector('.ot-btn.active:not(.mesa-active)');
+var tipoDOM = tipoBtn ? tipoBtn.getAttribute('onclick').replace(/.*'([^']+)'.*/, '$1') : '';
+if (tipoDOM === 'in-table' && tpvIdMesa === 0) {
+alert('Selecciona una mesa antes de continuar.');
+return;
+}
+document.getElementById('cobro-tipodoc').value = 'pedidocliente';
+document.getElementById('cobro-codcliente').value = '';
+document.getElementById('cobro-codpago-hidden').value = '';
+document.getElementById('cobro-dado-hidden').value = '0.00';
+document.getElementById('form-cobro').submit();
+}
+
+var _cobroPersonas = 1;
+var _splitAsignaciones = {};
+var _tpvLineasSplit = [];
+var _tpvPedidoLineas = [];
+var _splitTotalesPersonas = [];
+var _splitAsignacionesConfirmadas = '';
+
+function cobroPersonasCambiar(delta) {
+_cobroPersonas = Math.max(1, _cobroPersonas + delta);
+_splitTotalesPersonas = [];
+_splitAsignacionesConfirmadas = '';
+document.getElementById('cobro-personas-val').textContent = _cobroPersonas;
+var rowPP = document.getElementById('cobro-perpersona-row');
+var splitBtnRow = document.getElementById('cobro-split-btn-row');
+var bloqueUnico = document.getElementById('cobro-bloque-unico');
+var bloqueMulti = document.getElementById('cobro-bloque-multipersona');
+if (_cobroPersonas > 1) {
+if (rowPP) 
+rowPP.style.display = 'flex';
+
+
+if (splitBtnRow) 
+splitBtnRow.style.display = '';
+
+
+document.getElementById('cobro-perpersona-val').textContent = (_cobroTotal / _cobroPersonas).toFixed(2) + ' €';
+if (bloqueUnico) 
+bloqueUnico.style.display = 'none';
+
+
+if (bloqueMulti) 
+bloqueMulti.style.display = '';
+
+
+cobroRenderFilasPersonas();
+} else {
+if (rowPP) 
+rowPP.style.display = 'none';
+
+
+if (splitBtnRow) 
+splitBtnRow.style.display = 'none';
+
+
+if (bloqueUnico) 
+bloqueUnico.style.display = '';
+
+
+if (bloqueMulti) 
+bloqueMulti.style.display = 'none';
+
+
+cobroCalcCambio();
+}
+}
+
+function cobroRenderFilasPersonas() {
+var container = document.getElementById('cobro-personas-filas');
+if (! container) 
+return;
+
+
+var html = '';
+for (var i = 1; i <= _cobroPersonas; i++) {
+var totalEstaPersona = (_splitTotalesPersonas.length >= i) ? _splitTotalesPersonas[i - 1] : (_cobroTotal / _cobroPersonas);
+html += '<div class="d-flex align-items-center mb-2" style="gap:6px;">';
+html += '<span class="badge badge-secondary" style="min-width:28px;">P' + i + '</span>';
+html += '<span class="small text-muted" style="min-width:52px;">' + totalEstaPersona.toFixed(2) + '€ debe</span>';
+html += '<input type="number" class="form-control form-control-sm text-right cobro-dado-persona" id="cobro-dado-p' + i + '" data-persona="' + i + '" step="0.01" min="0" placeholder="0.00" style="width:80px;" oninput="cobroCalcCambioMulti()">';
+html += '<span class="small font-weight-bold text-primary" id="cobro-cambio-p' + i + '" style="min-width:52px;text-align:right;">cambio: 0.00€</span>';
+html += '</div>';
+}
+container.innerHTML = html;
+cobroCalcCambioMulti();
+}
+
+function cobroCalcCambioMulti() {
+var cambioTotal = 0;
+for (var i = 1; i <= _cobroPersonas; i++) {
+var totalEstaPersona = (_splitTotalesPersonas.length >= i) ? _splitTotalesPersonas[i - 1] : (_cobroTotal / _cobroPersonas);
+var inp = document.getElementById('cobro-dado-p' + i);
+var dado = inp ? (parseFloat(inp.value) || 0) : 0;
+var cambio = Math.max(0, dado - totalEstaPersona);
+cambioTotal += cambio;
+var sp = document.getElementById('cobro-cambio-p' + i);
+if (sp) 
+sp.textContent = 'cambio: ' + cambio.toFixed(2) + '€';
+
+
+}
+var el = document.getElementById('cobro-cambio-multi');
+if (el) 
+el.textContent = cambioTotal.toFixed(2) + ' €';
+
+
+}
+
+function cobroCalcCambio() {
+var dado = parseFloat(document.getElementById('cobro-dado').value) || 0;
+var base = _cobroTotal;
+var cambio = Math.max(0, dado - base);
+document.getElementById('cobro-cambio').textContent = cambio.toFixed(2) + ' €';
+}
+
+function cobroSetExacto() {
+cobroLimpiarBadges();
+if (_cobroPersonas > 1) {
+var totalPP = _cobroTotal / _cobroPersonas;
+for (var i = 1; i <= _cobroPersonas; i++) {
+var inp = document.getElementById('cobro-dado-p' + i);
+if (inp) 
+inp.value = totalPP.toFixed(2);
+
+
+}
+cobroCalcCambioMulti();
+} else {
+document.getElementById('cobro-dado').value = _cobroTotal.toFixed(2);
+cobroCalcCambio();
+}
+}
+
+function cobroSetImporte(btn, val) {
+var badge = btn.querySelector('.cobro-badge');
+if (badge) {
+var n = (parseInt(badge.textContent) || 0) + 1;
+badge.textContent = n;
+badge.style.display = 'block';
+}
+var current = parseFloat(document.getElementById('cobro-dado').value) || 0;
+document.getElementById('cobro-dado').value = (current + val).toFixed(2);
+cobroCalcCambio();
+}
+
+function cobroLimpiar() {
+cobroLimpiarBadges();
+document.getElementById('cobro-dado').value = '';
+cobroCalcCambio();
+}
+
+function cobroLimpiarBadges() {
+document.querySelectorAll('#modalCobro .cobro-badge').forEach(function (b) {
+b.textContent = '';
+b.style.display = 'none';
+});
+}
+
+function _tpvDebugLog(etapa, extra) {
+try {
+var campos = {};
+[
+'cobro-tipodoc',
+'cobro-codcliente',
+'cobro-codpago-hidden',
+'cobro-dado-hidden',
+'cobro-num-personas',
+'cobro-split-asignaciones',
+'cobro-dados-personas',
+'cobro-idcomanda'
+].forEach(function (id) {
+var el = document.getElementById(id);
+if (el) 
+campos[id] = el.value;
+
+
+});
+var dadosArr = [];
+for (var _pi = 1; _pi <= _cobroPersonas; _pi++) {
+var _inp = document.getElementById('cobro-dado-p' + _pi);
+dadosArr.push(_inp ? _inp.value : null);
+}
+var payload = {
+timestamp: new Date().toISOString(),
+userAgent: navigator.userAgent,
+etapa: etapa,
+js_state: {
+_cobroPersonas: _cobroPersonas,
+_cobroTotal: _cobroTotal,
+_cobroTipodoc: _cobroTipodoc,
+_cobroIdcomanda: _cobroIdcomanda,
+_splitTotalesPersonas: _splitTotalesPersonas,
+_splitAsignacionesConfirmadas: _splitAsignacionesConfirmadas,
+dadosInputs: dadosArr
+},
+form_campos: campos,
+extra: extra || {}
+};
+navigator.sendBeacon('{{ fsc.url() }}?action=save-debug', JSON.stringify(payload));
+} catch (e) {}
+}
+
+function cobroEnviar() {
+var selMobile = document.getElementById('sel-cliente-mobile');
+var selDesktop = document.getElementById('sel-cliente-desktop');
+var sel = (selMobile && window.getComputedStyle(selMobile).display !== 'none') ? selMobile : selDesktop;
+var dado = parseFloat(document.getElementById('cobro-dado').value) || 0;
+// Calcular importes por persona y total
+var dadosPersonas = [];
+var importedado = dado;
+if (_cobroPersonas > 1) {
+var sumaDados = 0;
+for (var pi = 1; pi <= _cobroPersonas; pi++) {
+var inp = document.getElementById('cobro-dado-p' + pi);
+var v = inp ? (parseFloat(inp.value) || 0) : 0;
+dadosPersonas.push(v);
+sumaDados += v;
+}
+importedado = sumaDados;
+}
+if (_cobroTipodoc === 'factura-pedido') {
+if (_cobroPersonas > 1) { // N personas desde un pedido: usar form-cobro (actionCobrar) que sí crea N facturas
+document.getElementById('cobro-tipodoc').value = 'factura-pedido';
+document.getElementById('cobro-codcliente').value = sel ? sel.value : '';
+document.getElementById('cobro-codpago-hidden').value = document.getElementById('cobro-codpago').value;
+document.getElementById('cobro-dado-hidden').value = importedado.toFixed(2);
+document.getElementById('cobro-num-personas').value = _cobroPersonas;
+document.getElementById('cobro-split-asignaciones').value = _splitAsignacionesConfirmadas || '';
+document.getElementById('cobro-idcomanda').value = _cobroIdcomanda || '';
+document.getElementById('cobro-dados-personas').value = JSON.stringify(dadosPersonas);
+_tpvDebugLog('factura-pedido-multi', {
+importedado: importedado,
+dadosPersonas: dadosPersonas
+});
+$('#modalCobro').modal('hide');
+setTimeout(function () {
+document.getElementById('form-cobro').submit();
+}, 200);
+return;
+}
+document.getElementById('mdp-idcomanda').value = _cobroIdcomanda;
+document.getElementById('mdp-codpago').value = document.getElementById('cobro-codpago').value;
+document.getElementById('mdp-importedado').value = importedado.toFixed(2);
+_tpvDebugLog('factura-pedido-single', {importedado: importedado});
+$('#modalCobro').modal('hide');
+setTimeout(function () {
+document.getElementById('mdp-form-factura').submit();
+}, 200);
+return;
+}
+document.getElementById('cobro-tipodoc').value = _cobroTipodoc;
+document.getElementById('cobro-codcliente').value = sel ? sel.value : '';
+document.getElementById('cobro-codpago-hidden').value = document.getElementById('cobro-codpago').value;
+document.getElementById('cobro-dado-hidden').value = importedado.toFixed(2);
+document.getElementById('cobro-num-personas').value = _cobroPersonas;
+document.getElementById('cobro-split-asignaciones').value = _splitAsignacionesConfirmadas || '';
+document.getElementById('cobro-dados-personas').value = _cobroPersonas > 1 ? JSON.stringify(dadosPersonas) : '';
+document.getElementById('cobro-idcomanda').value = _cobroIdcomanda || '';
+_tpvDebugLog('cobro-normal', {
+importedado: importedado,
+dadosPersonas: dadosPersonas
+});
+$('#modalCobro').modal('hide');
+setTimeout(function () {
+_splitAsignacionesConfirmadas = '';
+_splitTotalesPersonas = [];
+document.getElementById('form-cobro').submit();
+}, 200);
+}
+
+var _splitNumPersonas = 2;
+var _splitColores = [
+'primary',
+'success',
+'warning',
+'danger',
+'info',
+'secondary'
+];
+
+function abrirSplitArticulos() {
+_splitAsignaciones = {};
+_splitNumPersonas = Math.max(2, _cobroPersonas);
+// Inicializar asignaciones desde _tpvLineasSplit (cargado al abrir el modal de cobro)
+_tpvLineasSplit.forEach(function (l) {
+_splitAsignaciones[l.idlinea] = new Array(_splitNumPersonas).fill(0);
+});
+var html = '';
+_tpvLineasSplit.forEach(function (l) {
+var pu = l.cantidad > 0 ? (l.subtotal / l.cantidad) : 0;
+html += '<div class="py-2 border-bottom" id="split-row-' + l.idlinea + '">';
+html += '<div class="font-weight-bold mb-1">' + l.descripcion + ' <span class="text-muted small font-weight-normal">(' + parseFloat(pu).toFixed(2) + '\u20ac/ud)</span></div>';
+html += '<div class="d-flex align-items-center flex-wrap" style="gap:6px;row-gap:4px;">';
+for (var p = 1; p <= _splitNumPersonas; p++) {
+var col = _splitColores[(p - 1) % _splitColores.length];
+html += '<span class="badge badge-' + col + '">P' + p + '</span>';
+html += '<button type="button" class="btn btn-outline-secondary btn-sm" style="padding:1px 7px;" onclick="splitCambiarQty(' + l.idlinea + ',' + p + ',-1)">\u2212</button>';
+html += '<span id="split-qty-' + p + '-' + l.idlinea + '" class="font-weight-bold text-' + col + '" style="min-width:22px;text-align:center;">0</span>';
+html += '<button type="button" class="btn btn-outline-secondary btn-sm" style="padding:1px 7px;" onclick="splitCambiarQty(' + l.idlinea + ',' + p + ',1)">+</button>';
+if (p < _splitNumPersonas) 
+html += '<span class="text-muted" style="font-size:.8em;">|</span>';
+
+
+
+}
+html += '<span class="ml-auto text-danger small" id="split-sin-' + l.idlinea + '">sin: ' + l.cantidad + '</span>';
+html += '</div></div>';
+});
+if (! html) 
+html = '<p class="text-muted text-center p-3 small">No hay art\u00edculos para dividir.</p>';
+
+
+
+document.getElementById('split-lineas-list').innerHTML = html;
+// Generar fila de totales dinámica
+var totalesHtml = '';
+for (var p = 1; p <= _splitNumPersonas; p++) {
+var col = _splitColores[(p - 1) % _splitColores.length];
+totalesHtml += '<div><div class="small font-weight-bold text-' + col + '">Persona ' + p + '</div>';
+totalesHtml += '<div class="h5 mb-0 text-' + col + '" id="split-total-' + p + '">0.00 \u20ac</div></div>';
+}
+totalesHtml += '<div><div class="small font-weight-bold text-danger" id="split-sin-asignar-lbl" style="display:none;">Sin asignar</div>';
+totalesHtml += '<div class="h5 mb-0 text-danger" id="split-total-sin">0.00 \u20ac</div></div>';
+document.getElementById('split-totales-row').innerHTML = totalesHtml;
+splitRecalcTotales();
+$('#modalCobro').modal('hide');
+setTimeout(function () {
+$('#modalSplitArticulos').modal('show');
+}, 300);
+}
+
+function splitCambiarQty(idlinea, persona, delta) {
+var l = _tpvLineasSplit.find(function (x) {
+return x.idlinea === idlinea;
+});
+if (! l) 
+return;
+
+
+
+var asig = _splitAsignaciones[idlinea];
+if (! asig) 
+return;
+
+
+
+var idx = persona - 1;
+var sumaOtras = 0;
+for (var i = 0; i < asig.length; i++) {
+if (i !== idx) 
+sumaOtras += asig[i];
+
+
+
+}
+var maxVal = l.cantidad - sumaOtras;
+asig[idx] = Math.max(0, Math.min(maxVal, asig[idx] + delta));
+document.getElementById('split-qty-' + persona + '-' + idlinea).textContent = asig[idx];
+var suma = asig.reduce(function (a, b) {
+return a + b;
+}, 0);
+var sinQty = l.cantidad - suma;
+var sinEl = document.getElementById('split-sin-' + idlinea);
+if (sinEl) 
+sinEl.textContent = sinQty > 0 ? 'sin: ' + sinQty : '';
+
+
+
+splitRecalcTotales();
+}
+
+function splitRecalcTotales() {
+var totals = new Array(_splitNumPersonas).fill(0);
+var tSin = 0;
+var todoAsignado = true;
+_tpvLineasSplit.forEach(function (l) {
+var asig = _splitAsignaciones[l.idlinea] || new Array(_splitNumPersonas).fill(0);
+var pu = l.cantidad > 0 ? (l.subtotal / l.cantidad) : 0;
+for (var i = 0; i < _splitNumPersonas; i++) {
+totals[i] += (asig[i] || 0) * pu;
+}
+var suma = asig.reduce(function (a, b) {
+return a + b;
+}, 0);
+var sin = l.cantidad - suma;
+tSin += sin * pu;
+if (sin > 0) 
+todoAsignado = false;
+
+
+
+});
+for (var p = 1; p <= _splitNumPersonas; p++) {
+var el = document.getElementById('split-total-' + p);
+if (el) 
+el.textContent = totals[p - 1].toFixed(2) + ' \u20ac';
+
+
+
+}
+var sinTotalEl = document.getElementById('split-total-sin');
+if (sinTotalEl) 
+sinTotalEl.textContent = tSin.toFixed(2) + ' \u20ac';
+
+
+
+var sinLbl = document.getElementById('split-sin-asignar-lbl');
+if (sinLbl) 
+sinLbl.style.display = tSin > 0.001 ? '' : 'none';
+
+
+
+var confirmBtn = document.getElementById('split-confirmar-btn');
+if (confirmBtn) 
+confirmBtn.disabled = ! todoAsignado;
+
+
+
+}
+
+function splitConfirmar() {
+var asignaciones = [];
+_tpvLineasSplit.forEach(function (l) {
+var asig = _splitAsignaciones[l.idlinea] || [];
+for (var i = 0; i < asig.length; i++) {
+if (asig[i] > 0) 
+asignaciones.push({
+idlinea: l.idlinea,
+persona: i + 1,
+cantidad: asig[i]
+});
+
+
+}
+});
+_splitAsignacionesConfirmadas = JSON.stringify(asignaciones);
+_splitTotalesPersonas = [];
+for (var p = 1; p <= _splitNumPersonas; p++) {
+var elT = document.getElementById('split-total-' + p);
+_splitTotalesPersonas.push(elT ? (parseFloat(elT.textContent) || 0) : 0);
+}
+_cobroPersonas = _splitNumPersonas;
+document.getElementById('cobro-personas-val').textContent = _cobroPersonas;
+var rowPP = document.getElementById('cobro-perpersona-row');
+if (rowPP) 
+rowPP.style.display = 'none';
+
+
+var splitBtnRow = document.getElementById('cobro-split-btn-row');
+if (splitBtnRow) 
+splitBtnRow.style.display = 'none';
+
+
+var bloqueUnico = document.getElementById('cobro-bloque-unico');
+var bloqueMulti = document.getElementById('cobro-bloque-multipersona');
+if (bloqueUnico) 
+bloqueUnico.style.display = 'none';
+
+
+if (bloqueMulti) 
+bloqueMulti.style.display = '';
+
+
+$('#modalSplitArticulos').modal('hide');
+setTimeout(function () {
+cobroRenderFilasPersonas();
+$('#modalCobro').modal('show');
+}, 300);
+}
+
+var _cobroTipodoc = '';
+var _cobroTotal = 0;
+var _cobroIdcomanda = 0;
+
+function tpvAbrirModalFactura(idcomanda, btnEl) {
+_cobroIdcomanda = idcomanda;
+_cobroTipodoc = 'factura-pedido';
+// Cargar líneas para el split por artículos
+_tpvLineasSplit = [];
+var _rawLsf = null;
+if (btnEl && btnEl.getAttribute) {
+_rawLsf = btnEl.getAttribute('data-lsf');
+} else if (tpvSelectedOrderEl) {
+_rawLsf = tpvSelectedOrderEl.getAttribute('data-lsf');
+}
+if (_rawLsf) {
+try {
+_tpvLineasSplit = JSON.parse(_rawLsf).map(function (l) {
+return {
+idlinea: l[0],
+descripcion: l[1],
+cantidad: l[2],
+subtotal: l[2] * l[3]
+};
+});
+} catch (e) {
+_tpvLineasSplit = [];
+}
+} else if (_tpvPedidoLineas.length) {
+_tpvLineasSplit = _tpvPedidoLineas.map(function (l) {
+return {
+idlinea: l[0],
+descripcion: l[1],
+cantidad: l[2],
+subtotal: l[2] * l[3]
+};
+});
+}
+var total = 0;
+if (btnEl && btnEl.getAttribute) {
+total = parseFloat(btnEl.getAttribute('data-total')) || 0;
+} else if (btnEl !== undefined && btnEl !== null && typeof btnEl !== 'object') {
+total = parseFloat(btnEl) || 0;
+}
+if (! total) {
+var totalEl = document.getElementById('mdp-total');
+if (totalEl) 
+total = parseFloat(totalEl.textContent.replace(',', '.').replace(/[^\d.]/g, '')) || 0;
+
+
+
+}
+if (! total && tpvSelectedOrderEl) {
+total = parseFloat(tpvSelectedOrderEl.getAttribute('data-total')) || 0;
+}
+_cobroTotal = total;
+document.getElementById('cobro-total-val').textContent = _cobroTotal.toFixed(2) + ' €';
+document.getElementById('cobro-dado').value = '';
+document.getElementById('cobro-cambio').textContent = '0.00 €';
+cobroLimpiarBadges();
+_cobroPersonas = 1;
+document.getElementById('cobro-personas-val').textContent = '1';
+document.getElementById('cobro-perpersona-row').style.display = 'none';
+document.getElementById('cobro-perpersona-val').textContent = _cobroTotal.toFixed(2) + ' €';
+var _lbl2 = document.getElementById('cobro-dado-label2');
+if (_lbl2) 
+_lbl2.textContent = 'Importe entregado';
+
+
+
+$('#modalDetallesPedido').modal('hide');
+setTimeout(function () {
+$('#modalCobro').modal('show');
+}, 300);
+}
+
+
+function tpvTipoOrden(btn, tipo) { // Actualizar variable global de tipo actual
+tipoActual = tipo;
+
+// Actualizar clases activas en el contenedor del botón
+var container = btn.parentElement;
+container.querySelectorAll('.ot-btn:not(.mesa-active)').forEach(function (b) {
+b.classList.remove('active');
+});
+btn.classList.add('active');
+
+// Sincronizar el otro panel (mobile <-> desktop)
+document.querySelectorAll('.tpv-ordertype, #xl-ordertype').forEach(function (cont) {
+if (cont === container) 
+return;
+
+
+
+cont.querySelectorAll('.ot-btn:not(.mesa-active)').forEach(function (b) {
+b.classList.remove('active');
+var oc = b.getAttribute('onclick') || '';
+if (oc.indexOf("'" + tipo + "'") !== -1) 
+b.classList.add('active');
+
+
+
+});
+});
+
+// Habilitar / deshabilitar TODOS los botones de mesa (mobile + desktop)
+['btn-mesa-mobile', 'btn-mesa-desktop'].forEach(function (id) {
+var mesaBtn = document.getElementById(id);
+if (! mesaBtn) 
+return;
+
+
+
+if (tipo === 'in-table') {
+mesaBtn.disabled = false;
+mesaBtn.classList.remove('disabled');
+} else {
+mesaBtn.disabled = true;
+mesaBtn.classList.add('disabled');
+}
+});
+
+// Persistir en el servidor
+var body = new URLSearchParams();
+body.append('multireqtoken', '{{ formToken(false) }}');
+body.append('action', 'update-tipo');
+body.append('tipo', tipo);
+
+fetch('{{ fsc.url() }}?idmesa=       {{ fsc.mesa ? fsc.mesa.idmesa : 0 }}', {
+method: 'POST',
+body: body,
+headers: {
+'Content-Type': 'application/x-www-form-urlencoded'
+}
+});
+}
+
+// Al cargar la página, ajustar botones de mesa según el tipo actual
+var tipoActual = '{{ fsc.comanda ? fsc.comanda.tipo : fsc.settingServicioDefecto }}';
+var tpvIdMesa = {{ fsc.mesa ? fsc.mesa.idmesa : 0 }};
+(function () {
+if (tipoActual !== 'in-table') {
+['btn-mesa-mobile', 'btn-mesa-desktop'].forEach(function (id) {
+var mesaBtn = document.getElementById(id);
+if (mesaBtn) {
+mesaBtn.disabled = true;
+mesaBtn.classList.add('disabled');
+}
+});
+}
+})();
+	</script>
+
+	{% if fsc.ticketComanda %}
+		<script>
+			document.addEventListener('DOMContentLoaded', function () { // Limpiar parámetros de ticket de la URL para que no relance al recargar
+(function () {
+var u = new URL(window.location.href);
+['ticket', 'tcodcl', 'tdado', 'tcambio'].forEach(function (p) {
+u.searchParams.delete(p);
+});
+history.replaceState(null, '', u.toString());
+})();
+var empData = {{ fsc.ticketEmpresaData|json_encode|raw }};
+var idComanda = {{ fsc.ticketComanda.idcomanda }};
+var camarero = {{ fsc.ticketComanda.codcamarero|json_encode|raw }};
+var fecha = {{ fsc.ticketComanda.fecha|json_encode|raw }};
+var hora = {{ fsc.ticketComanda.hora|json_encode|raw }};
+var clienteDefault = {{ fsc.codClienteDefault|json_encode|raw }};
+var clienteCod = {{ fsc.ticketCliente ? fsc.ticketCliente.codcliente|json_encode|raw : '""' }};
+var clienteNombre = {{ fsc.ticketCliente ? fsc.ticketCliente.nombre|json_encode|raw : '""' }};
+var mesa = {{ fsc.mesa ? fsc.mesa.nombre|json_encode|raw : '""' }};
+var ticketEfectivo = {{ fsc.ticketEfectivo|default(0) }};
+var ticketCambio = {{ fsc.ticketCambio|default(0) }};
+var ticketNeto = {{ fsc.ticketNeto|default(0) }};
+var ticketTotal = {{ fsc.ticketTotal|default(0) }};
+var ticketIvaGroups = {{ fsc.ticketIvaGroups|default({})|json_encode|raw }};
+var ticketFormaPago = {{ fsc.ticketFormaPago|default('')|json_encode|raw }};
+var ticketSerieDesc = {{ fsc.ticketSerieDesc|default('')|json_encode|raw }};
+var ticketEsFactura = {{ fsc.ticketComanda.idfactura ? 'true' : 'false' }};
+var ticketIdfactura = {{ fsc.ticketComanda.idfactura|default(0) }};
+var ticketDocCodigo = {{ fsc.ticketDocCodigo|json_encode|raw }};
+var lineas = [{% for l in fsc.ticketLineas %}{
+desc: {{ l.descripcion|json_encode|raw }},
+qty: {{ l.cantidad }},
+pvu: {{ l.pvpunitario }},
+total: {{ (l.cantidad * l.pvpunitario)|round(2) }},
+obs: {{ l.observaciones|default('')|json_encode|raw }}
+}
+{{ loop.last ? '' : ',' }}
+{% endfor %}];
+
+var ticketEstaciones = [{% for est in fsc.ticketEstaciones %}{
+nombre: {{ est.nombre|json_encode|raw }},
+lineas: [{% for l in est.lineas %}{
+desc: {{ l.desc|json_encode|raw }},
+qty: {{ l.qty }},
+obs: {{ l.obs|default('')|json_encode|raw }},
+mods: {{ l.mods|default([])|json_encode|raw }}
+}
+{{ loop.last ? '' : ',' }}
+{% endfor %}]
+}
+{{ loop.last ? '' : ',' }}
+{% endfor %}];
+
+var esc = function (s) {
+return(s || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
+
+var ticketMulti = {{ fsc.ticketMulti|json_encode|raw }};
+
+// ── MULTI-TICKET: split por artículos o N personas ──
+if (ticketMulti.length > 1) {
+var hasBcMt = ticketMulti.some(function (t) {
+return !! t.docCodigo;
+});
+var allHtmlMt = '';
+ticketMulti.forEach(function (tkt, idx) {
+if (idx > 0) 
+allHtmlMt += '<div style="page-break-before:always;"></div>';
+
+
+
+var h = '<div id="receipt-data">' + '<div style="text-align:center;">' + '<h3 style="text-transform:uppercase;">' + esc(camarero) + '</h3>' + '<p>' + esc(empData.nombre || '') + '<br/>' + esc(empData.direccion || '') + '<br/>' + 'Tel: ' + esc(empData.telefono || '') + '<br/>NIF/CIF: ' + esc(empData.cifnif || '') + '</p>' + '</div>' + '<div style="text-align:center;">' + '<h4 style="font-weight:bold;">FACTURA SIMPLIFICADA</h4>' + (
+tkt.docCodigo ? '<p style="margin:2px 0;">N\u00ba ' + esc(tkt.docCodigo) + '</p>' : ''
+) + '</div>' + '<div class="sec-doc" style="text-align:left !important;padding-right:5px;padding-left:10px;">' + '<p>Fecha: ' + esc(fecha) + ' ' + esc(hora) + '<br/>Comanda: <strong>#' + idComanda + '</strong>';
+if (mesa) 
+h += '<br/>Mesa: ' + esc(mesa);
+
+
+
+if (clienteNombre && clienteCod !== clienteDefault) 
+h += '<br/>Cliente: ' + esc(clienteNombre);
+
+
+
+h += '</p></div>' + '<table class="sec-doc" style="margin-right:15px;margin-left:5px;width:93.5%;">' + '<thead class="sec-doc" style="background-color:#f2f2f2;color:#000"><tr>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:left;">Descripci\u00f3n</th>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:center;">Ud.</th>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:right;">P/u</th>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:right;">Total</th>' + '</tr></thead><tbody class="sec-doc">';
+tkt.lineas.forEach(function (l) {
+var qStr = (l.qty % 1 === 0) ? parseInt(l.qty) : parseFloat(l.qty).toFixed(2);
+h += '<tr>' + '<td style="text-align:left;">' + esc(l.desc) + '</td>' + '<td style="text-align:center;">' + qStr + '</td>' + '<td style="text-align:right;">' + parseFloat(l.pvu).toFixed(2) + ' \u20ac</td>' + '<td style="text-align:right;font-weight:bold;">' + parseFloat(l.total).toFixed(2) + ' \u20ac</td>' + '</tr>';
+});
+h += '</tbody></table>';
+if (tkt.total > 0) {
+h += '<table class="sec-doc" style="margin-right:15px;margin-left:5px;width:93.5%;margin-top:6px;">';
+h += '<tr><td style="text-align:right;font-weight:bold;">NETO:</td>' + '<td style="text-align:right;min-width:60px;">' + parseFloat(tkt.neto).toFixed(2) + ' \u20ac</td></tr>';
+Object.keys(tkt.ivaGroups).sort().forEach(function (rate) {
+var amount = parseFloat(tkt.ivaGroups[rate]);
+if (amount > 0) {
+h += '<tr><td style="text-align:right;font-weight:bold;">IVA (' + rate + '%):</td>' + '<td style="text-align:right;">' + amount.toFixed(2) + ' \u20ac</td></tr>';
+}
+});
+h += '<tr><td style="text-align:right;font-weight:bold;border-top:1px solid #aaa;">TOTAL:</td>' + '<td style="text-align:right;font-weight:bold;border-top:1px solid #aaa;">' + parseFloat(tkt.total).toFixed(2) + ' \u20ac</td></tr>';
+if (tkt.formaPago) {
+h += '<tr><td style="text-align:right;font-style:italic;text-transform:uppercase;padding-top:3px;">' + esc(tkt.formaPago) + '</td><td></td></tr>';
+}
+if (tkt.efectivo > 0) {
+h += '<tr><td style="text-align:right;font-weight:bold;">ENTREGADO:</td><td style="text-align:right;">' + parseFloat(tkt.efectivo).toFixed(2) + ' \u20ac</td></tr>';
+h += '<tr><td style="text-align:right;font-weight:bold;">CAMBIO:</td><td style="text-align:right;">' + parseFloat(tkt.cambio).toFixed(2) + ' \u20ac</td></tr>';
+}
+h += '</table>';
+}
+h += '<p class="sec-doc" style="text-align:center;margin-top:25px;margin-left:20px;margin-right:20px;">' + '<span style="font-weight:bold;">Gracias por su visita.</span></p>';
+if (tkt.docCodigo) {
+h += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;">' + '<svg id="bc-' + idx + '"></svg>' + '<div style="font-size:12px;font-weight:bold;color:#000;margin-top:4px;">' + esc(tkt.docCodigo) + '</div>' + '</div>';
+}
+h += '</div>';
+allHtmlMt += h;
+});
+// Si ESC/POS habilitado, imprimir cada factura por impresora térmica
+if (tpvEscposEnabled) {
+ticketMulti.forEach(function (tkt) {
+if (tkt.idfactura > 0) {
+tpvImprimirFactura(tkt.idfactura);
+}
+});
+return;
+}
+var wmt = window.open('', '_blank', 'width=420,height=620');
+if (wmt) {
+wmt.document.write('<html><head><meta charset="utf-8"><style>@page{margin:0;}body{font-size:16px;margin:0;padding:0;}.sec-doc{font-size:14px !important;}</style></head><body>');
+wmt.document.write(allHtmlMt);
+if (hasBcMt) {
+wmt.document.write('<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script>');
+var bcScriptMt = 'window.onload=function(){';
+ticketMulti.forEach(function (tkt, idx) {
+if (tkt.docCodigo) {
+bcScriptMt += 'try{JsBarcode(\'#bc-' + idx + '\',\'' + tkt.docCodigo.replace(/'/g, "\\'") + '\',{format:\'CODE128\',width:1.5,height:50,displayValue:false,margin:5});}catch(e){}';
+}
+});
+bcScriptMt += '};';
+wmt.document.write('<script>' + bcScriptMt + '<\/script>');
+}
+wmt.document.write('</body></html>');
+wmt.document.close();
+wmt.focus();
+setTimeout(function () {
+wmt.print();
+}, hasBcMt ? 900 : 400);
+}
+return;
+}
+
+var html = (ticketEsFactura || ticketEstaciones.length === 0) ? '' : null;
+
+if (html === null) { // ── PEDIDO: KOT por estación, misma cabecera que el ticket normal, sin precios ──
+var htmlKot = '';
+ticketEstaciones.forEach(function (est, idx) {
+if (idx > 0) 
+htmlKot += '<div style="page-break-before:always;"></div>';
+
+
+
+htmlKot += '<div id="receipt-data">' + '<div style="text-align:center;">' + '<h2 style="font-weight:bold;">' + esc(est.nombre) + '</h2>' + (
+ticketDocCodigo ? '<p style="margin:2px 0;">N\u00ba ' + esc(ticketDocCodigo) + '</p>' : ''
+) + '</div>' + '<div class="sec-doc" style="text-align:left !important;padding-right:5px;padding-left:10px;">' + '<p>Fecha: ' + esc(fecha) + ' ' + esc(hora) + '<br/>' + 'Comanda: <strong>#' + idComanda + '</strong>';
+if (mesa) 
+htmlKot += '<br/>Mesa: ' + esc(mesa);
+
+
+
+if (clienteNombre && clienteCod !== clienteDefault) 
+htmlKot += '<br/>Cliente: ' + esc(clienteNombre);
+
+
+
+htmlKot += '</p></div>' + '<table class="sec-doc" style="margin-right:15px;margin-left:5px;width:93.5%;">' + '<thead class="sec-doc" style="background-color:#f2f2f2;color:#000"><tr>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:left;">Descripci\u00f3n</th>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:right;">Cant.</th>' + '</tr></thead><tbody class="sec-doc">';
+est.lineas.forEach(function (l) {
+var modsHtml = '';
+if (l.mods && l.mods.length) {
+l.mods.forEach(function (m) {
+modsHtml += '<div style="padding-left:12px;font-size:.9em;">&#8627; ' + esc(m.desc) + (m.qty !== 1 ? ' x' + parseFloat(m.qty).toFixed(0) : '') + '</div>';
+});
+}
+htmlKot += '<tr>' + '<td style="text-align:left;">' + esc(l.desc) + (l.obs ? '<div style="font-size:.85em;color:#555;font-style:italic;padding-left:4px;">' + esc(l.obs) + '</div>' : '') + modsHtml + '</td>' + '<td style="text-align:right;">' + parseFloat(l.qty).toFixed(0) + '</td>' + '</tr>';
+});
+htmlKot += '</tbody></table></div>';
+});
+if (tpvEscposEnabled) {
+fetch('{{ fsc.url() }}?action=print-kot&idcomanda=' + idComanda).then(function (r) {
+return r.json();
+}).then(function (d) {
+if (! d.ok || ! d.kots || d.kots.length === 0) {
+var te = document.createElement('div');
+te.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:8px 20px;border-radius:6px;font-size:14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+te.textContent = 'No hay KOT pendiente';
+document.body.appendChild(te);
+setTimeout(function () {
+te.remove();
+}, 4000);
+return;
+}
+var kotPromises = d.kots.map(function (kot) {
+var payload = {
+buffer: kot.buffer
+};
+if (kot.tipo === 'usb') {
+payload.usb = kot.usb;
+} else {
+payload.ip = kot.ip;
+payload.port = kot.port;
+}
+return fetch(kot.relayUrl || tpvRelayUrl, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(payload)
+}).then(function (r) {
+return r.json();
+}).then(function (rd) {
+return {
+ok: rd.ok,
+estacion: kot.estacion,
+error: rd.error || ''
+};
+}).catch(function (e) {
+return {ok: false, estacion: kot.estacion, error: e.message};
+});
+});
+Promise.all(kotPromises).then(function (results) {
+var ok = results.filter(function (r) {
+return r.ok;
+}).map(function (r) {
+return r.estacion;
+});
+var err = results.filter(function (r) {
+return ! r.ok;
+});
+if (ok.length > 0) {
+var t = document.createElement('div');
+t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#27ae60;color:#fff;padding:8px 20px;border-radius:6px;font-size:14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+t.textContent = 'Comanda enviada a: ' + ok.join(', ');
+document.body.appendChild(t);
+setTimeout(function () {
+t.remove();
+}, 3000);
+}
+err.forEach(function (r) {
+var t2 = document.createElement('div');
+t2.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:8px 20px;border-radius:6px;font-size:14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+t2.textContent = 'Error (' + r.estacion + '): ' + (
+r.error || 'desconocido'
+);
+document.body.appendChild(t2);
+setTimeout(function () {
+t2.remove();
+}, 6000);
+});
+});
+fetch('{{ fsc.url() }}?action=mark-kot-sent&idcomanda=' + idComanda).catch(function () {});
+}).catch(function (e) {
+var t4 = document.createElement('div');
+t4.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:8px 20px;border-radius:6px;font-size:14px;z-index:9999;box-shadow:0 2px 8px rgba(0,0,0,.25);';
+t4.textContent = 'Error al obtener KOT: ' + e.message;
+document.body.appendChild(t4);
+setTimeout(function () {
+t4.remove();
+}, 6000);
+});
+} else {
+var wk = window.open('', '_blank', 'width=420,height=620');
+if (wk) {
+wk.document.write('<html><head><meta charset="utf-8"><style>@page{margin:0;}body{font-size:16px;margin:0;padding:0;}.sec-doc{font-size:14px !important;}</style></head><body>');
+wk.document.write(htmlKot);
+wk.document.write('</body></html>');
+wk.document.close();
+wk.focus();
+setTimeout(function () {
+wk.print();
+}, 400);
+}
+}
+} else { // ── FACTURA o pedido sin estaciones: recibo completo ──
+html = '<div id="receipt-data">' + '<div style="text-align:center;">' + '<h3 style="text-transform:uppercase;">' + esc(camarero) + '</h3>' + '<p>' + esc(empData.nombre || '') + '<br/>' + esc(empData.direccion || '') + '<br/>' + 'Tel: ' + esc(empData.telefono || '') + '<br/>' + 'NIF/CIF: ' + esc(empData.cifnif || '') + '</p>' + '</div>' + '<div style="text-align:center;">' + '<h4 style="font-weight:bold;">' + (
+ticketEsFactura ? 'FACTURA SIMPLIFICADA' : ('PEDIDO' + (
+ticketSerieDesc ? ' ' + esc(ticketSerieDesc.toUpperCase()) : ''
+))
+) + '</h4>' + (
+ticketDocCodigo ? '<p style="margin:2px 0;">N\u00ba ' + esc(ticketDocCodigo) + '</p>' : ''
+) + '</div>' + '<div class="sec-doc" style="text-align:left !important;padding-right:5px;padding-left:10px;">' + '<p>Fecha: ' + esc(fecha) + ' ' + esc(hora) + '<br/>' + 'Comanda: <strong>#' + idComanda + '</strong>';
+if (mesa) 
+html += '<br/>Mesa: ' + esc(mesa);
+
+
+
+if (clienteNombre && clienteCod !== clienteDefault) 
+html += '<br/>Cliente: ' + esc(clienteNombre);
+
+
+
+html += '</p>' + '</div>' + '<table class="sec-doc" style="margin-right:15px;margin-left:5px;width:93.5%;">' + '<thead class="sec-doc" style="background-color:#f2f2f2;color:#000">' + '<tr>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:left;">Descripci\u00f3n</th>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:center;">Ud.</th>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:right;">P/u</th>' + '<th style="padding-top:3px;padding-bottom:3px;text-align:right;">Total</th>' + '</tr>' + '</thead>' + '<tbody class="sec-doc">';
+lineas.forEach(function (l) {
+var qtyStr = (l.qty % 1 === 0) ? parseInt(l.qty) : parseFloat(l.qty).toFixed(2);
+html += '<tr>' + '<td style="text-align:left;">' + esc(l.desc) + (l.obs ? '<div style="font-size:.85em;color:#555;font-style:italic;padding-left:4px;">' + esc(l.obs) + '</div>' : '') + '</td>' + '<td style="text-align:center;">' + qtyStr + '</td>' + '<td style="text-align:right;">' + parseFloat(l.pvu).toFixed(2) + ' \u20ac</td>' + '<td style="text-align:right;font-weight:bold;">' + parseFloat(l.total).toFixed(2) + ' \u20ac</td>' + '</tr>';
+});
+html += '</tbody>' + '</table>';
+if (ticketTotal > 0) {
+html += '<table class="sec-doc" style="margin-right:15px;margin-left:5px;width:93.5%;margin-top:6px;">';
+html += '<tr><td style="text-align:right;font-weight:bold;">NETO:</td>' + '<td style="text-align:right;min-width:60px;">' + ticketNeto.toFixed(2) + ' \u20ac</td></tr>';
+var ivaKeys = Object.keys(ticketIvaGroups);
+ivaKeys.sort().forEach(function (rate) {
+var amount = parseFloat(ticketIvaGroups[rate]);
+if (amount > 0) {
+html += '<tr><td style="text-align:right;font-weight:bold;">IVA (' + rate + '%):</td>' + '<td style="text-align:right;">' + amount.toFixed(2) + ' \u20ac</td></tr>';
+}
+});
+html += '<tr><td style="text-align:right;font-weight:bold;border-top:1px solid #aaa;">TOTAL:</td>' + '<td style="text-align:right;font-weight:bold;border-top:1px solid #aaa;">' + ticketTotal.toFixed(2) + ' \u20ac</td></tr>';
+if (ticketFormaPago) {
+html += '<tr><td style="text-align:right;font-style:italic;text-transform:uppercase;padding-top:3px;">' + esc(ticketFormaPago) + '</td><td></td></tr>';
+}
+if (ticketEfectivo > 0) {
+html += '<tr><td style="text-align:right;font-weight:bold;">ENTREGADO:</td>' + '<td style="text-align:right;">' + ticketEfectivo.toFixed(2) + ' \u20ac</td></tr>' + '<tr><td style="text-align:right;font-weight:bold;">CAMBIO:</td>' + '<td style="text-align:right;">' + ticketCambio.toFixed(2) + ' \u20ac</td></tr>';
+}
+html += '</table>';
+}
+html += '<p class="sec-doc" style="text-align:center;margin-top:25px;margin-left:20px;margin-right:20px;"><span style="font-weight:bold;">Gracias por su visita.</span></p>';
+if (ticketDocCodigo) {
+html += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;">' + '<svg id="ticket-barcode"></svg>' + '<div style="font-size:12px;font-weight:bold;color:#000;margin-top:4px;">' + esc(ticketDocCodigo) + '</div>' + '</div>';
+}
+html += '</div>';
+
+// Si ESC/POS habilitado y es factura, imprimir por impresora térmica
+if (tpvEscposEnabled && ticketEsFactura && ticketIdfactura > 0) {
+tpvImprimirFactura(ticketIdfactura);
+} else {
+var w = window.open('', '_blank', 'width=420,height=620');
+if (w) {
+w.document.write('<html><head><meta charset="utf-8"><style>@page{margin:0;}body{font-size:16px;margin:0;padding:0;}.sec-doc{font-size:14px !important;}</style></head><body>');
+w.document.write(html);
+if (ticketDocCodigo) {
+w.document.write('<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script>');
+w.document.write('<script>window.onload=function(){try{JsBarcode(\'#ticket-barcode\',\'' + ticketDocCodigo.replace(/'/g, "\\'") + '\',{format:\'CODE128\',width:1.5,height:50,displayValue:false,margin:5});}catch(e){ }};<\/script>');
+}
+w.document.write('</body></html>');
+w.document.close();
+w.focus();
+setTimeout(function () {
+w.print();
+}, ticketDocCodigo ? 900 : 400);
+}
+}
+}
+});
+		</script>
+	{% endif %}
+
+	<div class="modal fade" tabindex="-1" id="modalCashMovement">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="{{ cajaContextUrl }}" method="post">
+					{{ formToken() }}
+					<input type="hidden" name="action" id="cashMovementAction" value="cash-in">
+					<div class="modal-header bg-secondary text-white">
+						<h5 class="modal-title" id="cashMovementTitle">Entrada de caja</h5>
+						<button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label>Importe</label>
+							<input type="number" step="0.01" min="0.01" name="cash-amount" id="cashMovementAmount" class="form-control" required>
+						</div>
+						<div class="form-group mb-0">
+							<label>Concepto</label>
+							<input type="text" name="cash-concept" id="cashMovementConcept" class="form-control" required>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	{# ════ MODAL COBRO ════ #}
+	<div class="modal fade" id="modalCobro" tabindex="-1" role="dialog" aria-labelledby="modalCobroLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm" role="document" style="max-width:360px;">
+			<div class="modal-content">
+				<div class="modal-header bg-success text-white py-2">
+					<h5 class="modal-title" id="modalCobroLabel">
+						<i class="fa-solid fa-cash-register mr-2"></i>Cobrar
+					</h5>
+					<button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+						<span class="font-weight-bold">Total a pagar:</span>
+						<span class="font-weight-bold text-success h4 mb-0" id="cobro-total-val">0.00 €</span>
+					</div>
+					<div class="d-flex align-items-center justify-content-between mb-1">
+						<span class="small font-weight-bold">Dividir entre:</span>
+						<div class="d-flex align-items-center" style="gap:6px;">
+							<button type="button" class="btn btn-outline-secondary btn-sm" onclick="cobroPersonasCambiar(-1)" style="width:28px;padding:0;line-height:1.4;">−</button>
+							<span id="cobro-personas-val" class="font-weight-bold" style="min-width:22px;text-align:center;">1</span>
+							<button type="button" class="btn btn-outline-secondary btn-sm" onclick="cobroPersonasCambiar(1)" style="width:28px;padding:0;line-height:1.4;">+</button>
+							<span class="small text-muted">personas</span>
+						</div>
+					</div>
+					<div class="justify-content-between align-items-center mb-2 pb-2 border-bottom" id="cobro-perpersona-row" style="display:none;">
+						<span class="small text-muted">Por persona:</span>
+						<span class="font-weight-bold text-info" id="cobro-perpersona-val">0.00 €</span>
+					</div>
+					<div class="text-right mb-2" id="cobro-split-btn-row" style="display:none;">
+						<button type="button" class="btn btn-outline-info btn-sm" onclick="abrirSplitArticulos()">
+							<i class="fa-solid fa-scissors mr-1"></i>Dividir por artículos
+						</button>
+					</div>
+					<div class="form-group mb-2">
+						<label class="small mb-1" id="cobro-dado-label">Forma de pago</label>
+						<select class="form-control form-control-sm" id="cobro-codpago">
+							{% for fp in fsc.formasPago %}
+								<option value="{{ fp.codpago }}">{{ fp.descripcion }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					{# Bloque 1 persona #}
+					<div id="cobro-bloque-unico">
+						<div class="form-group mb-2">
+							<label class="small mb-1" id="cobro-dado-label2">Importe entregado</label>
+							<input type="number" class="form-control form-control-lg text-right font-weight-bold" id="cobro-dado" step="0.01" min="0" placeholder="0.00" oninput="cobroCalcCambio()">
+						</div>
+						<div class="d-flex flex-wrap justify-content-between mb-3" style="gap:4px;">
+							<button type="button" class="btn btn-outline-secondary btn-sm flex-fill" onclick="cobroSetExacto()">Exacto</button>
+							<button type="button" class="btn btn-outline-secondary btn-sm flex-fill" onclick="cobroSetImporte(this,5)" style="position:relative;">5 €<span class="cobro-badge" style="display:none;position:absolute;top:-7px;right:-7px;background:#dc3545;color:#fff;border-radius:50%;font-size:10px;font-weight:700;width:18px;height:18px;line-height:18px;text-align:center;pointer-events:none;"></span>
+							</button>
+							<button type="button" class="btn btn-outline-secondary btn-sm flex-fill" onclick="cobroSetImporte(this,10)" style="position:relative;">10 €<span class="cobro-badge" style="display:none;position:absolute;top:-7px;right:-7px;background:#dc3545;color:#fff;border-radius:50%;font-size:10px;font-weight:700;width:18px;height:18px;line-height:18px;text-align:center;pointer-events:none;"></span>
+							</button>
+							<button type="button" class="btn btn-outline-secondary btn-sm flex-fill" onclick="cobroSetImporte(this,20)" style="position:relative;">20 €<span class="cobro-badge" style="display:none;position:absolute;top:-7px;right:-7px;background:#dc3545;color:#fff;border-radius:50%;font-size:10px;font-weight:700;width:18px;height:18px;line-height:18px;text-align:center;pointer-events:none;"></span>
+							</button>
+							<button type="button" class="btn btn-outline-secondary btn-sm flex-fill" onclick="cobroSetImporte(this,50)" style="position:relative;">50 €<span class="cobro-badge" style="display:none;position:absolute;top:-7px;right:-7px;background:#dc3545;color:#fff;border-radius:50%;font-size:10px;font-weight:700;width:18px;height:18px;line-height:18px;text-align:center;pointer-events:none;"></span>
+							</button>
+							<button type="button" class="btn btn-outline-danger btn-sm flex-fill" onclick="cobroLimpiar()">Limpiar</button>
+						</div>
+						<div class="d-flex justify-content-between align-items-center pt-2 border-top">
+							<span class="font-weight-bold">Cambio:</span>
+							<span class="font-weight-bold text-primary h4 mb-0" id="cobro-cambio">0.00 €</span>
+						</div>
+					</div>
+					{# Bloque N personas: una fila por persona #}
+					<div id="cobro-bloque-multipersona" style="display:none;">
+						<div id="cobro-personas-filas"></div>
+						<div class="d-flex justify-content-between align-items-center pt-2 border-top mt-2">
+							<span class="font-weight-bold small">Cambio total:</span>
+							<span class="font-weight-bold text-primary h5 mb-0" id="cobro-cambio-multi">0.00 €</span>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer py-2">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-success" onclick="cobroEnviar()">
+						<i class="fa-solid fa-paper-plane mr-1"></i>Enviar
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="modalSplitArticulos" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document" style="max-width:480px;">
+			<div class="modal-content">
+				<div class="modal-header bg-info text-white py-2">
+					<h5 class="modal-title">
+						<i class="fa-solid fa-scissors mr-2"></i>Dividir por artículos</h5>
+					<button type="button" class="close text-white" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-2">
+					<p class="small text-muted mb-2">Asigna cada artículo a una persona. Usa los +/− para repartir cantidades entre personas.</p>
+					<div id="split-lineas-list"></div>
+					<hr class="my-2">
+					<div id="split-totales-row" class="d-flex justify-content-around text-center flex-wrap" style="gap:6px;"></div>
+				</div>
+				<div class="modal-footer py-2">
+					<button type="button" class="btn btn-secondary btn-sm" onclick="$('#modalSplitArticulos').modal('hide');setTimeout(function(){$('#modalCobro').modal('show');},300);">Volver</button>
+					<button type="button" class="btn btn-success" id="split-confirmar-btn" onclick="splitConfirmar()" disabled>
+						<i class="fa-solid fa-check mr-1"></i>Confirmar reparto
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# Formulario oculto para enviar el cobro #}
+	<form id="form-cobro" method="POST" action="{{ fsc.url() }}?idmesa={{ fsc.mesa ? fsc.mesa.idmesa : 0 }}" style="display:none;">
+		<input type="hidden" name="multireqtoken" value="{{ formToken(false) }}">
+		<input type="hidden" name="action" value="cobrar">
+		<input type="hidden" name="tipodoc" id="cobro-tipodoc" value="">
+		<input type="hidden" name="codcliente" id="cobro-codcliente" value="">
+		<input type="hidden" name="codpago" id="cobro-codpago-hidden" value="">
+		<input type="hidden" name="importedado" id="cobro-dado-hidden" value="">
+		<input type="hidden" name="num_personas" id="cobro-num-personas" value="1">
+		<input type="hidden" name="split_asignaciones" id="cobro-split-asignaciones" value="">
+		<input type="hidden" name="idcomanda" id="cobro-idcomanda" value="">
+		<input type="hidden" name="dados_personas" id="cobro-dados-personas" value="">
+	</form>
+
+{% endblock %}

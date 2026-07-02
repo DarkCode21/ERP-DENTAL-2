@@ -1,0 +1,86 @@
+<?php // algolplus
+// phpcs:ignoreFile WordPress.DB.PreparedSQL.NotPrepared
+
+class SLN_Shortcode_SalonRecentComments
+{
+    const NAME = 'sln_recent_comments';
+
+    private $plugin;
+    private $attrs;
+
+    function __construct(SLN_Plugin $plugin, $attrs)
+    {
+        $this->plugin = $plugin;
+        $this->attrs = $attrs;
+    }
+
+    public static function init(SLN_Plugin $plugin)
+    {
+        add_shortcode(self::NAME, array(__CLASS__, 'create'));
+    }
+
+    public static function create($attrs)
+    {
+        SLN_TimeFunc::startRealTimezone();
+
+        $obj = new self(SLN_Plugin::getInstance(), $attrs);
+
+        $ret = $obj->execute();
+        SLN_TimeFunc::endRealTimezone();
+        return $ret;
+    }
+
+    public function execute()
+    {
+        $number = 10;
+        $rating = false;
+        $truncate_lastname = false;
+
+        if(!empty($this->attrs['number'])){
+            $number = (int)$this->attrs['number'];
+        }
+        if(!empty($this->attrs['rating'])){
+            $rating = (int)$this->attrs['rating'];
+        }
+        if(!empty($this->attrs['truncate_lastname'])){
+            $truncate_lastname = (int)$this->attrs['truncate_lastname'];
+        }
+
+        global $wpdb;
+
+        // Securely prepare WHERE clause using wpdb->prepare to prevent SQL injection
+        if ($rating) {
+            $where = $wpdb->prepare(" AND pm.meta_value = %d", $rating);
+        } else {
+            $where = "";
+        }
+
+        $results = $wpdb->get_results(
+            $wpdb->prepare("
+                SELECT
+                    c.*,
+                    pm.meta_value as rating
+                FROM {$wpdb->comments} c
+                INNER JOIN {$wpdb->posts} p ON p.ID = c.comment_post_ID AND p.post_type = 'sln_booking'
+                LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND pm.meta_key = '_sln_booking_rating'
+                WHERE
+                    c.comment_type = 'sln_review'
+                AND
+                    p.post_status <> 'trash'
+                {$where}
+                ORDER BY
+                    c.comment_date DESC
+                LIMIT %d
+            ", $number)
+        );
+        $data = array('comments' => $results,'truncate_lastname'=> $truncate_lastname);
+
+        return $this->render($data);
+    }
+
+    protected function render($data = array())
+    {
+        return $this->plugin->loadView('shortcode/sln_recent_comments', compact('data'));
+    }
+
+}

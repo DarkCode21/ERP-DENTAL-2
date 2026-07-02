@@ -1,0 +1,15 @@
+{
+    "code": 64,
+    "message": "Access level to FacturaScripts\\Plugins\\Dental\\Controller\\CalendarDental::privateCore() must be public (as in class FacturaScripts\\Core\\Lib\\ExtendedController\\BaseController)",
+    "file": "\/Plugins\/Dental\/Controller\/CalendarDental.php",
+    "line": 42,
+    "fragment": "            }\n37            }\n38        }\n39        return parent::execPreviousAction($action);\n40    }\n41\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">42    protected function privateCore(&$response, $user, $permissions)<\/spam>\n43    {\n44        parent::privateCore($response, $user, $permissions);\n45        $this->setTemplate('Calendar\/CalendarDental');\n46    }\n47",
+    "hash": "fd9d7921d3368a3edcfef06cc626a740",
+    "url": "\/AdminPlugins",
+    "report_url": "https:\/\/facturascripts.com\/errores\/fd9d7921d3368a3edcfef06cc626a740",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2Ffd9d7921d3368a3edcfef06cc626a740",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

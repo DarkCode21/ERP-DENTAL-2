@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : rrhh_devices.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Structure for the biometric devices table.
+-->
+<table>
+    <column>
+        <name>auto_import</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>device</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>host</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idcity</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idprovince</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>name</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>note</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>port</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>roadname</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>timezone</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>type</name>
+        <type>integer</type>
+        <default>1</default>                     <!-- 1: anviz -->
+    </column>
+    <column>
+        <name>zipcode</name>
+        <type>character varying(10)</type>
+    </column>
+    <constraint>
+        <name>rrhh_devices_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_devices_provincias</name>
+        <type>FOREIGN KEY (idprovince) REFERENCES provincias (idprovincia) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_devices_ciudades</name>
+        <type>FOREIGN KEY (idcity) REFERENCES ciudades (idciudad) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

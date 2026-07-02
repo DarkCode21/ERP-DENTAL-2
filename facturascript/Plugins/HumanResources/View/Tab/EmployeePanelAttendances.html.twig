@@ -1,0 +1,557 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+*/
+#}
+<form id="formEmployeePanel" method="post">
+    <input type="hidden" name="action"/>
+    <input type="hidden" name="idemployee" value="{{ fsc.employee.id }}" />
+    <input type="hidden" name="multireqtoken" value="{{ fsc.multiRequestProtection.newToken() }}"/>
+    <div class="container-fluid">
+        <div class="form-row">
+            <div class="col-12">
+                {{ _self.workshiftCard(fsc) }}
+            </div>
+            <div class="col-12">
+                {{ _self.workperiodCard(fsc) }}
+            </div>
+            <div class="col-sm-6">
+                {{ _self.delayWarningNotice(fsc) }}
+                {{ _self.attendancesButtonsCard(fsc) }}
+                {{ _self.attendancesCard(fsc) }}
+            </div>
+            <div class="col-sm-6">
+                {{ _self.holidaysButtonsCard(fsc) }}
+                {{ _self.holidaysCard(fsc) }}
+            </div>
+        </div>
+    </div>
+    {{ _self.attendanceModal(fsc) }}
+    {{ _self.holidaysModal(fsc) }}
+    {% if settings('rrhh', 'allowcomputable', 0) %}
+        {{ _self.computableModal(fsc) }}
+    {% endif %}
+</form>
+
+{#
+    ATTENDANCES
+#}
+{% macro delayWarningNotice(fsc) %}
+    {% if fsc.attendances.hasDelayWarning() %}
+        <div class="alert alert-danger border border-danger shadow text-center" role="alert">
+            {{ trans('delay-warning-message')|raw }}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro attendancesButtonsCard(fsc) %}
+    <div class="card border-primary shadow mb-3">
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col">
+                    {% set onclick = settings('rrhh', 'allowcomputable', 0) ? 'showComputableModal(1);' : 'insertAttendance(1, false);' %}
+                    <button type="button" class="btn btn-primary btn-block" onclick="{{ onclick }}">
+                        <span class="d-block d-md-none"><i class="fa-solid fa-sign-in-alt" aria-hidden="true"></i></span>
+                        <span class="d-none d-md-block">{{ trans('input') }}</span>
+                    </button>
+                </div>
+                <div class="col">
+                    {% set onclick = settings('rrhh', 'allowcomputable', 0) ? 'showComputableModal(2);' : 'insertAttendance(2, false);' %}
+                    <button type="button" class="btn btn-success btn-block" onclick="{{ onclick }}">
+                        <span class="d-block d-md-none"><i class="fa-solid fa-sign-out-alt" aria-hidden="true"></i></span>
+                        <span class="d-none d-md-block">{{ trans('output') }}</span>
+                    </button>
+                </div>
+                {% if settings('rrhh', 'allowmanual', 1) %}
+                <div class="col-4">
+                    <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#modalAttendance">
+                        <span class="d-block d-md-none"><i class="fa-solid fa-edit" aria-hidden="true"></i></span>
+                        <span class="d-none d-md-block">{{ trans('manual') }}</span>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro attendancesCard(fsc) %}
+    <div class="card border-primary shadow mb-3">
+        <div class="card-header bg-primary text-white text-center">
+            <div class="row">
+                <div class="col-1 text-white">
+                    <button type="button" class="btn btn-link p-0"
+                            onclick="showAttendance('previous', '{{ fsc.attendances.date }}');">
+                        <i class="fa-solid fa-angle-double-left fa-fw text-white" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="col text-center">
+                    <strong>
+                        {% if fsc.attendances.isBeforeDate %}
+                            {{ fsc.attendances.date|date('d-m-Y') }}
+                        {% else %}
+                            {{ trans('attendances')|upper }}
+                        {% endif %}
+                    </strong>
+                </div>
+                <div class="col-1 text-right text-white">
+                    <button type="button" class="btn btn-link p-0"
+                            onclick="showAttendance('next', '{{ fsc.attendances.date }}');">
+                        <i class="fa-solid fa-angle-double-right fa-fw text-white" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                {% set previousAttendance = fsc.attendances.previousAttendance %}
+                {% set lastKind = previousAttendance.idinput > 0 ? 1 : 2 %}
+                {%  for attendanceData in fsc.attendances.data %}
+                    {% set kind = attendanceData.idinput > 0 ? 1 : 2 %}
+                    {% if (lastKind == kind) %}
+                        {% if loop.first %}
+                            {{ _self.attendancesLinesError(fsc, previousAttendance, kind, true) }}
+                        {% else %}
+                            {{ _self.attendancesLinesError(fsc, attendanceData, kind, false) }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if attendanceData.idinput %}
+                        {{ _self.attendancesLinesAdd(fsc, attendanceData, 1) }}
+                        {% set lastKind = 1 %}
+                    {% endif %}
+
+                    {% if attendanceData.idexit %}
+                        {{ _self.attendancesLinesAdd(fsc, attendanceData, 2) }}
+                        {% set lastKind = 2 %}
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+        <div class="card-footer text-muted text-center">
+            <strong>
+                {% if fsc.attendances.time.hours > 0 or fsc.attendances.time.minutes > 0 %}
+                    {{ trans('total')|upper }}:
+                    {% if fsc.attendances.time.hours > 0 %}
+                        {{ fsc.attendances.time.hours }} {{ trans('hours') }}
+                        {{ trans('and') }}
+                    {% endif %}
+                    {{ fsc.attendances.time.minutes }} {{ trans('minutes') }}
+                {% endif %}
+            </strong>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro attendancesLinesError(fsc, attendanceData, type, isPrevious) %}
+    {% set timeHelp = (isPrevious == true) ? trans('min') : trans('max') %}
+    <tr class="text-center">
+        <td colspan="5">
+            {% if type == 1 %}
+                <button type="button" class="btn btn-outline-danger shadow" onclick="incidenceAttendance(this);"
+                        data-kind="2"
+                        data-date="{{ attendanceData.date|date('Y-m-d') }}"
+                        data-time="{{ timeHelp ~ ': ' ~ attendanceData.input|date('H:i') }}"
+                        data-note="{{ trans('attendance-forgotten') }}">
+                    {{ trans('attendance-output-error') }}
+                </button>
+            {% else %}
+                <button type="button" class="btn btn-outline-danger shadow" onclick="incidenceAttendance(this);"
+                        data-kind="1"
+                        data-date="{{ attendanceData.date|date('Y-m-d') }}"
+                        data-max-time="{{ timeHelp ~ ': ' ~ attendanceData.exit|date('H:i') }}"
+                        data-note="{{ trans('attendance-forgotten') }}">
+                    {{ trans('attendance-input-error') }}
+                </button>
+            {% endif %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro attendancesLinesAdd(fsc, attendanceData, type) %}
+    {% set time = (type == 1) ? attendanceData.input : attendanceData.exit %}
+    {% set label = (type == 1) ? trans('input') : trans('output') %}
+    {% set id = (type == 1) ? attendanceData.idinput : attendanceData.idexit %}
+    {% set authorized = (type == 1) ? attendanceData.authorized_input : attendanceData.authorized_exit %}
+    {% set delayed = (type == 1) ? attendanceData.inputdelay : 0 %}
+    <tr {% if authorized == false %}class="table-danger"{% endif %}>
+        <td>
+            <span class="d-block d-md-none">{{ attendanceData.date|date('d-m') }}</span>
+            <span class="d-none d-md-block">{{ attendanceData.date }}</span>
+        </td>
+        <td>{{ time }}</td>
+        <td>{{ label }}</td>
+        <td>
+            {% if delayed %}
+                <span class="text-danger">{{ trans('delay')|upper }}: {{ delayed }}m</span>
+            {% else %}
+                <span class="d-block d-md-none">{{ attendanceData.translatedIncidence }}</span>
+                <span class="d-none d-md-block">{{ attendanceData.translatedIncidenceDesc }}</span>
+            {% endif %}
+        </td>
+        <td style="width: 0;">{% if attendanceData.canDelete %}
+            <button type="button" class="btn btn-link p-0"
+                    onclick="deleteAttendance('{{ id }}');">
+                <i class="fa-solid fa-trash-alt fa-fw text-danger" aria-hidden="true"></i>
+            </button>
+            {% endif %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro attendanceModal(fsc) %}
+    <div class="modal" id="modalAttendance" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-clock fa-fw"></i> {{ trans('attendance') }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>{{ trans('date') }}</label>
+                            <input type="date" name="date" value="{{ fsc.attendances.date|date('Y-m-d') }}" class="form-control" required />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>{{ trans('hour') }}</label>
+                            <input type="time" name="time" class="form-control" step="1" required />
+                            <small id="timeHelp" class="form-text text-muted"></small>
+                          </div>
+                        <div class="form-group col-md-4">
+                            <label>{{ trans('type') }}</label>
+                            <select class="form-control" name="kind">
+                              <option value="1">{{ trans('input') }}</option>
+                              <option value="2">{{ trans('output') }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label>{{ trans('reason') }}</label>
+                            <input type="textarea" name="note" class="form-control noEnterKey" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clearAttendanceManual();">
+                        {{ trans('cancel') }}
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="insertAttendanceManual();">
+                        {{ trans('accept') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro computableModal(fsc) %}
+    <div class="modal" id="modalComputable" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-clock fa-fw"></i> {{ trans('computable') }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <p>{{ trans('computable-question') }}</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnComputable" class="btn btn-danger" data-computable="true" data-kind="" onclick="insertComputableAttendance(this);">
+                        {{ trans('computable') }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        {{ trans('cancel') }}
+                    </button>
+                    <button type="button" id="btnNotComputable" class="btn btn-primary" data-computable="false" data-kind="" onclick="insertComputableAttendance(this);">
+                        {{ trans('not-computable') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+    HOLIDAYS
+#}
+{% macro holidaysButtonsCard(fsc) %}
+    <div class="card border-primary shadow mb-3">
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-12">
+                    <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#modalHolidays">
+                        {{ trans('request-vacation') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro holidaysCard(fsc) %}
+    <div class="card border-info shadow mb-3">
+        <div class="card-header bg-info text-white text-center">
+            <strong>{{ trans('holidays')|upper }}</strong>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                {%  for holiday in fsc.holidays.data %}
+                    {{ _self.holidaysLineAdd(fsc, holiday) }}
+                {% endfor %}
+            </table>
+        </div>
+        <div class="card-footer text-muted text-center">
+            <div class="row">
+                {% if fsc.holidays.total > 0 %}
+                <div class="col-md-6">
+                    <strong>
+                        {{ trans('total')|upper }}: {{ _self.daysText(fsc, fsc.holidays.total) }}
+                    </strong>
+                </div>
+                <div class="col-md-6">
+                    <strong>
+                        {{ trans('enjoyed')|upper }}: {{ _self.daysText(fsc, fsc.holidays.enjoyed) }}
+                    </strong>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro holidaysLineAdd(fsc, holiday) %}
+    <tr {% if holiday.authorized == false %}class="table-danger"{% endif %}>
+        <td>{{ holiday.startdate }}</td>
+        <td>{{ holiday.enddate }}</td>
+        <td>
+            {{ _self.daysText(fsc, holiday.totaldays) }}
+        </td>
+        <td style="width: 0;">
+            {% if holiday.canDelete %}
+            <button type="button" class="btn btn-link p-0" onclick="deleteHoliday('{{ holiday.id }}');">
+                <i class="fa-solid fa-trash-alt fa-fw text-danger" aria-hidden="true"></i>
+            </button>
+            {% endif %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro holidaysModal(fsc) %}
+    <div class="modal" id="modalHolidays" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-clock fa-fw"></i> {{ trans('holidays') }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>{{ trans('starting-date') }}</label>
+                            <input type="date" name="startdate" class="form-control" required="true" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>{{ trans('end-date') }}</label>
+                            <input type="date" name="enddate" class="form-control" required="true" />
+                          </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label>{{ trans('reason') }}</label>
+                            <input type="textarea" name="notes" class="form-control noEnterKey" required="true" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        {{ trans('cancel') }}
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="insertHolidays();">
+                        {{ trans('accept') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+
+{#
+    WORK PERIOD
+#}
+{% macro workperiodCard(fsc) %}
+    <div class="card border-secondary shadow mb-3">
+        <div class="card-header text-secondary d-flex">
+            <strong>
+                {{ trans('schedule')|upper }}
+                {{ fsc.attendances.workshiftPeriode() }}
+            </strong>
+            <a class="btn btn-link p-0 ml-auto" data-toggle="collapse" href="#workperiodCard" role="button" aria-expanded="false" aria-controls="workperiodCard">
+                <i class="fa fa-plus text-secondary"></i>
+            </a>
+        </div>
+        <div id="workperiodCard" class="collapse">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            {{ _self.dayOfWeekColumn(fsc, 'monday', 'center') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'tuesday', 'center') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'wednesday', 'center') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'thursday', 'center') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'friday', 'center') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'saturday', 'center') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'sunday', 'center') }}
+                            <th scope="col"></th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            {% set dayOfWeek = fsc.attendances.date|date('w') %}
+                            {% if dayOfWeek == 0 %}
+                                {% set dayOfWeek = 7 %}
+                            {% endif %}
+                            {% for day in 1..7 %}
+                                {% set styleCss = '' %}
+                                {% if day == dayOfWeek %}
+                                    <script>
+                                        currentWorkPeriods = {{ fsc.weekwork.workperiods[day - 1]|json_encode(constant('JSON_HEX_TAG'))|raw }};
+                                    </script>
+                                    {% set styleCss = ' font-weight-bold bg-light' %}
+                                {% endif %}
+                                <td class="text-center{{ styleCss }}">
+                                    {% for workperiod in fsc.weekwork.workperiods[day - 1] %}
+                                        <span class="d-none d-md-block">
+                                            {{ trans("from2") ~ " " ~ workperiod.starttime|date('H:i') }}
+                                            {{ trans("to2") ~ " " ~ workperiod.endtime|date('H:i') }}
+                                        </span>
+                                        <span class="d-block d-md-none">
+                                            {{ workperiod.starttime|date('H:i') }}<br>
+                                            {{ workperiod.endtime|date('H:i') }}
+                                        </span>
+                                        {%  if false == loop.last %}<hr>{% endif %}
+                                    {% endfor %}
+                                </td>
+                            {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+
+{#
+    WORK SHIFT
+#}
+{% macro workshiftCard(fsc) %}
+    <div class="card border-secondary shadow mb-3">
+        <div class="card-header {% if fsc.weekwork.hasIncidence or fsc.weekwork.totalDifference < 0 %}text-danger{% else %}text-secondary{% endif %} d-flex">
+            <strong>
+                {{ trans('work-shift')|upper }}
+                {{ fsc.attendances.workshiftPeriode() }}
+            </strong>
+            <a class="btn btn-link p-0 ml-auto" data-toggle="collapse" href="#workshiftCard" role="button" aria-expanded="false" aria-controls="workshiftCard">
+                <i class="fa fa-plus {% if fsc.weekwork.hasIncidence or fsc.weekwork.totalDifference < 0 %}text-danger{% else %}text-secondary{% endif %}"></i>
+            </a>
+        </div>
+        <div id="workshiftCard" class="collapse">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead>
+                            <th scope="col"></th>
+                            {{ _self.dayOfWeekColumn(fsc, 'monday', 'right') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'tuesday', 'right') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'wednesday', 'right') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'thursday', 'right') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'friday', 'right') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'saturday', 'right') }}
+                            {{ _self.dayOfWeekColumn(fsc, 'sunday', 'right') }}
+                            <th scope="col"></th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center" scope="row">T</th>
+                                {% for hours in fsc.weekwork.hours %}
+                                <td class="text-right">{{ fsc.getTime(hours) }}</td>
+                                {% endfor %}
+                                <td class="text-right"></td>
+                            </tr>
+                            <tr>
+                                <th class="text-center" scope="row">R</th>
+                                {% for worked in fsc.weekwork.worked %}
+                                <td class="text-right">{{ fsc.getTime(worked) }}</td>
+                                {% endfor %}
+                                <td class="text-right"></td>
+                            </tr>
+                            <tr>
+                                <th class="text-center" scope="row">D</th>
+                                {% for difference in fsc.weekwork.difference %}
+                                <td class="text-right {% if difference < 0 %}text-danger{% endif%}">
+                                    {{ fsc.getTime(difference) }}
+                                </td>
+                                {% endfor %}
+                                <td class="text-right {% if fsc.weekwork.totalDifference < 0 %}text-danger{% endif%}">
+                                    {{ fsc.weekwork.totalDifference ? fsc.getTime(fsc.weekwork.totalDifference) }}
+                                </td>
+                            </tr>
+                            {% if fsc.weekwork.incidence|length > 0 %}
+                            <tr>
+                                <th class="text-center" scope="row">I</th>
+                                {% for incidence in fsc.weekwork.incidence %}
+                                <td class="text-right">{{ incidence }}</td>
+                                {% endfor %}
+                                <td class=""></td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{#
+    TOOLS
+#}
+{% macro daysText(fsc, value) %}
+    {%  if value == 1 %}
+        {{ value }} {{ trans('day') }}
+    {% endif %}
+    {%  if value > 1 %}
+        {{ value }} {{ trans('days') }}
+    {% endif %}
+{% endmacro %}
+
+{% macro dayOfWeekColumn(fsc, dayName, display) %}
+    {% set title = trans(dayName) %}
+    <th class="text-{{ display }}" scope="col">
+        <span class="d-none d-md-block">{{ title }}</span>
+        <span class="d-block d-md-none">{{ title|slice(0,3) }}</span>
+    </th>
+{% endmacro %}

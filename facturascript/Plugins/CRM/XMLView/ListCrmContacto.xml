@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="idcontacto" onclick="EditContacto"/>
+        </column>
+        <column name="description" display="none" order="110">
+            <widget type="textarea" fieldname="descripcion"/>
+        </column>
+        <column name="name" order="120">
+            <widget type="text" fieldname="nombre"/>
+        </column>
+        <column name="surname" order="130">
+            <widget type="text" fieldname="apellidos"/>
+        </column>
+        <column name="company" display="none" order="140">
+            <widget type="text" fieldname="empresa"/>
+        </column>
+        <column name="position" display="none" order="150">
+            <widget type="text" fieldname="cargo"/>
+        </column>
+        <column name="fiscal-number" display="none" order="160">
+            <widget type="text" fieldname="cifnif"/>
+        </column>
+        <column name="email" order="170">
+            <widget type="text" fieldname="email"/>
+        </column>
+        <column name="phone" order="180">
+            <widget type="text" fieldname="telefono1"/>
+        </column>
+        <column name="phone2" order="190">
+            <widget type="text" fieldname="telefono2"/>
+        </column>
+        <column name="address" display="none" order="200">
+            <widget type="text" fieldname="direccion"/>
+        </column>
+        <column name="city" order="210">
+            <widget type="text" fieldname="ciudad"/>
+        </column>
+        <column name="province" order="220">
+            <widget type="text" fieldname="provincia"/>
+        </column>
+        <column name="country" order="230">
+            <widget type="select" fieldname="codpais">
+                <values source="paises" fieldcode="codpais" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="observations" display="none" order="240">
+            <widget type="text" fieldname="observaciones"/>
+        </column>
+        <column name="level" display="none" order="250">
+            <widget type="number" fieldname="level" decimal="0"/>
+        </column>
+        <column name="points" display="none" order="260">
+            <widget type="number" fieldname="puntos" decimal="0"/>
+        </column>
+        <column name="last-ip" display="none" order="270">
+            <widget type="text" fieldname="lastip"/>
+        </column>
+        <column name="creation-date" display="none" order="280">
+            <widget type="date" fieldname="fechaalta"/>
+        </column>
+        <column name="last-activity" display="none" order="290">
+            <widget type="datetime" fieldname="lastactivity"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="success" fieldname="codcliente" title="customer">notnull:</option>
+            <option color="danger" fieldname="email" title="missing-email"></option>
+            <option color="danger" fieldname="email" title="missing-email">null:</option>
+            <option color="warning" fieldname="telefono1" title="missing-phone"></option>
+            <option color="warning" fieldname="telefono1" title="missing-phone">null:</option>
+            <option color="warning" fieldname="verificado" title="not-verified">0</option>
+        </row>
+    </rows>
+    <modals>
+        <group name="import-contacts" title="import-contacts" icon="fas fa-file-import">
+            <column name="file" numcolumns="12" order="100">
+                <widget type="file" fieldname="contactsfile" accept=".csv,.xls,.xlsx" required="true"/>
+            </column>
+            <column name="source" titleurl="ListContacto?activetab=ListCrmFuente" numcolumns="12" order="110">
+                <widget type="select" fieldname="idfuente">
+                    <values source="CrmFuente" fieldcode="id"/>
+                </widget>
+            </column>
+            <column name="options" numcolumns="12" order="120">
+                <widget type="select" fieldname="mode" translate="true" required="true">
+                    <values title="only-insert">insert</values>
+                    <values title="insert-update">update</values>
+                </widget>
+            </column>
+        </group>
+    </modals>
+</view>

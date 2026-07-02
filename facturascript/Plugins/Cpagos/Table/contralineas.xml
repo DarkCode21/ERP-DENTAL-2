@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>idlc</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idfactura</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>factura</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>total</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>creationdate</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>idcpago</name>
+        <type>integer</type>
+    </column>
+
+    <constraint>
+        <name>contralineas_pkey</name>
+        <type>PRIMARY KEY (idlc)</type>
+    </constraint>
+
+    <constraint>
+    <name>ca_cpago_contralineas</name>
+    <type>FOREIGN KEY (idcpago) REFERENCES cpagos (idcpago) ON DELETE CASCADE ON UPDATE CASCADE</type>
+</constraint>
+</table>

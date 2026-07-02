@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples Copyright (C) 2022-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditCustomerReceiptGroupNote.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the edit view of AgentSettlement model
+-->
+<view>
+    <columns>
+        <group name="cash1" numcolumns="2">
+            <column name="bills-500" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="bills500" class="settlement" icon="fas fa-money-bill-alt" />
+            </column>
+            <column name="bills-200" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="bills200" class="settlement" icon="fas fa-money-bill-alt" />
+            </column>
+            <column name="bills-100" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="bills100" class="settlement" icon="fas fa-money-bill-alt" />
+            </column>
+            <column name="bills-50" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="bills50" class="settlement" icon="fas fa-money-bill-alt" />
+            </column>
+        </group>
+        <group name="cash2" numcolumns="2">
+            <column name="bills-20" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="bills20" class="settlement" icon="fas fa-money-bill-alt" />
+            </column>
+            <column name="bills-10" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="bills10" class="settlement" icon="fas fa-money-bill-alt" />
+            </column>
+            <column name="bills-5" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="bills5" class="settlement" icon="fas fa-money-bill-alt" />
+            </column>
+            <column name="coins-2" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="coins2" class="settlement" icon="fas fa-coins" />
+            </column>
+        </group>
+
+        <group name="cash3" numcolumns="2">
+            <column name="coins-1" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="coins1" class="settlement" icon="fas fa-coins" />
+            </column>
+            <column name="coins-050" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="coins050" class="settlement" icon="fas fa-coins" />
+            </column>
+            <column name="coins-020" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="coins020" class="settlement" icon="fas fa-coins" />
+            </column>
+            <column name="coins-010" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="coins010" class="settlement" icon="fas fa-coins" />
+            </column>
+        </group>
+
+        <group name="cash4" numcolumns="2">
+            <column name="coins-005" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="coins005" class="settlement" icon="fas fa-coins" />
+            </column>
+            <column name="coins-002" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="coins002" class="settlement" icon="fas fa-coins" />
+            </column>
+            <column name="coins-001" numcolumns="12" >
+                <widget type="number" decimal="0" step="1" fieldname="coins001" class="settlement" icon="fas fa-coins" />
+            </column>
+            <column name="calculation" numcolumns="12" >
+                <widget type="select" fieldname="automatic" translate="true" required="true">
+                    <values title="automatic">1</values>
+                    <values title="manual">0</values>
+                </widget>
+            </column>
+        </group>
+
+        <group name="space" numcolumns="1"></group>
+
+        <group name="total">
+            <column name="code" numcolumns="2" display="none" order="0" >
+                <widget type="number" fieldname="id" icon="fas fa-globe" readonly="true" />
+            </column>
+            <column name="diets" numcolumns="12" order="100">
+                <widget type="money" fieldname="total_diets" class="settlement" decimal="2" />
+            </column>
+            <column name="bank-checks" numcolumns="12" order="110">
+                <widget type="money" fieldname="bankchecks" readonly="true" decimal="2" />
+            </column>
+            <column name="total" numcolumns="12" order="120">
+                <widget type="money" fieldname="total" class="settlement-total" decimal="2" readonly="true" />
+            </column>
+            <column name="difference" numcolumns="12" order="130">
+                <widget type="money" fieldname="difference" class="settlement-difference" decimal="2" readonly="true" />
+            </column>
+        </group>
+    </columns>
+</view>

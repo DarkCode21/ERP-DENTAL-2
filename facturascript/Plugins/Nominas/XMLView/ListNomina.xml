@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="idnomina" />
+        </column>
+     
+        <column name="employee" order="120">
+            <widget type="text" fieldname="nombretrabajador" />
+        </column>
+        <column name="cifnif" order="130">
+            <widget type="text" fieldname="nif" />
+        </column>
+        <column name="start-liquidation" order="140">
+            <widget type="date" fieldname="inicioliquidacion" />
+        </column>
+        <column name="end-liquidation" order="150">
+            <widget type="date" fieldname="finliquidacion" />
+        </column>
+        <column name="address" order="160">
+            <widget type="textarea" fieldname="direccion" />
+        </column>
+        <column name="group-cotizacion" order="170">
+            <widget type="textarea" fieldname="grupocotizacion" />
+        </column>
+        <column name="city" order="180">
+            <widget type="text" fieldname="localidad" />
+        </column>
+    </columns>
+</view>

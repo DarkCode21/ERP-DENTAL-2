@@ -1,0 +1,17 @@
+{
+  "config": {
+    "platform": {
+      "php": "7.4"
+    }
+  },
+  "require": {
+    "barnetik/ticketbai": "dev-main",
+    "ext-gd": "*",
+    "ext-json": "*",
+    "ext-soap": "*",
+    "ext-simplexml": "*"
+  },
+  "require-dev": {
+    "overdesign/cif-generator": "^1.0"
+  }
+}

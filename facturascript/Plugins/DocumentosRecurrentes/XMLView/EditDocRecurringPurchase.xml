@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of DocumentosRecurrentes plugin for FacturaScripts.
+    FacturaScripts         Copyright (C) 2015-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+    DocumentosRecurrentes  Copyright (C) 2020-2021 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : docrecurrentes_purchase.xml
+    Author     : Carlos Garcia Gomez    <carlos@facturascripts.com>
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        View structure for EditDocRecurringPurchase.
+-->
+<view>
+    <columns>
+        <group name="header-data" numcolumns="9">
+            <column name="code" numcolumns="1" display="none" order="100">
+                <widget type="text" fieldname="id" required="true" readonly="true" />
+            </column>
+            <column name="description" order="110">
+                <widget type="text" fieldname="name" icon="fas fa-tag" required="true" />
+            </column>
+            <column name="supplier" order="150">
+                <widget type="autocomplete" fieldname="codproveedor" onclick="EditProveedor" required="true">
+                    <values source="proveedores" fieldcode="codproveedor" fieldtitle="razonsocial" />
+                </widget>
+            </column>
+        </group>
+        <group name="dates" numcolumns="3">
+            <column name="last-date" numcolumns="6" tabindex="99" order="100">
+                <widget type="date" fieldname="lastdate" readonly="true" />
+            </column>
+            <column name="next-date" numcolumns="6" tabindex="99" order="110">
+                <widget type="date" fieldname="nextdate" readonly="true" />
+            </column>
+        </group>
+        <group name="each-data" numcolumns="12" valign="bottom">
+            <column name="generate" numcolumns="3" order="120">
+                <widget type="select" fieldname="generatedoc" translate="true" required="true">
+                    <values title="supplier-estimation">PresupuestoProveedor</values>
+                    <values title="supplier-order">PedidoProveedor</values>
+                    <values title="supplier-delivery-note">AlbaranProveedor</values>
+                    <values title="supplier-invoice">FacturaProveedor</values>
+                </widget>
+            </column>
+            <column name="each" numcolumns="1" order="130">
+                <widget type="number" decimal="0" min="1" fieldname="termunits" required="true" />
+            </column>
+            <column name="term-type" numcolumns="2" order="140">
+                <widget type="select" fieldname="termtype" required="true" translate="true">
+                    <values title="days">1</values>
+                    <values title="weeks">2</values>
+                    <values title="months">3</values>
+                    <values title="manual">99</values>
+                </widget>
+            </column>
+            <column name="firstforce" title="force-first-doc" order="150">
+                <widget type="checkbox" fieldname="firstforce" />
+            </column>
+            <column name="sendmail" title="send-mail" numcolumns="2" order="160">
+                <widget type="checkbox" fieldname="sendmail" />
+            </column>
+        </group>
+    </columns>
+
+    <modals>
+        <group name="generate-manually" title="generate-doc" icon="fas fa-cogs">
+            <column name="code" display="none" order="0">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="generatedate" title="date-new-document" numcolumns="12" order="100">
+                <widget type="date" fieldname="generatedate" required="true" />
+            </column>
+            <column name="supplier" title="supplier" description="supplier-target-desc" order="110">
+                <widget type="autocomplete" fieldname="target">
+                    <values source="proveedores" fieldcode="codproveedor" fieldtitle="razonsocial" />
+                </widget>
+            </column>
+        </group>
+        <group name="duplicate-doc" title="clone" icon="far fa-clone">
+            <column name="code" display="none" order="0">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="description" title="description" numcolumns="12" order="100">
+                <widget type="text" fieldname="name" icon="fas fa-tag" required="true" />
+            </column>
+            <column name="supplier" title="supplier" order="150">
+                <widget type="autocomplete" fieldname="target" required="true">
+                    <values source="proveedores" fieldcode="codproveedor" fieldtitle="razonsocial" />
+                </widget>
+            </column>
+        </group>
+    </modals>
+</view>

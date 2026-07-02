@@ -1,0 +1,95 @@
+
+<style>
+    .top-navbar {
+        background: {{ settings('richitheme', 'tbgcolor', '#ffffffb3') }};
+    }
+
+    .ntext, .user-info span {
+        color: {{ settings('richitheme', 'ttxtcolor', '#1a1f36') }};
+    }
+
+    .top-navbar-right .nav-link {
+        color: {{ settings('richitheme', 'itxtcolor', '#6c757d') }};
+    }
+
+    .user-avatar {
+        background: linear-gradient(135deg, {{ settings('richitheme', 'uigradient', '#2770ca') }} 0%, color-mix(in srgb, {{ settings('richitheme', 'uigradient', '#2770ca') }} 55%, #ffc400 45%) 100%);
+    }
+
+    {% if settings('richitheme', 'tcndis', true) %}
+        .nlink {
+            display: none;
+        }
+    {% endif %}
+
+</style>
+
+<div class="top-navbar">
+    <div class="top-navbar-left">
+        <button class="toggle-btn" id="toggleBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a class="nlink" href="{{ asset(fsc.user.homepage) }}" title="{{ trans('homepage') }}">
+            <span class="ntext">{{ fsc.empresa.nombrecorto | raw }}</span>
+        </a>
+    </div>
+    <div class="top-navbar-right">
+        <!-- Boton FullScreen -->
+        <a class="nav-link" href="#" id="fullscreenToggle">
+            <i class="fa-solid fa-expand" aria-hidden="true"></i>
+        </a>
+        <div class="user-info dropdown">
+            <span class="d-none d-md-inline">{{ fsc.empresa.nombrecrm }} · <strong>{{ fsc.user.nick }}</strong></span>
+            <a class="nav-link" href="#" id="drop2" data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false" title="{{ trans('user') }}">
+                <div class="user-avatar" title="{{ fsc.user.nick }}">
+                    {{ fsc.user.nick|slice(0, 1)|upper }}
+                </div>
+            </a>
+            <div class="mt-2 dropdown-menu dropdown-menu-right dropdown-menu-animate-up"
+                 aria-labelledby="drop2">
+                <div class="message-body">
+                    <a href="{{ fsc.user.url() }}"
+                       class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="fa-regular fa-user"></i>
+                        <p class="mb-0">{{ fsc.user.nick }}</p>
+                    </a>
+                    <a href="SendMail"
+                       class="d-flex align-items-center gap-2 dropdown-item">
+                        <i class="fa-regular fa-envelope"></i>
+                        <p class="mb-0">{{ trans('send-mail') }}</p>
+                    </a>
+                    <a class="d-flex align-items-center gap-2 dropdown-item"
+                       href="/Soporte">
+                        <i class="fa-regular fa-question-circle"></i>
+                        <p class="mb-0">{{ trans('help') }}</p>
+                    </a>
+					<a class="d-flex align-items-center gap-2 dropdown-item" 
+						href="MegaSearch" id="menuIconSearch">
+                        <i class="fa-solid fa-search" aria-hidden="true"></i>
+                        <p class="mb-0">{{ trans('search') }}</p>
+                    </a>
+                    {% for includeView in getIncludeViews('MenuTemplate', 'MenuIconUser') %}
+                        {% include includeView['path'] %}
+                    {% endfor %}
+                    <a href="{{ asset('login') }}?action=logout&multireqtoken={{ formToken(false) }}"
+                       class="btn btn-outline-primary mx-3 mt-2 d-block">{{ trans('logout') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle Fullscreen
+    document.getElementById('fullscreenToggle').addEventListener('click', function (e) {
+        e.preventDefault();
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    });
+</script>

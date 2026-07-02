@@ -1,0 +1,117 @@
+<div class="card shadow p-3">
+    <h2 class="mb-0">Generar</h2>
+    <p>
+        Desde esta pestaña podremos crear un nuevo asiento usando los datos predefinidos. Solamente debemos elegir
+        <b>fecha</b>, <b>empresa</b>, <b>los valores para las variables</b> registradas y pulsar el <b>botón generar</b>.
+    </p>
+    <h2 class="mt-4 mb-0">Líneas</h2>
+    <p>La pestaña líneas nos sirve para definir las partidas del nuevo asiento. Para ello deberemos indicar:</p>
+    <ul>
+        <li>
+            <b>Subcuenta:</b> la subcuenta a utilizar, ya sea directamente o con variables. Ejemplos:
+            <ul>
+                <li>
+                    <span class="text-success">5700000001</span>: la subcuenta de caja del ejercicio actual.
+                </li>
+                <li>
+                    <span class="text-success">570.1</span>: la misma subcuenta de caja, pero abreviamos los ceros con
+                    el punto. El punto rellena de ceros hasta completar la longitud de la subcuenta.
+                </li>
+                <li>
+                    <span class="text-success">570.A</span>: A es una variable que podemos registrar en la pestaña
+                    variables para luego poder darle valor al generar un nuevo asiento. En este ejemplo, si le damos
+                    valor 2, estaríamos usando la subcuenta 570.2, que se traduce por 5700000002.
+                </li>
+                <li>
+                    <span class="text-success">A</span>: A es una variable que podemos registrar en la pestaña variables
+                    para luego poder darle valor al generar un nuevo asiento. En este ejemplo, si le damos valor
+                    5720000001, esa sería la sucbuenta elegida para esta línea.
+                </li>
+                <li>
+                    <span class="text-danger">570..1</span>: no se permite más de un punto.
+                </li>
+                <li>
+                    <span class="text-danger">570.AB</span>: no se permite más de una variable.
+                </li>
+                <li>
+                    <span class="text-danger">570.a</span>: no se permiten variables en <b>minúsculas</b>.
+                </li>
+                <li>
+                    <span class="text-danger">Z</span>: la variable Z está reservada para las columnas debe y haber.
+                </li>
+            </ul>
+        </li>
+        <li>
+            <b>Descripción</b>: una breve descripción para la línea del asiento.
+        </li>
+        <li>
+            <b>Debe</b> y <b>Haber</b>: los importes para esas columnas de la partida. Ejemplos:
+            <ul>
+                <li>
+                    <span class="text-success">100</span>: 100€ para la columna.
+                </li>
+                <li>
+                    <span class="text-success">-100</span>: -100€ para la columna.
+                </li>
+                <li>
+                    <span class="text-success">B</span>: B es una variable que podemos registrar en la pestaña variables
+                    para luego poder darle valor al generar un nuevo asiento. En este ejemplo, si le damos valor
+                    50, ese sería el importe para esa columna.
+                </li>
+                <li>
+                    <span class="text-success">-B</span>: mismo caso que el anterior, pero con el valor de B en
+                    negativo.
+                </li>
+                <li>
+                    <span class="text-success">100 + B</span>: B es una variable que podemos registrar y con la que
+                    podemos hacer ciertas operaciones matemáticas como sumar, restar, multiplicar y dividir.
+                    En este ejemplo, si le damos valor 50, el importe para esa columna sería 150.
+                </li>
+                <li>
+                    <span class="text-success">B + 100</span>: mismo caso.
+                </li>
+                <li>
+                    <span class="text-success">B + C</span>: mismo caso.
+                </li>
+                <li>
+                    <span class="text-success">B - 100</span>: mismo caso.
+                </li>
+                <li>
+                    <span class="text-success">B * 2</span>: el valor que asignemos a la variable B lo multiplicamos
+                    por 2.
+                </li>
+                <li>
+                    <span class="text-success">B / 2</span>: el valor que asignemos a la variable B lo dividimos
+                    por 2.
+                </li>
+                <li>
+                    <span class="text-success">Z</span>: la variable Z es una variable que no hace falta crearla.
+                    Esta variable es sustituida por <b>el descuadre</b> que tenga el asiento a la hora de crear la
+                    línea en la que se encuentre.
+                </li>
+                <li>
+                    <span class="text-danger">a - b</span>: las variables deben ser en <b>mayúsculas</b>.
+                </li>
+                <li>
+                    <span class="text-danger">B x 2</span>: para multiplicar se debe usar *.
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <h3 class="mt-4 mb-0">Variables</h3>
+    <p>
+        En la pestaña variables, se deben registrar las variables que queremos utilizar y su descripción para el
+        usuario, para que sea sencillo entender qué hacen.
+    </p>
+    <ul>
+        <li>
+            Por ejemplo si hemos usado la subcuenta <b>430.A</b> en la pestaña lineas, tendríamos que registrar una
+            variable con <b>código</b> A y <b>mensaje</b> "Complete la cuenta del cliente".
+        </li>
+        <li>
+            <b>La variable Z</b> es una variable que no hace falta registrar. Esta variable sólo debe de ser usada en
+            las columnas Debe/Haber. Y cuando se está generando el asiento, esta variable es sustituida por el descuadre
+            que tenga el asiento a la hora de crear la línea en la que se encuentre.
+        </li>
+    </ul>
+</div>

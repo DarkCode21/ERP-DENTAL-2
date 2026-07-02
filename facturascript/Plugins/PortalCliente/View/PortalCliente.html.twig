@@ -1,0 +1,122 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/PortalPanelTemplate.html.twig" %}
+
+{% block main %}
+<div class="w-100 bg-light">
+    <div class="container pt-3 pb-3">
+        <div class="form-row d-flex align-items-center">
+            <div class="col-sm">
+                <h1 class="h3 m-0 p-0">{{ trans('client-portal') }}</h1>
+                <p>{{ trans('welcome') }} <i>{{ fsc.contact.pc_nick }}</i></p>
+            </div>
+
+            {% for item in getIncludeViews('PortalCliente', 'buttonsBefore') %}
+                {% include item['path'] %}
+            {% endfor %}
+
+            {% block buttons %}
+                {% if fsc.user %}
+                    <div class="col-sm-auto text-right">
+                        <a class="btn btn-secondary" href="{{ asset(fsc.contact.url()) }}">
+                            <i class="fa-solid fa-circle-info"></i>
+                            {{ trans('details') }}
+                        </a>
+                    </div>
+                {% endif %}
+                {% if fsc.contact.pc_allow_buy %}
+                    <button type="button" class="btn btn-primary" title="{{ trans('shopping-cart') }}" data-toggle="modal" data-target="#shoppingCartModal">
+                        <i class="fa-solid fa-cart-shopping"></i> <span id="btnTotalCart"></span>
+                    </button>
+                    <div class="modal fade" id="shoppingCartModal" tabindex="-1" role="dialog" aria-labelledby="shoppingCartModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="shoppingCartModalLabel">
+                                        <i class="fa-solid fa-cart-shopping"></i> {{ trans('shopping-cart') }}
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th>{{ trans('image') }}</th>
+                                            <th>{{ trans('product') }}</th>
+                                            <th class="text-right text-nowrap">{{ trans('quantity') }}</th>
+                                            <th class="text-right text-nowrap">{{ trans('price') }}</th>
+                                            <th class="text-right text-nowrap">{{ trans('discount') }}</th>
+                                            <th class="text-right text-nowrap">{{ trans('tax') }}</th>
+                                            <th class="text-right text-nowrap">{{ trans('total') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="cartHtml"></tbody>
+                                    </table>
+                                </div>
+                                <div id="cartResume" class="modal-body bg-light">
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control" rows="3" id="cartNote" placeholder="{{ trans('observations') }}"></textarea>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="row text-right">
+                                                <div class="col-6">
+                                                    {{ trans('subtotal') }}
+                                                </div>
+                                                <div id="subtotalCart" class="col-6 font-weight-bold"></div>
+                                                <div class="col-6">
+                                                    {{ trans('global-dto') }}
+                                                </div>
+                                                <div id="dtoCart" class="col-6 font-weight-bold"></div>
+                                                <div class="col-6">
+                                                    {{ trans('global-dto-2') }}
+                                                </div>
+                                                <div id="dto2Cart" class="col-6 font-weight-bold"></div>
+                                                <div class="col-6">
+                                                    {{ trans('net') }}
+                                                </div>
+                                                <div id="netCart" class="col-6 font-weight-bold"></div>
+                                                <div class="col-6">
+                                                    {{ trans('taxes') }}
+                                                </div>
+                                                <div id="taxesCart" class="col-6 font-weight-bold"></div>
+                                                <div class="col-6">
+                                                    {{ trans('total') }}
+                                                </div>
+                                                <div id="totalCart" class="col-6 font-weight-bold"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ trans('close') }}</button>
+                                    <button type="button" id="btnSaveCart" onclick="finalizePurchase()" class="btn btn-primary btn-spin-action">{{ trans('finalize-purchase') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-sm-auto text-right">
+                    <form action="{{ asset('PortalCliente') }}" method="post">
+                        <button type="submit" name="action" value="logout" class="btn btn-danger"
+                                title="{{ trans('logout') }}">
+                            <i class="fas fa-door-open"></i>
+                            {{ trans('exit') }}
+                        </button>
+                    </form>
+                </div>
+            {% endblock %}
+
+            {% for item in getIncludeViews('PortalCliente', 'buttonsAfter') %}
+                {% include item['path'] %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{{ parent() }}
+{% endblock %}

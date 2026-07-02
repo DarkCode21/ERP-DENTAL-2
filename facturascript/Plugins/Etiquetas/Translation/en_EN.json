@@ -1,0 +1,17 @@
+{
+    "add-product": "Add product",
+    "all-tags": "All",
+    "auto-generate-barcodes": "Generate barcodes automatically",
+    "barcode-generate-ok": "%num% remaining barcodes generated",
+    "barcode-type": "Barcode type",
+    "generate-barcodes": "Generate barcodes",
+    "initial-column": "Initial column",
+    "initial-row": "Initial row",
+    "no-tag": "None",
+    "number-labels-per-product": "Number of tags by product",
+    "one-per-product": "One by product",
+    "only-with-barcode": "Only products with barcode",
+    "print-barcodes": "Barcodes",
+    "print-prices": "Prices",
+    "tags": "Tags"
+}

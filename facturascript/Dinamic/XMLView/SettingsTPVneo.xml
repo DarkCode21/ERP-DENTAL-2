@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+
+        <group name="escpos" title="ESC/POS Relay" icon="fas fa-print" numcolumns="12" valign="bottom">
+
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+
+            <!-- URL del relay. Vacío = http://localhost:9091 -->
+            <column name="escpos-relay-url" title="relay-url" numcolumns="6" order="100">
+                <widget type="text" fieldname="escpos_relay_url" maxlength="200"/>
+            </column>
+
+            <!-- Tipo de conexión: TCP o USB -->
+            <column name="escpos-tipo" title="printer-type" numcolumns="2" order="110">
+                <widget type="select" fieldname="escpos_tipo">
+                    <values title="TCP / Red">tcp</values>
+                    <values title="USB">usb</values>
+                </widget>
+            </column>
+
+            <!-- IP de la impresora (solo modo TCP) -->
+            <column name="escpos-ip" title="printer-ip" numcolumns="3" order="120">
+                <widget type="text" fieldname="escpos_ip" maxlength="50"/>
+            </column>
+
+            <!-- Puerto TCP (solo modo TCP) -->
+            <column name="escpos-port" title="printer-port" numcolumns="1" order="130">
+                <widget type="number" fieldname="escpos_port" step="1" min="1" max="65535"/>
+            </column>
+
+            <!-- Nombre/ruta USB. Windows: RP-12N-USB  Linux: /dev/usb/lp0 -->
+            <column name="escpos-usb" title="printer-usb-device" numcolumns="6" order="140">
+                <widget type="text" fieldname="escpos_usb" maxlength="100"/>
+            </column>
+
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditEmployeeWorkShifts.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditEmployeeWorkShifts
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" numcolumns="1" order="100">
+                <widget type="text" fieldname="id"/>
+            </column>
+            <column name="employee" display="none" order="110">
+                <widget type="select" fieldname="idemployee" required="true">
+                    <values source="rrhh_employees" fieldcode="id" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="starting-date" numcolumns="3" order="120">
+                <widget type="date" fieldname="startdate" icon="fa-solid fa-sign-in-alt"/>
+            </column>
+            <column name="end-date" numcolumns="3" order="130">
+                <widget type="date" fieldname="enddate" icon="fa-solid fa-sign-out-alt"/>
+            </column>
+        </group>
+        <group name="workshifts" title="hours-to-work" numcolumns="12" icon="fa-solid fa-clock">
+            <column name="monday" display="right" order="140">
+                <widget type="number" decimal="2" min="0" max="24" fieldname="monday"/>
+            </column>
+            <column name="tuesday" display="right" order="150">
+                <widget type="number" decimal="2" min="0" max="24" fieldname="tuesday"/>
+            </column>
+            <column name="wednesday" display="right" order="160">
+                <widget type="number" decimal="2" min="0" max="24" fieldname="wednesday"/>
+            </column>
+            <column name="thursday" display="right" order="170">
+                <widget type="number" decimal="2" min="0" max="24" fieldname="thursday"/>
+            </column>
+            <column name="friday" display="right" order="180">
+                <widget type="number" decimal="2" min="0" max="24" fieldname="friday"/>
+            </column>
+            <column name="saturday" display="right" order="190">
+                <widget type="number" decimal="2" min="0" max="24" fieldname="saturday"/>
+            </column>
+            <column name="sunday" display="right" order="200">
+                <widget type="number" decimal="2" min="0" max="24" fieldname="sunday"/>
+            </column>
+        </group>
+    </columns>
+
+    <rows>
+        <row type="actions">
+            <button type="modal" label="add-working-hours" color="info" action="workinghours" icon="far fa-calendar-plus"/>
+        </row>
+    </rows>
+
+    <modals>
+        <group name="workinghours" title="create-from-orders" icon="far fa-calendar-plus">
+            <column name="startday" numcolumns="6" order="100">
+                <widget type="select" fieldname="_startdayweek" translate="true" required="true">
+                    <values title="monday">1</values>
+                    <values title="tuesday">2</values>
+                    <values title="wednesday">3</values>
+                    <values title="thursday">4</values>
+                    <values title="friday">5</values>
+                    <values title="saturday">6</values>
+                    <values title="sunday">7</values>
+                </widget>
+            </column>
+            <column name="endday" numcolumns="6" order="110">
+                <widget type="select" fieldname="_enddayweek" translate="true" required="true">
+                    <values title="monday">1</values>
+                    <values title="tuesday">2</values>
+                    <values title="wednesday">3</values>
+                    <values title="thursday">4</values>
+                    <values title="friday">5</values>
+                    <values title="saturday">6</values>
+                    <values title="sunday">7</values>
+                </widget>
+            </column>
+            <column name="starttime" numcolumns="6" order="120">
+                <widget type="time" fieldname="_starttime" required="true"/>
+            </column>
+            <column name="endtime" numcolumns="6" order="130">
+                <widget type="time" fieldname="_endtime" required="true"/>
+            </column>
+        </group>
+    </modals>
+</view>

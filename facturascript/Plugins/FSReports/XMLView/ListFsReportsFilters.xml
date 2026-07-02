@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ * Initial description for the controller ListFSReportsReports
+ *
+ * @author Raúl Jiménez <raljopa@gmail.com>
+-->
+
+<view>
+    <columns>
+        <column name="code" order="100" title="code" display="none" numcolumns="1">
+            <widget type="text" fieldname="id" readonly="true" />
+        </column>
+        <column name="report" order="110" title="report" numcolumns="2" >
+            <widget type="select" fieldname="idreport">
+                <values source="fsreports_reports" fieldcode="idreport" fieldtitle="report"></values>
+            </widget>
+        </column>
+        <column name="type" order="120" title="type" numcolumns="2">
+            <widget type="select" fieldname="type"  hint="" >
+                <values title="date">Fecha</values>
+                <values title="checkbox">Checkbox</values>
+                <values title="numeric">Número</values>
+            </widget>
+        </column>
+        <column name="operator" order="130" title="operator" numcolumns="3">
+            <widget type="select" fieldname="type"  hint="" >
+                <values title="GTE">Mayor o igual que</values>
+                <values title="LTE">Menor o igual que</values>
+                <values title="Igual">Igual</values>
+            </widget>
+        </column>
+        <column name="label" order="100" title="label"  numcolumns="1">
+            <widget type="text" fieldname="label"  />
+        </column>
+        <column name="default value" order="100" title="default"  numcolumns="1">
+            <widget type="text" fieldname="default"  />
+        </column>
+
+    </columns>
+    <filters>
+    </filters>
+</view>

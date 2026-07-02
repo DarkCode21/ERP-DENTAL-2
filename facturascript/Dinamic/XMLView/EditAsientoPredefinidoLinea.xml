@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="idasientopre" display="none" order="90">
+                <widget type="text" fieldname="idasientopre" readonly="true"/>
+            </column>
+            <column name="subaccount" numcolumns="2" order="100">
+                <widget type="text" fieldname="codsubcuenta" required="true"/>
+            </column>
+            <column name="description" order="120">
+                <widget type="text" fieldname="concepto" maxlength="255" required="true"/>
+            </column>
+            <column name="debit" numcolumns="2" order="130">
+                <widget type="text" fieldname="debe"/>
+            </column>
+            <column name="credit" numcolumns="2" order="140">
+                <widget type="text" fieldname="haber"/>
+            </column>
+            <column name="counterpart" numcolumns="2" order="150">
+                <widget type="text" fieldname="codcontrapartida"/>
+            </column>
+            <column name="sort" numcolumns="1" order="160">
+                <widget type="number" decimal="0" min="0" max="999" step="5" fieldname="orden"/>
+            </column>
+        </group>
+    </columns>
+</view>

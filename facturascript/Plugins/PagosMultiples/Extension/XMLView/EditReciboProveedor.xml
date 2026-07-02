@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples  Copyright (C) 2018-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditReciboProveedor.xml
+    Author     : Jose Antonio Cuello <yopli2000@gmail.com>
+    Description:
+        Add to columns to basic edit of supplier receipt view.
+-->
+<view>
+    <columns>
+        <group name="payment" numcolumns="12">
+            <column name="multiple-payment" order="145">
+                <widget type="text" fieldname="idmultiple" readonly="true" onclick="EditSupplierReceiptGroup"/>
+            </column>
+        </group>
+    </columns>
+</view>

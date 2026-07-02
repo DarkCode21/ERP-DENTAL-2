@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : crm_oportunidades.xml
+    Description:
+        Estructura de la tabla crm_oportunidades.
+-->
+<table>
+    <column>
+        <name>codagente</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>coddivisa</name>
+        <type>character varying(3)</type>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>editable</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fechamod</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>fecha_cierre</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>hora</name>
+        <type>time without time zone</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idcontacto</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idestado</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idfuente</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idinteres</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idpresupuesto</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>neto</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>netoeuros</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>rechazado</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>tasaconv</name>
+        <type>double precision</type>
+    </column>
+    <constraint>
+        <name>crm_oportunidades_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_crm_oportunidades_crm_contactos2</name>
+        <type>FOREIGN KEY (idcontacto) REFERENCES contactos (idcontacto) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_crm_oportunidades_estados</name>
+        <type>FOREIGN KEY (idestado) REFERENCES crm_oportunidades_estados (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_crm_oportunidades_crm_intereses</name>
+        <type>FOREIGN KEY (idinteres) REFERENCES crm_intereses (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_crm_oportunidades_presupuestoscli</name>
+        <type>FOREIGN KEY (idpresupuesto) REFERENCES presupuestoscli (idpresupuesto) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

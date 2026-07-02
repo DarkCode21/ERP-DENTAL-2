@@ -1,0 +1,283 @@
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block body %}
+{% if fsc.facturas is defined and fsc.facturas|length == 0 and fsc.request.request.get('action') == 'process' %}
+    <div class="container py-4">
+        <div class="card shadow">
+            <div class="card-header bg-warning">
+                <h3 class="text-center m-0">
+                    <i class="fas fa-exclamation-triangle fa-fw"></i> 
+                    {{ i18n.trans('no-invoices-found') }}
+                </h3>
+            </div>
+            <div class="card-body text-center">
+                <p class="lead">{{ i18n.trans('no-invoices-period') }}</p>
+                <p class="text-muted">{{ i18n.trans('try-different-period') }}</p>
+                <a href="ExportInvoicesZIP" class="btn btn-primary mt-3">
+                    <i class="fas fa-search fa-fw"></i> 
+                    {{ i18n.trans('back-to-search') }}
+                </a>
+            </div>
+        </div>
+    </div>
+{% elseif fsc.facturas|length > 0 %}
+    <div class="container py-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="text-center m-0">
+                    <i class="fas fa-cogs fa-spin me-2"></i>
+                    {{ i18n.trans('compressing') }}
+                </h3>
+            </div>
+            <div class="card-body">
+                <!-- Estado actual -->
+                <div id="currentStatus" class="text-center mb-4">
+                    <h5 class="text-primary">
+                        <i class="fas fa-file-pdf me-2"></i>
+                        {{ i18n.trans('processing-documents') }}
+                    </h5>
+                </div>
+
+                <!-- Información detallada -->
+                <div class="row mb-4">
+                    <div class="col-md-4 text-center">
+                        <div class="card bg-light h-100">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">{{ i18n.trans('total-invoices') }}</h6>
+                                <h4 class="mb-0">{{ fsc.facturas|length }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="card bg-light h-100">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">{{ i18n.trans('processed') }}</h6>
+                                <h4 id="processedCount" class="mb-0">0</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="card bg-light h-100">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">{{ i18n.trans('remaining-time') }}</h6>
+                                <h4 id="estimatedTime" class="mb-0">--:--</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barra de progreso -->
+                <div class="progress" style="height: 25px;">
+                    <div id="progressBar" 
+                         class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                         role="progressbar" 
+                         style="width: 0%"
+                         aria-valuenow="0" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">0%</div>
+                </div>
+
+                <!-- Mensaje de espera -->
+                <div class="text-center mt-4">
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {{ i18n.trans('please-wait') }}
+                    </p>
+                    <small id="downloadStatus" class="text-muted d-none">
+                        {{ i18n.trans('preparing-download') }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script>
+        function formatTime(seconds) {
+            if (isNaN(seconds) || !isFinite(seconds)) return '--:--';
+            
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            
+            if (minutes > 99) return '99:99';
+            
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        var urlDescargar = new URL(window.location.href);
+        var urls = [];
+        var zip = new JSZip();
+        let procesados = 0;
+        const startTime = Date.now();
+        
+        {% for factura in fsc.facturas %}
+            urls.push({
+                url: 'EditFacturaCliente?code={{ factura.idfactura }}&action=export&option=PDF',
+                nombreArchivo: '{{ factura.codigo }}.pdf',
+                tipo: '{{ factura.modelClassName == "FacturaCliente" ? "ventas" : "compras" }}'
+            });
+        {% endfor %}
+
+        const totalArchivos = urls.length;
+
+        function actualizarInterfaz() {
+            procesados++;
+            
+            // Actualizar contador y progreso
+            const porcentaje = Math.round((procesados / totalArchivos) * 100);
+            progressBar.style.width = porcentaje + '%';
+            progressBar.textContent = porcentaje + '%';
+            processedCount.textContent = procesados;
+
+            // Actualizar tiempo estimado
+            if (procesados > 0) {
+                const tiempoTranscurrido = (Date.now() - startTime) / 1000;
+                const tiempoPorArchivo = tiempoTranscurrido / procesados;
+                const archivosRestantes = totalArchivos - procesados;
+                const tiempoRestante = tiempoPorArchivo * archivosRestantes;
+                estimatedTime.textContent = formatTime(tiempoRestante);
+            }
+
+            // Actualizar estado actual
+            document.getElementById('currentStatus').innerHTML = `
+                <h5 class="text-primary">
+                    <i class="fas fa-file-pdf me-2"></i>
+                    Procesando archivos (${procesados}/${totalArchivos})
+                </h5>
+            `;
+        }
+
+        function procesarArchivos(index) {
+            if (index >= urls.length) {
+                const tiempoTotal = (Date.now() - startTime) / 1000;
+                estimatedTime.textContent = 'Completado en ' + formatTime(tiempoTotal);
+                
+                return zip.generateAsync({ type: "blob" })
+                    .then(content => {
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(content);
+                        
+                        var nombreZip = '{{ fsc.request.request.get('year') }}_{{ fsc.request.request.get('quarter') }}T';
+                        if ('{{ fsc.request.request.get('invoiceType') }}' === 'all') {
+                            nombreZip += '_Compras_Ventas';
+                        } else if ('{{ fsc.request.request.get('invoiceType') }}' === 'sales') {
+                            nombreZip += '_Ventas';
+                        } else {
+                            nombreZip += '_Compras';
+                        }
+                        nombreZip += '.zip';
+                        
+                        link.setAttribute('download', nombreZip);
+                        link.addEventListener('click', function() {
+                            history.back();
+                        });
+
+                        document.body.appendChild(link);
+                        link.click();
+                    })
+                    .catch(error => {
+                        console.error('Error al generar el ZIP:', error);
+                    });
+            }
+
+            const urlData = urls[index];
+            return fetch(urlData.url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la descarga: ' + response.status);
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    if ('{{ fsc.request.request.get('invoiceType') }}' === 'all') {
+                        const carpeta = urlData.tipo === 'ventas' ? 'Ventas' : 'Compras';
+                        zip.folder(carpeta).file(urlData.nombreArchivo, blob);
+                    } else {
+                        zip.file(urlData.nombreArchivo, blob);
+                    }
+                    
+                    actualizarInterfaz();
+                    return procesarArchivos(index + 1);
+                })
+                .catch(error => {
+                    console.error('Error procesando archivo:', urlData.nombreArchivo, error);
+                    return procesarArchivos(index + 1); // Continuar con el siguiente archivo
+                });
+        }
+
+        // Iniciar el proceso
+        procesarArchivos(0);
+    </script>
+{% else %}
+    <div class="container">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2>
+                    <i class="fas fa-file-archive fa-fw"></i> 
+                    {{ i18n.trans('export-invoices') }}
+                </h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" name="action" value="process">
+                    <input type="hidden" name="multireqtoken" value="{{ fsc.multiRequestProtection.newToken() }}"/>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="year">{{ i18n.trans('year') }}</label>
+                                <select name="year" class="form-control" required>
+                                    {% for year in range("now"|date("Y"), "now"|date("Y")-5, -1) %}
+                                        <option value="{{ year }}" {% if year == "now"|date("Y") %}selected{% endif %}>
+                                            {{ year }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="quarter">{{ i18n.trans('quarter') }}</label>
+                                <select name="quarter" class="form-control" required>
+                                    <option value="1">1T (Enero - Marzo)</option>
+                                    <option value="2">2T (Abril - Junio)</option>
+                                    <option value="3">3T (Julio - Septiembre)</option>
+                                    <option value="4">4T (Octubre - Diciembre)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="invoiceType">{{ i18n.trans('invoice-type') }}</label>
+                                <select name="invoiceType" class="form-control" required>
+                                    <option value="all">{{ i18n.trans('all-invoices') }}</option>
+                                    <option value="sales">{{ i18n.trans('sales-invoices') }}</option>
+                                    <option value="purchases">{{ i18n.trans('purchase-invoices') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        {# <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="exportType">{{ i18n.trans('export-type') }}</label>
+                                <select name="exportType" id="exportType" class="form-control" required>
+                                    <option value="individual">{{ i18n.trans('individual-pdfs') }}</option>
+                                    <option value="merged">{{ i18n.trans('merged-pdf') }}</option>
+                                </select>
+                            </div>
+                        </div> #}
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-download fa-fw"></i> 
+                                {{ i18n.trans('start-export') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

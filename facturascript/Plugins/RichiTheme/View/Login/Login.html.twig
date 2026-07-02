@@ -1,0 +1,67 @@
+{% extends '@Core/Login/Login.html.twig' %}
+
+{% block css %}
+    {{ parent() }}
+
+        <style>
+            body {
+                background-color: {{ settings('richitheme', 'lbgcolor', '#333A40') }};
+            }
+
+            {% if settings('richitheme', 'lfoodis', true) %}
+                div.card-footer {
+                    display: none !important;
+                }
+            {% endif %}
+
+            {% if settings('richitheme', 'lrpdis', true) %}
+                a[data-target="#newPasswordModal"] {
+                    display: none !important;
+                }
+            {% endif %}
+
+            form.form .card {
+                background-color: {{ settings('richitheme', 'fbgcolor', '#FFFFFF') }}
+            }
+
+            .container .card {
+              margin-top: 75px !important;
+            }
+
+            .btn-primary {
+                --bs-btn-color: #fff;
+                --bs-btn-bg: {{ settings('richitheme', 'lbtncolor', '#2770ca') }};
+                --bs-btn-border-color: {{ settings('richitheme', 'lbtncolor', '#2770ca') }};
+                --bs-btn-hover-color: #fff;
+                --bs-btn-hover-bg: #0b5ed7;
+                --bs-btn-hover-border-color: #0a58ca;
+                --bs-btn-focus-shadow-rgb: 49, 132, 253;
+                --bs-btn-active-color: #fff;
+                --bs-btn-active-bg: #0a58ca;
+                --bs-btn-active-border-color: #0a53be;
+                --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+                --bs-btn-disabled-color: #fff;
+                --bs-btn-disabled-bg: {{ settings('richitheme', 'lbtncolor', '#2770ca') }};
+                --bs-btn-disabled-border-color: #2770ca;
+            }
+
+            .btn-primary:hover {
+                background-color: {{ settings('richitheme', 'lbtncolor', '#2770ca') }};
+                border-color: {{ settings('richitheme', 'lbtncolor', '#2770ca') }};
+                box-shadow: inset 0 0 0 100px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active, .btn:focus-visible {
+                background-color: {{ settings('richitheme', 'lbtncolor', '#2770ca') }};
+                border-color: {{ settings('richitheme', 'lbtncolor', '#2770ca') }};
+                box-shadow: inset 0 0 0 100px rgba(0, 0, 0, 0.2);
+            }
+
+            @media (min-width: 1400px) {
+                .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+                    max-width: 1120px;
+                }
+            }
+        </style>
+
+{% endblock %}

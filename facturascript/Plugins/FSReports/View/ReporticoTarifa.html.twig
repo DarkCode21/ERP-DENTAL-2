@@ -1,0 +1,19 @@
+{# empty Twig template #}
+<?php
+require 'D:\xampp\htdocs\reportico\vendor\autoload.php';
+$reportico_home = 'D:\\xampp\htdocs\\reportico\\';
+$reportico_url_home = 'http://localhost/reportico';
+$q = new Reportico\Engine\Reportico();
+
+$q->reportico_ajax_script_url = $reportico_url_home . '/run.php';
+$q->url_path_to_assets = $reportico_url_home . 'assets';
+$q->urt_path_to_templates = $reportico_url_home . '/themes';
+
+$q->setTheme('default');
+$q->access_mode = "ONEREPORT";
+$q->initial_execute_mode = "EXECUTE";
+$q->initial_project = "Facturascripts";
+$q->initial_reports = "tarifa";
+$q->initial_output_format = "HTML";
+$q->execute();
+?>

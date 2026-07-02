@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" valign="bottom">
+            <column name="group-lines" order="145">
+                <widget type="checkbox" fieldname="group_lines"/>
+            </column>
+        </group>
+    </columns>
+</view>

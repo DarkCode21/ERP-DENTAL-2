@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<table>
+    <column>
+        <name>pc_price_max</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>pc_price_min</name>
+        <type>double precision</type>
+    </column>
+</table>

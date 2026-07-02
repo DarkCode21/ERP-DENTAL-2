@@ -1,0 +1,11 @@
+{
+    "accounting-prepaid": "Vorabzahlung %code%",
+    "accounting-prepaid-customer-delivery-note": "Vorabzahlung Lieferschein %code%",
+    "accounting-prepaid-customer-estimation": "Vorabzahlung Kundenbudget %code%",
+    "accounting-prepaid-customer-order": "Vorabzahlung für Kundenauftrag %code%",
+    "amount-greater-zero": "Der Betrag muss größer als null sein.",
+    "document-company-different-from-payment-method-company": "Die Gesellschaft des Dokuments unterscheidet sich von der des Zahlungsmittels.",
+    "document-not-found": "Dokument nicht gefunden",
+    "no-editable": "Nicht bearbeitbar",
+    "only-one-document-allowed": "Es ist nur ein Dokument erlaubt"
+}

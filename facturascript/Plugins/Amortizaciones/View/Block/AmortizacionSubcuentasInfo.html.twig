@@ -1,0 +1,54 @@
+{#
+/**
+ * This file is part of Amortizaciones plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Amortizaciones Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ */
+#}
+<div class="col-12 text-secondary" style="font-size: smaller">
+    <div class="row text-info">
+        <div class="col-12 mb-3">
+            <h5>{{ i18n.trans('subaccount-help-title') }}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav-tabs nav-fill" role="tablist">
+                {% for grouptype, grouptypedesc in fsc.infoView.getSubAccountGroupType() %}
+                <li class="nav-item">
+                  <a class="h6 nav-link{% if loop.first %} active{% endif %}" href="#{{ 'div_grouptype_' ~ grouptype }}" data-toggle="tab">
+                    {{ grouptypedesc }}
+                  </a>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for grouptype, grouptypedesc in fsc.infoView.getSubAccountGroupType() %}
+                <div class="table-responsive tab-pane{% if loop.first %} active{% endif %}" id="{{ 'div_grouptype_' ~ grouptype }}" role="tabpanel">
+                    <table class="table table-sm table-hover mt-3">
+                        <thead>
+                            <tr>
+                            {% for group, groupdesc in fsc.infoView.getSubAccountGroup() %}
+                                <th colspan="2">{{ groupdesc }}</th>
+                            {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in fsc.infoView.getSubAccountDescription(grouptype) %}
+                            <tr>
+                                {% for group, groupdesc in fsc.infoView.getSubAccountGroup() %}
+                                <td>{{ data[group][0] }}</td>
+                                <td>{{ data[group][1] }}</td>
+                                {% endfor %}
+                             </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

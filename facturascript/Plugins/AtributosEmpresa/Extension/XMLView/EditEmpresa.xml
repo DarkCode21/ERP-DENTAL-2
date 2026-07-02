@@ -1,0 +1,9 @@
+<view>
+   <columns>
+        <group name="data" numcolumns="12">
+            <column name="title-software" order="150">
+                <widget type="text" fieldname="nombrecrm"  />
+            </column>
+        </group>
+    </columns>
+</view>

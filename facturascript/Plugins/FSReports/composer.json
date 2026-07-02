@@ -1,0 +1,13 @@
+{
+    "name": "vendor/fsreports",
+    "description": "Description of project fsreports.",
+    "authors": [
+        {
+            "name": "Raúl",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+        "mpdf/mpdf": "dev-master"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "name": "facturascripts/plantillas-p-d-f",
+    "description": "Description of project PlantillasPDF.",
+    "homepage": "https://facturascripts.com/plugins/plantillaspdf",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Carlos García Gómez",
+            "email": "carlos@facturascripts.com"
+        }
+    ],
+    "config": {
+        "platform": {
+            "php": "7.3"
+        }
+    },
+    "require": {
+        "mpdf/mpdf": "v8.*",
+        "mpdf/qrcode": "^1.2",
+        "myclabs/deep-copy": "^1.11",
+        "ext-gd": "*"
+    }
+}

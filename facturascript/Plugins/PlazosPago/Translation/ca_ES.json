@@ -1,0 +1,5 @@
+{
+    "cannot-mark-payment-as-paid-if-terms": "No pots marcar la forma de pagament com pagada si hi ha termini de pagament",
+    "payment-term": "Termini de pagament",
+    "terms-exceed-100p": "Els terminis excedeixen el 100%"
+}

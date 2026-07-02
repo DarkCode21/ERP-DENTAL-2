@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This file is part of AgruparProducto plugin for FacturaScripts.
+ * FacturaScripts  Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * AgruparProducto Copyright (C) 2022-2022 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * Initial description for Edit Product Grouping Line
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12" valign="bottom">
+            <column name="code" display="none" order="10">
+                <widget type="text" fieldname="id" icon="fas fa-hashtag" readonly="true" />
+            </column>
+            <column name="product" display="none" order="10">
+                <widget type="text" fieldname="idproduct" icon="fas fa-hashtag" readonly="true" />
+            </column>
+            <column name="product-group" titleurl="ListProducto?activetab=ListProductGrouping" order="100">
+                <widget type="select" fieldname="idgroup" required="true">
+                    <values source="agruparproducto_group" fieldcode="id" fieldtitle="name"></values>
+                </widget>
+            </column>
+            <column name="quantity" numcolumns="2" order="110">
+                <widget type="number" step="1" min="1" fieldname="quantity" required="true" />
+            </column>
+            <column name="discount" numcolumns="2" order="120">
+                <widget type="number" decimal="2" step="1" min="0" max="100" fieldname="discount" />
+            </column>
+            <column name="barcode" order="130">
+                <widget type="text" fieldname="barcode" icon="fas fa-barcode" />
+            </column>
+            <column name="default" numcolumns="2" order="140">
+                <widget type="checkbox" fieldname="bydefault" />
+            </column>
+        </group>
+    </columns>
+</view>

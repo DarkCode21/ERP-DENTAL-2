@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idpaciente</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idespecialista</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idgabinete</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idtratamiento</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>hora_inicio</name>
+        <type>time</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>hora_fin</name>
+        <type>time</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>duracion</name>
+        <type>integer</type>
+        <default>30</default>
+    </column>
+    <column>
+        <name>motivo</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>character varying(20)</type>
+        <default>'pendiente'</default>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>recordatorio_enviado</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>confirmada_paciente</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>created_by</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>created_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <column>
+        <name>updated_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <constraint>
+        <name>dental_citas_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_citas_fk_paciente</name>
+        <type>FOREIGN KEY (idpaciente) REFERENCES dental_pacientes(id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_citas_fk_especialista</name>
+        <type>FOREIGN KEY (idespecialista) REFERENCES dental_especialistas(id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_citas_fk_gabinete</name>
+        <type>FOREIGN KEY (idgabinete) REFERENCES dental_gabinetes(id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_citas_fk_tratamiento</name>
+        <type>FOREIGN KEY (idtratamiento) REFERENCES dental_tratamientos_paciente(id) ON DELETE SET NULL</type>
+    </constraint>
+</table>

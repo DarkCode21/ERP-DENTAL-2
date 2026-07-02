@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2022-2024 Carlos García Gómez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="idlote" readonly="true"/>
+            </column>
+            <column name="product" order="110">
+                <widget type="select" fieldname="idproducto" readonly="true" onclick="EditProducto">
+                    <values source="productos" fieldcode="idproducto" fieldtitle="referencia"/>
+                </widget>
+            </column>
+            <column name="reference" title="variant" order="120">
+                <widget type="text" fieldname="referencia" readonly="true"/>
+            </column>
+            <column name="warehouse" order="130">
+                <widget type="select" fieldname="codalmacen" readonly="true">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="batch-serial-number" order="140">
+                <widget type="text" fieldname="numserie" readonly="true"/>
+            </column>
+            <column name="quantity" order="150">
+                <widget type="number" fieldname="cantidad" readonly="true"/>
+            </column>
+            <column name="date" order="160">
+                <widget type="date" fieldname="fecha" readonly="true"/>
+            </column>
+            <column name="expiration-date" order="170">
+                <widget type="date" fieldname="fecha_caducidad"/>
+            </column>
+        </group>
+    </columns>
+</view>

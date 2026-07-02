@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : rrhh_coursestrainings.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Structure for the training course table.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idarea</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idcost</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idmethod</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idobjective</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>name</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>note</name>
+        <type>text</type>
+    </column>
+    <constraint>
+        <name>rrhh_coursestrainings_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_coursestrainings_areas</name>
+        <type>FOREIGN KEY (idarea) REFERENCES rrhh_coursesareas (id) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_coursestrainings_costs</name>
+        <type>FOREIGN KEY (idcost) REFERENCES rrhh_coursescosts (id) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_coursestrainings_methods</name>
+        <type>FOREIGN KEY (idmethod) REFERENCES rrhh_coursesmethods (id) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_coursestrainings_objectives</name>
+        <type>FOREIGN KEY (idobjective) REFERENCES rrhh_coursesobjectives (id) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

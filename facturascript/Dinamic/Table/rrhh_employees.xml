@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : rrhh_employees.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Structure for the employees table.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idcompany</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idcontact</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>iddepartment</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+
+    <!-- Fields not translated for compatibility with the FS Core -->
+    <column>
+        <name>cifnif</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>email</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>fechaalta</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>telefono1</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>telefono2</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>tipoidfiscal</name>
+        <type>character varying(25)</type>
+    </column>
+    <!-- End fields -->
+
+    <!-- human resource data -->
+    <column>
+        <name>bankaccountid</name>
+        <type>character varying(24)</type>
+    </column>
+    <column>
+        <name>credentialid</name>
+        <type>character varying(13)</type>
+    </column>
+    <column>
+        <name>dischargedate</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>dischargereason</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>insuranceid</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+
+    <!-- Personal Data -->
+    <column>
+        <name>birthday</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>gender</name>
+        <type>integer</type>
+        <default>1</default>                     <!-- 1: man, 2: woman, 3: other -->
+    </column>
+    <column>
+        <name>marital</name>
+        <type>integer</type>
+        <default>1</default>                     <!-- 1: single, 2: married, 3: widower, 4: divorced -->
+    </column>
+
+    <!-- Constraints -->
+    <constraint>
+        <name>rrhh_employees_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_employees_departments</name>
+        <type>FOREIGN KEY (iddepartment) REFERENCES rrhh_departments (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_employees_empresas</name>
+        <type>FOREIGN KEY (idcompany) REFERENCES empresas (idempresa) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_employees_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

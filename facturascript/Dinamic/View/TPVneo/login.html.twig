@@ -1,0 +1,1817 @@
+{#
+* Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+* Author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/MenuBgTemplate.html.twig" %}
+{% import 'Macro/Forms.html.twig' as forms %}
+
+{% block body %}
+    {{ parent() }}
+    <style>
+        /* Ocultar flechas en inputs number para Chrome, Safari, Edge */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Ocultar flechas en inputs number para Firefox */
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        /* Opcional: Estilos específicos para los inputs de precio y descuento */
+        .precio::-webkit-outer-spin-button,
+        .precio::-webkit-inner-spin-button,
+        .descuento::-webkit-outer-spin-button,
+        .descuento::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .precio,
+        .descuento {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        /* CSS para productos responsive personalizado */
+        .product-card {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 7.5px;
+            margin-bottom: 15px;
+        }
+
+        /* Hacer que todas las tarjetas tengan la misma altura */
+        .product-card .card {
+            height: 200px !important; /* Altura fija para todas las tarjetas */
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        /* Móviles pequeños */
+        @media (min-width: 576px) {
+            .product-card {
+                flex: 0 0 33.333333%;
+                max-width: 33.333333%;
+            }
+        }
+
+        /* Tablets */
+        @media (min-width: 768px) {
+            .product-card {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+        }
+
+        /* Laptops medianas (1024px-1399px) - 5 productos */
+        @media (min-width: 1024px) and (max-width: 1399px) {
+            .product-card {
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+        }
+
+        /* Pantallas grandes (1400px+) - 5 productos */
+        @media (min-width: 1400px) {
+            .product-card {
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+        }
+
+        #linesCart {
+            max-height: calc(100vh - 400px); /* Ajusta según el espacio que necesites para los botones */
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        /* Asegurar que el carrito no se expanda más allá del contenedor */
+        .col-lg-5, .col-xl-5 {
+            display: flex;
+            flex-direction: column;
+            max-height: 100vh;
+        }
+        
+        /* Hacer que los botones del carrito siempre sean visibles - SOLO para el formulario saleForm */
+        form[name="saleForm"] + .card-footer,
+        #saleForm .card-footer,
+        .carrito-container .card-footer {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+            border-top: 1px solid #dee2e6;
+            padding: 15px 0;
+        }
+        
+        /* Mejorar el scroll en dispositivos móviles */
+        #linesCart::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #linesCart::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        #linesCart::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        
+        #linesCart::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        @media (min-width: 1441px) {
+            .col-xl-5 {
+                flex: 0 0 33.333333% !important;
+                max-width: 33.333333% !important;
+            }
+        }
+        
+        /* Ajustar también la columna de productos para compensar */
+        @media (min-width: 1441px) {
+            .col-xl-7 {
+                flex: 0 0 66.666667% !important;
+                max-width: 66.666667% !important;
+            }
+        }
+
+        /* Columnas personalizadas: productos ~55%, carrito ~45% */
+        @media (min-width: 992px) {
+            .col-productos {
+                flex: 0 0 55% !important;
+                max-width: 55% !important;
+            }
+            .col-carrito {
+                flex: 0 0 45% !important;
+                max-width: 45% !important;
+            }
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="form-row">
+            <div class="col-lg-6 col-xl-6 col-productos">
+                {# <div id="titletpv" class="col-12 text-center mb-3">
+                    <h3 class="mb-0">
+                        {{ fsc.agente.nombre }}
+                        {% if fsc.tpvAgents %}
+                            <form action="{{ fsc.url() }}" method="post">
+                                <input type="hidden" name="idtpv" value="{{ fsc.tpv.idtpv }}">
+                                <button type="submit" name="action" value="agent-out"
+                                        class="btn btn-outline-secondary ml-1">
+                                    <i class="fas fa-users fa-fw"></i> {{ i18n.trans('change-agent') }}
+                                </button>
+                            </form>
+                        {% endif %}
+                    </h3>
+                    <small class="text-secondary">{{ i18n.trans('pos-terminal') }}: {{ fsc.tpv.name }}</small>
+                </div> #}
+                <div class="form-row">
+                    <div class="col-sm">
+                        <form method="post" name="barcodeForm" onsubmit="return verifyBarcode()">
+                            <input type="hidden" name="action" value="add-barcode">
+                            <input type="hidden" name="codalmacen"
+                                   value="{{ fsc.tpv.codalmacen }}">
+                            <input type="hidden" name="multireqtoken"
+                                   value="{{ fsc.multiRequestProtection.newToken(fsc.user.logkey) }}"/>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-barcode"></i></span>
+                                </div>
+                                <input type="text" name="barcode" class="form-control form-control-lg"
+                                       placeholder="{{ i18n.trans('barcode') }}" autofocus>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm">
+                        <form method="post" name="productsForm" onsubmit="return searchProducts()">
+                            <input type="hidden" name="action" value="find-products">
+                            <input type="hidden" name="productlimit"
+                                   value="{{ fsc.tpv.productlimit }}">
+                            <input type="hidden" name="codalmacen"
+                                   value="{{ fsc.tpv.codalmacen }}">
+                            <input type="hidden" name="codfamilia" value="-1">
+                            <input type="hidden" name="multireqtoken"
+                                   value="{{ fsc.multiRequestProtection.newToken(fsc.user.logkey) }}"/>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                                <input type="text" name="query" class="form-control form-control-lg"
+                                       placeholder="{{ i18n.trans('search') }}">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-row" id="productList">
+                            {{ fsc.renderProductList(fsc.tpv.codalmacen) | raw }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-xl-6 col-carrito">
+                <div id="cart" class="card border-secondary shadow-sm">
+                    <div class="card-header bg-secondary">
+                        <div class="input-group input-group-lg">
+                            <div class="input-group-prepend">
+                                <div class="btn-group dropdown">
+                                    <button class="btn btn-light dropdown-toggle h-100" type="button" id="dropdownMenuButton"
+                                            data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-cash-register"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                                        <form action="{{ fsc.url() }}" method="post">
+                                            <input type="hidden" name="idtpv" value="">
+                                            <input type="hidden" name="idcaja" value="">
+                                            <input type="hidden" name="action" value="">
+                                            <button type="submit" class="dropdown-item p-3" id="btnChangeTerminal">
+                                                <i class="fas fa-exchange-alt fa-fw"></i> {{ i18n.trans('pos-terminals') }}
+                                            </button>
+                                        </form>
+                                        <div class="dropdown-divider"></div>
+                                        {% if fsc.tpv.idprinter %}
+                                            <button type="button" class="dropdown-item p-3" onclick="return openDrawer()">
+                                                <i class="fas fa-inbox fa-fw"></i> {{ i18n.trans('open-drawer') }}
+                                            </button>
+                                        {% endif %}
+                                        <form action="{{ fsc.url() }}" method="post">
+                                            <input type="hidden" name="idtpv" value="{{ fsc.tpv.idtpv }}">
+                                            <input type="hidden" name="idcaja" value="{{ fsc.caja.idcaja }}">
+                                            <button type="submit" name="action" value="close-box-start" class="dropdown-item p-3 text-danger">
+                                                <i class="fas fa-times fa-fw"></i> {{ i18n.trans('close-box') }}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="text" name="query" class="form-control" id="customertpv"
+                                   placeholder="{{ fsc.getNameClient() }}"/>
+                            <div class="input-group-append">
+                                <button class="btn btn-success btn-spin-action" type="button"
+                                        onclick="return modalAddCustomer()" title="{{ i18n.trans('new-customer') }}">
+                                    <i class="fas fa-user-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="saleDiv" class="card-body p-0 overflow-auto">
+                        {{ fsc.renderSaleForm() | raw }}
+                    </div>
+                    {% if fsc.tpv.addemptyline %}
+                        <div class="px-3 py-2">
+                            <button class="btn btn-block btn-outline-success" onclick="newLine()">
+                                <i class="fas fa-plus mr-2"></i>
+                                {{ i18n.trans('line') }}
+                            </button>
+                        </div>
+                    {% endif %}
+                    <div class="card-footer bg-secondary">
+                        <div id="btnSaleFooter" class="form-row mb-2">
+                            <div class="col">
+                                <button type="button" onclick="return collectMoney()" class="btn btn-block btn-success btn-lg btn-spin-action">
+                                    {{ i18n.trans('collect-money') }}
+                                    <span id="saleAmount">{{ fsc.getAmount() }}</span>
+                                </button>
+                            </div>
+                            <div class="col-auto">
+                                <button onclick="return clearCart()"
+                                        class="btn btn-block btn-danger btn-lg btn-spin-action">
+                                    {{ i18n.trans('delete') }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-8">
+                                <div class="btn-group btn-block" role="group">
+                                    <button onclick="return modalPark()" class="btn btn-warning btn-lg btn-spin-action">
+                                        {{ i18n.trans('park-ticket') }}
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning btn-lg btn-spin-action text-nowrap" id="btnPark" onclick="return modalListPark()">
+                                        {{ i18n.trans('parked-tickets') }}
+                                        <span class="badge badge-warning">{{ fsc.getParkCount() }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" onclick="return modalTickets()" class="btn btn-block btn-primary btn-lg  btn-spin-action">
+                                    {{ i18n.trans('tickets') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="floatCart" class="btn rounded-0 d-xl-none w-100 p-2 bg-success text-white text-center">
+        <i class="fas fa-shopping-cart fa-fw"></i> {{ i18n.trans('view-cart') }}
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="modalAddCustomer">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i18n.trans('new-customer')|capitalize }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>{{ i18n.trans('business-name') }}</label>
+                        <input type="text" class="form-control" name="razonsocial" maxlength="100">
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('type') }}</label>
+                                <select name="personafisica" class="form-control">
+                                    <option value="1">{{ i18n.trans('is-person') }}</option>
+                                    <option value="0">{{ i18n.trans('company') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('fiscal-id') }}</label>
+                                {{ forms.simpleSelect('customer-fiscal', 'tipoidfiscal', appSettings.get('default', 'tipoidfiscal', 'NIF'),
+                                    fsc.getSelectValues('idsfiscales', 'tipoidfiscal', 'tipoidfiscal', false)) }}
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('fiscal-number') }}</label>
+                                <input type="text" class="form-control" name="cifnif" maxlength="30">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ i18n.trans('address') }}</label>
+                        <input type="text" class="form-control" name="address" maxlength="100">
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('post-office-box') }}</label>
+                                <input type="text" class="form-control" name="apartado" maxlength="10">
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('zip-code') }}</label>
+                                <input type="text" class="form-control" name="codpostal" maxlength="10">
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('city') }}</label>
+                                <input type="text" class="form-control" name="ciudad" maxlength="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('province') }}</label>
+                                <input type="text" class="form-control" name="provincia" maxlength="100">
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('country') }}</label>
+                                {{ forms.simpleSelect('customer-country', 'codpais', '',
+                                    fsc.getSelectValues('paises', 'codpais', 'nombre', false)) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('phone') }}</label>
+                                <input type="text" class="form-control" name="telefono1" maxlength="30">
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label>{{ i18n.trans('email') }}</label>
+                                <input type="text" class="form-control" name="email" maxlength="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-lg"
+                            data-dismiss="modal">{{ i18n.trans('cancel') }}</button>
+                    <button type="button" class="btn btn-success btn-lg btn-spin-action"
+                            onclick="return saveAddCustomer()">{{ i18n.trans('save') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="modalReturn">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i18n.trans('returns') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="productsReturn"></div>
+                <div id="optsReturn" class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-md-6 text-center">
+                            <div>
+                                <label>{{ i18n.trans('total-return') }}</label>
+                            </div>
+                            <div class="h1" id="totalReturn">
+                                <span class="money"></span>
+                                <span class="symbol ml-1">{{ fsc.getDivisa().simbolo }}</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 text-center">
+                            <div>
+                                <label>{{ i18n.trans('method-return') }}</label>
+                            </div>
+                            <div class="h1" id="methodReturn"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-lg"
+                            data-dismiss="modal">{{ i18n.trans('cancel') }}</button>
+                    <button type="button" class="btn btn-success btn-lg btn-spin-action"
+                            onclick="return saveReturn()">{{ i18n.trans('return') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="modalTickets">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div id="iframe"></div>
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i18n.trans('tickets') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="row text-center">
+                        <div class="col col-sm-4">
+                            <div class="font-weight-bolder">{{ i18n.trans('start-money') }}</div>
+                            <div>{{ fsc.getFormatMoney(fsc.caja.dineroini) }}</div>
+                        </div>
+                        <div class="col col-sm-4">
+                            <div class="font-weight-bolder">{{ i18n.trans('income') }}</div>
+                            <div id="boxEstimated"></div>
+                        </div>
+                        <div class="col col-sm-4">
+                            <div class="font-weight-bolder">{{ i18n.trans('total-in-box') }}</div>
+                            <div id="boxTotal"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="form-group border-top">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control text-center" id="searchTicket"
+                                   placeholder="{{ i18n.trans('search-document', {'%doctype%': i18n.trans(fsc.tpv.doctype ~ '-min')|lower}) }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" id="listTickets">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                        <tr>
+                            <th class="text-nowrap">{{ i18n.trans('agent') }}</th>
+                            <th class="text-nowrap">{{ i18n.trans('code') }}</th>
+                            <th class="text-nowrap">{{ i18n.trans('number2') }}</th>
+                            <th class="text-nowrap">{{ i18n.trans('customer') }}</th>
+                            <th class="text-nowrap">{{ i18n.trans('payment-method') }}</th>
+                            <th class="text-nowrap">{{ i18n.trans('observations') }}</th>
+                            <th class="text-nowrap text-right">{{ i18n.trans('total') }}</th>
+                            <th class="text-nowrap text-right">{{ i18n.trans('date') }}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="modalPrintTicket">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id="iframe"></div>
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i18n.trans('options-ticket') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="optsPrint"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<!-- INI MOD ERICK -->
+	<div class="modal fade" tabindex="-1" id="modalPrintPreviewTicket">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div id="iframe"></div>
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i18n.trans('preview-ticket') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="optsPrint"></div>
+					
+					<div id="previewPDF" style="display:none;"></div>
+                </div>
+				<div class="modal-footer">
+					<div class="col-12">
+						<button type="button" onclick="imprimirTicket();" 
+							class="btn btn-block btn-primary">{{ i18n.trans('processing') }}</button>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+	<!-- FIN MOD ERICK -->
+
+    <!-- Modal preview ticket ESC/POS -->
+    <div class="modal fade" tabindex="-1" id="modalEscposPreview">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-receipt"></i> Vista previa ESC/POS (papel térmico)
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="background:#f0f0f0;padding:20px;">
+                    <div id="escposPreviewContainer" style="display:flex;justify-content:center;">
+                        <div id="escposPreviewContent" style="min-height:100px;text-align:center;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i> {{ i18n.trans('close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin modal preview ESC/POS -->
+
+    <div class="modal fade" tabindex="-1" id="modalColletMoney">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i18n.trans('collect-money') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <div>
+                                    <label>{{ i18n.trans('total') }}</label>
+                                </div>
+                                <div class="h1" id="moneyTotal"></div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <div>
+                                    <label>{{ i18n.trans('money-change') }}</label>
+                                </div>
+                                <div class="h1" style="color: red;">
+                                    <span id="moneyChange"></span>
+                                    <span id="symbolChange"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ i18n.trans('payment-methods') }}</label>
+                        <div id="paymentMethods">{{ fsc.getPaymentMethodsModalCollectMoneyHtml()|raw }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <textarea id="observations" class="form-control" placeholder="{{ i18n.trans('observations') }}"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-lg"
+                            data-dismiss="modal">{{ i18n.trans('cancel') }}</button>
+                    <button type="button" class="btn btn-success btn-lg btn-spin-action"
+                            onclick="return saveCart()">{{ i18n.trans('save') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="modalPark">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i18n.trans('park-ticket') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if fsc.prepagos %}
+                        <div class="form-group">
+                            <label>{{ i18n.trans('payment-method') }}</label>
+                            <div class="input-group my-group">
+                                <input type="number" min="0" id="amount" class="form-control" placeholder="0.00"/>
+                                <select id="payments" class="form-control">
+                                    {% for key, payment in fsc.getPaymentMethodsTpv() %}
+                                        {% set select = payment.codpago is same as(fsc.tpv.codpago) ? 'selected' : '' %}
+                                        <option value="{{ payment.codpago }}" {{ select }}>{{ payment.descripcion }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <textarea id="observations" class="form-control" placeholder="{{ i18n.trans('observations') }}"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-lg"
+                            data-dismiss="modal">{{ i18n.trans('cancel') }}</button>
+                    <button type="button" class="btn btn-warning btn-lg btn-spin-action"
+                            onclick="return savePark()">{{ i18n.trans('park-ticket') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="modalListPark">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ i18n.trans('cart-parking') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="table-responsive" id="listPark">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                        <tr>
+                            <th>{{ i18n.trans('code') }}</th>
+                            <th>{{ i18n.trans('customer') }}</th>
+                            <th class="text-right">{{ i18n.trans('total') }}</th>
+                            <th class="text-right">{{ i18n.trans('date') }}</th>
+                            <th>{{ i18n.trans('observations') }}</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deletePark">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ i18n.trans('close') }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-trash-alt fa-3x"></i>
+                    <h5 class="mt-3 mb-1">{{ i18n.trans('confirm-delete') }}</h5>
+                    <p class="mb-0">{{ i18n.trans('are-you-sure') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="return modalListPark()"
+                            data-dismiss="modal">{{ i18n.trans('cancel') }}</button>
+                    <button type="button" class="btnDelete btn btn-danger"
+                            onclick="">{{ i18n.trans('delete') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+    <style>
+        img.photo-modal, img.photo-cart {
+            max-width: 50px;
+            max-height: 50px;
+            width: 100%;
+            height: 100%;
+        }
+
+        img.photo-default {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            overflow: hidden;
+        }
+
+        #floatCart {
+            position: fixed;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        #btnPark {
+            position: relative;
+        }
+
+        .w-9 {
+            max-width: 9%;
+            width: 100%;
+        }
+
+        .text-orange, .text-orange:hover {
+            color: #ff9557;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        #productList .card {
+            /*height: 130px;*/
+        }
+
+        #productList .card .add-product {
+            height: 90%;
+        }
+
+        .ui-autocomplete {
+            z-index: 5000;
+        }
+
+        /* Animations Spinner */
+        .spinner-add,
+        .spinner-remove {
+            animation-fill-mode: both;
+            animation-duration: .4s;
+        }
+
+        .spinner-add {
+            animation-name: spinner-add;
+        }
+
+        @keyframes spinner-add {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .spinner-remove {
+            animation-name: spinner-remove;
+        }
+
+        @keyframes spinner-remove {
+            to {
+                transform: scale(0);
+            }
+        }
+
+        @media (min-width: 992px) {
+            #cart {
+                position: fixed;
+            }
+        }
+		@media (min-width: 1200px) {
+		  .modal-xl {
+			max-width: 1140px !important;
+		  }
+		}
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+    <script>
+        let codcliente = '';
+        let codpark = '';
+        let editLine = 0;
+        let idDocReturn = '';
+        let keyupInputName = null;
+        let totalCart = 0;
+        let totalReturn = 0;
+        let waitCounter = 0;
+
+		// INI MOD ERICK
+	    function verifyBarcode() {
+            document.forms['saleForm']['action'].value = 'verify-barcode';
+            document.forms['saleForm']['action-code'].value = document.forms['barcodeForm']['barcode'].value;
+            document.forms['barcodeForm']['barcode'].value = '';
+            let formData = new FormData(document.forms['saleForm']);
+            return sendForm(formData);
+        }
+		// FIN MOD ERICK
+		
+        function addBarcode() {
+            document.forms['saleForm']['action'].value = 'add-barcode';
+            document.forms['saleForm']['action-code'].value = document.forms['barcodeForm']['barcode'].value;
+            document.forms['barcodeForm']['barcode'].value = '';
+            let formData = new FormData(document.forms['saleForm']);
+            return sendForm(formData);
+        }
+
+		function addPeviewPrintAutomatic () {
+			{% if fsc.tpv.printdirect == 1 and fsc.tpv.ticketformat == 'Previsualizar Ticket' %}
+            	//console.log("Abrir automaticamente...")
+				$('#ticket-print').click();
+				$('#modalPrintTicket').modal('hide');
+			{% endif %}
+		}
+		
+		function addPrintAutomatic () {
+			{% if fsc.tpv.printdirect == 1 and fsc.tpv.ticketformat == 'Previsualizar Ticket' %}
+            	imprimirTicket();
+				$('#modalPrintPreviewTicket').modal('hide');
+			{% endif %}
+		}
+		
+		
+        function addProduct(ref) {
+            let encontrado = false;
+
+            {% if fsc.tpv.sound %}
+            let snd = new Audio("data:audio/wav;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIIIhxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQAVQ2ORaIQwEMAJiDg95G4nQL7mQVWI6GwRcfsZAcsKkJvxgxEjzFUgfHoSQ9Qq7KNwqHwuB13MA4a1q/DmBrHgPcmjiGoh//EwC5nGPEmS4RcfkVKOhJf+WOgoxJclFz3kgn//dBA+ya1GhurNn8zb//9NNutNuhz31f////9vt///z+IdAEAAAK4LQIAKobHItEIYCGAExBwe8jcToF9zIKrEdDYIuP2MgOWFSE34wYiR5iqQPj0JIeoVdlG4VD4XA67mAcNa1fhzA1jwHuTRxDUQ//iYBczjHiTJcIuPyKlHQkv/LHQUYkuSi57yQT//uggfZNajQ3Vmz+Zt//+mm3Wm3Q576v////+32///5/EOgAAADVghQAAAAA//uQZAUAB1WI0PZugAAAAAoQwAAAEk3nRd2qAAAAACiDgAAAAAAABCqEEQRLCgwpBGMlJkIz8jKhGvj4k6jzRnqasNKIeoh5gI7BJaC1A1AoNBjJgbyApVS4IDlZgDU5WUAxEKDNmmALHzZp0Fkz1FMTmGFl1FMEyodIavcCAUHDWrKAIA4aa2oCgILEBupZgHvAhEBcZ6joQBxS76AgccrFlczBvKLC0QI2cBoCFvfTDAo7eoOQInqDPBtvrDEZBNYN5xwNwxQRfw8ZQ5wQVLvO8OYU+mHvFLlDh05Mdg7BT6YrRPpCBznMB2r//xKJjyyOh+cImr2/4doscwD6neZjuZR4AgAABYAAAABy1xcdQtxYBYYZdifkUDgzzXaXn98Z0oi9ILU5mBjFANmRwlVJ3/6jYDAmxaiDG3/6xjQQCCKkRb/6kg/wW+kSJ5//rLobkLSiKmqP/0ikJuDaSaSf/6JiLYLEYnW/+kXg1WRVJL/9EmQ1YZIsv/6Qzwy5qk7/+tEU0nkls3/zIUMPKNX/6yZLf+kFgAfgGyLFAUwY//uQZAUABcd5UiNPVXAAAApAAAAAE0VZQKw9ISAAACgAAAAAVQIygIElVrFkBS+Jhi+EAuu+lKAkYUEIsmEAEoMeDmCETMvfSHTGkF5RWH7kz/ESHWPAq/kcCRhqBtMdokPdM7vil7RG98A2sc7zO6ZvTdM7pmOUAZTnJW+NXxqmd41dqJ6mLTXxrPpnV8avaIf5SvL7pndPvPpndJR9Kuu8fePvuiuhorgWjp7Mf/PRjxcFCPDkW31srioCExivv9lcwKEaHsf/7ow2Fl1T/9RkXgEhYElAoCLFtMArxwivDJJ+bR1HTKJdlEoTELCIqgEwVGSQ+hIm0NbK8WXcTEI0UPoa2NbG4y2K00JEWbZavJXkYaqo9CRHS55FcZTjKEk3NKoCYUnSQ0rWxrZbFKbKIhOKPZe1cJKzZSaQrIyULHDZmV5K4xySsDRKWOruanGtjLJXFEmwaIbDLX0hIPBUQPVFVkQkDoUNfSoDgQGKPekoxeGzA4DUvnn4bxzcZrtJyipKfPNy5w+9lnXwgqsiyHNeSVpemw4bWb9psYeq//uQZBoABQt4yMVxYAIAAAkQoAAAHvYpL5m6AAgAACXDAAAAD59jblTirQe9upFsmZbpMudy7Lz1X1DYsxOOSWpfPqNX2WqktK0DMvuGwlbNj44TleLPQ+Gsfb+GOWOKJoIrWb3cIMeeON6lz2umTqMXV8Mj30yWPpjoSa9ujK8SyeJP5y5mOW1D6hvLepeveEAEDo0mgCRClOEgANv3B9a6fikgUSu/DmAMATrGx7nng5p5iimPNZsfQLYB2sDLIkzRKZOHGAaUyDcpFBSLG9MCQALgAIgQs2YunOszLSAyQYPVC2YdGGeHD2dTdJk1pAHGAWDjnkcLKFymS3RQZTInzySoBwMG0QueC3gMsCEYxUqlrcxK6k1LQQcsmyYeQPdC2YfuGPASCBkcVMQQqpVJshui1tkXQJQV0OXGAZMXSOEEBRirXbVRQW7ugq7IM7rPWSZyDlM3IuNEkxzCOJ0ny2ThNkyRai1b6ev//3dzNGzNb//4uAvHT5sURcZCFcuKLhOFs8mLAAEAt4UWAAIABAAAAAB4qbHo0tIjVkUU//uQZAwABfSFz3ZqQAAAAAngwAAAE1HjMp2qAAAAACZDgAAAD5UkTE1UgZEUExqYynN1qZvqIOREEFmBcJQkwdxiFtw0qEOkGYfRDifBui9MQg4QAHAqWtAWHoCxu1Yf4VfWLPIM2mHDFsbQEVGwyqQoQcwnfHeIkNt9YnkiaS1oizycqJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");
+            snd.play();
+            {% endif %}
+
+            $('#linesCart .line').each(function () {
+                if ($(this).attr('referencia') === ref) {
+                    encontrado = true;
+                    $(this).find('.plusQty').click();
+                }
+            });
+
+            if (false === encontrado) {
+                document.forms['saleForm']['action'].value = 'add-product';
+                document.forms['saleForm']['action-code'].value = ref;
+                let formData = new FormData(document.forms['saleForm']);
+                return sendForm(formData);
+            }
+        }
+
+        function changeClient() {
+            document.forms['saleForm']['action'].value = 'recalculate';
+            let formData = new FormData(document.forms['saleForm']);
+            return sendForm(formData);
+        }
+
+        function changeLineDescription(num) {
+            let desc = prompt('{{ i18n.trans('description') }}');
+            if (desc.trim() === '') {
+                return false;
+            }
+
+            $('#linesCart .line' + num + ' .desc').html(desc);
+            $('#linesCart .line' + num + ' input[name="descripcion_' + num + '"]').val(desc);
+        }
+
+        function checkTotalPayments(input) {
+            let total = 0;
+            let cont = 0;
+            let totalDefault = 0;
+            let totalLine = 0;
+
+            if (input.attr('max') !== '' && parseFloat(input.val()) > parseFloat(input.attr('max'))) {
+                input.val('');
+            }
+
+            $("#modalColletMoney #paymentMethods input").each(function () {
+                if ($(this).val() !== '') {
+                    let value = parseFloat($(this).val());
+
+                    if ($(this).attr('max') === '') {
+                        totalDefault = value;
+                    } else {
+                        totalLine += value;
+                    }
+                }
+            });
+
+            if (totalLine > 0 && parseFloat((totalDefault + totalLine).toFixed(2)) > parseFloat(totalCart)) {
+                input.val('');
+            }
+
+            $("#modalColletMoney #paymentMethods input").each(function () {
+                if ($(this).val() !== '') {
+                    total += parseFloat($(this).val());
+                    cont++;
+                }
+            });
+
+            if (total === 0) {
+                $('#modalColletMoney #moneyChange, #modalColletMoney #symbolChange').html('');
+            } else {
+                let amount = $('#saleAmount').html().split(' ');
+                $('#modalColletMoney #moneyChange').html((total - totalCart).toFixed(2));
+                $('#modalColletMoney #symbolChange').html(amount[1]);
+            }
+        }
+
+        function clearCart() {
+            codpark = '';
+            document.forms['saleForm']['action'].value = 'clear-cart';
+            document.forms['saleForm']['action-code'].value = '';
+            let formData = new FormData(document.forms['saleForm']);
+            return sendForm(formData);
+        }
+
+        function collectMoney() {
+            if ($('#linesCart .line').length > 0) {
+                $('#modalColletMoney #moneyTotal').html($('#saleAmount').html());
+                $('#modalColletMoney #moneyChange').html('');
+                $('#modalColletMoney #symbolChange').html('');
+
+                $("#modalColletMoney #paymentMethods input").each(function () {
+                    if ($(this).attr('codpago') !== '{{ fsc.tpv.codpago }}') {
+                        $(this).attr('max', totalCart);
+                    }
+                    checkTotalPayments($(this));
+                });
+
+                $('#modalColletMoney').modal('show');
+                $('#modalColletMoney').on('shown.bs.modal', function () {
+                    $('#modalColletMoney #paymentMethods input:first').focus();
+                });
+            }
+        }
+
+        function collectMoneyClear() {
+            $('#modalColletMoney #paymentMethods input, #modalColletMoney textarea').val('');
+        }
+
+        function deleteDocPark(codpark) {
+            let formData = new FormData();
+            formData.append('action', 'delete-park');
+            formData.append('codpark', codpark);
+            return sendForm(formData);
+        }
+
+        function heightCart() {
+            let windowh = $(window).height();
+            let nav = $('nav:first').outerHeight();
+            let space = $('nav:first').next().outerHeight();
+            let titletpv = $('#titletpv').outerHeight();
+            $('#cart').css('height', windowh - (nav + space + titletpv + 25) + 'px');
+        }
+
+        function heightProductCard() {
+            let height = 0;
+            $('#productList .card').each(function () {
+                if ($(this).height() > height) {
+                    height = $(this).height();
+                }
+            });
+            $('#productList .card').height(height);
+        }
+
+        function lineQuantity(num, qty) {
+            document.forms['saleForm']['action'].value = 'recalculate';
+            document.forms['saleForm']['action-code'].value = '';
+            document.forms['saleForm']['cantidad_' + num].value = qty;
+            let formData = new FormData(document.forms['saleForm']);
+            return sendForm(formData);
+        }
+
+        function changeQtyPrompt(num) {
+            const qty = parseFloat(prompt('{{ i18n.trans('quantity') }}').replace(',', '.')) || 0;
+            if (qty > 0) {
+                return lineQuantity(num, qty);
+            }
+            return false;
+        }
+
+        function loadPark(codpark) {
+            document.forms['saleForm']['action'].value = 'load-park';
+            document.forms['saleForm']['codpark'].value = codpark;
+            let formData = new FormData(document.forms['saleForm']);
+            return sendForm(formData);
+        }
+
+        function modalAddCustomer() {
+            $('#modalAddCustomer input').val('');
+            $("#modalAddCustomer select option:selected").prop("selected", false)
+            $('#modalAddCustomer').modal('show');
+            $('#modalAddCustomer').on('shown.bs.modal', function () {
+                $('#modalAddCustomer input:first').focus();
+            });
+        }
+
+        function modalDeletePark(codpark) {
+            $('#modalListPark').modal('hide');
+            $('#deletePark .btnDelete').attr('onclick', "return deleteDocPark(" + codpark + ")");
+            $('#deletePark').modal('show');
+        }
+
+        function modalTickets() {
+            return searchTickets();
+        }
+
+        function modalListPark() {
+            $('#listPark tbody').html('');
+            let formData = new FormData();
+            formData.append('action', 'modal-list-park');
+            return sendForm(formData);
+        }
+
+        function modalPark() {
+            if (totalCart <= 0) {
+                return false;
+            }
+
+            $('#modalPark').modal('show');
+            $('#modalPark input, #modalPark textarea').val('');
+            $('#modalPark').on('shown.bs.modal', function () {
+                $('#modalPark input:first').focus();
+            });
+        }
+
+        function modalPrintTicket(idDoc) {
+            $('#modalTickets').modal('hide');
+            $('#modalPrintTicket').modal('show');
+            $('#modalPrintTicket #optsPrint').html('');
+            let formData = new FormData();
+            formData.append('action', 'load-doc-print');
+            formData.append('idDoc', idDoc);
+            return sendForm(formData);
+        }
+		
+		// INI MOD ERICK
+        function modalPrintPreviewTicket(idDoc) {
+            $('#modalTickets').modal('hide');
+            $('#modalPrintPreviewTicket').modal('show');
+            $('#modalPrintPreviewTicket #optsPrint').html('');
+            let formData = new FormData();
+            formData.append('action', 'load-doc-preview-print');
+            formData.append('idDoc', idDoc);
+            return sendForm(formData);
+        }
+
+        function previewEscposTicket(idDoc) {
+            $('#modalTickets').modal('hide');
+            $('#escposPreviewContent').html('<i class="fas fa-spinner fa-spin fa-2x"></i>');
+            $('#modalEscposPreview').modal('show');
+            let formData = new FormData();
+            formData.append('action', 'preview-escpos-ticket');
+            formData.append('idDoc', idDoc);
+            return sendForm(formData);
+        }
+
+        function printEscposDirect(idDoc) {
+            let formData = new FormData();
+            formData.append('action', 'print-escpos-direct');
+            formData.append('idDoc', idDoc);
+            return sendForm(formData);
+        }
+
+        function btnPrintTicket(idDoc) {
+            var escposTipo = '{{ fsc.escposTipo }}';
+            if (escposTipo !== '') {
+                return printEscposDirect(idDoc);
+            }
+            return modalPrintPreviewTicket(idDoc);
+        }
+
+        function openInvoiceForGeneralSeries(doc) {
+            if (!doc || !doc.code) {
+                return false;
+            }
+
+            if (String(doc.codserie || '').toUpperCase() !== 'A') {
+                return false;
+            }
+
+            var modelName = doc.modelClassName || 'FacturaCliente';
+            window.open('Edit' + modelName + '?code=' + encodeURIComponent(doc.code) + '&action=export&option=PDF', '_blank');
+            return true;
+        }
+		// FIN MOD ERICK
+
+        function modalReturn(idDoc) {
+            $('#modalTickets').modal('hide');
+            $('#modalReturn #optsReturn').hide();
+            $('#modalReturn #productsReturn').html('');
+            $('#modalReturn').modal('show');
+            let formData = new FormData();
+            formData.append('action', 'load-doc-return');
+            formData.append('idDoc', idDoc);
+            return sendForm(formData);
+        }
+
+        function newLine() {
+            let desc = prompt('{{ i18n.trans('description') }}');
+            if (desc.trim() === '') {
+                return false;
+            }
+
+            document.forms['saleForm']['action'].value = 'new-line';
+            document.forms['saleForm']['new-desc'].value = desc;
+            let formData = new FormData(document.forms['saleForm']);
+            if (false === sendForm(formData)) {
+                return false;
+            }
+
+            $('#linesCart .line:last .desc').html(desc);
+            $('#linesCart .line:last input[name="desc_*"]').val(desc);
+            document.forms['saleForm']['action'].value = '';
+            return true;
+        }
+
+        function openDrawer() {
+            let formData = new FormData();
+            formData.append('action', 'open-drawer');
+            return sendForm(formData);
+        }
+
+		// INI MOD ERICK
+        function printTicket(idDoc) {
+            let formData = new FormData();
+			formData.append('idDoc', idDoc);
+		    
+			if ($('#ticketformat option:selected').val() == 'Previsualizar Ticket') {
+				$('#modalPrintTicket').modal('hide');
+				  
+  				$('#modalPrintPreviewTicket').modal('show');
+            	$('#modalPrintPreviewTicket #optsPrint').html('');
+				
+				formData.append('action', 'load-doc-preview-print');
+				formData.append('ajax', true);
+    		} else {
+				formData.append('action', 'print-ticket');
+				formData.append('ticketformat', $('#ticketformat option:selected').val());
+            }
+			
+			return sendForm(formData);
+        }
+		// FIN MOD ERICK
+		
+        /*function printTicket(idDoc) {
+            let formData = new FormData();
+            formData.append('action', 'print-ticket');
+            formData.append('idDoc', idDoc);
+            formData.append('ticketformat', $('#ticketformat option:selected').val());
+            return sendForm(formData);
+        }*/
+
+		// INI MOD ERICK
+		function imprimirTicket () {
+			var printContents = document.getElementById('previewPDF').innerHTML;
+			var originalContents = document.body.innerHTML;
+
+			var document_html = window.open('', 'PRINT', 'height=600,width=800');
+    	
+	    	document_html.document.write('<style> body { font-size: 16px; margin: 3px 2px; } .sec-doc { font-size: 14px !important;} </style>');
+	    	document_html.document.write(printContents);
+   			// document_html.document.write(originalContents);
+		    
+			setTimeout(function() {
+				document_html.print();
+				document_html.document.close();
+				document_html.focus();
+				document_html.close();
+				return true;
+			}, 2000)   
+   		}
+		// FIN MOD ERICK
+
+        function rmLine(num) {
+            document.forms['saleForm']['action'].value = 'rm-line';
+            document.forms['saleForm']['action-code'].value = num;
+            let formData = new FormData(document.forms['saleForm']);
+            return sendForm(formData);
+        }
+
+        function saveAddCustomer() {
+            let razonsocial = $('#modalAddCustomer input[name="razonsocial"]').val();
+            let cifnif = $('#modalAddCustomer input[name="cifnif"]').val();
+            let address = $('#modalAddCustomer input[name="address"]').val();
+            let apartado = $('#modalAddCustomer input[name="apartado"]').val();
+            let codpostal = $('#modalAddCustomer input[name="codpostal"]').val();
+            let ciudad = $('#modalAddCustomer input[name="ciudad"]').val();
+            let provincia = $('#modalAddCustomer input[name="provincia"]').val();
+            let telefono1 = $('#modalAddCustomer input[name="telefono1"]').val();
+            let email = $('#modalAddCustomer input[name="email"]').val();
+            let personafisica = $('#modalAddCustomer select[name="personafisica"] option:selected').val();
+            let tipoidfiscal = $('#modalAddCustomer select[name="tipoidfiscal"] option:selected').val();
+            let codpais = $('#modalAddCustomer select[name="codpais"] option:selected').val();
+
+            let formData = new FormData();
+            formData.append('action', 'add-customer');
+            formData.append('empresa', razonsocial);
+            formData.append('cifnif', cifnif);
+            formData.append('direccion', address);
+            formData.append('apartado', apartado);
+            formData.append('codpostal', codpostal);
+            formData.append('ciudad', ciudad);
+            formData.append('provincia', provincia);
+            formData.append('telefono1', telefono1);
+            formData.append('email', email);
+            formData.append('personafisica', personafisica);
+            formData.append('tipoidfiscal', tipoidfiscal);
+            formData.append('codpais', codpais);
+            return sendForm(formData);
+        }
+
+        function saveCart() {
+            document.forms['saleForm']['action'].value = 'save-cart';
+            document.forms['saleForm']['action-code'].value = '';
+
+            let formData = new FormData(document.forms['saleForm']);
+            formData.append('observations', $('#modalColletMoney #observations').val());
+            let moneyReceived = 0;
+            let formasPagos = 0;
+
+            $("#modalColletMoney #paymentMethods input").each(function () {
+                let money = parseFloat($(this).val());
+                if (money > 0) {
+                    formasPagos++;
+                    moneyReceived += money;
+                    formData.append($(this).attr('codpago'), money);
+                }
+            });
+
+            let decimals = totalCart.split('.');
+            if (moneyReceived.toFixed(decimals.length) >= parseFloat(totalCart)) {
+                formData.append('formasPagos', formasPagos);
+                if (codpark != '') {
+                    document.forms['saleForm']['codpark'].value = codpark;
+                    formData.append('codpark', codpark);
+                }
+                return sendForm(formData);
+            }
+
+            return false;
+        }
+
+        function savePark() {
+            if (totalCart <= 0) {
+                return false;
+            }
+
+            document.forms['saleForm']['action'].value = 'save-park';
+            document.forms['saleForm']['action-code'].value = '';
+            if (codpark !== '') {
+                document.forms['saleForm']['codpark'].value = codpark;
+            }
+            let formData = new FormData(document.forms['saleForm']);
+            formData.append('advance-payment-amount', $('#modalPark #amount').val());
+            formData.append('advance-payment', $('#modalPark #payments option:selected').val());
+            formData.append('observations', $('#modalPark #observations').val());
+            return sendForm(formData);
+        }
+
+        function saveReturn() {
+            let formData = new FormData();
+            let cont = 0;
+            $('#modalReturn #productsReturn tbody tr').each(function () {
+                let val = parseFloat($(this).find('input').val());
+
+                if (val > 0) {
+                    formData.append('referencia_' + cont, $(this).attr('referencia'));
+                    formData.append('idlinea_' + cont, $(this).attr('idlinea'));
+                    formData.append('cantidad_' + cont, val);
+                    cont++;
+                }
+            });
+            formData.append('action', 'save-return');
+            formData.append('lines', cont);
+            formData.append('idDocReturn', idDocReturn);
+            return sendForm(formData);
+        }
+
+        function searchProducts() {
+            document.forms['productsForm']['productlimit'].value = 0;
+            let formData = new FormData(document.forms['productsForm']);
+            return sendForm(formData);
+        }
+
+        function searchTickets(codigo = '') {
+            $('#listTickets tbody').html('<i class="fas fa-spinner fa-spin"></i>');
+            let formData = new FormData();
+            formData.append('action', 'modal-tickets');
+            formData.append('codigo', codigo);
+            return sendForm(formData);
+        }
+
+        function sendDoc(idDoc) {
+            let formData = new FormData();
+            formData.append('action', 'send-doc');
+            formData.append('idDoc', idDoc);
+            formData.append('email', $('#modalPrintTicket #emailInput').val());
+            return sendForm(formData);
+        }
+
+        function sendForm(formData) {
+            if (editLine > 1) {
+                editLine--;
+                return false;
+            }
+
+            editLine = 0;
+            animateSpinner('add');
+
+            formData.append('linesCart', $('#linesCart .line').length);
+            formData.append('codcliente', codcliente);
+            formData.append('idtpv', {{ fsc.tpv.idtpv }});
+            formData.append('idcaja', {{ fsc.caja.idcaja }});
+            formData.append('ajax', true);
+
+            console.log(Object.fromEntries(formData));
+
+            fetch('{{ fsc.url() }}', {
+                method: 'POST',
+                body: formData
+            }).then(function (response) {
+                if (response.ok) {
+                    animateSpinner('remove', true);
+                    return response.json();
+                }
+
+                animateSpinner('remove', false);
+                return Promise.reject(response);
+            }).then(function (data) {
+                console.log(data);
+
+                if (data.refresh) {
+                    $('#btnChangeTerminal').click();
+                }
+
+                if (['add-product', 'new-line'].includes(formData.get('action'))) {
+                    $('.modalProductInfo').modal('hide');
+                    $("#saleDiv").animate({ scrollTop: $('#saleDiv').prop("scrollHeight")}, 1000);
+                }
+
+                if (formData.get('action') === 'delete-park') {
+                    modalListPark();
+                    $('#deletePark').modal('hide');
+                    $('#btnPark span.badge').html(data.totalParks);
+
+                    if (parseInt(formData.get('codpark')) === parseInt(codpark)) {
+                        codpark = '';
+                        document.forms['saleForm']['codpark'].value = codpark;
+                    }
+                }
+				
+				// INI MOD ERICK
+				if (formData.get('action') === 'verify-barcode') {
+					console.log('ref', data.referencia);
+					if (data.referencia != null) {
+						return addProduct(data.referencia);
+					}
+				}
+				// FIN MOD ERICK
+                if (formData.get('action') === 'load-park') {
+                    $('#modalListPark').modal('hide');
+
+                    // cargamos los pagos anticipados
+                    collectMoneyClear();
+                    $.each(data['advance-payments'], function (key, value) {
+                        $('#modalColletMoney #paymentMethods input[codpago="' + value.codpago + '"]').val(value.amount);
+                    });
+                }
+
+                if (formData.get('action') === 'modal-list-park') {
+                    $('#modalListPark').modal('show');
+                }
+
+                if (formData.get('action') === 'save-park') {
+                    $('#modalPark').modal('hide');
+                }
+
+                if (formData.get('action') === 'modal-tickets') {
+                    $('#modalTickets').modal('show');
+                    $('#modalTickets #boxEstimated').html(data.boxEstimated);
+                    $('#modalTickets #boxTotal').html(data.boxTotal);
+                }
+
+                if (['open-drawer', 'print-ticket'].includes(formData.get('action'))) {
+                    $('#modalPrintTicket #iframe').html('<iframe class="d-none" src="http://localhost:8089"></iframe>');
+                }
+
+                if (data.totalCart) {
+                    totalCart = data.totalCart;
+
+                    if (data.totalCart > 0) {
+                        $('#saleAmount').popover('show');
+						$('#btnSaleFooter').show(); //MOD ERICK
+                        setInterval(function () {
+                            $('#saleAmount').popover('hide');
+                        }, 2000);
+                    } else if (formData.get('action') !== 'recalculate' && formData.get('action') !== 'load-park') {
+                        $('#btnSaleFooter').hide();
+                        $('#products-tab').click();
+                    }
+                }
+
+                if (data.amount && data.amount !== '' && data.amount !== document.getElementById("saleAmount").innerHTML) {
+                    document.getElementById("saleAmount").innerHTML = data.amount;
+                }
+
+                if (data.cart && data.cart !== '') {
+                    document.getElementById("saleDiv").innerHTML = data.cart;
+                    if ($('#linesCart .line').length > 0) {
+                        $('#btnSaleFooter').show();
+                    }
+                } else if (data.cartMap && !data.cartMap.length) {
+                    $.each(data.cartMap, function (index, value) {
+                        $('#saleDiv').find('#' + index).html(value);
+                    });
+                }
+
+                if (formData.get('action') === 'new-line') {
+                    $('#linesCart .line:last input.precio').val('').focus();
+                }
+
+                if (data.products && data.products !== '') {
+                    document.getElementById("productList").innerHTML = data.products;
+                    heightProductCard();
+                }
+
+                if (data.savecart) {
+                    $('#modalColletMoney').modal('hide');
+                    collectMoneyClear();
+                    if (false === openInvoiceForGeneralSeries(data.document)) {
+                        modalPrintTicket(data.document.code);
+                    }
+                    $('#btnPark span.badge').html(data.totalParks);
+                }
+
+                if (data.savereturn) {
+                    $('#modalReturn').modal('hide');
+                    modalPrintTicket(data.document.code);
+                }
+
+                if (data.savepark || data.savecart || data.clearcart) {
+                    searchProducts();
+                    $('#btnSaleFooter').hide();
+                    $('#products-tab').click();
+                }
+				
+                if (data.savecart && codpark !== '' || $('#linesCart .line').length === 0 && codpark !== '') {
+                    codpark = '';
+                }
+
+                if (data.savepark) {
+                    $('#btnPark button').popover('show');
+                    setInterval(function () {
+                        $('#btnPark button').popover('hide');
+                    }, 2000);
+                    $('#btnPark span.badge').html(data.totalParks);
+                }
+
+                if (data.codpark && data.codpark !== '') {
+                    codpark = data.codpark;
+                }
+
+                if (data.presupuestos && data.presupuestos !== '') {
+                    $('#listPark tbody').html(data.presupuestos);
+                }
+
+                if (data.tickets && data.tickets !== '') {
+                    $('#listTickets tbody').html(data.tickets);
+                }
+
+                if (data.docprint && data.docprint !== '') {
+                    $('#modalPrintTicket #optsPrint').html(data.docprint);
+					addPeviewPrintAutomatic();					
+                }
+
+				// INI MOD ERICK
+				if (data.docpreviewprint && data.docpreviewprint !== '') {
+                    $('#modalPrintPreviewTicket #optsPrint').html(data.docpreviewprint);
+				    $('#modalPrintPreviewTicket #previewPDF').html(data.docprintPDF);
+					
+					addPrintAutomatic();
+		        }
+				// FIN MOD ERICK
+
+                if (formData.get('action') === 'preview-escpos-ticket') {
+                    if (data.html) {
+                        $('#escposPreviewContent').html(data.html);
+                    } else {
+                        $('#escposPreviewContent').html('<p class="text-danger">Error al generar la vista previa.</p>');
+                    }
+                }
+				
+                if (data.docreturn && data.docreturn !== '') {
+                    $('#modalReturn #productsReturn').html(data.docreturn);
+                    $('#modalReturn #methodReturn').html(data.methodreturn);
+
+                    totalReturn = 0;
+                    idDocReturn = data.idDoc;
+                    $('#modalReturn #totalReturn .money').html(totalReturn.toFixed(2));
+                    $('#modalReturn #optsReturn').show();
+                }
+
+                if (formData.get('action') === 'add-customer' && data.customer) {
+                    codcliente = data.customer.codcliente;
+                    $('#customertpv').val(data.customer.nombre);
+                    $('#saleDiv input[name="codcliente"]').val(codcliente);
+                    $('#iconCustomerSearch').removeClass('fa-search').addClass('cursor-pointer fa-times text-danger');
+                    changeClient();
+                    $('#modalAddCustomer').modal('hide');
+                }
+
+                document.forms['productsForm']['productlimit'].value = {{ fsc.tpv.productlimit }};
+
+                // si no hay foco, establecemos el foco si tenemos el name del input donde se estaba escribiendo
+                if (formData.get('action') === 'recalculate-line' && document.activeElement.name === undefined && keyupInputName !== null) {
+                    let focusInput = $('input[name="' + keyupInputName + '"]');
+                    let focusLength = focusInput.val().length;
+                    let focusType = focusInput[0].type;
+                    // para establecer el cursor al final de input el type debe ser text
+                    if (focusType !== 'text') {
+                        focusInput[0].type = 'text';
+                    }
+                    focusInput.focus();
+                    focusInput[0].setSelectionRange(focusLength, focusLength);
+                    focusInput[0].type = focusType;
+                    keyupInputName = null;
+                }
+
+                if (Array.isArray(data.messages)) {
+                    data.messages.forEach(item => alert(item.message));
+                }
+            }).catch(function (error) {
+                alert('error');
+                console.warn(error);
+            });
+
+            return false;
+        }
+
+        function showFamily(codfamilia) {
+            document.forms['productsForm']['codfamilia'].value = codfamilia;
+            document.forms['productsForm']['query'].value = '';
+            let formData = new FormData(document.forms['productsForm']);
+            return sendForm(formData);
+        }
+
+        $(document).on('keyup', '#linesCart .line input', async function () {
+            let min = parseFloat($(this).attr('min'));
+            let max = parseFloat($(this).attr('max'));
+            let val = parseFloat($(this).val());
+            console.log(min, max, val);
+            if (val < min) {
+                $(this).val(min);
+            }
+
+            if (val > max) {
+                $(this).val(max);
+            }
+
+            // usamos un contador y un temporizador para solamente procesar la última llamada
+            waitCounter++;
+            let waitNum = waitCounter;
+            await new Promise(r => setTimeout(r, 300));
+            if (waitNum < waitCounter) {
+                return;
+            }
+
+            // obtenemos el name del input si cumple la condición de pulsado
+            keyupInputName = $(this).attr('name');
+
+            editLine++;
+            document.forms['saleForm']['action'].value = 'recalculate-line';
+            let formData = new FormData(document.forms['saleForm']);
+            sendForm(formData);
+        });
+
+        $(document).on('keyup', '#modalColletMoney #paymentMethods input', function () {
+            checkTotalPayments($(this));
+        });
+
+        $(document).on('click', '#modalColletMoney #paymentMethods .setMaxPayment', function(){
+            let input = $(this).parent().parent().find('input');
+            let defaultPay = $('#paymentMethods input:first').val();
+
+            if (defaultPay === '') {
+                defaultPay = 0;
+            }
+
+            let diff = parseFloat($(input).attr('max')) - parseFloat(defaultPay);
+
+            if (diff <= 0) {
+                return;
+            }
+
+            $(input).val(diff.toFixed(2));
+            checkTotalPayments(input);
+        });
+
+        $(document).on('keyup change', '#modalReturn #productsReturn tbody tr input', function () {
+            let max = parseFloat($(this).attr('max'));
+            let val = parseFloat($(this).val());
+
+            if (val > max) {
+                $(this).val(max);
+            }
+
+            totalReturn = 0;
+            $('#modalReturn #productsReturn tbody tr').each(function () {
+                let input = $(this).find('input');
+
+                if (parseFloat($(input).val()) > 0) {
+                    totalReturn += parseFloat($(input).val()) * parseFloat($(this).attr('pvpunitario'));
+                }
+            });
+
+            $('#modalReturn #totalReturn .money').html(totalReturn.toFixed(2));
+        });
+
+        $(document).on('keyup change', '#searchTicket', function () {
+            let val = $(this).val();
+            if (val.length >= 3) {
+                return searchTickets(val);
+            } else if (val === '') {
+                return searchTickets();
+            }
+        });
+
+        $(document).ready(function () {
+            $('#btnSaleFooter').hide();
+            let changeAgentTime = parseInt({{ fsc.tpv.closeagent }});
+
+            if (changeAgentTime > 0) {
+                let intervalCloseAgent;
+
+                function startCounter() {
+                    intervalCloseAgent = setInterval(function () {
+                        window.location.href = '{{ fsc.url() }}?action=agent-out';
+                    }, changeAgentTime * 60000);
+                }
+
+                startCounter();
+
+                function stopCounter() {
+                    clearInterval(intervalCloseAgent);
+                    startCounter();
+                }
+
+                $(document).mousemove(function (e) {
+                    stopCounter();
+                });
+
+                $(document).click(function (e) {
+                    stopCounter();
+                });
+
+                $(document).keypress(function (e) {
+                    stopCounter();
+                });
+            }
+
+            function widthCart() {
+                let parentDiv = $('#cart').parent().width();
+                $('#cart').css({'width': '100%', 'max-width': parentDiv + 'px'});
+            }
+            widthCart();
+
+            let observerCart = new IntersectionObserver(function(entries) {
+                if(entries[0]['isIntersecting'] === true) {
+                    if (entries[0].intersectionRatio >= 0.5) {
+                        $('#floatCart').hide('slow');
+                    } else {
+                        $('#floatCart').show('slow');
+                    }
+                } else {
+                    $('#floatCart').show('slow');
+                }
+            }, { threshold: [0, 0.5, 1] });
+            observerCart.observe(document.querySelector("#cart"));
+
+            $('#floatCart').click(function () {
+                $('html,body').animate({
+                    scrollTop: $('#cart').offset().top
+                }, 'slow');
+            });
+
+            $('#saleAmount').popover({
+                placement: 'bottom',
+                trigger: 'manual',
+                content: '{{ i18n.trans('updated-cart') }}'
+            });
+
+            $('#btnPark button').popover({
+                placement: 'bottom',
+                trigger: 'hover manual',
+                content: '{{ i18n.trans('cart-parking') }}'
+            });
+
+            $('#saleAmount').click(function () {
+                $('#saleAmount').popover('hide');
+            });
+
+            $('#iconCustomerSearch').click(function () {
+                if ($("#customertpv").val() != '') {
+                    $('#iconCustomerSearch').removeClass('cursor-pointer fa-times text-danger').addClass('fa-search');
+                    $("#customertpv").val('');
+                    codcliente = '';
+                    changeClient();
+                }
+            });
+
+            $("#customertpv").autocomplete({
+                source: function (request, response) {
+                    let formData = {};
+                    formData["action"] = "autocomplete-customer";
+                    formData["query"] = $("#customertpv").val();
+                    formData["idcaja"] = '{{ fsc.caja.idcaja }}';
+                    formData["idtpv"] = '{{ fsc.tpv.idtpv }}';
+                    formData["ajax"] = true;
+
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ fsc.url() }}",
+                        data: formData,
+                        dataType: "json",
+                        success: function (results) {
+                            if (results.refresh) {
+                                $('#btnChangeTerminal').click();
+                            }
+
+                            let values = [];
+                            results.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        codcliente = ui.item.key;
+                        $('#iconCustomerSearch').removeClass('fa-search').addClass('cursor-pointer fa-times text-danger');
+                        changeClient();
+                        let value = ui.item.value.split(" | ");
+                        if (value.length > 1) {
+                            ui.item.value = value[1];
+                        } else {
+                            ui.item.value = value[0];
+                        }
+                    }
+                }
+            });
+
+            heightProductCard();
+            heightCart();
+        });
+    </script>
+{% endblock %}

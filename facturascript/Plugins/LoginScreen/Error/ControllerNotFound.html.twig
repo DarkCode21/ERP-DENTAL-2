@@ -1,0 +1,22 @@
+{% extends "Master/MicroTemplate.html.twig" %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <br/><br/>
+                <div class="jumbotron">
+                    <h1>
+                        <i class="fas fa-bug fa-fw" aria-hidden="true"></i>
+                        Ocurrio un error al intentar cargar la página.
+                    </h1>
+                    <hr class="my-4">
+                    <br/><br/>
+                    <a href="{{ asset('') }}" class="btn btn-success">
+                        <i class="fas fa-home fa-fw" aria-hidden="true"></i> Ir al inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

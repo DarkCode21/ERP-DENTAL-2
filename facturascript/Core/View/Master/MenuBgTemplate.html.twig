@@ -1,0 +1,106 @@
+{#
+/**
+ * This file is part of FacturaScripts
+ * Copyright (C) 2017-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
+ */
+#}
+{% import 'Macro/GoogleTagManager.html.twig' as GoogleTagManager %}
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block fullBody %}
+    <body class="bg-light">
+    {{ GoogleTagManager.body() }}
+    {% block navbar %}
+        {{ parent() }}
+    {% endblock %}
+    <div class="pt-3">
+        {% block messages %}
+            {{ parent() }}
+        {% endblock %}
+        {% block bodyHeaderOptions %}
+            {{ parent() }}
+        {% endblock %}
+    </div>
+    {% block body %}
+        {{ parent() }}
+    {% endblock %}
+    {% for includeView in getIncludeViews('MenuTemplate', 'JsFooter') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {% for includeView in getIncludeViews('MenuTemplate', 'BodyEnd') %}
+        {% include includeView['path'] %}
+    {% endfor %}
+    {{ debugBarRender.render() | raw }}
+    <br/>
+    <br/>
+    <br/>
+    <!-- execution time: {{ executionTime() }} s -->
+	<script>
+!(function(){
+    if(window.chatnode && window.chatnode('getState') === 'initialized') return;
+    window.chatnode = (...args)=>{
+        if(!window.chatnode.q) window.chatnode.q=[];
+        window.chatnode.q.push(args);
+    };
+    window.chatnode = new Proxy(window.chatnode,{
+        get(target,prop){
+            if(prop==='q') return target.q;
+            return (...args)=>target(prop,...args);
+        },
+    });
+    function onLoad(){
+        const script=document.createElement('script');
+        script.src='https://embed.chatnode.ai/a8eaaeec-c04e-40b6-bc2d-cdaf9463afc5/popup.js';
+        document.body.appendChild(script);
+    }
+    if(document.readyState==='complete'){ onLoad(); }
+    else{ window.addEventListener('load',onLoad); }
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const data = {
+        name: "Usuario: {{ fsc.user.nick }}",
+        email: "Correo: {{ fsc.user.email }}",
+        info: "Empresa: {{ fsc.empresa.nombre }} | CIF: {{ fsc.empresa.cifnif }}",
+        stripe_accounts: [
+            { 
+                id: "Id empresa: cus_{{ fsc.empresa.idempresa }}", 
+                name: "Empresa: {{ fsc.empresa.nombre }}", 
+                email: "Correo empresa: {{ fsc.empresa.email }}" 
+            }
+        ]
+    };
+
+    let tries = 0;
+    const maxTries = 20;
+
+    const interval = setInterval(function() {
+        if (window.chatnode && typeof window.chatnode.setUserInfo === 'function') {
+            window.chatnode.setUserInfo(data);
+            clearInterval(interval);
+        } else {
+            tries++;
+            if (tries >= maxTries) {
+                clearInterval(interval);
+            }
+        }
+    }, 500);
+});
+</script>
+    </body>
+{% endblock %}

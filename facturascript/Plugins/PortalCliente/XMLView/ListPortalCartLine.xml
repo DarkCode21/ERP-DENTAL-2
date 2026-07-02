@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="reference" order="100">
+            <widget type="select" fieldname="idvariante">
+                <values source="variantes" fieldcode="idvariante" fieldtitle="referencia"/>
+            </widget>
+        </column>
+        <column name="quantity" display="center" order="110">
+            <widget type="number" fieldname="quantity"/>
+        </column>
+        <column name="creation-date" display="right" order="120">
+            <widget type="datetime" fieldname="creation_date"/>
+        </column>
+        <column name="last-update" display="right" order="130">
+            <widget type="datetime" fieldname="last_update"/>
+        </column>
+    </columns>
+</view>

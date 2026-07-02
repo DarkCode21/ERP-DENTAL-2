@@ -1,0 +1,196 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 28-abr-2019, 17:50:19
+    Author     : Usuario
+*/
+/*
+Para el encabezado del informe
+*/
+body{
+    font-family:verdana;
+}
+.encabezado-pagina{
+
+}
+.empresa-fecha{
+    width:100%;
+}
+.datos-empresa{
+    float:left;
+    with:50%;
+}
+.datos-fecha{
+    float:right;
+    with:50%;
+}
+.title-report{
+    font-weight: bold;
+    text-align:center;
+    align-content: center;
+
+}
+.title{
+    text-align: center;
+}
+.title-company{
+    font-weight: bold;
+}
+.company{
+
+}
+.title-date{
+    font-weight: bold;
+}
+.date{
+
+}
+.filters{
+    clear:both;
+}
+.singlefilter{
+    float:left;
+    padding:3mm;
+}
+table{
+    width:100%;
+
+}
+th{
+    border: 0.5px solid gray;
+    background: lightgray;
+}
+
+.columna{
+    padding-left:3mm;
+    padding-right:3mm;
+
+}
+.contenido
+{
+    font-family: verdana;
+    font-size:0.9em;
+
+}
+
+.linea{
+
+
+}
+.document{
+    width:45mm;
+
+
+}
+.date{
+    width:40mm;
+}
+.cif
+{
+    width:40mm;
+    text-align:center;
+}
+vcifnif{
+    text-align:center;
+}
+.customer{
+    width:80mm;
+}
+.base{
+    width:25mm;
+    text-align:right;
+}
+.poriva{
+    width:15mm;
+    text-align:right;
+}
+.iva{
+    width:25mm;
+    text-align:right;
+}
+.porre{
+    width:15mm;
+    text-align:right;
+}
+.re{
+    width:25mm;
+    text-align:right;
+}
+.porirpf{
+    width:15mm;
+    text-align:right;
+}
+.irpf{
+    width:25mm;
+    text-align:right;
+}
+.total{
+    width:35mm;
+    text-align:right;
+    padding-right:10mm;
+}
+.valoresparciales{
+    font-size:0.7em;
+}
+.vbasep{
+    text-align:right;
+    font-style:italic;
+}
+.vporiva{
+    text-align:right;
+    font-style:italic;
+}
+.viva{
+    text-align:right;
+    font-style:italic;
+}
+.vpre{
+    text-align:right;
+    font-style:italic;
+}
+.vre{
+    text-align:right;
+    font-style:italic;
+}
+.vpirpf{
+    text-align:right;
+    font-style:italic;
+}
+.virpf{
+    text-align:right;
+    font-style:italic;
+}
+.vtotal{
+    text-align:right;
+    font-style:italic;
+}
+filatotaldocumento{
+    border-top: 0.5px solid gray;
+    border-bottom: gray;
+    font-weight: bold;
+}
+.totalbase{
+    text-align: right;
+}
+.totaliva{
+    text-align:right;
+}
+.totalirpf{
+    text-align:right;
+}
+.totalre{
+    text-align:right;
+}
+.totalfactura{
+    text-align:right;
+    padding-right:6mm;
+    font-weight: bold;
+}
+/** Pie de la página */
+.footerPage{
+    width:100%;
+    padding-top:5mm;
+}

@@ -1,0 +1,32 @@
+
+<div id="encabezado-pagina" class="encabezado-pagina">
+    <div class="title-report">
+        <h3 class="title-report">
+            {{ i18n.trans(fsc.pdfParams.title) }}
+
+        </h3>
+    </div>
+    <table class="empresa-fecha">
+        <tr>
+        <td class="datos-empresa">
+
+            <span class="title-company">{{  i18n.trans('company')}}: </span>
+            <span class="company" >{{ fsc.pdfParams.companyName }}</span>
+        </td>
+        <td class="datos-fecha">
+            <span class="title-date">{{ i18n.trans('date') }}:</span>
+            <span class="date">{{ "now"|date("d/m/Y") }}</span>
+        </td>
+    </tr>
+    </table>
+    <table class="filters">
+        <tr>
+            <td class="title-text">Desde Fecha:</td>
+            <td>{{ fsc.filters.desdeFechaMostrar }}</td>
+            <td class="title-text">Hasta Fecha:</td>
+            <td>{{ fsc.filters.hastaFechaMostrar }}</td>
+            <td class="title-text">Cantidad:</td>
+            <td>{{ fsc.filters.cantidad }}</td>
+        </tr>
+    </table>
+    </div>

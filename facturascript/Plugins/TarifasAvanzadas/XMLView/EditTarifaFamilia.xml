@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12" valign="bottom">
+            <column name="rate" display="none" order="100">
+                <widget type="select" fieldname="codtarifa" onclick="EditTarifa" required="true">
+                    <values source="tarifas" fieldcode="codtarifa" fieldtitle="nombre" />
+                </widget>
+            </column>
+            <column name="family" titleurl="ListFamilia" numcolumns="2" order="110">
+                <widget type="select" fieldname="codfamilia" onclick="EditFamilia" required="true">
+                    <values source="familias" fieldcode="codfamilia" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="aplicar" title="formula-to-apply" numcolumns="2" order="120">
+                <widget type="select" fieldname="aplicar" translate="true" required="true">
+                    <values title="formula-sale-price">pvp</values>
+                    <values title="formula-cost-price">coste</values>
+                </widget>
+            </column>
+            <column name="value-x" numcolumns="2" order="130">
+                <widget type="number" fieldname="valorx" icon="fas fa-percentage" />
+            </column>
+            <column name="value-y" numcolumns="2" order="140">
+                <widget type="money" fieldname="valory" />
+            </column>
+            <column name="mincoste" title="dont-sell-below-cost" order="150">
+                <widget type="checkbox" fieldname="mincoste" />
+            </column>
+            <column name="maxpvp" title="dont-sell-above-pvp" order="160">
+                <widget type="checkbox" fieldname="maxpvp" />
+            </column>
+        </group>
+    </columns>
+</view>

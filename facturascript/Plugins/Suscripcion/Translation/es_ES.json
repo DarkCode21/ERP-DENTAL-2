@@ -1,0 +1,15 @@
+{
+	"suscription": "Suscripción",
+	"max-empresas-permitidas": "N° de Empresas permitidas",
+	"max-usuarios": "Usuarios Actuales (Máximo:5)",
+	"max-usuarios-descripcion": "Máximo: Ilimitados",
+	"capacidad-almacenamiento": "Uso de Almacenamiento Actual",
+	"capacidad-max-almacenamiento": "Máximo de Almacenamiento Permitido",
+	"max-facturas-permitidas": "Máximo de Facturas permitidas",
+	"max-clientes-permitidas": "Máximo de Clientes Permitidos",
+	"max-proveedores-permitidos": "Máximo de Proveedores Permitidos",
+	"max-productos-servicios-permitidos": "Máximo de Productos y Servicios Permitidos",
+	"title-software": "Nombre CRM",
+	"extra-software": "Información Adicional",
+	"licencia": "Licencia"
+}

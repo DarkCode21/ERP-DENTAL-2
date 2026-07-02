@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of Ubicaciones plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Ubicaciones    Copyright (C) 2019-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<view>
+    <columns>
+        <group name="product" title="product" numcolumns="12" icon="fas fa-cube">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="product-code" display="none" order="100">
+                <widget type="text" fieldname="idproduct" readonly="true" />
+            </column>
+            <column name="product" numcolumns="2" order="110">
+                <widget type="text" fieldname="productreference" icon="fas fa-hashtag" readonly="true" />
+            </column>
+            <column name="description" numcolumns="7" order="120">
+                <widget type="text" fieldname="productdescription" readonly="true" />
+            </column>
+            <column name="reference" title="variant" numcolumns="3" order="120">
+                <widget type="select" fieldname="reference" readonly="dinamic" required="true">
+                    <values></values>
+                </widget>
+            </column>
+        </group>
+        <group name="warehouse" title="warehouse" numcolumns="4" icon="fas fa-warehouse">
+            <column name="warehouse" order="210">
+                <widget type="select" fieldname="codewarehouse" onclick="EditAlmacen" readonly="dinamic">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre"></values>
+                </widget>
+            </column>
+        </group>
+        <group name="location" title="location" numcolumns="8" icon="fas fa-search-location">
+            <column name="location" order="200">
+                <widget type="autocomplete" fieldname="idlocation" required="true">
+                    <values source="locations" fieldcode="id" fieldtitle=""></values>
+                </widget>
+            </column>
+            <column name="storage-type" title="type" numcolumns="2" order="210">
+                <widget type="select" fieldname="storagetype" translate="true" readonly="true">
+                    <values title="storage">0</values>
+                    <values title="picking">1</values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="actions">
+            <button type="js" label='help' color="primary" action="$('#help-card').toggle()" icon="fas fa-question-circle" />
+        </row>
+        <row type="footer">
+            <group name="help" id="help-card" class="collapse" html="Block/EditVariantLocationInfo.html.twig"></group>
+        </row>
+    </rows>
+</view>

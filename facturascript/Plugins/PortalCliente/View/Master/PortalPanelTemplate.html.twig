@@ -1,0 +1,53 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block main %}
+    {{ parent() }}
+
+    {% set enabledViews = [] %}
+    {% for viewName, view in fsc.views %}
+        {% if view.settings.active %}
+            {% set enabledViews = enabledViews | merge([viewName]) %}
+        {% endif %}
+    {% endfor %}
+
+    <div class="bg-light pt-3">
+        <div class="{{ enabledViews | length > 6 ? 'container-fluid' : 'container' }}">
+            <div class="nav nav-tabs justify-content-center"
+                 role="tablist">
+                {% for viewName, view in fsc.views %}
+                    {% if view.settings.active %}
+                        {% set active = (viewName == fsc.active) ? ' active' : '' %}
+                        <a class="nav-item nav-link{{ active }}{{ disable }}" id="{{ viewName }}-tab"
+                           data-toggle="tab" href="#{{ viewName }}"
+                           role="tab" aria-controls="{{ viewName }}" aria-expanded="true">
+                            <i class="{{ view.icon }} fa-fw" aria-hidden="true"></i>
+                            <span class="d-none d-lg-inline-block">{{ view.title }}</span>
+                            {% if view.count >= 1 %}
+                                <span class="badge badge-secondary">{{ number(view.count, 0) }}</span>
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="tab-content pt-3">
+            {% for viewName, view in fsc.views %}
+                {% if view.settings.active %}
+                    {% set active = (viewName == fsc.active) ? ' show active' : '' %}
+                    <div class="tab-pane fade{{ active }}" id="{{ viewName }}" role="tabpanel"
+                         aria-labelledby="{{ viewName }}-tab">
+                        {% do fsc.setCurrentView(viewName) %}
+                        {{ include(view.template) }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

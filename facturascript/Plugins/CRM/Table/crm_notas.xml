@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : crm_notas.xml
+    Description:
+        Estructura de la tabla crm_notas.
+-->
+<table>
+    <column>
+        <name>automatica</name>
+        <type>boolean</type>
+        <defecto>false</defecto>
+    </column>
+    <column>
+        <name>avisar</name>
+        <type>boolean</type>
+        <defecto>false</defecto>
+    </column>
+    <column>
+        <name>documento</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>fechaaviso</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>hora</name>
+        <type>time without time zone</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idcontacto</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>iddocumento</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idinteres</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idoportunidad</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>paratodos</name>
+        <type>boolean</type>
+        <defecto>false</defecto>
+    </column>
+    <column>
+        <name>tipodocumento</name>
+        <type>character varying(25)</type>
+    </column>
+    <constraint>
+        <name>crm_notas_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_crm_notas_crm_contactos2</name>
+        <type>FOREIGN KEY (idcontacto) REFERENCES contactos (idcontacto) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_crm_notas_crm_intereses</name>
+        <type>FOREIGN KEY (idinteres) REFERENCES crm_intereses (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_crm_notas_oportunidades</name>
+        <type>FOREIGN KEY (idoportunidad) REFERENCES crm_oportunidades (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

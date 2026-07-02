@@ -1,0 +1,108 @@
+{#
+/**
+ * MOD ERICK - Vista de actualizaciones del sistema.
+ */
+#}
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% set allVersions = fsc.getAllVersions() %}
+{% set actVersion  = fsc.getVersionActual() %}
+
+{% block bodyHeaderOptions %}
+    {{ parent() }}
+    <div class="container-fluid mb-2">
+        <div class="row mb-3">
+            <div class="col-sm-12">
+                <h5>{{ fsc.toolBox().appSettings().get('default', 'nombrecrm') }} versión instalada: {{ actVersion.version }}</h5>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <strong>Comprobar actualizaciones disponibles:</strong>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="form-control form-control-sm">
+                                    <option selected="">Automático</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="form-control form-control-sm">
+                                    <option selected="">A las 14:00 horas</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="message" class="text-danger" style="font-weight: bold;"></div>
+
+                        <div class="row mt-2">
+                            <div class="col-sm-4">
+                                <button class="btn btn-sm btn-success">Guardar</button>
+                                <button class="btn btn-sm btn-outline-danger"
+                                        onclick="comprobarActualizaciones()">Comprobar actualizaciones ahora</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="btn-group">
+                            <a class="btn btn-sm btn-secondary" href="{{ fsc.url() }}" title="{{ trans('refresh') }}">
+                                <i class="fas fa-redo" aria-hidden="true"></i>
+                            </a>
+                            {% if fsc.getPageData()['name'] == fsc.user.homepage %}
+                                <a class="btn btn-sm btn-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE"
+                                   title="{{ trans('marked-as-homepage') }}">
+                                    <i class="fas fa-bookmark" aria-hidden="true"></i>
+                                </a>
+                            {% else %}
+                                <a class="btn btn-sm btn-secondary" href="{{ fsc.url() }}?defaultPage=TRUE"
+                                   title="{{ trans('mark-as-homepage') }}">
+                                    <i class="far fa-bookmark" aria-hidden="true"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm text-right">
+                        <h1 class="h3">
+                            {{ trans(fsc.getPageData()['title']) | capitalize }}
+                            <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container-fluid">
+        <h6 class="text-secondary">Historial de versiones:</h6>
+        <table class="table table-striped">
+            <tbody>
+                {% for version in allVersions %}
+                    <tr>
+                        <td>{{ version.nombresoftware }}</td>
+                        <td>{{ version.version }}</td>
+                        <td>{{ version.fecha }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">{{ trans('no-data') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function comprobarActualizaciones() {
+            document.getElementById('message').innerHTML = 'No hay actualizaciones Disponibles Actualmente';
+        }
+    </script>
+{% endblock %}

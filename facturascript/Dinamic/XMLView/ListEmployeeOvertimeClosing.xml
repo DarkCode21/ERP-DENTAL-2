@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ListEmployeeOvertimeClosing.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller ListEmployeeOvertimeClosing
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id" readonly="true"/>
+        </column>
+        <column name="closing" display="none" order="100">
+            <widget type="text" fieldname="idclosing" readonly="true"/>
+        </column>
+        <column name="employee" order="110">
+            <widget type="autocomplete" fieldname="idemployee">
+                <values source="rrhh_employees" fieldcode="id" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="overtime" title="extra-hours" display="right" order="120">
+            <widget type="number" fieldname="overtime" decimal="2"/>
+        </column>
+        <column name="compensation" display="center" order="130">
+            <widget type="select" fieldname="compensation" translate="true">
+                <values title="no-compensation">0</values>
+                <values title="monetary">1</values>
+                <values title="holidays">2</values>
+            </widget>
+        </column>
+    </columns>
+
+    <rows>
+        <row type="actions">
+            <button type="modal" label="compensation" color="info" action="compensation" icon="fa-solid fa-list-check"/>
+        </row>
+    </rows>
+
+    <modals>
+        <group name="compensation" title="overtime-compensation" icon="fa-solid fa-list-check">
+            <column name="closing" display="none" order="100">
+                <widget type="text" fieldname="idclosing" readonly="true"/>
+            </column>
+            <column name="compensation">
+                <widget type="select" fieldname="new_compensation" translate="true" required="true">
+                    <values title="no-compensation">0</values>
+                    <values title="monetary">1</values>
+                    <values title="holidays">2</values>
+                </widget>
+            </column>
+        </group>
+    </modals>
+</view>

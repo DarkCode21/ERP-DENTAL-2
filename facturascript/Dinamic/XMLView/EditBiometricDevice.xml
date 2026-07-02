@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditBiometricDevice.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditBiometricDevice
+-->
+<view>
+    <columns>
+        <group name="id" numcolumns="12">
+            <column name="code" numcolumns="2" display="none" order="100">
+                <widget type="text" fieldname="id" readonly="true"/>
+            </column>
+            <column name="name" order="110">
+                <widget type="text" fieldname="name" required="true"/>
+            </column>
+            <column name="type" numcolumns="3" order="110">
+                <widget type="select" fieldname="type" required="true" icon="fa-solid fa-fingerprint">
+                    <values title="Anviz">1</values>
+                </widget>
+            </column>
+            <column name="zone" numcolumns="4" order="110">
+                <widget type="select" fieldname="timezone" required="true" icon="fa-solid fa-globe"/>
+            </column>
+        </group>
+        <group name="device" numcolumns="12" valign="bottom">
+            <column name="device" numcolumns="2" order="110">
+                <widget type="number" fieldname="device" step="1" min="0" icon="fa-solid fa-tablet-alt"/>
+            </column>
+            <column name="host" numcolumns="3" order="120">
+                <widget type="text" fieldname="host" required="true" icon="fa-solid fa-server"/>
+            </column>
+            <column name="port" numcolumns="2" order="130">
+                <widget type="number" fieldname="port" step="1" min="0" icon="fa-solid fa-sort-numeric-down-alt"/>
+            </column>
+            <column name="auto-import" numcolumns="2" order="140">
+                <widget type="checkbox" fieldname="auto_import"/>
+            </column>
+        </group>
+        <group name="address" numcolumns="12">
+            <column name="address" order="100">
+                <widget type="text" fieldname="roadname" maxlength="100" icon="fa-solid fa-road"/>
+            </column>
+            <column name="zip-code" numcolumns="2" order="110">
+                <widget type="text" fieldname="zipcode" maxlength="10"/>
+            </column>
+            <column name="city" numcolumns="3" order="120">
+                <widget type="autocomplete" fieldname="idcity" onclick="EditCiudad">
+                    <values source="ciudades" fieldcode="idciudad" fieldtitle="ciudad"/>
+                </widget>
+            </column>
+            <column name="province" numcolumns="2" order="130">
+                <widget type="autocomplete" fieldname="idprovince" onclick="EditProvincia" readonly="true">
+                    <values source="provincias" fieldcode="idprovincia" fieldtitle="provincia"/>
+                </widget>
+            </column>
+        </group>
+        <group name="other" numcolumns="12">
+            <column name="notes" numcolumns="12" order="100">
+                <widget type="textarea" fieldname="note" rows="3" icon="fa-solid fa-sticky-note"/>
+            </column>
+        </group>
+    </columns>
+</view>

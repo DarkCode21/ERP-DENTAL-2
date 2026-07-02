@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="patient" order="105">
+            <widget type="text" fieldname="paciente_nombre"/>
+        </column>
+        <column name="date" order="110">
+            <widget type="date" fieldname="fecha"/>
+        </column>
+        <column name="type" order="120">
+            <widget type="text" fieldname="tipo" translate="true"/>
+        </column>
+        <column name="reason" order="130">
+            <widget type="text" fieldname="motivo_consulta"/>
+        </column>
+        <column name="diagnosis" order="140">
+            <widget type="text" fieldname="diagnostico"/>
+        </column>
+    </columns>
+</view>

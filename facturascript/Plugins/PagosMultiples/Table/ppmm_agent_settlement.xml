@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples  Copyright (C) 2018-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ppmm_agent_settlement.xml
+    Author     : Jose Antonio Cuello <yopli2000@gmail.com>
+    Description:
+        Structure for the settlement of agent collections table.
+-->
+<table>
+    <column>
+        <name>automatic</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+
+    <column>
+        <name>accept</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+
+    <column>
+        <name>bankchecks</name>
+        <type>double precision</type>
+        <default>0</default>
+    </column>
+
+    <column>
+        <name>bills500</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>bills200</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>bills100</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>bills50</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>bills20</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>bills10</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>bills5</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>coins2</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>coins1</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>coins050</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>coins020</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>coins010</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>coins005</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>coins002</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>coins001</name>
+        <type>integer</type>
+    </column>
+
+    <column>
+        <name>difference</name>
+        <type>double precision</type>
+        <default>0</default>
+    </column>
+
+    <column>
+        <name>id</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+
+    <column>
+        <name>total</name>
+        <type>double precision</type>
+        <default>0</default>
+    </column>
+
+    <column>
+        <name>total_diets</name>
+        <type>double precision</type>
+        <default>0</default>
+    </column>
+
+    <constraint>
+        <name>ppmm_agent_settlement_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_ppmm_agent_settlement_customer</name>
+        <type>FOREIGN KEY (id) REFERENCES ppmm_customer_receipts (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

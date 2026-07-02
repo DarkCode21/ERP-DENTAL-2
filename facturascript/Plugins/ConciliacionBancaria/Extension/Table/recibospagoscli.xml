@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<table>
+    <column>
+        <name>idbankmovement</name>
+        <type>integer</type>
+    </column>
+    <constraint>
+        <name>ca_recibospagoscli_cuentasbanco_movimientos</name>
+        <type>FOREIGN KEY (idbankmovement) REFERENCES cuentasbanco_movimientos (id) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

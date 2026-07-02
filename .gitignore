@@ -1,0 +1,33 @@
+# Composer
+vendor/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+*.log
+log.txt
+
+# Entorno
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+tmp/
+temp/
+
+# FacturaScripts
+facturascript/MyFiles/Cache/
+facturascript/MyFiles/Tmp/

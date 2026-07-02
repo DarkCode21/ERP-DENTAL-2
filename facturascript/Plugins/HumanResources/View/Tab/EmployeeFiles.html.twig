@@ -1,0 +1,192 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+*/
+#}
+{% set employeeView = fsc.views | first %}
+{% set employee = employeeView.model %}
+{% set currentView = fsc.getCurrentView() %}
+{% set docsTypes = fsc.codeModel.all('rrhh_documentstypes', 'id', 'name', false) %}
+
+<div class="container-fluid">
+    {# -- New form -- #}
+    <div class="row">
+        <div class="col">
+            <form id="{{ 'form' ~ currentView.getViewName() ~ '0' }}" action="{{ employee.url() }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}" />
+                <input type="hidden" name="action" value="add-file" />
+                <input type="hidden" name="multireqtoken" value="{{ fsc.multiRequestProtection.newToken() }}"/>
+                <div class="card border-success shadow mb-2">
+                    <div class="card-body p-2">
+                        <button class="btn btn-sm btn-outline-success" type="button" data-toggle="collapse" data-target="#NewFileCollapse" aria-expanded="false">
+                            <i class="fa-solid fa-plus-square fa-fw" aria-hidden="true"></i>
+                            {{ trans('add') }}
+                        </button>
+                        &nbsp;
+                        {{ currentView.title }}
+                    </div>
+                    <div class="collapse" id="NewFileCollapse">
+                        <div class="card-body border-top">
+                            <div class="form-row align-items-end">
+                                {{ _self.inputNumber('now' | date('Y'), fsc, 0) }}
+                                {{ _self.selectDocumentTypes(0, docsTypes, fsc, 0) }}
+                                {{ _self.inputDate('', fsc, 0) }}
+                                {{ _self.inputBool('', fsc, 0) }}
+                            </div>
+                            {{ _self.inputTextArea('', fsc) }}
+                            <div class="form-row align-items-end">
+                                <div class="col">
+                                    <input type="file" name="new-files[]" class="form-control-file" multiple required="" />
+                                    <p class="text-muted mb-0">{{ trans('help-server-accepts-filesize', {'%size%': currentView.model.getMaxFileUpload()}) }}</p>
+                                </div>
+                                <div class="col text-right">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="fa-solid fa-save fa-fw" aria-hidden="true"></i> {{ trans('save') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% for counter, employeeDocument in currentView.cursor %}
+                {% set formName = currentView.getViewName() ~ (counter + 1) %}
+                {% set urlFile = employeeDocument.getUrlDownload() %}
+                <form id="{{ 'form' ~ formName }}" action="{{ employee.url() }}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}" />
+                    <input type="hidden" name="id" value="{{ employeeDocument.id }}" />
+                    <input type="hidden" name="action" value="edit-file"/>
+                    <input type="hidden" name="multireqtoken" value="{{ fsc.multiRequestProtection.newToken() }}"/>
+                    <div class="card shadow mb-3">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-md-9">
+                                    <h5 class="card-title"><i class="far fa-file-image mb-3"></i> &nbsp;{{ employeeDocument.filename }}</h5>
+                                    <div class="form-row align-items-end">
+                                        {{ _self.inputNumber(employeeDocument.year_group, fsc, 1) }}
+                                        {{ _self.selectDocumentTypes(employeeDocument.iddoctype, docsTypes, fsc, 1) }}
+                                        {{ _self.inputDate(employeeDocument.expires, fsc, 1) }}
+                                        {{ _self.inputBool(employeeDocument.downloadable, fsc, 1) }}
+                                    </div>
+                                    {{ _self.inputTextArea(employeeDocument.note, fsc) }}
+                                    <div class="form-row">
+                                        <div class="col">
+                                            {{ _self.buttonDelete(formName, fsc) }}
+                                        </div>
+                                        <div class="col text-center">
+                                            <small>
+                                                <i class="fa-solid fa-user"></i> {{ employeeDocument.nick }} &nbsp;
+                                                <i class="fa-solid fa-calendar-alt"></i> {{ employeeDocument.creationdate }}
+                                            </small>
+                                        </div>
+                                        <div class="col text-right">
+                                            <a class="btn btn-sm btn-outline-info" target="_blank" href="{{ asset(urlFile) }}">
+                                                <i class="fa-solid fa-cloud-download-alt"></i>
+                                                <span class="d-none d-sm-inline-block">{{ trans('download') }}</span>
+                                            </a>
+                                            <button class="btn btn-sm btn-primary" type="submit" name="action" value="edit-file">
+                                                <i class="fa-solid fa-save fa-fw" aria-hidden="true"></i>
+                                                <span class="d-none d-sm-inline-block">{{ trans('save') }}</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    {{ _self.previewFile(urlFile, employeeDocument.filename, employeeDocument.getExtension(), fsc) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% macro selectDocumentTypes(iddoctype, options, fsc, adjustment) %}
+    <div class="form-group col-{{3 + adjustment}}">
+        <label>{{ trans('type') }}</label>
+        <select name="iddoctype" class="form-control">
+            {% for row in options %}
+                {% set selected = (row.code == iddoctype) ? ' selected' %}
+                <option value="{{ row.code }}"{{ selected }}>{{ row.description }}</option>
+            {%  endfor %}
+        </select>
+    </div>
+{% endmacro %}
+
+{% macro inputBool(value, fsc, adjustment) %}
+    <div class="form-group col-{{1 + adjustment}} pl-4">
+        <input type="checkbox" name="downloadable" class="form-check-input" value="1" {% if value %}checked{% endif %}>
+        <label>{{ trans('public') }}</label>
+    </div>
+{% endmacro %}
+
+{% macro inputDate(value, fsc, adjustment) %}
+    <div class="form-group col-{{2 + adjustment}}">
+        <label class="mb-0">{{ trans('expires') }}</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="far fa-calendar-times fa-fw"></i></span>
+            </div>
+            <input type="date" name="expires" class="form-control" autocomplete="off" value="{{ value }}">
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro inputNumber(value, fsc, adjustment) %}
+    <div class="form-group col-{{2 + adjustment}}">
+        <label>{{ trans('year') }}</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="far fa-calendar fa-fw"></i></span>
+            </div>
+            <input type="number" name="year_group" class="form-control" placeholder="{{ trans('year') }}" value="{{ value }}" step="1" min="2000" autocomplete="off">
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro inputTextArea(text, fsc) %}
+    <div class="form-group">
+        <textarea name="note" class="form-control col-12" placeholder="{{ trans('notes') }}">{{ text }}</textarea>
+    </div>
+{% endmacro %}
+
+{% macro previewFile(url, filename, extFile, fsc) %}
+    <style>
+        .preview-fit { width: inherit; height: 215px; max-width: 100%; max-height: 100%; object-fit: contain; }
+    </style>
+    {% if extFile in ['gif','jpg', 'jpeg','png', 'svg', 'webp'] %}
+        <img src="{{ asset(url) }}" class="preview-fit img-thumbnail border-info" alt="{{ filename }}">
+    {% elseif extFile in ['mp4', 'ogg', 'webm'] %}
+        <div class="embed-responsive embed-responsive-16by9">
+            <video class="preview-fit" controls><source src="{{ asset(url) }}" type="video/{{ extFile }}" /></video>
+        </div>
+    {% elseif extFile == 'pdf' %}
+        <embed class="preview-fit" src="{{ asset(url) }}" type="application/pdf">
+    {% else %}
+        <p class="card-text">{{ trans('preview-file-type-not-soported') }}</p>
+    {% endif %}
+{% endmacro %}
+
+{% macro buttonDelete(formName, fsc) %}
+    {% set label = trans('delete-file') %}
+    {% set text = trans('are-you-sure') %}
+    {% set cancel = trans('cancel') %}
+    {% set confirm = trans('confirm') %}
+    <button type="button" class="btn btn-sm btn-danger"
+            onclick="confirmAction('{{ formName }}','delete-file','{{ label }}','{{ text }}','{{ cancel }}','{{ confirm }}');">
+        <i class="fa-solid fa-trash-alt fa-fw" aria-hidden="true"></i>
+        <span class="d-none d-sm-inline-block">{{ trans('delete') }}</span>
+    </button>
+{% endmacro %}

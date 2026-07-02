@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="options" numcolumns="12">
+            <column name="traceability" display="center" order="145">
+                <widget type="checkbox" fieldname="trazabilidad"/>
+            </column>
+        </group>
+    </columns>
+</view>

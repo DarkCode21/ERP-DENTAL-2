@@ -1,0 +1,183 @@
+{% block body %}
+	<div
+		class="container-fluid">
+		{# -- Combined Form with Files -- #}
+		<form id="main-form" method="post" enctype="multipart/form-data">
+			{{ formToken() }}
+			<input type="hidden" name="action" value="save"/>
+			<input type="hidden" name="activetab" value="EditArchivo"/>
+			<input type="hidden" name="code" value="{{ fsc.getViewModelValue('EditArchivo', 'id') }}"/>
+
+			<div class="card shadow mb-3">
+				<div class="card-header">
+					<h5 class="mb-0">{{ trans('clinical-file') }}</h5>
+				</div>
+				<div class="card-body">
+					<div class="form-row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>{{ trans('patient') }}
+									*</label>
+								<select name="idpaciente" id="idpaciente" class="form-control" required>
+									<option value="">{{ trans('select-option') }}</option>
+									{% for patient in fsc.patients %}
+										<option value="{{ patient.id }}" {% if fsc.getViewModelValue('EditArchivo', 'idpaciente') == patient.id %} selected {% endif %}>{{ patient.razonsocial }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>{{ trans('specialist') }}</label>
+								<select name="idespecialista" id="idespecialista" class="form-control">
+									<option value="">{{ trans('select-option') }}</option>
+									{% for specialist in fsc.specialists %}
+										<option value="{{ specialist.id }}" {% if fsc.getViewModelValue('EditArchivo', 'idespecialista') == specialist.id %} selected {% endif %}>{{ specialist.nombre }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>{{ trans('appointment') }}</label>
+								<select name="idcita" id="idcita" class="form-control" disabled>
+									<option value="">{{ trans('select-option') }}</option>
+									{% for appt in fsc.appointments %}
+										<option value="{{ appt.id }}" data-idpaciente="{{ appt.idpaciente }}" data-idespecialista="{{ appt.idespecialista }}" {% if fsc.getViewModelValue('EditArchivo', 'idcita') == appt.id %} selected {% endif %}>{{ appt.fecha }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>{{ trans('treatment') }}</label>
+								<select name="idtratamiento" id="idtratamiento" class="form-control" disabled>
+									<option value="">{{ trans('select-option') }}</option>
+									{% for treatment in fsc.treatments %}
+										<option value="{{ treatment.id }}" data-idpaciente="{{ treatment.idpaciente }}" {% if fsc.getViewModelValue('EditArchivo', 'idtratamiento') == treatment.id %} selected {% endif %}>{{ treatment.referencia_servicio }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>{{ trans('category') }}
+									*</label>
+								<input type="text" name="categoria" class="form-control" value="{{ fsc.getViewModelValue('EditArchivo', 'categoria') }}" required>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>{{ trans('observations') }}</label>
+						<textarea name="descripcion" class="form-control" rows="3">{{ fsc.getViewModelValue('EditArchivo', 'descripcion') }}</textarea>
+					</div>
+					<div class="form-group mb-0">
+						<label>{{ trans('file') }}</label>
+						<input type="file" name="newfiles[]" class="form-control-file" multiple>
+						<small class="text-muted">{{ trans('help-server-accepts-filesize', {'%size%': '100'}) }}</small>
+					</div>
+				</div>
+				<div class="card-footer text-right">
+					<button type="submit" class="btn btn-primary">
+						<i class="fas fa-save"></i>
+						{{ trans('save') }}
+					</button>
+				</div>
+			</div>
+		</form>
+
+		{# -- File list (after save) -- #}
+		{% if fsc.files | length > 0 %}
+			<div class="card shadow">
+				<div class="card-header">
+					<h5 class="mb-0">
+						<i class="fas fa-paperclip"></i>
+						{{ trans('files') }}</h5>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						{% for docfile in fsc.files %}
+							<div class="col-md-4 mb-3">
+								<div class="card">
+									<div class="card-body p-2">
+										{% set file = docfile.getFile() %}
+										{% if file.mimetype starts with 'image/' %}
+											<img src="{{ asset(file.url('download')) }}" class="img-fluid rounded w-100 mb-2">
+										{% else %}
+											<i class="fas fa-file fa-2x text-muted mr-3"></i>
+										{% endif %}
+										<div class="d-flex justify-content-between align-items-center">
+											<div>
+												<strong>{{ file.filename }}</strong>
+												<br><small class="text-muted">{{ (file.size / 1024) | number_format(2) }} KB</small>
+											</div>
+											<div>
+												<a href="{{ file.url('download-permanent') }}" target="_blank" class="btn btn-outline-primary btn-sm">
+													<i class="fas fa-download"></i>
+												</a>
+												<form action="{{ fsc.getViewModel('EditArchivo').url() }}" method="post" class="d-inline">
+													{{ formToken() }}
+													<input type="hidden" name="action" value="delete-file"/>
+													<input type="hidden" name="id" value="{{ docfile.id }}"/>
+													<input type="hidden" name="activetab" value="EditArchivo"/>
+													<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('{{ trans('are-you-sure') }}');">
+														<i class="fas fa-trash"></i>
+													</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const pacienteSelect = document.getElementById('idpaciente');
+			const especialistaSelect = document.getElementById('idespecialista');
+			const citaSelect = document.getElementById('idcita');
+			const tratamientoSelect = document.getElementById('idtratamiento');
+
+			function filterCitas() {
+				const pacienteId = String(pacienteSelect.value);
+				const especialistaId = String(especialistaSelect.value);
+				const options = citaSelect.querySelectorAll('option');
+
+				options.forEach(function(option) {
+					if (option.value === '') return;
+					const matchPaciente = !pacienteId || String(option.dataset.idpaciente) === pacienteId;
+					const matchEspecialista = !especialistaId || String(option.dataset.idespecialista) === especialistaId;
+					option.style.display = (matchPaciente && matchEspecialista) ? '' : 'none';
+				});
+				citaSelect.disabled = options.length <= 1;
+			}
+
+			function filterTratamientos() {
+				const pacienteId = String(pacienteSelect.value);
+				const options = tratamientoSelect.querySelectorAll('option');
+
+				options.forEach(function(option) {
+					if (option.value === '') return;
+					const matchPaciente = !pacienteId || String(option.dataset.idpaciente) === pacienteId;
+					option.style.display = matchPaciente ? '' : 'none';
+				});
+				tratamientoSelect.disabled = options.length <= 1;
+			}
+
+			pacienteSelect.addEventListener('change', function() {
+				filterCitas();
+				filterTratamientos();
+			});
+			especialistaSelect.addEventListener('change', filterCitas);
+
+			filterCitas();
+			filterTratamientos();
+		});
+	</script>
+{% endblock %}

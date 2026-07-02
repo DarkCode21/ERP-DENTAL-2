@@ -1,0 +1,23 @@
+{
+    "accepted-with-errors": "Accepted with errors",
+    "error-cert-not-found": "Certificate not found",
+    "error-read-cert": "Error reading certificate",
+    "error-write-cert": "Error writing certificate",
+    "incorrect": "Incorrecto",
+    "no-location-for-port": "Port location not found: %port%",
+    "not-sent": "Not sent",
+    "pct-irpf": "% IRPF",
+    "pct-supplied": "% Supplied",
+    "regimen-key": "Regimen key",
+    "report-sii": "Report SII",
+    "send-to-aeat": "Send to AEAT",
+    "set-decimals-to-two": "You must set decimals to 2",
+    "sii-sent": "SII sending date",
+    "sii-status": "SII status",
+    "type-invoice": "Invoice type",
+    "wrong-total-tax-calculation": "Incorrect calculation of total tax",
+    "xml-processing": "%num% out of %total% XML have been processed",
+    "xml-sent-error": "%num% XML not sent",
+    "xml-sent-success": "%num% XML sent",
+    "xml-sent-warning": "%num% XML sent with warnings"
+}

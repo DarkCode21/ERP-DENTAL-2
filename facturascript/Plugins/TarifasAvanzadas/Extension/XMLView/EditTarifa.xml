@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data">
+            <column name="decimals" order="150">
+                <widget type="number" fieldname="decimales" min="0" step="1" />
+            </column>
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,16 @@
+{
+    "accumulate-discount": "Deskontua pilatu",
+    "discounts": "Deskontuak",
+    "fixed-price": "Prezio finkoa",
+    "formula-cost-price-alt": "Kostu-prezioa + %x%% + %%y",
+    "formula-sale-price-alt": "Prezioa - %x%% - %y%",
+    "global-changes": "Aldaketa globalak",
+    "global-changes-desc": "Hemen gertu diren aldaketak, beheko alderi guztietara aplikatuko dira",
+    "level-tarifas-av": "Prezioak ikusteko gutxieneko maila",
+    "prices": "Prezioak",
+    "reset-all-rates": "Tasa guztiak berrezarri",
+    "reset-rates": "Tarifak berrezarri",
+    "reset-rates-for-this-variant": "Aldaketa hauetarako tarifak berrezarri",
+    "save-all-variants": "Guztizko aldaerak gorde",
+    "save-this-variant": "Bvariantza hau gorde"
+}

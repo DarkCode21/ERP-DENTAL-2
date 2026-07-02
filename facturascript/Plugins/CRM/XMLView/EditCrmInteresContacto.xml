@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="main" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id" />
+            </column>
+            <column name="contact" order="110">
+                <widget type="autocomplete" fieldname="idcontacto" onclick="EditContacto" required="true">
+                    <values source="Contacto" fieldcode="idcontacto"/>
+                </widget>
+            </column>
+            <column name="interest" titleurl="ListContacto?activetab=ListCrmInteres" order="120">
+                <widget type="select" fieldname="idinteres" onclick="EditCrmInteres" required="true">
+                    <values source="crm_intereses" fieldcode="id" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="date" display="right" order="130">
+                <widget type="date" fieldname="fecha" readonly="true" />
+            </column>
+        </group>
+    </columns>
+</view>

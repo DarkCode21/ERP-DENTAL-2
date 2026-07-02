@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditEmployeeSanction.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditEmployeeSanction
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" order="0" display="none">
+                <widget type="text" fieldname="id" readonly="true"/>
+            </column>
+            <column name="employee" display="none" order="110">
+                <widget type="autocomplete" fieldname="idemployee" required="true" readonly="true">
+                    <values source="rrhh_employees" fieldcode="id" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="date" order="120">
+                <widget type="date" fieldname="startdate" required="true"/>
+            </column>
+            <column name="notification" order="130">
+                <widget type="date" fieldname="notification"/>
+            </column>
+            <column name="notice" order="140">
+                <widget type="select" fieldname="notice" required="true" translate="true">
+                    <values title="none">1</values>
+                    <values title="written">2</values>
+                    <values title="verbal">3</values>
+                </widget>
+            </column>
+            <column name="level" order="150">
+                <widget type="select" fieldname="level" required="true" translate="true">
+                    <values title="mild">1</values>
+                    <values title="medium">2</values>
+                    <values title="severe">3</values>
+                    <values title="very-severe">4</values>
+                </widget>
+            </column>
+        </group>
+        <group name="offense" numcolumns="12">    
+            <column name="disciplinary-offense" order="150">
+                <widget type="select" fieldname="idoffense" required="true">
+                    <values source="rrhh_disciplinaryoffenses" fieldcode="id" fieldtitle="name"/>
+                </widget>
+            </column>
+            <column name="sanction" order="150">
+                <widget type="select" fieldname="idsanction" required="true">
+                    <values source="rrhh_sanctions" fieldcode="id" fieldtitle="name"/>
+                </widget>
+            </column>
+        </group>
+        <group name="notes" numcolumns="12">
+            <column name="notes" numcolumns="12" order="110">
+                <widget type="textarea" fieldname="note" rows="4"/>
+            </column>
+        </group>
+    </columns>    
+</view>

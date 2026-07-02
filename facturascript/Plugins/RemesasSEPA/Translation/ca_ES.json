@@ -1,0 +1,17 @@
+{
+    "cant-delete-remittance-receipts": "No es pot eliminar una remesa amb rebuts.",
+    "charge-date": "Data càrrec",
+    "charges": "Cobrament",
+    "creditor-id": "Creditor ID",
+    "customer-have-no-iban": "%customer% no té cap compte bancari amb IBAN.",
+    "group-receipts-by-customer": "Agrupar rebuts per client",
+    "ready": "Preparada",
+    "receipt-inside-remittance": "No es pot suprimir un rebut que està dins d'una remesa.",
+    "rectify": "Rectificar",
+    "remittance": "Remesa",
+    "remittance-charged": "Remesa cobrada",
+    "remittance-paid": "Remesa pagada",
+    "remittance-ready-to-download": "Remesa llesta per descarregar",
+    "remittance-sent": "Remesa enviada",
+    "remittances": "Remeses"
+}

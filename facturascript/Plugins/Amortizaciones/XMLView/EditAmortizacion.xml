@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditAmortizacion.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of the view for edit an amortization.
+-->
+<view>
+    <columns>
+        <group name="basic" numcolumns="9">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="idamortizacion" readonly="true" />
+            </column>
+            <column name="company" display="none" numcolumns="2" order="110">
+                <widget type="select" fieldname="idempresa" required="true" onclick="EditEmpresa">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto" />
+                </widget>
+            </column>
+            <column name="description" order="120">
+                <widget type="text" fieldname="descripcion" required="true" />
+            </column>
+            <column name="type" numcolumns="2" order="130">
+                <widget type="select" fieldname="tipo" required="true" translate="true">
+                    <values title="constant">constante</values>
+                    <values title="banking">bancario</values>
+                    <values title="lineal">lineal</values>
+                </widget>
+            </column>
+        </group>
+        <group name="dates" numcolumns="3">
+            <column name="start-date" order="100">
+                <widget type="date" fieldname="fechainicio" required="true" />
+            </column>
+            <column name="end-date" order="110">
+                <widget type="date" fieldname="fechafin" readonly="true" />
+            </column>
+        </group>
+        <group name="invoices" numcolumns="12">
+            <column name="purchase-invoice" numcolumns="2" order="140">
+                <widget type="autocomplete" fieldname="idfactura" onclick="EditFacturaProveedor">
+                    <values source="facturasprov" fieldcode="idfactura" fieldtitle="codigo" fieldfilter="idempresa" />
+                </widget>
+            </column>
+            <column name="amount" numcolumns="2" order="150">
+                <widget type="money" decimal="2" fieldname="valor" required="true" />
+            </column>
+            <column name="currency" numcolumns="2" order="160">
+                <widget type="select" fieldname="coddivisa" required="true">
+                    <values source="divisas" fieldcode="coddivisa" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="sales-invoice" numcolumns="2" order="200">
+                <widget type="autocomplete" fieldname="idfacturaventa" onclick="EditFacturaCliente" readonly="true">
+                    <values source="facturascli" fieldcode="idfactura" fieldtitle="codigo" fieldfilter="idempresa" />
+                </widget>
+            </column>
+            <column name="end-useful" numcolumns="2" order="210">
+                <widget type="date" fieldname="fechafinvidautil" readonly="true" />
+            </column>
+        </group>
+    </columns>
+    <modals>
+        <group name="generate" title="create-plan" class="modal-lg" icon="fas fa-cogs">
+            <column name="code" display="none">
+                <widget type="text" fieldname="idamortizacion" />
+            </column>
+            <column name="firstperiod" title="first-period" description="first-period-calculation" numcolumns="12">
+                <widget type="select" fieldname="firstPeriodType" translate="true" required="true">
+                    <values title="period-complete">1</values>
+                    <values title="acquisition-with-distribution">2</values>
+                    <values title="acquisition-additional-period">3</values>
+                </widget>
+            </column>
+        </group>
+        <group name="finalize" title="end-useful-life" class="modal-lg" icon="far fa-calendar-times">
+            <column name="code" display="none">
+                <widget type="text" fieldname="idamortizacion" />
+            </column>
+            <column name="amount" numcolumns="3">
+                <widget type="money" decimal="2" fieldname="valor" readonly="true" />
+            </column>
+            <column name="amortized" numcolumns="3">
+                <widget type="money" decimal="2" fieldname="amortized" readonly="true" />
+            </column>
+            <column name="pending" numcolumns="3">
+                <widget type="money" decimal="2" fieldname="pending" readonly="true" />
+            </column>
+            <column name="currency" numcolumns="3">
+                <widget type="autocomplete" fieldname="coddivisa" readonly="true">
+                    <values source="divisas" fieldcode="coddivisa" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="date" numcolumns="4">
+                <widget type="date" fieldname="finalize_date" />
+            </column>
+        </group>
+        <group name="sell" title="sell-immobilized" class="modal-lg" icon="fas fa-donate">
+            <column name="code" display="none">
+                <widget type="text" fieldname="idamortizacion" />
+            </column>
+            <column name="sell-company" title="company" numcolumns="3">
+                <widget type="select" fieldname="idempresa" readonly="true">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto" />
+                </widget>
+            </column>
+            <column name="sell-description" title="description" numcolumns="6">
+                <widget type="text" fieldname="descripcion" readonly="true" />
+            </column>
+            <column name="sell-residual" title="residual" numcolumns="3">
+                <widget type="money" decimal="2" fieldname="residual" readonly="true" />
+            </column>
+            <column name="sellsubaccount" title="subaccount-sell" numcolumns="9">
+                <widget type="autocomplete" fieldname="sell_subaccount" required="true">
+                    <values source="subcuentas" fieldcode="codsubcuenta" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="sell-amount" title="amount" numcolumns="3">
+                <widget type="money" decimal="2" fieldname="sell_amount" min="0.01" required="true" />
+            </column>
+            <column name="sell-invoice" title="invoice" description="sell-invoice-description" numcolumns="12">
+                <widget type="autocomplete" fieldname="sell_invoice">
+                    <values source="facturascli" fieldcode="idfactura" fieldtitle="codigo" fieldfilter="idempresa" />
+                </widget>
+            </column>
+            <column name="sell-customer" title="customer" numcolumns="6">
+                <widget type="autocomplete" fieldname="sell_customer">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre" />
+                </widget>
+            </column>
+            <column name="sell-serie" title="serie" numcolumns="3">
+                <widget type="autocomplete" fieldname="sell_serie">
+                    <values source="series" fieldcode="codserie" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="sell-date" title="date" numcolumns="3">
+                <widget type="date" fieldname="sell_date" />
+            </column>
+        </group>
+    </modals>
+</view>

@@ -1,0 +1,563 @@
+{#
+/**
+ * This file is part of FacturaScripts
+ * Copyright (C) 2017-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
+ */
+#}
+{% extends "Master/MenuBghTemplate.html.twig" %}
+{% import 'Macro/Utils.html.twig' as Utils %}
+
+{% block body %}
+    <div class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h1 class="h4">
+                        {% if fsc.getPageData().name == fsc.user.homepage %}
+                            <a class="btn btn-sm btn-secondary align-bottom active"
+                               href="{{ fsc.url() }}?defaultPage=FALSE" title="{{ trans('marked-as-homepage') }}">
+                                <i class="fa-solid fa-bookmark" aria-hidden="true"></i>
+                            </a>
+                        {% else %}
+                            <a class="btn btn-sm btn-secondary align-bottom" href="{{ fsc.url() }}?defaultPage=TRUE"
+                               title="{{ trans('mark-as-homepage') }}">
+                                <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+                            </a>
+                        {% endif %}
+                        <span class="ms-2">{{ fsc.title }}</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        {% block sectionStats %}
+            {{ _self.sectionStats(fsc) }}
+        {% endblock %}
+
+        {% block dashboardCharts %}
+            {% if pluginEnabled('Informes') %}
+                <div id="dashChartsSection" class="mb-4">
+                    <div class="row pb-3">
+                        <div class="col-12">
+                            <div class="card shadow">
+                                <div class="card-body h5 mb-0">
+                                    <i class="fa-solid fa-chart-line"></i> {{ trans('annual-result') }}
+                                    <span id="dashChartsSpinner" class="ms-2 spinner-border spinner-border-sm text-secondary" role="status" style="display:none;"></span>
+                                </div>
+                                <div style="height:300px; padding: 0 1rem 1rem;">
+                                    <canvas id="dash_chartsResume"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pb-3 g-3">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card shadow">
+                                <div class="card-body h5 mb-0">
+                                    <i class="fa-solid fa-chart-pie"></i> {{ trans('sales-per-family') }}
+                                </div>
+                                <div style="height:250px; padding: 0 1rem;">
+                                    <canvas id="dash_chartsFamilies"></canvas>
+                                </div>
+                                <div class="table-responsive" id="dash_chartsListFamilies">
+                                    <table class="table mb-0 table-sm">
+                                        <thead><tr><th></th><th>{{ trans('family') }}</th><th class="text-end">%</th><th class="text-end">{{ trans('total') }}</th></tr></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card shadow">
+                                <div class="card-body h5 mb-0">
+                                    <i class="fa-solid fa-chart-pie"></i> {{ trans('sales-per-serie') }}
+                                </div>
+                                <div style="height:250px; padding: 0 1rem;">
+                                    <canvas id="dash_chartsSeries"></canvas>
+                                </div>
+                                <div class="table-responsive" id="dash_chartsListSeries">
+                                    <table class="table mb-0 table-sm">
+                                        <thead><tr><th></th><th>{{ trans('serie') }}</th><th class="text-end">%</th><th class="text-end">{{ trans('total') }}</th></tr></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card shadow">
+                                <div class="card-body h5 mb-0">
+                                    <i class="fa-solid fa-chart-pie"></i> {{ trans('sales-per-paymethod') }}
+                                </div>
+                                <div style="height:250px; padding: 0 1rem;">
+                                    <canvas id="dash_chartsPagos"></canvas>
+                                </div>
+                                <div class="table-responsive" id="dash_chartsListPagos">
+                                    <table class="table mb-0 table-sm">
+                                        <thead><tr><th></th><th>{{ trans('method-payment') }}</th><th class="text-end">%</th><th class="text-end">{{ trans('total') }}</th></tr></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card shadow">
+                                <div class="card-body h5 mb-0">
+                                    <i class="fa-solid fa-chart-pie"></i> {{ trans('sales-per-agent') }}
+                                </div>
+                                <div style="height:250px; padding: 0 1rem;">
+                                    <canvas id="dash_chartsAgentes"></canvas>
+                                </div>
+                                <div class="table-responsive" id="dash_chartsListAgentes">
+                                    <table class="table mb-0 table-sm">
+                                        <thead><tr><th></th><th>{{ trans('agent') }}</th><th class="text-end">%</th><th class="text-end">{{ trans('total') }}</th></tr></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endblock %}
+
+        {% block sectionLinks %}
+            <div class="row">
+                <div class="col">
+                    {{ _self.sectionLinks(fsc) }}
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block sections %}
+            <div class="row">
+                {% if 'receipts' in fsc.sections and 'low-stock' in fsc.sections %}
+                    <div class="col-lg-6 col-md-12 pb-4">
+                        {{ _self.sectionReceipts(fsc) }}
+                    </div>
+                    <div class="col-lg-6 col-md-12 pb-4">
+                        {{ _self.sectionLowStock(fsc) }}
+                    </div>
+                {% elseif 'receipts' in fsc.sections %}
+                    <div class="col-lg-12 pb-4">
+                        {{ _self.sectionReceipts(fsc) }}
+                    </div>
+                {% elseif 'low-stock' in fsc.sections %}
+                    <div class="col-lg-12 pb-4">
+                        {{ _self.sectionLowStock(fsc) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Noticias ocultas
+            <div class="row pb-4 g-3">
+                <div class="col-12">
+                    {{ _self.sectionNews(fsc) }}
+                </div>
+            </div>
+            #}
+
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% macro drawStatsBox(fsc, group, color, ismoney, icon) %}
+    <div class="stat-card-wrapper">
+        <div class="stat-card {{ color }}">
+            {# Icono superior #}
+            <div class="stat-icon">
+                <i class="{{ icon }}"></i>
+            </div>
+
+            {# Título del grupo #}
+            <div class="stat-title">
+                {{ trans(group) }}
+            </div>
+
+            {# Valor principal (primera estadística) #}
+            {% set firstKey = fsc.stats[group]|keys|first %}
+            {% set firstValue = fsc.stats[group][firstKey] %}
+            <div class="stat-value">
+                {% if ismoney %}
+                    {{ money(firstValue) }}
+                {% else %}
+                    {{ firstValue }}
+                {% endif %}
+            </div>
+
+            {# Label del valor principal #}
+            <div class="stat-label">
+                {{ trans(firstKey) }}
+            </div>
+
+            {# Detalles adicionales si hay más estadísticas #}
+            {% if fsc.stats[group]|length > 1 %}
+                <div class="stat-details">
+                    {% for key, value in fsc.stats[group] %}
+                        {% if not loop.first %}
+                            <div class="stat-detail-item">
+                                <span class="stat-detail-label">{{ trans(key) }}:</span>
+                                {% if ismoney %}
+                                    <span class="stat-detail-value">{{ money(value) }}</span>
+                                {% else %}
+                                    <span class="stat-detail-value">{{ value }}</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro sectionLinks(fsc) %}
+    <div class="pb-4">
+        <div class="row g-3">
+            {# Columna 1: Crear #}
+            <div class="col-lg-4 col-md-6">
+                <div class="section-link-card">
+                    <button class="section-link-header" type="button" data-toggle="collapse"
+                            data-target="#createSection" aria-expanded="false" aria-controls="createSection">
+                        <div class="section-link-title">
+                            <i class="fas fa-plus section-link-icon"></i>
+                            <span>{{ trans('create') }}</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-link-arrow"></i>
+                    </button>
+
+                    <div class="collapse" id="createSection">
+                        <div class="section-link-body">
+                            <ul class="section-link-list">
+                                {% for link, label in fsc.createLinks %}
+                                    <li class="section-link-item">
+                                        <i class="fas fa-chevron-right section-link-bullet"></i>
+                                        <a href="{{ link }}" class="section-link-anchor">{{ trans(label) }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Columna 2: Historial (oculto) #}
+            {% if false and fsc.openLinks %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="section-link-card">
+                        <button class="section-link-header" type="button" data-toggle="collapse"
+                                data-target="#historySection" aria-expanded="false" aria-controls="historySection">
+                            <div class="section-link-title">
+                                <i class="fas fa-folder-open section-link-icon"></i>
+                                <span>{{ trans('open') }}</span>
+                            </div>
+                            <i class="fas fa-chevron-down section-link-arrow"></i>
+                        </button>
+
+                        <div class="collapse" id="historySection">
+                            <div class="section-link-body">
+                                <ul class="section-link-list">
+                                    {% for link in fsc.openLinks %}
+                                        <li class="section-link-item history-item">
+                                            <i class="fas fa-chevron-right section-link-bullet"></i>
+                                            <div class="history-content">
+                                                <div class="history-main">
+                                                    <span class="history-type">{{ trans(link.type) }}</span>
+                                                    <a href="{{ link.url }}" class="section-link-anchor">{{ link.name }}</a>
+                                                </div>
+                                                <span class="history-date">{{ link.date }}</span>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {# Columna 3: Ayuda (solo si el plugin Soporte está activo) #}
+            {% if pluginEnabled('Soporte') %}
+            <div class="col-lg-4 col-md-6">
+                <div class="section-link-card">
+                    <button class="section-link-header" type="button" data-toggle="collapse"
+                            data-target="#helpSection" aria-expanded="false" aria-controls="helpSection">
+                        <div class="section-link-title">
+                            <i class="fas fa-question-circle section-link-icon"></i>
+                            <span>{{ trans('help') }}</span>
+                        </div>
+                        <i class="fas fa-chevron-down section-link-arrow"></i>
+                    </button>
+
+                    <div class="collapse" id="helpSection">
+                        <div class="section-link-body">
+                            <ul class="section-link-list">
+                                <li class="section-link-item">
+                                    <i class="fas fa-chevron-right section-link-bullet"></i>
+                                    <a href="Soporte" class="section-link-anchor">
+                                        Soporte&nbsp;<i class="far fa-comment-dots"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro sectionLowStock(fsc) %}
+    <div class="section-link-card">
+        <button class="section-link-header" type="button" data-toggle="collapse"
+                data-target="#lowStockSection" aria-expanded="false" aria-controls="lowStockSection">
+            <div class="section-link-title">
+                <i class="fa-solid fa-pallet section-link-icon"></i>
+                <span>{{ trans('minimum-stock') }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="badge bg-warning me-3">{{ fsc.lowStock|length }}</span>
+                <i class="fas fa-chevron-down section-link-arrow"></i>
+            </div>
+        </button>
+
+        <div class="collapse" id="lowStockSection">
+            <div class="section-link-body">
+                {% for stock in fsc.lowStock %}
+                    <div class="d-flex justify-content-between align-items-center border border-warning rounded p-3 mb-2">
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">
+                                {{ stock.referencia }} • {{ stock.codalmacen }}
+                            </div>
+                            <div class="small text-muted">
+                                {{ trans('minimum-stock') }}: {{ number(stock.stockmin) }} •
+                                {{ trans('available') }}: {{ number(stock.disponible) }}
+                            </div>
+                        </div>
+                        <a href="{{ stock.url() }}" class="btn btn-sm btn-outline-primary ms-3"
+                           title="{{ trans('open') }}">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro sectionNews(fsc) %}
+    <div class="section-link-card">
+        <button class="section-link-header" type="button" data-toggle="collapse"
+                data-target="#newsSection" aria-expanded="true" aria-controls="newsSection">
+            <div class="section-link-title">
+                <i class="fas fa-newspaper section-link-icon"></i>
+                <span>{{ trans('news') }}</span>
+            </div>
+            <i class="fas fa-chevron-down section-link-arrow"></i>
+        </button>
+
+        <div class="collapse show" id="newsSection">
+            <div class="section-link-body">
+                {% for news in fsc.news %}
+                    <div class="d-flex align-items-start border rounded p-3 mb-2">
+                        <div class="me-3">
+                            <a href="{{ news.url }}" target="_blank" class="btn btn-outline-secondary btn-sm">
+                                <i class="fa-regular fa-newspaper"></i>
+                            </a>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold mb-1">
+                                <a href="{{ news.url }}" target="_blank" class="text-decoration-none">
+                                    {{ news.title | raw }}
+                                </a>
+                            </div>
+                            <div class="small text-muted mb-2">{{ news.fecha }}</div>
+                            <div class="small">{{ news.body | raw }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro sectionReceipts(fsc) %}
+    <div class="section-link-card">
+        <button class="section-link-header" type="button" data-toggle="collapse"
+                data-target="#receiptsSection" aria-expanded="true" aria-controls="receiptsSection">
+            <div class="section-link-title">
+                <i class="fa-solid fa-dollar-sign section-link-icon"></i>
+                <span>{{ trans('receipts') }}</span>
+            </div>
+            <div class="d-flex align-items-center">
+                <span class="badge bg-danger me-2">{{ trans('unpaid') }}</span>&nbsp;
+                <i class="fas fa-chevron-down section-link-arrow"></i>
+            </div>
+        </button>
+
+        <div class="collapse show" id="receiptsSection">
+            <div class="section-link-body">
+                {% for receipt in fsc.receipts %}
+                    <div class="d-flex justify-content-between align-items-center border border-danger rounded p-3 mb-2">
+                        <div class="flex-grow-1">
+                            <div class="fw-bold">
+                                {{ receipt.getSubject().nombre | raw }} • {{ money(receipt.importe) }}
+                            </div>
+                            <div class="small text-muted">
+                                {{ trans('expiration') }}: {{ receipt.vencimiento }}
+                            </div>
+                            {% if receipt.observaciones %}
+                                <div class="small text-muted mt-1">
+                                    {{ receipt.observaciones | raw }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <a href="{{ receipt.url() }}" class="btn btn-sm btn-outline-primary ms-3"
+                           title="{{ trans('open') }}">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro sectionStats(fsc) %}
+    <div class="row pb-4 g-3">
+        <div class="col-sm-6 col-lg-3">
+            {{ _self.drawStatsBox(fsc, 'purchases', 'danger', true, 'fas fa-shopping-cart') }}
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            {{ _self.drawStatsBox(fsc, 'sales', 'success', true, 'fas fa-cash-register') }}
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            {{ _self.drawStatsBox(fsc, 'taxes', 'warning', true, 'fas fa-calculator') }}
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            {{ _self.drawStatsBox(fsc, 'new-customers', 'info', false, 'fas fa-users') }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if pluginEnabled('Informes') %}
+    {# Buscar el ejercicio del año actual #}
+    {% set dashCodEjercicio = '' %}
+    {% for exercise in fsc.empresa.getExercises() %}
+        {% if exercise.fechafin|date('Y') == 'now'|date('Y') and dashCodEjercicio == '' %}
+            {% set dashCodEjercicio = exercise.codejercicio %}
+        {% endif %}
+    {% endfor %}
+    <script src="{{ asset('node_modules/chart.js/dist/Chart.min.js') }}"></script>
+    <script>
+        (function () {
+            let dash_agentesChart, dash_familiesChart, dash_pagosChart, dash_resumeChart, dash_seriesChart;
+
+            const chartColors = {
+                red: 'rgb(255, 99, 132)',
+                orange: 'rgb(255, 159, 64)',
+                yellow: 'rgb(255, 205, 86)',
+                green: 'rgb(75, 192, 192)',
+                blue: 'rgb(54, 162, 235)',
+                purple: 'rgb(153, 102, 255)',
+                grey: 'rgb(231,233,237)'
+            };
+
+            function pieOptions() {
+                return {
+                    maintainAspectRatio: false,
+                    cutoutPercentage: 40,
+                    responsive: true,
+                    animation: { animateRotate: true, animateScale: true },
+                    legend: { display: false },
+                    tooltips: {
+                        mode: 'index', intersect: true,
+                        callbacks: {
+                            label: function (tooltipItem, data) {
+                                const allData = data.datasets[tooltipItem.datasetIndex].data;
+                                const allData2 = data.datasets[tooltipItem.datasetIndex].data2;
+                                const total = allData.reduce((a, b) => a + b, 0);
+                                const pct = Math.round((allData[tooltipItem.index] / total) * 100);
+                                return data.labels[tooltipItem.index] + ': ' + allData2[tooltipItem.index] + ' (' + pct + '%)';
+                            }
+                        }
+                    }
+                };
+            }
+
+            function setDashCharts(charts) {
+                document.querySelector('#dash_chartsListFamilies tbody').innerHTML = charts['families']['table'];
+                document.querySelector('#dash_chartsListSeries tbody').innerHTML = charts['series']['table'];
+                document.querySelector('#dash_chartsListPagos tbody').innerHTML = charts['pagos']['table'];
+                document.querySelector('#dash_chartsListAgentes tbody').innerHTML = charts['agentes']['table'];
+
+                if (dash_resumeChart) dash_resumeChart.destroy();
+                if (dash_familiesChart) dash_familiesChart.destroy();
+                if (dash_seriesChart) dash_seriesChart.destroy();
+                if (dash_pagosChart) dash_pagosChart.destroy();
+                if (dash_agentesChart) dash_agentesChart.destroy();
+
+                dash_resumeChart = Chart.Line(document.getElementById('dash_chartsResume').getContext('2d'), {
+                    data: {
+                        labels: ["{{ trans('january') }}", "{{ trans('february') }}", "{{ trans('march') }}", "{{ trans('april') }}", "{{ trans('may') }}", "{{ trans('june') }}", "{{ trans('july') }}", "{{ trans('august') }}", "{{ trans('september') }}", "{{ trans('october') }}", "{{ trans('november') }}", "{{ trans('december') }}"],
+                        datasets: [
+                            { type: 'line', label: '{{ trans('sales') }}', borderColor: chartColors.green, borderWidth: 2, fill: false, data: charts['totales']['ventas'] },
+                            { type: 'line', label: '{{ trans('purchases') }}', borderColor: chartColors.orange, borderWidth: 2, fill: false, data: charts['totales']['compras'] },
+                            { type: 'line', label: '{{ trans('expenses') }}', borderColor: chartColors.red, borderWidth: 2, fill: false, data: charts['totales']['gastos'] },
+                            { type: 'line', label: '{{ trans('result') }}', borderColor: chartColors.blue, borderWidth: 4, fill: false, data: charts['totales']['resultado'] }
+                        ]
+                    },
+                    options: { maintainAspectRatio: false, responsive: true, hoverMode: 'index', title: { display: false }, tooltips: { mode: 'index', intersect: true } }
+                });
+
+                dash_familiesChart = new Chart(document.getElementById('dash_chartsFamilies').getContext('2d'), { type: 'pie', data: { labels: charts['families']['labels'], datasets: [{ data: charts['families']['porc'], data2: charts['families']['totales'], backgroundColor: charts['families']['colors'], hoverBackgroundColor: charts['families']['colors'] }] }, options: pieOptions() });
+                dash_seriesChart   = new Chart(document.getElementById('dash_chartsSeries').getContext('2d'),   { type: 'pie', data: { labels: charts['series']['labels'],   datasets: [{ data: charts['series']['porc'],   data2: charts['series']['totales'],   backgroundColor: charts['series']['colors'],   hoverBackgroundColor: charts['series']['colors']   }] }, options: pieOptions() });
+                dash_pagosChart    = new Chart(document.getElementById('dash_chartsPagos').getContext('2d'),    { type: 'pie', data: { labels: charts['pagos']['labels'],    datasets: [{ data: charts['pagos']['porc'],    data2: charts['pagos']['totales'],    backgroundColor: charts['pagos']['colors'],    hoverBackgroundColor: charts['pagos']['colors']    }] }, options: pieOptions() });
+                dash_agentesChart  = new Chart(document.getElementById('dash_chartsAgentes').getContext('2d'),  { type: 'pie', data: { labels: charts['agentes']['labels'],  datasets: [{ data: charts['agentes']['porc'],  data2: charts['agentes']['totales'],  backgroundColor: charts['agentes']['colors'],  hoverBackgroundColor: charts['agentes']['colors']  }] }, options: pieOptions() });
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const spinner = document.getElementById('dashChartsSpinner');
+                if (spinner) spinner.style.display = 'inline-block';
+
+                const formData = new FormData();
+                formData.append('action', 'load-summary');
+                formData.append('codejercicio', '{{ dashCodEjercicio }}');
+
+                fetch('ReportResult', {
+                    method: 'POST',
+                    body: formData
+                }).then(function (response) {
+                    return response.ok ? response.json() : Promise.reject(response);
+                }).then(function (data) {
+                    if (data.charts) {
+                        setDashCharts(data.charts);
+                    }
+                }).catch(function (err) {
+                    console.warn('Dashboard charts error', err);
+                    const section = document.getElementById('dashChartsSection');
+                    if (section) section.innerHTML = '<div class="alert alert-warning">{{ trans('error') }}: no se pudieron cargar las gráficas.</div>';
+                }).finally(function () {
+                    if (spinner) spinner.style.display = 'none';
+                });
+            });
+        })();
+    </script>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="patient" order="105">
+            <widget type="text" fieldname="paciente_nombre" />
+        </column>
+        <column name="category" order="110">
+            <widget type="text" fieldname="categoria" />
+        </column>
+        <column name="original-name" order="120">
+            <widget type="text" fieldname="nombre_original" />
+        </column>
+        <column name="extension" display="center" order="130">
+            <widget type="text" fieldname="extension" />
+        </column>
+        <column name="size" display="right" order="140">
+            <widget type="number" decimal="0" fieldname="tamano" />
+        </column>
+        <column name="date" order="150">
+            <widget type="date" fieldname="created_at" />
+        </column>
+    </columns>
+</view>

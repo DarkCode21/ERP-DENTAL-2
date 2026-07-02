@@ -1,0 +1,15 @@
+{
+    "code": 0,
+    "message": "Unable to find template &quot;PanelCamarero.html.twig&quot; (looked into: \/Dinamic\/View).\n\nStack trace:\n#0 \/vendor\/twig\/twig\/src\/Loader\/FilesystemLoader.php(131): Twig\\Loader\\FilesystemLoader-&gt;findTemplate(&#39;PanelCamarero.h...&#39;)\n#1 \/vendor\/twig\/twig\/src\/Environment.php(290): Twig\\Loader\\FilesystemLoader-&gt;getCacheKey(&#39;PanelCamarero.h...&#39;)\n#2 \/vendor\/twig\/twig\/src\/Environment.php(343): Twig\\Environment-&gt;getTemplateClass(&#39;PanelCamarero.h...&#39;)\n#3 \/vendor\/twig\/twig\/src\/Environment.php(306): Twig\\Environment-&gt;load(&#39;PanelCamarero.h...&#39;)\n#4 \/Core\/Html.php(92): Twig\\Environment-&gt;render(&#39;PanelCamarero.h...&#39;, Array)\n#5 \/Core\/Base\/Controller.php(315): FacturaScripts\\Core\\Html::render(&#39;PanelCamarero.h...&#39;, Array)\n#6 \/Core\/Kernel.php(372): FacturaScripts\\Core\\Base\\Controller-&gt;run()\n#7 \/Core\/Kernel.php(190): FacturaScripts\\Core\\Kernel::runController(&#39;\/PanelCamarero&#39;)\n#8 \/index.php(63): FacturaScripts\\Core\\Kernel::run(&#39;\/PanelCamarero&#39;)\n#9 {main}",
+    "file": "\/vendor\/twig\/twig\/src\/Loader\/FilesystemLoader.php",
+    "line": 227,
+    "fragment": "\n222\n223        if (!$throw) {\n224            return null;\n225        }\n226\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">227        throw new LoaderError($this->errorCache[$name]);<\/spam>\n228    }\n229\n230    private function normalizeName(string $name): string\n231    {\n232        return preg_replace('#\/{2,}#', '\/', str_replace('\\\\', '\/', $name));",
+    "hash": "db437d114bb4a01feff887f307775313",
+    "url": "\/PanelCamarero",
+    "report_url": "https:\/\/facturascripts.com\/errores\/db437d114bb4a01feff887f307775313",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2Fdb437d114bb4a01feff887f307775313",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,TPVneo,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,RestauranteTPV,LogsFields,LoginScreen"
+}

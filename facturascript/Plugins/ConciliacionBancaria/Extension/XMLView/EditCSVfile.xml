@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="options" numcolumns="12" valign="bottom">
+            <column name="account" display="none" order="115">
+                <widget type="select" fieldname="codcuenta" readonly="true" onclick="EditCuentaBanco">
+                    <values source="subcuentas" fieldcode="codcuenta" fieldtitle="codcuenta"/>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

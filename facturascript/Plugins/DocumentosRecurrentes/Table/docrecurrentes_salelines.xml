@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of DocumentosRecurrentes plugin for FacturaScripts.
+    FacturaScripts         Copyright (C) 2015-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+    DocumentosRecurrentes  Copyright (C) 2020-2021 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : docrecurrentes_salelines.xml
+    Author     : Carlos Garcia Gomez    <carlos@facturascripts.com>
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Structure for the document recurring sale lines table.
+-->
+<table>
+    <column>
+        <name>discount</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>iddoc</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idproduct</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>name</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>price</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>quantity</name>
+        <type>double precision</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>reference</name>
+        <type>character varying(30)</type>
+    </column>
+    <constraint>
+        <name>docrecurrentes_salelines_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_salelines_docs</name>
+        <type>FOREIGN KEY (iddoc) REFERENCES docrecurrentes_sale (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_docrecurrentes_salelines_productos</name>
+        <type>FOREIGN KEY (idproduct) REFERENCES productos (idproducto) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

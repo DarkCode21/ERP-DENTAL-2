@@ -1,0 +1,72 @@
+{#
+ * Custom view for SettingsRestauranteTPV tab -- renders the standard
+ * EditView form plus a sound file upload card.
+ *}
+
+{# -- Render the standard EditView form for this tab -- #}
+{{ include('Master/EditView.html.twig') }}
+
+{#  Sound file upload card  #}
+<div class="container-fluid mt-3">
+    <div class="card border-info">
+        <div class="card-header bg-info text-white py-2">
+            <i class="fa-solid fa-upload mr-2"></i><strong>Subir archivos de sonido</strong>
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-3">
+                Sube archivos de audio (<code>.wav</code>, <code>.mp3</code>, <code>.ogg</code>).
+                Se guardarán en <code>Plugins/RestauranteTPV/Assets/Sound/</code>
+                y el nombre se aplicará automáticamente al campo correspondiente.
+            </p>
+            <form method="post" action="{{ fsc.url() }}" enctype="multipart/form-data" onsubmit="animateSpinner('add')">
+                {{ formToken() }}
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="activetab" value="SettingsRestauranteTPV">
+                <div class="form-row align-items-end">
+                    <div class="form-group col-md-4">
+                        <label class="small font-weight-bold">
+                            <i class="fa-solid fa-music mr-1"></i>Sonido al añadir producto
+                        </label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="audio1File"
+                                   name="audio_beep1_file" accept=".wav,.mp3,.ogg">
+                            <label class="custom-file-label" for="audio1File">Elegir archivo...</label>
+                        </div>
+                        {% set currentModel = fsc.views.SettingsRestauranteTPV.model %}
+                        <small class="text-muted">Actual: <strong>{{ currentModel.audio_beep1 ?: 'beep.wav' }}</strong></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="small font-weight-bold">
+                            <i class="fa-solid fa-music mr-1"></i>Sonido al cambiar cantidad
+                        </label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="audio2File"
+                                   name="audio_beep2_file" accept=".wav,.mp3,.ogg">
+                            <label class="custom-file-label" for="audio2File">Elegir archivo...</label>
+                        </div>
+                        <small class="text-muted">Actual: <strong>{{ currentModel.audio_beep2 ?: 'beep2.wav' }}</strong></small>
+                    </div>
+                    <div class="form-group col-md-2 align-self-end">
+                        <button type="submit" class="btn btn-info btn-block">
+                            <i class="fa-solid fa-upload mr-1"></i>Subir
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <hr>
+            <p class="small font-weight-bold mb-1">
+                <i class="fa-solid fa-folder-open mr-1"></i>Archivos disponibles:
+            </p>
+            <div class="d-flex flex-wrap" style="gap:6px;">
+                {% for file in fsc.tpvSoundFiles %}
+                    <span class="badge badge-secondary py-1 px-2" style="font-size:.85em;">
+                        <i class="fa-solid fa-file-audio mr-1"></i>{{ file }}
+                    </span>
+                {% else %}
+                    <span class="text-muted small">No hay archivos de sonido guardados.</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

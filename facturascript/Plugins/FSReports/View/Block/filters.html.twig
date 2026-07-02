@@ -1,0 +1,11 @@
+<table class="filters">
+
+    <tr>
+
+        {%  for value in fsc.filtersReport %}
+            {% if value.value !='' %}
+            <td class="singlefilter" style="font-weight: bold;"> {{ value.label  }}</td><td> {{ value.value }}</td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+</table>

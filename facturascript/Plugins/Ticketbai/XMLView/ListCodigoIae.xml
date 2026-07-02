@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="id" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="country" order="110">
+            <widget type="select" fieldname="codpais">
+                <values source="paises" fieldcode="codpais" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="province" order="120">
+            <widget type="select" fieldname="idprovincia">
+                <values source="provincias" fieldcode="idprovincia" fieldtitle="provincia"/>
+            </widget>
+        </column>
+        <column name="code-iae" order="130">
+            <widget type="text" fieldname="iae"/>
+        </column>
+        <column name="description" order="140">
+            <widget type="textarea" fieldname="descripcion"/>
+        </column>
+    </columns>
+</view>

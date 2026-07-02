@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="name" order="100">
+                <widget type="text" fieldname="nombre" maxlength="30"/>
+            </column>
+            <column name="title" description="optional" order="110">
+                <widget type="text" fieldname="titulo" maxlength="30"/>
+            </column>
+            <column name="size" order="120">
+                <widget type="select" fieldname="size">
+                    <values>A3</values>
+                    <values>A4</values>
+                    <values>A5</values>
+                    <values>Legal</values>
+                    <values>Letter</values>
+                </widget>
+            </column>
+            <column name="orientation" order="130">
+                <widget type="select" fieldname="orientation" translate="true">
+                    <values>landscape</values>
+                    <values>portrait</values>
+                </widget>
+            </column>
+            <column name="logo" order="140">
+                <widget type="library" fieldname="idlogo" icon="fas fa-image" onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+            <column name="color-1" order="150">
+                <widget type="color" fieldname="color1"/>
+            </column>
+        </group>
+        <group name="apply" numcolumns="12" valign="bottom">
+            <column name="auto-apply-to" numcolumns="12" order="100">
+                <widget type="checkbox" fieldname="autoaplicar"/>
+            </column>
+            <column name="doc-type" order="110">
+                <widget type="select" fieldname="tipodoc" translate="true">
+                    <values title="customer-estimation">PresupuestoCliente</values>
+                    <values title="customer-order">PedidoCliente</values>
+                    <values title="customer-delivery-note">AlbaranCliente</values>
+                    <values title="customer-invoice">FacturaCliente</values>
+                    <values title="supplier-estimation">PresupuestoProveedor</values>
+                    <values title="supplier-order">PedidoProveedor</values>
+                    <values title="supplier-delivery-note">AlbaranProveedor</values>
+                    <values title="supplier-invoice">FacturaProveedor</values>
+                </widget>
+            </column>
+            <column name="company" titleurl="ListEmpresa" order="120">
+                <widget type="select" fieldname="idempresa" icon="fas fa-building" onclick="EditEmpresa"
+                        required="true">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>
+                </widget>
+            </column>
+            <column name="serie" titleurl="ListSerie" order="130">
+                <widget type="select" fieldname="codserie" onclick="EditSerie">
+                    <values source="series" fieldcode="codserie" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+        </group>
+        <group name="options" title="options" icon="fas fa-cogs" numcolumns="12">
+            <column name="primary-number2" order="100">
+                <widget type="checkbox" fieldname="primarynumero2"/>
+            </column>
+            <column name="hide-totals" order="110">
+                <widget type="checkbox" fieldname="hidetotals"/>
+            </column>
+            <column name="hide-payment-methods" order="120">
+                <widget type="checkbox" fieldname="hidepaymentmethods"/>
+            </column>
+            <column name="hide-receipts" order="130">
+                <widget type="checkbox" fieldname="hidereceipts"/>
+            </column>
+            <column name="hide-observations" order="140">
+                <widget type="checkbox" fieldname="hideobservations"/>
+            </column>
+            <column name="hide-billing-address" order="150">
+                <widget type="checkbox" fieldname="hidebillingaddress"/>
+            </column>
+            <column name="hide-shipping-address" order="160">
+                <widget type="checkbox" fieldname="hideshippingaddress"/>
+            </column>
+            <column name="hide-vat-breakdown" order="170">
+                <widget type="checkbox" fieldname="hide_vat_breakdown"/>
+            </column>
+            <column name="hide-breakdowns" order="180">
+                <widget type="checkbox" fieldname="hide_breakdowns"/>
+            </column>
+        </group>
+        <group name="lines" title="lines" icon="fas fa-list" numcolumns="12">
+            <column name="line-columns" description="line-columns-desc" numcolumns="7" order="100">
+                <widget type="text" fieldname="linecols" maxlength="100"/>
+            </column>
+            <column name="line-column-alignments" description="line-column-alignments-desc" numcolumns="5" order="110">
+                <widget type="text" fieldname="linecolalignments" maxlength="100"/>
+            </column>
+            <column name="line-column-types" description="line-column-types-desc" numcolumns="7" order="120">
+                <widget type="text" fieldname="linecoltypes" maxlength="100"/>
+            </column>
+            <column name="lines-height" numcolumns="5" order="130">
+                <widget type="number" decimals="0" min="0" max="650" fieldname="linesheight" icon="fas fa-arrows-alt-v"
+                        required="true"/>
+            </column>
+        </group>
+        <group name="end-texts" title="end-text" icon="fas fa-font" numcolumns="6">
+            <column name="end-text" numcolumns="12" order="100">
+                <widget type="textarea" fieldname="texto"/>
+            </column>
+            <column name="image-text" title="image" order="110">
+                <widget type="library" fieldname="idimagetext" icon="fas fa-image" onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+        </group>
+        <group name="thanks-texts" title="thanks-text" icon="fas fa-font" numcolumns="6">
+            <column name="thanks-title" numcolumns="12" order="100">
+                <widget type="text" fieldname="thankstitle" maxlength="50"/>
+            </column>
+            <column name="thanks-text" numcolumns="12" order="110">
+                <widget type="textarea" fieldname="thankstext"/>
+            </column>
+        </group>
+        <group name="footer-texts" title="footer-text" icon="fas fa-font" numcolumns="12">
+            <column name="footer-text" description="footer-text-description" numcolumns="12" order="110">
+                <widget type="textarea" fieldname="footertext"/>
+            </column>
+            <column name="image-footer" title="image" order="110">
+                <widget type="library" fieldname="idimagefooter" icon="fas fa-image" onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+        </group>
+    </columns>
+</view>

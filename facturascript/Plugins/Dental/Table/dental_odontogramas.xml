@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idpaciente</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>datos</name>
+        <type>longtext</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>created_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <column>
+        <name>updated_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <constraint>
+        <name>dental_odontogramas_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_odontogramas_fk_paciente</name>
+        <type>FOREIGN KEY (idpaciente) REFERENCES dental_pacientes(id) ON DELETE CASCADE</type>
+    </constraint>
+</table>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ReportAttendanceSummary.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller ReportAttendanceSummary
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="idemployee" />
+        </column>
+        <column name="employee" order="110">
+            <widget type="text" fieldname="name" />
+        </column>
+        <column name="delays" display="center" order="115">
+            <widget type="number" decimal="0" fieldname="totalInputDelay">
+                <option color="danger">&gt;0</option>
+                <option color="black">0</option>
+            </widget>
+        </column>
+        <column name="holidays" display="center" order="120">
+            <widget type="number" decimal="0" fieldname="totalHoliday">
+                <option color="danger">&gt;0</option>
+                <option color="black">0</option>
+            </widget>
+        </column>
+        <column name="leaves" title="sick-leave" display="center" order="130">
+            <widget type="number" decimal="0" fieldname="totalLeave">
+                <option color="danger">&gt;0</option>
+                <option color="black">0</option>
+            </widget>
+        </column>
+        <column name="hours" display="right" order="140">
+            <widget type="number" decimal="2" fieldname="totalHours" />
+        </column>
+        <column name="worked" display="right" order="150">
+            <widget type="number" decimal="2" fieldname="totalWorked" />
+        </column>
+        <column name="difference" display="right" order="160">
+            <widget type="number" decimal="2" fieldname="totalDifference">
+                <option color="danger">&lt;0</option>
+                <option color="success">&gt;0</option>
+                <option color="dark">0</option>
+            </widget>
+        </column>
+    </columns>
+
+    <rows>
+        <row type="status" fieldname="hasIncidence">
+            <option title="incidences" color="danger">true</option>
+        </row>
+        <row type="actions">
+            <button type="js" label='help' color="primary" action="$('#header-help-summary').toggle()" icon="fa-solid fa-question-circle" />
+        </row>
+        <row type="header">
+            <group name="help" id="header-help-summary" class="collapse" html="Block/AttendanceIncidenceInfo.html.twig"></group>
+        </row>
+        <row type="footer">
+            <group name="buttons">
+                <button type="js" label='help' color="primary" action="$('#footer-help-summary').toggle()" icon="fa-solid fa-question-circle" />
+            </group>
+            <group name="help" id="footer-help-summary" class="collapse show" html="Block/AttendanceIncidenceInfo.html.twig"></group>
+        </row>
+    </rows>
+</view>

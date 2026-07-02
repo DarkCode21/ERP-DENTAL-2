@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>ciuoficina</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>ciuorgano</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>ciuorganop</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>ciuunidad</name>
+        <type>character varying(50)</type>
+    </column>
+    
+    <column>
+        <name>codoficina</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>codorgano</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>codorganop</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>codunidad</name>
+        <type>character varying(50)</type>
+    </column>
+    
+    <column>
+        <name>cpoficina</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>cporgano</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>cporganop</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>cpunidad</name>
+        <type>character varying(10)</type>
+    </column>
+    
+    <column>
+        <name>creationdate</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>description</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>desorganop</name>
+        <type>character varying(100)</type>
+    </column>
+    
+    <column>
+        <name>diroficina</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>dirorgano</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>dirorganop</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>dirunidad</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>enddate</name>
+        <type>date</type>
+    </column>
+    
+    <column>
+        <name>filereference</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>iban</name>
+        <type>character varying(34)</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>idfactura</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>issuercontraref</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>issuertransref</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>legalliterals</name>
+        <type>text</type>
+    </column>
+    
+    <column>
+        <name>nomoficina</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>nomorgano</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>nomorganop</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>nomunidad</name>
+        <type>character varying(100)</type>
+    </column>
+    
+    <column>
+        <name>numeroregistro</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>boolean</type>
+    </column>
+    
+    <column>
+        <name>proficina</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>prorgano</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>prorganop</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>prunidad</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>receivercontraref</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>receivertransref</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>startdate</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>vencimiento</name>
+        <type>date</type>
+    </column>
+    <constraint>
+        <name>xmlfacturaes_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_xmlfacturaes_facturascli</name>
+        <type>FOREIGN KEY (idfactura) REFERENCES facturascli (idfactura) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

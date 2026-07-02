@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Tabla: rest_zonas
+    Descripción: Zonas del local (interior, terraza, barra, etc.)
+-->
+<table>
+    <column>
+        <name>idzona</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>prefijo</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+    </column>
+    <constraint>
+        <name>pk_rest_zonas</name>
+        <type>PRIMARY KEY (idzona)</type>
+    </constraint>
+</table>

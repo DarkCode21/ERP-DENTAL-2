@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditEmployeeHoliday.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditEmployeeHoliday
+-->
+<view>
+    <columns>
+        <group name="employee" numcolumns="12" valign="bottom">
+            <column name="code" display="none" numcolumns="2" order="100">
+                <widget type="text" fieldname="id" />
+            </column>
+            <column name="employee" order="110">
+                <widget type="autocomplete" fieldname="idemployee" required="true" readonly="dinamic">
+                    <values source="rrhh_employees" fieldcode="id" fieldtitle="nombre"></values>
+                </widget>
+            </column>
+            <column name="starting-date" numcolumns="2" order="120">
+                <widget type="date" fieldname="startdate" icon="fa-solid fa-sign-in-alt" />
+            </column>
+            <column name="end-date" numcolumns="2" order="130">
+                <widget type="date" fieldname="enddate" icon="fa-solid fa-sign-out-alt" />
+            </column>
+            <column name="totaldays" numcolumns="2" order="140">
+                <widget type="number" fieldname="totaldays" icon="fa-solid fa-calculator" />
+            </column>
+        </group>
+
+        <group name="others" numcolumns="12">
+            <column name="calculate" numcolumns="1" order="100">
+                <widget type="checkbox" fieldname="automatic" />
+            </column>
+            <column name="authorized" numcolumns="1" order="110">
+                <widget type="checkbox" fieldname="authorized" />
+            </column>
+        </group>
+
+        <group name="notes" numcolumns="12">
+            <column name="notes" numcolumns="12" order="160">
+                <widget type="textarea" fieldname="note" rows="3" />
+            </column>
+        </group>
+    </columns>
+</view>

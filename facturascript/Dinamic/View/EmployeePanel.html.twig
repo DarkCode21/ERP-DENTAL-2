@@ -1,0 +1,78 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+*/
+#}
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% set pageData = fsc.getPageData() %}
+
+{% block bodyHeaderOptions %}
+    {{ parent() }}
+    <div class="container-fluid mb-1 d-print-none">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-secondary" href="{{ fsc.url() }}" title="{{ trans('refresh') }}">
+                        <i class="fa-solid fa-redo" aria-hidden="true"></i>
+                    </a>
+                    <a class="btn btn-sm btn-secondary" href="{{ fsc.url() }}?defaultPage=TRUE"
+                       title="{{ trans('mark-as-homepage') }}">
+                        <i class="far fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-5 text-right">
+                <h1 class="h4 mb-0 d-none d-md-inline-block">
+                    {% set title = trans(fsc.getPageData()['title']) | capitalize %}
+                    {{ title }}<i class="{{ fsc.getPageData()['icon'] }} ml-3" aria-hidden="true"></i>
+                </h1>
+            </div>
+        </div>
+        <div class="pb-3">
+            <div class="h5 text-success text-center">{{ fsc.employee.nombre }}</div>
+        </div>
+        <nav>
+            <div class="nav nav-tabs nav-justified" role="tablist">
+                <a class="nav-item nav-link active" id="attendances-tab" data-toggle="tab" href="#attendances" role="tab" aria-controls="attendances" aria-selected="true">{{ trans('attendances') }}</a>
+                {% if fsc.vouchers.data|length > 0 %}
+                <a class="nav-item nav-link" id="others-tab" data-toggle="tab" href="#others" role="tab" aria-controls="others" aria-selected="false">{{ trans('others') }}</a>
+                {% endif %}
+                <a class="nav-item nav-link" id="documents-tab" data-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false">{{ trans('files') }}</a>
+            </div>
+        </nav>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <script>
+        deleteCancel = "{{ trans('cancel') }}";
+        deleteConfirm = "{{ trans('confirm') }}";
+        deleteMessage = "{{ trans('are-you-sure') }}";
+        deleteTitle = "{{ trans('confirm-delete') }}";
+        {% if settings('rrhh', 'locationgps') %} setGeolocation(true); {% endif %}
+    </script>
+
+    <div class="tab-content" id="panel-tabs">
+        <div class="tab-pane fade active show" id="attendances" role="tabpanel" aria-labelledby="attendances-tab">
+            {% include 'Tab/EmployeePanelAttendances.html.twig' %}
+        </div>
+        {% if fsc.vouchers.data|length > 0 %}
+        <div class="tab-pane fade" id="others" role="tabpanel" aria-labelledby="others-tab">
+            {% include 'Tab/EmployeePanelOthers.html.twig' %}
+        </div>    
+        {% endif %}
+        <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+            {% include 'Tab/EmployeePanelDocuments.html.twig' %}
+        </div>    
+    </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of DocumentosRecurrentes plugin for FacturaScripts.
+    FacturaScripts         Copyright (C) 2015-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+    DocumentosRecurrentes  Copyright (C) 2020-2021 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : docrecurrentes_purchase.xml
+    Author     : Carlos Garcia Gomez    <carlos@facturascripts.com>
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        View structure for EditDocRecurringSaleLine.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" numcolumns="1" display="none" order="100">
+                <widget type="text" fieldname="id" required="true" readonly="true" />
+            </column>
+            <column name="document" numcolumns="1" display="none" order="100">
+                <widget type="text" fieldname="iddoc" required="true" readonly="true" />
+            </column>
+            <column name="reference" order="120">
+                <widget type="autocomplete" fieldname="reference">
+                    <values source="Variante" fieldcode="referencia" fieldtitle="referencia" />
+                </widget>
+            </column>
+            <column name="quantity" numcolumns="2" order="140">
+                <widget type="number" fieldname="quantity" />
+            </column>
+            <column name="price" numcolumns="2" order="150" description="empty-use-default">
+                <widget type="money" fieldname="price" />
+            </column>
+            <column name="dto" numcolumns="2" order="160" description="empty-use-default">
+                <widget type="percentage" fieldname="discount" />
+            </column>
+            <column name="description" numcolumns="12" order="200" description="empty-and-patterns">
+                <widget type="textarea" fieldname="name" rows="2" />
+            </column>
+        </group>
+    </columns>
+</view>

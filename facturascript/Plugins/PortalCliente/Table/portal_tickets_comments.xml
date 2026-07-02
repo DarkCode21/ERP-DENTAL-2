@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>body</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>creation_date</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>idcontacto</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>id_ticket</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>read</name>
+        <type>timestamp</type>
+    </column>
+    <constraint>
+        <name>portal_tickets_comments_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_portal_tickets_comments_portal_tickets</name>
+        <type>FOREIGN KEY (id_ticket) REFERENCES portal_tickets (id) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_portal_tickets_comments_contactos</name>
+        <type>FOREIGN KEY (idcontacto) REFERENCES contactos (idcontacto) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_portal_tickets_comments_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

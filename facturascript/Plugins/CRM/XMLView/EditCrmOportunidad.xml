@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="main" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id"/>
+            </column>
+            <column name="status" order="110">
+                <widget type="select" fieldname="idestado" icon="fas fa-tags" onclick="EditCrmOportunidadEstado"
+                        required="true">
+                    <values source="CrmOportunidadEstado" fieldcode="id"></values>
+                </widget>
+            </column>
+            <column name="contact" titleurl="ListContacto" order="120">
+                <widget type="autocomplete" fieldname="idcontacto" onclick="EditContacto" required="true">
+                    <values source="Contacto" fieldcode="idcontacto" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="interest" titleurl="ListContacto?activetab=ListCrmInteres" order="130">
+                <widget type="select" fieldname="idinteres" icon="fas fa-heart" onclick="EditCrmInteres">
+                    <values source="crm_intereses" fieldcode="id" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="agent" titleurl="ListAgente" order="140">
+                <widget type="select" fieldname="codagente" icon="fas fa-user-tie" onclick="EditAgente">
+                    <values source="agentes" fieldcode="codagente" fieldtitle="nombre"></values>
+                </widget>
+            </column>
+            <column name="description" numcolumns="12" order="150">
+                <widget type="textarea" fieldname="descripcion" required="true"/>
+            </column>
+            <column name="observations" display="none" numcolumns="12" order="160">
+                <widget type="textarea" fieldname="observaciones"/>
+            </column>
+        </group>
+        <group name="more" numcolumns="12">
+            <column name="user" order="100">
+                <widget type="select" fieldname="nick" icon="fas fa-user-circle" readonly="true">
+                    <values source="User" fieldcode="nick"/>
+                </widget>
+            </column>
+            <column name="date" order="110">
+                <widget type="date" fieldname="fecha" readonly="true"/>
+            </column>
+            <column name="hour" order="120">
+                <widget type="string" fieldname="hora" readonly="true"/>
+            </column>
+            <column name="last-update" order="130">
+                <widget type="datetime" fieldname="fechamod" readonly="true"/>
+            </column>
+            <column name="deadline" order="140">
+                <widget type="date" fieldname="fecha_cierre" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

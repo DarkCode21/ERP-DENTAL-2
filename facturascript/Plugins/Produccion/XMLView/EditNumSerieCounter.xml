@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditNumSerieCounter.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la vista EditNumSerieCounter.
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"  />
+        </column>
+        <column name="family" numcolumns="4" order="110">
+            <widget type="autocomplete" fieldname="idfamily">
+                <values source="familias" fieldcode="codfamilia" fieldtitle="descripcion" />
+            </widget>
+        </column>
+        <column name="reference" numcolumns="2" order="120">
+            <widget type="text" fieldname="reference" readonly="true" />
+        </column>
+        <column name="product" order="120">
+            <widget type="autocomplete" fieldname="idproduct">
+                <values source="productos" fieldcode="idproducto" fieldtitle="descripcion" />
+            </widget>
+        </column>
+        <column name="counter" numcolumns="2" display="right" order="130">
+            <widget type="number" fieldname="numserie" decimal="0" step="1" min="0" required="true" />
+        </column>
+    </columns>
+</view>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    {% block css %}
+        <link rel="stylesheet" href="./Plugins/FSReports/View/CSS/{{ fsc.params.cssFile }}.css" media="all">
+    {% endblock %}
+    <title>{{ i18n.trans(fsc.params.title) }}</title>
+</head>
+{% block body %}
+    {# Macros Template Imports #}
+    {% set totalBases=0 %}
+    {% set totalIvas=0 %}
+    {% set totalREs=0 %}
+    {% set totalIRPFs=0 %}
+    {% set totalFacturas = 0 %}
+    {% set numLineas=0 %}
+    {% set paginaActual = 1 %}
+    {% set numLineasResumen = fsc.countNumLineasResumen() %}
+    {% set resumenImpreso = 0 %}
+
+    {%  for value in fsc.listDocument %}
+        {%  if numLineas == 0 %}
+            {%  if paginaActual == 1 %}
+                {% include fsc.params.headerFile ~ '.html.twig' %}
+            {% endif %}
+
+            <table style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th class="columna document">{{ i18n.trans('document') }}</th>
+                        <th class="columna date">{{ i18n.trans('date') }}</th>
+                        <th class="columna cif">{{ i18n.trans('cif/nif') }}</th>
+                        <th class="columna customer">Suj. Pasivo</th>
+                        <th class="columna base">{{ i18n.trans('Base') }}</th>
+                        <th class="columna poriva">{{ i18n.trans('%IVA') }}</th>
+                        <th class="columna iva">{{ i18n.trans('IVA') }}</th>
+                        <th class="columna porre">{{ i18n.trans('%RE') }}</th>
+                        <th class="columna re">{{ i18n.trans('RE') }}</th>
+                        <th class="columna porirpf">{{ i18n.trans('%IRPF') }}</th>
+                        <th class="columna irpf">{{ i18n.trans('IRPF') }}</th>
+                        <th class="columna total">{{ i18n.trans('total') }}</th>
+                    </tr>
+                    {% set numLineas=numLineas +1 %}
+                </thead>
+
+                <tbody>
+
+                {% endif %} {# Encabezado de cada pagina #} 
+                <tr class="contenido">
+                    <td class="">&nbsp;&nbsp;{{value.idfactura}} &nbsp; {{ value.codigo }}</td>
+                    <td class="">{{ value.fecha|date("d/m/Y") }}</td>
+                    <td class="vcifnif">{{ value.cifnif }}</td>
+                    <td class="">{{ value.nombrecliente }}</td>
+                    <td class="" colspan="8"></td>
+
+                </tr>
+                {% set numLineas=numLineas + 1 %}
+                {%  set numLineasFactura =0 %}
+                {% for value2 in fsc.listLinesDoc({'idfactura': value.idfactura}) %}
+                    <tr class="contenido valoresparciales columna">
+                        <td colspan="4" class="relleno">{% if numLineasFactura == 0 %}{{ value.numproveedor }} {%  set numLineasFactura =1 %} {% endif %}</td>
+                        <td id="vbasep -{{paginaActual}} - {{numLineas}}" class="vbasep linea">{{ value2.base|number_format(2, ',', '.') }}</td>
+                        <td id="vporiva -{{paginaActual}} - {{numLineas}}" class="vporiva linea">{{ value2.iva|number_format(2, ',', '.') }}%</td>
+                        <td id="viva -{{paginaActual}} - {{numLineas}}" class="viva linea ">{{ value2.importe_iva|number_format(2, ',', '.') }}</td>
+                        <td id="vpre -{{paginaActual}} - {{numLineas}}" class="vpre linea ">{%if value2.recargo!=0 %} {{ value2.recargo|number_format(2, ',', '.') }}% {% endif %}</td>
+                        <td id="vre -{{paginaActual}} - {{numLineas}}" class="vre linea ">{%if value2.importe_recargo!=0 %}{{ value2.importe_recargo|number_format(2, ',', '.') }} {% endif %}</td>
+                        <td id="vpirpf -{{paginaActual}} - {{numLineas}}" class="vpirpf linea ">{%if value2.irpf!=0 %}{{ value2.irpf|number_format(2, ',', '.') }}% {% endif %}</td>
+                        <td id="virpf -{{paginaActual}} - {{numLineas}}" class="virpf linea">{%if value2.importe_irpf!=0 %}{{ value2.importe_irpf|number_format(2, ',', '.') }} {% endif %}</td>
+                        <td id="vtotal -{{paginaActual}} - {{numLineas}}" class="total linea">{{ (value2.base + value2.importe_iva + value2.importe_recargo - value2.importe_irpf)|number_format(2, ',', '.') }}</td>
+                    </tr>
+                    {% set numLineas=numLineas + 1 %}
+                {%  endfor %} {#Lineas de cada documento #}
+                <tr class="columna filatotaldocumento">
+                    <td colspan="4"></td>
+                    <td id="totalbase -{{paginaActual}} - {{numLineas}}" class="totalbase">{{ (value.total - value.totaliva - value.totalrecargo - value.totalirpf)|number_format(2, ',', '.') }}</td>
+
+                    <td id="totaliva -{{paginaActual}} - {{numLineas}}" class="totaliva" colspan="2">{{ value.totaliva|number_format(2, ',', '.') }}</td>
+
+                    <td id="totalre -{{paginaActual}} - {{numLineas}}" class="totalre" colspan="2">{{ value.totalrecargo|number_format(2, ',', '.') }}</td>
+
+                    <td id="totalirpf -{{paginaActual}} - {{numLineas}}" class="totalirpf" colspan="2">{{ value.totalirpf|number_format(2, ',', '.') }}</td>
+                    <td id="totalfactura -{{paginaActual}} - {{numLineas}}" class="totalfactura columna">{{ value.total|number_format(2, ',', '.') }}&nbsp;{{ value.coddivisa }}</td>
+                </tr>
+                {% set numLineas=numLineas + 1 %}
+                {# Vamos totalizando el informe #}
+                {% set totalBases=totalBases + (value.total - value.totaliva - value.totalrecargo - value.totalirpf) %}
+                {% set totalIvas=totalIvas + value.totaliva %}
+                {% set totalREs=totalREs + value.totalrecargo %}
+                {% set totalIRPFs=totalIRPFs + value.totalirpf %}
+                {% set totalFacturas = totalFacturas + value.total %}
+
+                {% if numLineas>=fsc.params.detailLines  %}
+
+                    {# {% set paginaActual = paginaActual + 1 %}#}
+                    <tr style="border-top: thin solid;">
+                        <td style="border-top: thin solid;" colspan="4">Sumas</td>
+                        <td class="cifra" style="border-top: thin solid;">{{ totalBases|number_format(2, ',', '.') }}</td>
+                        <td class="cifra" colspan="2" style="border-top: thin solid;">{{ totalIvas|number_format(2, ',', '.') }}</td>
+                        <td class="cifra" colspan="2" style="border-top: thin solid;">{{ totalREs|number_format(2, ',', '.') }}</td>
+                        <td class="cifra" colspan="2" style="border-top: thin solid;">{{ totalIRPFs|number_format(2, ',', '.') }}</td>
+                        <td class="cifra" style="border-top: thin solid;">{{ totalFacturas|number_format(2, ',', '.')  }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% if paginaActual < fsc.numPages %}
+                {% include fsc.params.footerFile ~ '.html.twig' %}
+                {% set paginaActual = paginaActual + 1 %}
+                <pagebreak/>
+                {% set numLineas = 0 %}
+                {% include fsc.params.headerFile ~ '.html.twig' %}
+            {% endif %}  {# Si estamos en la última página #}
+
+        {% endif %}{# alto de página #}
+    {% endfor %}{# Recorre todas las cabeceras de facturas #}
+    {% if paginaActual == fsc.numPages or fsc.numPages == 1  %}
+        <tr style="border-top: thin solid;">
+            <td style="border-top: thin solid;" colspan="4">Sumas</td>
+            <td class="cifra" style="border-top: thin solid;">{{ totalBases|number_format(2, ',', '.') }}</td>
+            <td class="cifra" colspan="2" style="border-top: thin solid;">{{ totalIvas|number_format(2, ',', '.') }}</td>
+            <td class="cifra" colspan="2" style="border-top: thin solid;">{{ totalREs|number_format(2, ',', '.') }}</td>
+            <td class="cifra" colspan="2" style="border-top: thin solid;">{{ totalIRPFs|number_format(2, ',', '.') }}</td>
+            <td class="cifra" style="border-top: thin solid;">{{ totalFacturas|number_format(2, ',', '.')  }}</td>
+        </tr>
+    </tbody></table>
+    {% if numLineas + numLineasResumen + 2 >= fsc.params.detailLines %}
+        {% include fsc.params.footerFile ~ '.html.twig' %}
+    <pagebreak/>
+    {% include fsc.params.headerFile ~ '.html.twig' %}
+{% endif %}
+
+{%  set resumenImpreso = 1 %}
+{% include  'Block/ResumenFinalLibroFacturas.html.twig' %}
+{% include fsc.params.footerFile ~ '.html.twig' %}
+{% endif %}
+{% endblock %}{# Fin del Body #}
+
+

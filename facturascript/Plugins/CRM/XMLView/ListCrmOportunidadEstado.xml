@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="nombre" />
+        </column>
+        <column name="icon" order="120">
+            <widget type="text" fieldname="icon" />
+        </column>
+        <column name="default" display="center" order="130">
+            <widget type="checkbox" fieldname="predeterminado" />
+        </column>
+        <column name="editable" display="center" order="140">
+            <widget type="checkbox" fieldname="editable" />
+        </column>
+        <column name="rejected" display="center" order="150">
+            <widget type="checkbox" fieldname="rechazado" />
+        </column>
+        <column name="sort" display="right" order="160">
+            <widget type="number" decimal="0" fieldname="orden" />
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="info" fieldname="predeterminado">1</option>
+            <option color="danger" fieldname="rechazado">1</option>
+            <option color="success" fieldname="editable">0</option>
+        </row>
+    </rows>
+</view>

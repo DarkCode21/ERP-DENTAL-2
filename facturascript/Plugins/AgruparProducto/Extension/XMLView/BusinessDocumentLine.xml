@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="groupings" title="product-grouping" display="none" order="135">
+            <widget type="text" fieldname="groupings" readonly="true" />
+        </column>
+    </columns>
+</view>

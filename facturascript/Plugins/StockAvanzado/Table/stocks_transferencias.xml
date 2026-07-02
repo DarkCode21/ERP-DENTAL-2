@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : stocks_transferencias.xml
+    Author     : Carlos Garcia Gomez
+    Description:
+        Structure for the stocks_transferencias table.
+-->
+<table>
+    <column>
+        <name>codalmacendestino</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>codalmacenorigen</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>completed</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>fecha_completed</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>idtrans</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <constraint>
+        <name>stocks_transferencias_pkey</name>
+        <type>PRIMARY KEY (idtrans)</type>
+    </constraint>
+    <constraint>
+        <name>ca_stocks_transferencias_almacenes_ori</name>
+        <type>FOREIGN KEY (codalmacenorigen) REFERENCES almacenes (codalmacen) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_stocks_transferencias_almacenes_des</name>
+        <type>FOREIGN KEY (codalmacendestino) REFERENCES almacenes (codalmacen) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_stocks_transferencias_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

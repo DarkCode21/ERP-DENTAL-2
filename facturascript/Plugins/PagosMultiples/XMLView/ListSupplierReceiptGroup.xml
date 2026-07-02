@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples Copyright (C) 2022-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ListSupplierReceiptGroupNote.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the list view of SupplierrReceiptGroup model
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="id" />
+        </column>
+        <column name="company" order="110">
+            <widget type="select" fieldname="idcompany">
+                <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"></values>
+            </widget>
+        </column>
+        <column name="serie" order="125">
+            <widget type="text" fieldname="idserie" />
+        </column>
+        <column name="date" order="130">
+            <widget type="date" fieldname="groupdate" />
+        </column>
+        <column name="bank-account" order="140">
+            <widget type="select" fieldname="idbank" required="true">
+                <values source="cuentasbanco" fieldcode="codcuenta" fieldtitle="descripcion" />
+            </widget>
+        </column>
+        <column name="receipts" order="150">
+            <widget type="number" fieldname="receipts" decimal="0" />
+        </column>
+        <column name="total" order="160">
+            <widget type="money" fieldname="total" />
+        </column>
+    </columns>
+
+    <rows>
+        <row type="status" fieldname="status">
+            <option color="warning" title="pending">0</option>
+            <option color="white" title="approved">1</option>
+        </row>
+    </rows>
+</view>

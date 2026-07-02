@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This file is part of AltasRep plugin for FacturaScripts.
+ * Copyright (C) 2025 FacturaScripts
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * Vista para altas rápidas de productos optimizada para móvil
+ */
+-->
+<view>
+    <columns>
+        <column name="descripcion" title="product-name" order="10">
+            <widget type="text" fieldname="descripcion" required="true" maxlength="100" hint="Introduce el nombre del producto"/>
+        </column>
+        
+        <column name="referencia" title="reference" order="20">
+            <widget type="text" fieldname="referencia" maxlength="30" hint="Referencia automática si se deja vacío"/>
+        </column>
+        
+        <column name="codbarras" title="barcode" order="30">
+            <widget type="text" fieldname="codbarras" maxlength="20" hint="Escribe o escanea el código de barras"/>
+        </column>
+        
+        <column name="precio" title="price" order="40">
+            <widget type="money" fieldname="precio" decimal="4" hint="Precio sin impuestos"/>
+        </column>
+    </columns>
+    
+    <rows>
+        <row type="header">
+            <column name="product-info" title="alta-rapida-productos" order="100">
+                <widget type="html" html="&lt;div class='alert alert-info'&gt;&lt;i class='fas fa-mobile-alt'&gt;&lt;/i&gt; Formulario optimizado para dispositivos móviles&lt;/div&gt;"/>
+            </column>
+        </row>
+        
+        <row type="statistics" id="product-form">
+            <column name="main-form" order="100">
+                <widget type="html" html="&lt;form id='altasRepForm' class='mobile-form'&gt;                             &lt;div class='form-group'&gt;                                 &lt;label for='descripcion' class='required'&gt;Nombre del Producto:&lt;/label&gt;                                 &lt;input type='text' id='descripcion' name='descripcion' class='form-control form-control-lg'                                         required maxlength='100' placeholder='Nombre del producto' autocomplete='off'&gt;                             &lt;/div&gt;                                                          &lt;div class='form-group'&gt;                                 &lt;label for='referencia'&gt;Referencia:&lt;/label&gt;                                 &lt;input type='text' id='referencia' name='referencia' class='form-control form-control-lg'                                         maxlength='30' placeholder='Automática si vacío' autocomplete='off'&gt;                             &lt;/div&gt;                                                          &lt;div class='form-group'&gt;                                 &lt;label for='codbarras'&gt;Código de Barras:&lt;/label&gt;                                 &lt;div class='input-group'&gt;                                     &lt;input type='text' id='codbarras' name='codbarras' class='form-control form-control-lg'                                             maxlength='20' placeholder='Escribe o escanea' autocomplete='off'&gt;                                     &lt;div class='input-group-append'&gt;                                         &lt;button type='button' id='scanButton' class='btn btn-primary btn-lg'&gt;                                             &lt;i class='fas fa-barcode'&gt;&lt;/i&gt; Escanear                                         &lt;/button&gt;                                     &lt;/div&gt;                                 &lt;/div&gt;                             &lt;/div&gt;                                                          &lt;div class='form-group'&gt;                                 &lt;label for='precio'&gt;Precio (sin IVA):&lt;/label&gt;                                 &lt;input type='number' id='precio' name='precio' class='form-control form-control-lg'                                         step='0.01' min='0' placeholder='0.00' autocomplete='off'&gt;                             &lt;/div&gt;                                                          &lt;div class='form-group text-center'&gt;                                 &lt;button type='submit' id='saveButton' class='btn btn-success btn-lg btn-block'&gt;                                     &lt;i class='fas fa-save'&gt;&lt;/i&gt; Guardar y Crear Otro                                 &lt;/button&gt;                             &lt;/div&gt;                                                          &lt;div id='messageArea' class='mt-3'&gt;&lt;/div&gt;                         &lt;/form&gt;"/>
+            </column>
+        </row>
+    </rows>
+</view>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of FacturaScripts
+ * Copyright (C) 2017-2018  Carlos Garcia Gomez  <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * Initial description for the controller ListFSReportsReports
+ *
+ * @author Raúl Jiménez <raljopa@gmail.com>
+-->
+
+<view>
+    <columns>
+        <column name="code" order="100" title="code" display="none" numcolumns="1">
+            <widget type="text" fieldname="id" readonly="true" />
+        </column>
+        <column name="report" order="110" title="report" numcolumns="2" >
+            <widget type="select" fieldname="idreport">
+                <values source="fsreports_reports" fieldcode="idreport" fieldtitle="report"></values>
+            </widget>
+        </column>
+        <column name="type" order="120" title="type" numcolumns="2">
+            <widget type="select" fieldname="type"  hint="" >
+                <values title="date">Fecha</values>
+                <values title="checkbox">Checkbox</values>
+                <values title="numeric">Número</values>
+            </widget>
+        </column>
+        <column name="operator" order="130" title="operator" numcolumns="3">
+            <widget type="select" fieldname="type"  hint="" >
+                <values title="GTE">Mayor o igual que</values>
+                <values title="LTE">Menor o igual que</values>
+                <values title="Igual">Igual</values>
+            </widget>
+        </column>
+        <column name="label" order="100" title="label"  numcolumns="1">
+            <widget type="text" fieldname="label"  />
+        </column>
+        <column name="default value" order="100" title="default"  numcolumns="1">
+            <widget type="text" fieldname="default"  />
+        </column>
+
+    </columns>
+    <filters>
+    </filters>
+</view>

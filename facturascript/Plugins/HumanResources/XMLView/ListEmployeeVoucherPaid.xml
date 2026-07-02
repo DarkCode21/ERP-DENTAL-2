@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ListEmployeeVoucherPaid.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller ListEmployeeVoucherPaid
+-->
+<view>
+    <columns>
+            <column name="code" order="100">
+                <widget type="text" fieldname="id" />
+            </column>
+            <column name="voucher" display="none" order="100">
+                <widget type="text" fieldname="idvoucher" />
+            </column>
+            <column name="date" order="110">
+                <widget type="date" fieldname="startdate" />
+            </column>
+            <column name="hour" order="120">
+                <widget type="text" fieldname="starttime" />
+            </column>
+            <column name="amount" display="right" order="130">
+                <widget type="money" fieldname="amount" />
+            </column>
+            <column name="user" display="center" order="140">
+                <widget type="select" fieldname="nick" >
+                    <values source="users" fieldcode="nick" fieldtitle="nick"></values>
+                </widget>
+            </column>
+            <column name="accounting-entry" display="none" order="200">
+                <widget type="autocomplete" fieldname="idaccounting">
+                    <values source="asientos" fieldcode="idasiento" fieldtitle="numero"></values>
+                </widget>
+            </column>
+    </columns>
+
+    <modals>
+        <group name="insertpaid" title="add-payment" icon="fa-solid fa-coins">
+            <column name="idvoucher" display="none" order="0">
+                <widget type="text" fieldname="modalVoucher" readonly="true" />
+            </column>
+            <column name="amount" numcolumns="12" order="100">
+                <widget type="money" fieldname="modalAmount" required="true" />
+            </column>
+            <column name="date" description="optional-current" order="110">
+                <widget type="date" fieldname="modalDate" />
+            </column>
+        </group>
+    </modals>
+</view>

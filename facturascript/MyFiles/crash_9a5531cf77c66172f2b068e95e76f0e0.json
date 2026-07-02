@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Call to undefined method FacturaScripts\\Plugins\\Dental\\Extension\\Controller\\EditPaciente::validateFormToken() in \/Plugins\/Dental\/Extension\/Controller\/EditPaciente.php:60\n\nStack trace:\n#0 [internal function]: FacturaScripts\\Plugins\\Dental\\Extension\\Controller\\EditPaciente-&gt;addClienteAction()\n#1 \/Core\/Base\/ExtensionsTrait.php(65): ReflectionMethod-&gt;invoke(Object(FacturaScripts\\Plugins\\Dental\\Extension\\Controller\\EditPaciente))\n#2 \/Core\/Base\/InitClass.php(107): FacturaScripts\\Dinamic\\Controller\\EditPaciente::addExtension(Object(FacturaScripts\\Plugins\\Dental\\Extension\\Controller\\EditPaciente))\n#3 \/Plugins\/Dental\/Init.php(13): FacturaScripts\\Core\\Base\\InitClass-&gt;loadExtension(Object(FacturaScripts\\Plugins\\Dental\\Extension\\Controller\\EditPaciente))\n#4 \/Core\/Internal\/Plugin.php(235): FacturaScripts\\Plugins\\Dental\\Init-&gt;init()\n#5 \/Core\/Plugins.php(244): FacturaScripts\\Core\\Internal\\Plugin-&gt;init()\n#6 \/index.php(59): FacturaScripts\\Core\\Plugins::init()\n#7 {main}\n  thrown",
+    "file": "\/Plugins\/Dental\/Extension\/Controller\/EditPaciente.php",
+    "line": 60,
+    "fragment": "        if (false === $this->permissions->allowUpdate) {\n55        if (false === $this->permissions->allowUpdate) {\n56            Tools::log()->warning('not-allowed-modify');\n57            return false;\n58        }\n59\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">60        if (false === $this->validateFormToken()) {<\/spam>\n61            return true;\n62        }\n63\n64        $nombre = $this->request->request->get('nombre', '');\n65        $apellidos = $this->request->request->get('apellidos', '');",
+    "hash": "9a5531cf77c66172f2b068e95e76f0e0",
+    "url": "\/AdminPlugins",
+    "report_url": "https:\/\/facturascripts.com\/errores\/9a5531cf77c66172f2b068e95e76f0e0",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F9a5531cf77c66172f2b068e95e76f0e0",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

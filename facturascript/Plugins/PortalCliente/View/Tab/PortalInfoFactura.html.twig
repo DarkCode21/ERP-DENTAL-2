@@ -1,0 +1,244 @@
+{#
+* Copyright (C) 2024-2025 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% set firstView = fsc.views | first %}
+{% set model = firstView.model %}
+{% set childrens = fsc.contact.exists() ? model.childrenDocuments() : {} %}
+{% set parents = fsc.contact.exists() ? model.parentDocuments() : {} %}
+
+{% for item in getIncludeViews('PortalInfoFactura', 'infoBefore') %}
+    {% include item['path'] %}
+{% endfor %}
+
+<link rel="stylesheet"
+      href="{{ asset('Plugins/PortalCliente/node_modules/@fancyapps/ui/dist/fancybox/fancybox.css') }}"/>
+<script src="{{ asset('Plugins/PortalCliente/node_modules/@fancyapps/ui/dist/fancybox/fancybox.umd.js') }}"></script>
+
+<div class="card-group shadow mb-3">
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <tbody>
+                <tr>
+                    <td class="text-center bg-white" colspan="2">
+                        <h2 class="h2 m-0">{{ money(model.total, model.coddivisa) }}</h2>
+                    </td>
+                </tr>
+                {% if model.editable %}
+                    <tr class="table-success">
+                        <td class="text-center" colspan="2">{{ model.getStatus().nombre }}</td>
+                    </tr>
+                {% elseif model.getStatus().generadoc is empty %}
+                    <tr class="table-danger">
+                        <td class="text-center" colspan="2">{{ model.getStatus().nombre }}</td>
+                    </tr>
+                {% endif %}
+                {% if parents is not empty %}
+                    <tr class="table-light">
+                        <td class="text-center" colspan="2">
+                            <strong>{{ trans('parent-documents') }}</strong>
+                            {% for parent in parents %}
+                                <div>
+                                    {{ trans(parent.getStatus().tipodoc ~ '-min') }}:
+                                    <a href="{{ asset(parent.url('public')) }}">{{ parent.codigo }}</a>
+                                </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if childrens is not empty %}
+                    <tr class="table-light">
+                        <td class="text-center" colspan="2">
+                            <strong>{{ trans('children-documents') }}</strong>
+                            {% for child in childrens %}
+                                <div>
+                                    {{ trans(child.getStatus().tipodoc ~ '-min') }}:
+                                    <a href="{{ asset(child.url('public')) }}">{{ child.codigo }}</a>
+                                </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if model.pc_paid %}
+                    <tr>
+                        <td>{{ trans('paid') }}</td>
+                        <td class="text-right">{{ trans('yes') }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>{{ trans('date') }}</td>
+                    <td class="text-right">{{ model.fecha }} {{ model.hora }}</td>
+                </tr>
+                <tr>
+                    <td>{{ trans('subtotal') }}</td>
+                    <td class="text-right">{{ money(model.netosindto, model.coddivisa) }}</td>
+                </tr>
+                {% if model.dtopor1 %}
+                    <tr>
+                        <td>{{ trans('global-dto') }}</td>
+                        <td class="text-right">{{ number(model.dtopor1) }} %</td>
+                    </tr>
+                {% endif %}
+                {% if model.dtopor2 %}
+                    <tr>
+                        <td>{{ trans('global-dto-2') }}</td>
+                        <td class="text-right">{{ number(model.dtopor2) }} %</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>{{ trans('net') }}</td>
+                    <td class="text-right">{{ money(model.neto, model.coddivisa) }}</td>
+                </tr>
+                <tr>
+                    <td>{{ trans('taxes') }}</td>
+                    <td class="text-right">{{ money(model.totaliva, model.coddivisa) }}</td>
+                </tr>
+                {% if model.totalirpf > 0 %}
+                    <tr>
+                        <td>{{ trans('irpf') }}</td>
+                        <td class="text-right">{{ money(model.totalirpf, model.coddivisa) }} %</td>
+                    </tr>
+                {% endif %}
+                {% if model.totalrecargo > 0 %}
+                    <tr>
+                        <td>{{ trans('surcharge') }}</td>
+                        <td class="text-right">{{ money(model.totalrecargo, model.coddivisa) }} %</td>
+                    </tr>
+                {% endif %}
+                {% if model.totalsuplidos > 0 %}
+                    <tr>
+                        <td>{{ trans('supplied-amount') }}</td>
+                        <td class="text-right">{{ money(model.totalsuplidos, model.coddivisa) }} %</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            {{ fsc.getPaymentGatewayHtml() | raw }}
+            <a class="btn btn-block btn-outline-info btn-spin-action"
+               href="{{ asset(fsc.contact.exists() ? model.url('public-print') : model.url('public-print-share')) }}"
+               target="_blank">
+                <i class="fas fa-print fa-fw" aria-hidden="true"></i> {{ trans('print') }}
+            </a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <tbody>
+                <tr>
+                    <td>{{ trans('name') }}</td>
+                    <td class="text-right">{{ model.nombrecliente | raw }}</td>
+                </tr>
+                {% if model.cifnif %}
+                    <tr>
+                        <td>{{ model.getSubject().tipoidfiscal }}</td>
+                        <td class="text-right">{{ model.cifnif }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>{{ trans('address') }}</td>
+                    <td class="text-right">{{ model.direccion | raw }}</td>
+                </tr>
+                {% if model.apartado %}
+                    <tr>
+                        <td>{{ trans('post-office-box') }}</td>
+                        <td class="text-right">{{ model.apartado }}</td>
+                    </tr>
+                {% endif %}
+                {% if model.codpostal %}
+                    <tr>
+                        <td>{{ trans('zip-code') }}</td>
+                        <td class="text-right">{{ model.codpostal }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td>{{ trans('city') }}</td>
+                    <td class="text-right">{{ model.ciudad | raw }}</td>
+                </tr>
+                <tr>
+                    <td>{{ trans('province') }}</td>
+                    <td class="text-right">{{ model.provincia | raw }}</td>
+                </tr>
+                <tr>
+                    <td>{{ trans('country') }}</td>
+                    <td class="text-right">{{ model.country() }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-3">
+    <div class="table-responsive">
+        <table class="table table-striped mb-0">
+            <thead>
+            <tr>
+                <th>{{ trans('image') }}</th>
+                <th>{{ trans('product') }}</th>
+                <th class="text-right text-nowrap">{{ trans('quantity') }}</th>
+                <th class="text-right text-nowrap">{{ trans('price') }}</th>
+                <th class="text-right text-nowrap">{{ trans('dto') }}</th>
+                <th class="text-right text-nowrap">{{ trans('tax') }}</th>
+                <th class="text-right text-nowrap">{{ trans('total') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for line in model.getLines() %}
+                <tr>
+                    <td class="align-middle">{{ fsc.getImages(line) | raw }}</td>
+                    <td class="align-middle">
+                        <b>{{ line.referencia }}</b> {{ line.descripcion | raw | nl2br }}
+                    </td>
+                    <td class="text-right text-nowrap align-middle">{{ number(line.cantidad) }}</td>
+                    <td class="text-right text-nowrap align-middle">
+                        <div class="small"  title="{{ trans('unit-price') }}">{{ money(line.pvpunitario, model.coddivisa) }}</div>
+                        <div>{{ money(line.pvpsindto, model.coddivisa) }}</div>
+                    </td>
+                    <td class="text-right text-nowrap align-middle">
+                        <div class="small">{{ number(line.dtopor) }} %</div>
+                        <div>{{ money(fsc.getLineTotalDiscount(line, model), model.coddivisa) }}</div>
+                    </td>
+                    <td class="text-right text-nowrap align-middle">
+                        <div class="small">{{ number(line.iva) }} %</div>
+                        <div>{{ money(fsc.getLineTotalTax(line, model), model.coddivisa) }}</div>
+                    </td>
+                    <td class="text-right text-nowrap align-middle">
+                        <div class="small">{{ money(line.pvptotal, model.coddivisa) }}</div>
+                        <div>{{ money(fsc.getLineSubtotal(line, model), model.coddivisa) }}</div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr class="table-warning">
+                    <td colspan="7">{{ trans('no-data') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if model.observaciones %}
+    <div class="card shadow mb-3">
+        <div class="card-header font-weight-bold">
+            {{ trans('observations') }}
+        </div>
+        <div class="card-body">
+            <p class="mb-0">{{ model.observaciones | raw | nl2br }}</p>
+        </div>
+    </div>
+{% endif %}
+
+{% for item in getIncludeViews('PortalInfoFactura', 'infoAfter') %}
+    {% include item['path'] %}
+{% endfor %}
+
+<script>
+    Fancybox.bind('[data-fancybox]');
+</script>

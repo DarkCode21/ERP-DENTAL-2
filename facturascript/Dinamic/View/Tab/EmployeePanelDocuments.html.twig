@@ -1,0 +1,66 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+*/
+#}
+
+<div class="container-fluid">
+    <div class="form-row">
+        {% for docType in fsc.documents.docTypes %}
+        <div class="col-12">
+            <div class="card border-secondary shadow mb-3">
+                <div class="card-header text-secondary d-flex">
+                    <strong>
+                        {{ docType.name|upper }}
+                    </strong>
+                    {% set cardName = 'docType_' ~ docType.id %}
+                    <a class="btn btn-link p-0 ml-auto" data-toggle="collapse" href="#{{ cardName }}" role="button" aria-expanded="false" aria-controls="{{ cardName }}">
+                        <i class="fa fa-plus text-secondary"></i>
+                    </a>
+                </div>
+                <div id="{{ cardName }}" class="collapse">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <tbody>
+                                    {% for document in fsc.documents.data[docType.name] %}
+                                        {{ _self.documentLineAdd(fsc, document) }}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                {{ trans('no-documents') }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+    
+{% macro documentLineAdd(fsc, document) %}
+    <tr>
+        <td>{{ document.year_group }}</td>
+        <td>{{ document.note }}</td>
+        <td class="d-none d-md-table-cell">{{ document.filename }}</td>
+        <td class="d-none d-lg-table-cell">{{ document.getSize(document.size) }}</td>
+        <td class="text-right">
+            {% set urlFile = document.getUrlDownload() %}
+            <a class="btn btn-sm btn-outline-primary" target="_blank" href="{{ asset(urlFile) }}">
+                <i class="fa-solid fa-cloud-download-alt"></i>
+                <span class="d-none d-sm-inline-block">{{ trans('download') }}</span>
+            </a>            
+        </td>
+    </tr>
+{% endmacro %}

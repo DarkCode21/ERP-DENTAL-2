@@ -1,0 +1,890 @@
+/* ==========================================================================
+   RESET Y BASE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    background: #f7f7f7;
+    border-right: 1px dashed #bec8d0;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    transform: translateX(0);
+    overscroll-behavior: contain;
+}
+
+.sidebar.hidden,
+.sidebar.closed {
+    transform: translateX(-260px);
+}
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 15px;
+    background: transparent;
+    color: black;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Sidebar Menu Container */
+.sidebar-menu {
+    flex: 1;
+    height: calc(100vh - 105px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* ==========================================================================
+   SIMPLEBAR CUSTOMIZATION
+   ========================================================================== */
+.simplebar-wrapper {
+    height: 100% !important;
+    overscroll-behavior-y: contain;
+}
+
+.simplebar-content-wrapper {
+    overflow: auto !important;
+    overscroll-behavior-y: contain;
+}
+
+.simplebar-scrollbar::before {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+.simplebar-track.simplebar-vertical {
+    width: 9px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   MENU ITEMS
+   ========================================================================== */
+.menu-item {
+    padding: 15px 25px;
+    color: #444b52;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.menu-item:hover {
+    background: rgba(52, 152, 219, 0.2);
+    border-left-color: #000;
+    color: #444b52;
+}
+
+.menu-item.active {
+    background: rgba(52, 152, 219, 0.2);
+    border-left-color: #000000;
+    color: #444b52;
+}
+
+.menu-item i {
+    width: 25px;
+    margin-right: 15px;
+    font-size: 1.1rem;
+}
+
+.menu-item .arrow {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.menu-item.has-submenu.open .arrow {
+    transform: rotate(90deg);
+}
+
+/* Folder Icon Animation */
+.folder-icon {
+    transition: all 0.3s ease;
+}
+
+.menu-item.open .folder-icon {
+    color: black;
+}
+
+/* ==========================================================================
+   SUBMENU
+   ========================================================================== */
+.submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    background: white;
+}
+
+.submenu.open {
+    max-height: 3000px;
+}
+
+.submenu-item {
+    padding: 12px 20px 12px 38px;
+    color: #444b52;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.submenu-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #444b52;
+    padding-left: 42px;
+}
+
+.submenu-item.active {
+    color: #4a5258;
+    background: rgba(52, 152, 219, 0.1);
+}
+
+/* ==========================================================================
+   MAIN CONTENT
+   ========================================================================== */
+.main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    transition: all 0.3s ease;
+    min-height: 100vh;
+}
+
+.sidebar.hidden ~ .main-content,
+.sidebar.closed ~ .main-content,
+.main-content.expanded,
+.main-content.nopush {
+    margin-left: 0;
+    width: 100%;
+}
+
+/* ==========================================================================
+   TOP NAVBAR
+   ========================================================================== */
+.top-navbar {
+    background: #ffffffb3;
+    backdrop-filter: blur(7px);
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 998;
+}
+
+.top-navbar-left,
+.top-navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Toggle Button */
+.toggle-btn {
+    background: #f7f7f7;
+    color: #2c3e50;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.toggle-btn:hover {
+    transform: scale(1.1);
+}
+
+.toggle-btn i {
+    transition: all 0.3s ease;
+    display: inline-block;
+    font-size: 1rem;
+}
+
+/* Logo Link */
+.nlink {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.nlink:hover {
+    opacity: 0.8;
+}
+
+.ntext {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1f36;
+    white-space: nowrap;
+}
+
+/* User Info */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info .nav-link {
+    padding: 0;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2770ca 0%, #7fb1e5 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.user-avatar:hover {
+    transform: scale(1.1);
+}
+
+/* ==========================================================================
+   STATS CARDS - DISEÑO MODERNO
+   ========================================================================== */
+
+/* Stats Grid Container */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+/* Stat Card Wrapper */
+.stat-card-wrapper {
+    height: 100%;
+}
+
+/* Stat Card Base */
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Línea superior de color */
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: currentColor;
+}
+
+/* Hover Effect - Elevación sutil y lenta */
+.stat-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    /*transform: translateY(-8px);*/
+}
+
+/* Icono */
+.stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    color: white;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.05);
+}
+
+/* Título */
+.stat-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+/* Valor principal */
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1f36;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+/* Label del valor */
+.stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 16px;
+}
+
+/* Detalles adicionales */
+.stat-details {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid #e9ecef;
+}
+
+.stat-detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 0.875rem;
+}
+
+.stat-detail-label {
+    color: #6c757d;
+}
+
+.stat-detail-value {
+    font-weight: 600;
+    color: #1a1f36;
+}
+
+/* ==========================================================================
+   COLORES POR VARIANTE
+   ========================================================================== */
+
+/* Primary - Azul */
+.stat-card.primary {
+    color: var(--bs-primary);
+}
+
+.stat-card.primary .stat-icon {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, #0066cc 100%);
+}
+
+/* Success - Verde */
+.stat-card.success {
+    color: #00d084;
+}
+
+.stat-card.success .stat-icon {
+    background: linear-gradient(135deg, #00d084 0%, #00a86b 100%);
+}
+
+/* Info - Cyan */
+.stat-card.info {
+    color: #00c7e6;
+}
+
+.stat-card.info .stat-icon {
+    background: linear-gradient(135deg, #00c7e6 0%, #009fb8 100%);
+}
+
+/* Warning - Ámbar */
+.stat-card.warning {
+    color: #ffb020;
+}
+
+.stat-card.warning .stat-icon {
+    background: linear-gradient(135deg, #ffb020 0%, #e69a1c 100%);
+}
+
+/* Danger - Rojo */
+.stat-card.danger {
+    color: #ff5757;
+}
+
+.stat-card.danger .stat-icon {
+    background: linear-gradient(135deg, #ff5757 0%, #ff2e2e 100%);
+}
+
+/* Secondary - Gris */
+.stat-card.secondary {
+    color: #6c757d;
+}
+
+.stat-card.secondary .stat-icon {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+}
+
+/* Dark - Oscuro */
+.stat-card.dark {
+    color: #1a1f36;
+}
+
+.stat-card.dark .stat-icon {
+    background: linear-gradient(135deg, #1a1f36 0%, #0f1220 100%);
+}
+
+/* Light - Claro */
+.stat-card.light {
+    color: #495057;
+}
+
+.stat-card.light .stat-icon {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    color: #495057;
+}
+
+/* ==========================================================================
+   CONTENT CARDS (Deprecated - usar .stat-card en su lugar)
+   ========================================================================== */
+
+.content-area {
+    padding: 30px;
+}
+
+.content-card {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.content-card h4 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* ==========================================================================
+   RESPONSIVE - MOBILE
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Sidebar Mobile */
+    .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Main Content Mobile */
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Top Navbar Mobile */
+    .top-navbar {
+        padding: 10px 15px;
+    }
+
+    .top-navbar-left {
+        gap: 10px;
+    }
+
+    .logo-text,
+    .ntext {
+        font-size: 1rem;
+    }
+
+    .user-info span {
+        display: none !important;
+    }
+
+    /* Stats Cards Mobile */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .stat-value {
+        font-size: 1.75rem;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+
+    /* Backdrop Overlay */
+    body.sidebar-open::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(199, 199, 199, 0.2);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        z-index: 999;
+        opacity: 1;
+        pointer-events: all;
+        transition: opacity 0.3s ease;
+    }
+
+    body:not(.sidebar-open)::before {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+}
+
+@media (max-width: 576px) {
+    .stat-card {
+        padding: 20px;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE - DESKTOP
+   ========================================================================== */
+@media (min-width: 769px) {
+    .sidebar.closed {
+        transform: translateX(-260px);
+    }
+
+    .main-content.nopush {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+
+
+/* ==========================================================================
+   RICHITHEME SECTION LINKS
+   ========================================================================== */
+
+.section-link-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #387ccf;
+}
+
+.section-links-container {
+    margin-bottom: 30px;
+}
+
+/* Card del acordeón */
+.section-link-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+    position: relative;
+}
+
+.section-link-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Header del acordeón */
+.section-link-header {
+    width: 100%;
+    padding: 24px;
+    background: white;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.section-link-header:hover {
+    background: rgba(0, 128, 255, 0.02);
+}
+
+.section-link-header[aria-expanded="false"] {
+    border-bottom: none;
+}
+
+/* Título del acordeón */
+.section-link-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a1f36;
+}
+
+.history-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.history-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.history-date {
+    font-size: 0.8125rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.section-link-icon {
+    width: 23px;
+    height: 23px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #2770ca 0%, #7fb1e5 100%);
+    flex-shrink: 0;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Flecha del acordeón */
+.section-link-arrow {
+    color: #6c757d;
+    font-size: 0.875rem;
+    transition: transform 0.3s ease;
+}
+
+.section-link-header[aria-expanded="true"] .section-link-arrow {
+    transform: rotate(180deg);
+}
+
+/* Body del acordeón */
+.section-link-body {
+    padding: 20px 24px 24px;
+    border-top: 1px dashed #d4e5f2;
+}
+
+/* Lista de enlaces */
+.section-link-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.section-link-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    transition: all 0.2s ease;
+}
+
+.section-link-item:hover {
+    padding-left: 8px;
+}
+
+/* Bullet point */
+.section-link-bullet {
+    color: #387ccf;
+    font-size: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Enlaces */
+.section-link-anchor {
+    color: #495057;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.section-link-anchor:hover {
+    color: var(--bs-primary);
+    text-decoration: none;
+}
+
+/* Iconos dentro de los enlaces */
+.section-link-anchor i {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.section-link-anchor:hover i {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   VARIANTES DE COLOR (Opcional)
+   ========================================================================== */
+
+/* Variante para "Crear" - Verde */
+.section-link-card.create .section-link-header {
+    background: linear-gradient(135deg, rgba(0, 208, 132, 0.05) 0%, rgba(0, 208, 132, 0.02) 100%);
+}
+
+.section-link-card.create .section-link-header:hover {
+    background: linear-gradient(135deg, rgba(0, 208, 132, 0.08) 0%, rgba(0, 208, 132, 0.04) 100%);
+}
+
+.section-link-card.create .section-link-icon,
+.section-link-card.create .section-link-bullet {
+    color: #00d084;
+}
+
+/* Variante para "Ayuda" - Naranja */
+.section-link-card.help .section-link-header {
+    background: linear-gradient(135deg, rgba(255, 176, 32, 0.05) 0%, rgba(255, 176, 32, 0.02) 100%);
+}
+
+.section-link-card.help .section-link-header:hover {
+    background: linear-gradient(135deg, rgba(255, 176, 32, 0.08) 0%, rgba(255, 176, 32, 0.04) 100%);
+}
+
+.section-link-card.help .section-link-icon,
+.section-link-card.help .section-link-bullet {
+    color: #ffb020;
+}
+
+
+/* ==========================================================================
+   SUBMENÚS ANIDADOS (TERCER NIVEL) - Añadir al final de RichiTheme.css
+   ========================================================================== */
+
+/* Wrapper para items de submenú que tienen hijos */
+.submenu-item-wrapper {
+    position: relative;
+}
+
+/* Items de submenú que tienen hijos (segundo nivel con expansión) */
+.submenu-item.has-children {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Flecha indicadora de más niveles */
+.submenu-arrow {
+    font-size: 0.7rem;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+/* Rotar flecha cuando el submenú está abierto */
+.submenu-item.has-children.open .submenu-arrow {
+    transform: rotate(90deg);
+}
+
+/* Contenedor del submenú anidado (tercer nivel) */
+.submenu-nested {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* Submenú anidado abierto */
+.submenu-nested.open {
+    max-height: 800px; /* Ajusta según la cantidad de items que esperas */
+}
+
+/* Items del tercer nivel */
+.submenu-nested-item {
+    display: block;
+    padding: 12px 20px 12px 45px;
+    color: #444b52;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.submenu-nested-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #444b52;
+    padding-left: 49px;
+}
+
+.submenu-nested-item.active {
+    color: #4a5258;
+    background: rgba(52, 152, 219, 0.15);
+}
+
+.submenu-nested-item i {
+    opacity: 0.7;
+    margin-right: 8px;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .section-link-header {
+        padding: 16px 20px;
+    }
+
+    .section-link-title {
+        font-size: 1rem;
+    }
+
+    .section-link-body {
+        padding: 16px 20px 20px;
+    }
+
+    .section-link-anchor {
+        font-size: 0.875rem;
+    }
+
+    .submenu-nested-item {
+        padding-left: 50px;
+    }
+
+    .submenu-nested-item:hover {
+        padding-left: 55px;
+    }
+}

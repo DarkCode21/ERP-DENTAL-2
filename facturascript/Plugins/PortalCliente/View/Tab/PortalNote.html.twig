@@ -1,0 +1,13 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% set firstView = fsc.views | first %}
+{% set note = firstView.model %}
+
+<div class="row mt-5">
+    <div class="col-12">
+        {{ note.markdown() | raw }}
+    </div>
+</div>

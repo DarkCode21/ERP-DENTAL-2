@@ -1,0 +1,16 @@
+{
+    "accumulate-discount": "Accumula lo sconto",
+    "discounts": "Sconti",
+    "fixed-price": "Prezzo fisso",
+    "formula-cost-price-alt": "Prezzo di costo + %x%% + %y%",
+    "formula-sale-price-alt": "Prezzo - %x%% - %y%",
+    "global-changes": "Cambiamenti globali",
+    "global-changes-desc": "Le modifiche apportate qui si applicheranno a tutte le varianti qui sotto",
+    "level-tarifas-av": "Livello minimo per visualizzare i prezzi",
+    "prices": "Prezzi",
+    "reset-all-rates": "Reimposta tutte le tariffe",
+    "reset-rates": "Ripristino tariffe",
+    "reset-rates-for-this-variant": "Reimposta tariffe per questa variante",
+    "save-all-variants": "Salva tutte le varianti",
+    "save-this-variant": "Salva questa variante"
+}

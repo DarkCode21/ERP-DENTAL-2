@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Class &quot;\\FacturaScripts\\Dinamic\\Controller\\Files&quot; not found in \/Core\/Kernel.php:378\n\nStack trace:\n#0 \/Core\/Kernel.php(190): FacturaScripts\\Core\\Kernel::runController(&#39;\/Plugins\/RichiT...&#39;)\n#1 \/index.php(63): FacturaScripts\\Core\\Kernel::run(&#39;\/Plugins\/RichiT...&#39;)\n#2 {main}\n  thrown",
+    "file": "\/Core\/Kernel.php",
+    "line": 378,
+    "fragment": "                return;\n373                return;\n374            }\n375\n376            \/\/ coincidencia con comod\u00edn\n377            if (str_ends_with($route, '*') && 0 === strncmp($url, $route, strlen($route) - 1)) {\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">378                $app = new $controller($name, $url);<\/spam>\n379                $app->run();\n380                return;\n381            }\n382        }\n383",
+    "hash": "38f5d7edb908ce09a5101e72cd49dcb5",
+    "url": "\/Plugins\/RichiTheme\/Assets\/CSS\/richitheme-bootstrap-colors.css",
+    "report_url": "https:\/\/facturascripts.com\/errores\/38f5d7edb908ce09a5101e72cd49dcb5",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F38f5d7edb908ce09a5101e72cd49dcb5",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

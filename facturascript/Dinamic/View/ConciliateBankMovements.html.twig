@@ -1,0 +1,836 @@
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% block bodyHeaderOptions %}
+    {{ parent() }}
+    <div class="container-fluid pb-3 mb-2">
+        <div class="form-row align-items-end">
+            <div class="col-auto">
+                <a class="btn btn-secondary" href="{{ asset('EditCuentaBanco?code=' ~ fsc.codcuenta) }}">
+                    <i class="fas fa-chevron-left mr-1" aria-hidden="true"></i>
+                    {{ trans('bank-account') }}
+                </a>
+                <a class="btn btn-secondary" href="{{ fsc.url() }}?codcuenta={{ fsc.codcuenta }}"
+                   title="{{ trans('refresh') }}">
+                    <i class="fas fa-redo" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="col-3">
+                {{ trans('bank-account') }}
+                <select id="codcuenta" class="form-control">
+                    {% for bank in fsc.getBankAccounts() %}
+                        {% if bank.codcuenta == fsc.codcuenta %}
+                            <option value="{{ bank.codcuenta }}" selected>{{ bank.descripcion }}</option>
+                        {% else %}
+                            <option value="{{ bank.codcuenta }}">{{ bank.descripcion }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm text-right">
+                <h1 class="h3">
+                    {{ trans(fsc.getPageData()['title']) | capitalize }}
+                    <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i>
+                </h1>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('/node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('/node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0">
+            <thead>
+            <tr>
+                <th class="text-right">{{ trans('amount') }}</th>
+                <th>{{ trans('date') }}</th>
+                <th>{{ trans('observations') }}</th>
+                <th class="text-right"></th>
+            </tr>
+            </thead>
+            <tbody id="listBankMovements"></tbody>
+        </table>
+    </div>
+
+    <!-- Modal recibos clientes -->
+    <div class="modal fade" id="clientsModal" tabindex="-1" aria-labelledby="clientsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clientsModalLabel">
+                        <i class="fa-solid fa-link mr-1"></i> {{ trans('reconcile-sales-movement') }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="row p-3">
+                        <div class="idmovement d-none"></div>
+                        <div class="col-auto">
+                            <div class="font-weight-bold">{{ trans('amount') }}</div>
+                            <div class="amountData"></div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="font-weight-bold">{{ trans('date') }}</div>
+                            <div class="dateData"></div>
+                        </div>
+                        <div class="col">
+                            <div class="font-weight-bold">{{ trans('observations') }}</div>
+                            <div class="observationsData"></div>
+                        </div>
+                    </div>
+                    <div class="form-row p-3">
+                        <div class="col-12 col-sm">
+                            {{ trans('customer') }}
+                            <input type="hidden" name="codcliente" value="">
+                            <div class="input-group">
+                                <input type="text" id="findClientInput" class="form-control" value=""/>
+                                <div class="input-group-append">
+                                    <button type="button" id="deleteClient" class="btn btn-warning d-none">
+                                        <i class="fas fa-times" aria-hidden="true"></i>
+                                    </button>
+                                    <span id="searchClient" class="input-group-text">
+                                        <i class="fas fa-search fa-fw"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm">
+                            {{ trans('amount') }}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">&gt;=</span>
+                                </div>
+                                <input type="number" class="form-control amountGreaterOrEqual" value=""
+                                       onkeyup="getReceiptsSales()"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm">
+                            {{ trans('amount') }}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">&lt;=</span>
+                                </div>
+                                <input type="number" class="form-control amountLessThanOrEqual" value=""
+                                       onkeyup="getReceiptsSales()"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm">
+                            {{ trans('method-payment') }}
+                            <select class="form-control methodPayment" onchange="getReceiptsSales()">
+                                {% for payment in fsc.getPaymentMethods() %}
+                                    <option value="{{ payment.codpago }}">{{ payment.descripcion }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>{{ trans('receipt') }}</th>
+                                <th class="text-right">{{ trans('amount') }}</th>
+                                <th class="text-nowrap">{{ trans('method-payment') }}</th>
+                                <th class="text-right">{{ trans('expiration') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody class="receipts"></tbody>
+                        </table>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary" onclick="reconciliate('sales')">
+                                {{ trans('reconciliate') }}
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                {{ trans('close') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal, asientos -->
+    <div class="modal fade" id="asientosModal" tabindex="-1" aria-labelledby="asientosModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="asientosModalLabel">
+                        <i class="fa-solid fa-link mr-1"></i> {{ trans('link-mov-with-acc') }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="row p-3">
+                        <div class="idmovement d-none"></div>
+                        <div class="col-auto">
+                            <div class="font-weight-bold">{{ trans('amount') }}</div>
+                            <div class="amountData"></div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="font-weight-bold">{{ trans('date') }}</div>
+                            <div class="dateData"></div>
+                        </div>
+                        <div class="col">
+                            <div class="font-weight-bold">{{ trans('observations') }}</div>
+                            <div class="observationsData"></div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs pl-2" id="asientosModalTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="asi-tab-buscar" data-toggle="tab"
+                                    data-target="#asiTabBuscar" type="button" role="tab" aria-controls="asiTabBuscar"
+                                    aria-selected="true">
+                                {{ trans('search') }}
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="asi-tab-nuevo" data-toggle="tab" data-target="#asiTabNuevo"
+                                    type="button" role="tab" aria-controls="asiTabNuevo" aria-selected="false">
+                                {{ trans('new') }}
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="asientosModalTabContent">
+                        <div class="tab-pane fade show active" id="asiTabBuscar" role="tabpanel"
+                             aria-labelledby="asi-tab-buscar">
+                            <div class="form-row pl-2 pt-2 pr-2">
+                                <div class="col-12 col-sm">
+                                    {{ trans('concept') }}
+                                    <div class="input-group">
+                                        <input type="text" class="concepto form-control" onkeyup="getAsientos()"/>
+                                        <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-search fa-fw"></i>
+                                    </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm">
+                                    {{ trans('amount') }}
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">&gt;=</span>
+                                        </div>
+                                        <input type="number" class="form-control amountGreaterOrEqual" value=""
+                                               onkeyup="getAsientos()"/>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm">
+                                    {{ trans('amount') }}
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">&lt;=</span>
+                                        </div>
+                                        <input type="number" class="form-control amountLessThanOrEqual" value=""
+                                               onkeyup="getAsientos()"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="p-2 mb-0 text-center text-muted">{{ trans('link-mov-with-acc-p') }}</p>
+                            <div class="table-responsive">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>{{ trans('concept') }}</th>
+                                        <th class="text-right text-nowrap">{{ trans('amount') }}</th>
+                                        <th class="text-right text-nowrap">{{ trans('date') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="asientos"></tbody>
+                                </table>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary" onclick="reconciliate('asientos')">
+                                        {{ trans('reconciliate') }}
+                                    </button>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                        {{ trans('close') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade p-2" id="asiTabNuevo" role="tabpanel" aria-labelledby="asi-tab-nuevo">
+                            <div class="form-group">
+                                {{ trans('bank-account') }}
+                                <input type="text" class="form-control" value="{{ fsc.cuenta.codsubcuenta }}" readonly/>
+                            </div>
+                            <div class="form-group">
+                                {{ trans('counterpart') }}
+                                <input list="sub-accounts" id="nuevoAsientoContra" class="form-control" required/>
+                                <datalist id="sub-accounts">
+                                    {% for account in fsc.getSubaccounts() %}
+                                        <option value="{{ account.codsubcuenta }}">{{ account.codsubcuenta }}
+                                            - {{ account.descripcion }}</option>
+                                    {% endfor %}
+                                </datalist>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-success" onclick="reconciliate('new-asiento')">
+                                        {{ trans('new') }}
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <p class="text-muted mb-0">{{ trans('link-mov-with-acc-c') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal remesas clientes -->
+    <div class="modal fade" id="remesasModal" tabindex="-1" aria-labelledby="remesasModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="remesasModalLabel">
+                        <i class="fa-solid fa-link mr-1"></i> {{ trans('reconcile-remittances') }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="row p-3">
+                        <div class="idmovement d-none"></div>
+                        <div class="col-auto">
+                            <div class="font-weight-bold">{{ trans('amount') }}</div>
+                            <div class="amountData"></div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="font-weight-bold">{{ trans('date') }}</div>
+                            <div class="dateData"></div>
+                        </div>
+                        <div class="col">
+                            <div class="font-weight-bold">{{ trans('observations') }}</div>
+                            <div class="observationsData"></div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>{{ trans('date') }}</th>
+                                <th>{{ trans('description') }}</th>
+                                <th class="text-right text-nowrap">{{ trans('amount') }}</th>
+                                <th class="text-right">{{ trans('charge-date') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody class="remesas"></tbody>
+                        </table>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary" onclick="reconciliate('remesas')">
+                                {{ trans('reconciliate') }}
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                {{ trans('close') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal recibos proveedores -->
+    <div class="modal fade" id="suppliersModal" tabindex="-1" aria-labelledby="suppliersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="suppliersModalLabel">
+                        <i class="fa-solid fa-link mr-1"></i> {{ trans('reconcile-purchases-movement') }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="row p-3">
+                        <div class="idmovement d-none"></div>
+                        <div class="col-auto">
+                            <div class="font-weight-bold">{{ trans('amount') }}</div>
+                            <div class="amountData"></div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="font-weight-bold">{{ trans('date') }}</div>
+                            <div class="dateData"></div>
+                        </div>
+                        <div class="col">
+                            <div class="font-weight-bold">{{ trans('observations') }}</div>
+                            <div class="observationsData"></div>
+                        </div>
+                    </div>
+                    <div class="form-row p-3">
+                        <div class="col-12 col-sm">
+                            {{ trans('supplier') }}
+                            <input type="hidden" name="codproveedor" value="">
+                            <div class="input-group">
+                                <input type="text" id="findSupplierInput" class="form-control" value=""/>
+                                <div class="input-group-append">
+                                    <button type="button" id="deleteSupplier" class="btn btn-warning d-none">
+                                        <i class="fas fa-times" aria-hidden="true"></i>
+                                    </button>
+                                    <span id="searchSupplier" class="input-group-text">
+                                        <i class="fas fa-search fa-fw"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm">
+                            {{ trans('amount') }}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">&gt;=</span>
+                                </div>
+                                <input type="number" class="form-control amountGreaterOrEqual" value=""
+                                       onkeyup="getReceiptsPurchases()"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm">
+                            {{ trans('amount') }}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">&lt;=</span>
+                                </div>
+                                <input type="number" class="form-control amountLessThanOrEqual" value=""
+                                       onkeyup="getReceiptsPurchases()"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm">
+                            {{ trans('method-payment') }}
+                            <select class="form-control methodPayment" onchange="getReceiptsPurchases()">
+                                {% for payment in fsc.getPaymentMethods() %}
+                                    <option value="{{ payment.codpago }}">{{ payment.descripcion }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>{{ trans('receipt') }}</th>
+                                <th class="text-right">{{ trans('amount') }}</th>
+                                <th class="text-nowrap">{{ trans('method-payment') }}</th>
+                                <th class="text-right">{{ trans('expiration') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody class="receipts"></tbody>
+                        </table>
+                    </div>
+                    <div class="row p-2">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary" onclick="reconciliate('purchases')">
+                                {{ trans('reconciliate') }}
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                {{ trans('close') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function autocompleteClient() {
+            const val = $('#clientsModal input[name="codcliente"]').val();
+            if (val !== '') {
+                $('#clientsModal button#deleteClient').removeClass('d-none');
+                $('#clientsModal span#searchClient').addClass('d-none');
+            } else {
+                $('#clientsModal button#deleteClient').addClass('d-none');
+                $('#clientsModal span#searchClient').removeClass('d-none');
+            }
+            getReceiptsSales();
+        }
+
+        function autocompleteSupplier() {
+            const val = $('#suppliersModal input[name="codproveedor"]').val();
+            if (val !== '') {
+                $('#suppliersModal button#deleteSupplier').removeClass('d-none');
+                $('#suppliersModal span#searchSupplier').addClass('d-none');
+            } else {
+                $('#suppliersModal button#deleteSupplier').addClass('d-none');
+                $('#suppliersModal span#searchSupplier').removeClass('d-none');
+            }
+            getReceiptsPurchases();
+        }
+
+        function getAsientos() {
+            let formData = new FormData();
+            formData.append('concepto', $('#asientosModal .concepto').val());
+            formData.append('amountGreaterOrEqual', $('#asientosModal .amountGreaterOrEqual').val());
+            formData.append('amountLessThanOrEqual', $('#asientosModal .amountLessThanOrEqual').val());
+            sendForm(formData, 'getAsientos');
+        }
+
+        function getBankMovements() {
+            let formData = new FormData();
+            sendForm(formData, 'getBankMovements');
+        }
+
+        function getReceiptsPurchases() {
+            let formData = new FormData();
+            formData.append('codproveedor', $('#suppliersModal input[name="codproveedor"]').val());
+            formData.append('codpago', $('#suppliersModal .methodPayment option:selected').val());
+            formData.append('amountGreaterOrEqual', $('#suppliersModal .amountGreaterOrEqual').val());
+            formData.append('amountLessThanOrEqual', $('#suppliersModal .amountLessThanOrEqual').val());
+            sendForm(formData, 'getReceiptsPurchases');
+        }
+
+        function getReceiptsSales() {
+            let formData = new FormData();
+            formData.append('codcliente', $('#clientsModal input[name="codcliente"]').val());
+            formData.append('codpago', $('#clientsModal .methodPayment option:selected').val());
+            formData.append('amountGreaterOrEqual', $('#clientsModal .amountGreaterOrEqual').val());
+            formData.append('amountLessThanOrEqual', $('#clientsModal .amountLessThanOrEqual').val());
+            sendForm(formData, 'getReceiptsSales');
+        }
+
+        function getRemesas() {
+            let formData = new FormData();
+            sendForm(formData, 'getRemesas');
+        }
+
+        function reconciliate(type) {
+            let formData = new FormData();
+            formData.append('type', type);
+
+            if (type === 'asientos') {
+                let idAsientos = [];
+                $('#asientosModal .asientos input[type="checkbox"]:checked').each(function () {
+                    idAsientos.push($(this).val());
+                });
+                formData.append('idAsientos', idAsientos);
+                formData.append('idMovement', $('#asientosModal .idmovement').html());
+                sendForm(formData, 'reconciliate');
+                return;
+            }
+
+            if (type === 'new-asiento') {
+                let contra = $('#nuevoAsientoContra').val();
+                if (contra === '') {
+                    $('#nuevoAsientoContra').select();
+                    return;
+                }
+
+                formData.append('contra', contra);
+                formData.append('idMovement', $('#asientosModal .idmovement').html());
+                sendForm(formData, 'reconciliate');
+                return;
+            }
+
+            if (type === 'purchases') {
+                let idReceipts = [];
+                $('#suppliersModal .receipts input[type="checkbox"]:checked').each(function () {
+                    idReceipts.push($(this).val());
+                });
+                formData.append('idReceipts', idReceipts);
+                formData.append('idMovement', $('#suppliersModal .idmovement').html());
+                sendForm(formData, 'reconciliate');
+            }
+
+            if (type === 'remesas') {
+                let idRemesas = [];
+                $('#remesasModal .remesas input[type="checkbox"]:checked').each(function () {
+                    idRemesas.push($(this).val());
+                });
+                formData.append('idRemesas', idRemesas);
+                formData.append('idMovement', $('#remesasModal .idmovement').html());
+                sendForm(formData, 'reconciliate');
+                return;
+            }
+
+            if (type === 'sales') {
+                let idReceipts = [];
+                $('#clientsModal .receipts input[type="checkbox"]:checked').each(function () {
+                    idReceipts.push($(this).val());
+                });
+                formData.append('idReceipts', idReceipts);
+                formData.append('idMovement', $('#clientsModal .idmovement').html());
+                sendForm(formData, 'reconciliate');
+                return;
+            }
+        }
+
+        function sendForm(formData, action) {
+            animateSpinner('add');
+
+            formData.append('action', action);
+            formData.append('ajax', true);
+            formData.append('codcuenta', $('#codcuenta option:selected').val());
+
+            fetch('{{ fsc.url() }}', {
+                method: 'POST',
+                body: formData
+            }).then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                }
+
+                return Promise.reject(response);
+            }).then(function (data) {
+                if (data.getAsientos) {
+                    $('#asientosModal .asientos').html(data.html);
+                }
+
+                if (data.getBankMovements) {
+                    $('#listBankMovements').html(data.html);
+                }
+
+                if (data.getReceiptsPurchases) {
+                    $('#suppliersModal .receipts').html(data.html);
+                }
+
+                if (data.getReceiptsSales) {
+                    $('#clientsModal .receipts').html(data.html);
+                }
+
+                if (data.getRemesas) {
+                    $('#remesasModal .remesas').html(data.html);
+                }
+
+                if (data.reconciliate) {
+                    $('#clientsModal').modal('hide');
+                    $('#suppliersModal').modal('hide');
+                    $('#remesasModal').modal('hide');
+                    $('#asientosModal').modal('hide');
+                    getBankMovements();
+                }
+
+                // si hay mensajes de error
+                if (data.messages) {
+                    data.messages.forEach(function (msg) {
+                        alert(msg.message);
+                    });
+                }
+
+                animateSpinner('remove');
+            }).catch(function (error) {
+                alert('error');
+                console.warn(error);
+                animateSpinner('remove');
+            });
+
+            return false;
+        }
+
+        function showModalAsientos(btn) {
+            // limpiamos los campos
+            $('#asientosModal .concepto').val('');
+            $('#asientosModal .amountGreaterOrEqual').val('');
+            $('#asientosModal .amountLessThanOrEqual').val('');
+            getAsientos();
+
+            // obtenemos el tr al que pertenece el btn
+            let tr = $(btn).closest('tr');
+
+            // copiamos y pegamos los datos del tr en el modal
+            $('#asientosModal .idmovement').html(tr.data('idmovement'));
+            $('#asientosModal .amountData').html(tr.find('td.amount').text());
+            $('#asientosModal .dateData').html(tr.find('td.date').text());
+            $('#asientosModal .observationsData').html(tr.find('td.observations').text());
+
+            $('#asientosModal').modal('show');
+        }
+
+        function showModalClients(btn) {
+            // limpiamos los campos
+            $('#clientsModal input[name="codcliente"]').val('');
+            $('#clientsModal #findClientInput').val('');
+            $('#clientsModal .amountGreaterOrEqual').val('');
+            $('#clientsModal .amountLessThanOrEqual').val('');
+            $('#clientsModal .methodPayment option:first').prop('selected', true);
+            autocompleteClient();
+
+            // obtenemos el tr al que pertenece el btn
+            let tr = $(btn).closest('tr');
+
+            // copiamos y pegamos los datos del tr en el modal
+            $('#clientsModal .idmovement').html(tr.data('idmovement'));
+            $('#clientsModal .amountData').html(tr.find('td.amount').text());
+            $('#clientsModal .dateData').html(tr.find('td.date').text());
+            $('#clientsModal .observationsData').html(tr.find('td.observations').text());
+
+            $('#clientsModal').modal('show');
+        }
+
+        function showModalRemesas(btn) {
+            // limpiamos los campos
+            $('#remesasModal input[name="codcuenta"]').val('');
+            getRemesas();
+
+            // obtenemos el tr al que pertenece el btn
+            let tr = $(btn).closest('tr');
+
+            // copiamos y pegamos los datos del tr en el modal
+            $('#remesasModal .idmovement').html(tr.data('idmovement'));
+            $('#remesasModal .amountData').html(tr.find('td.amount').text());
+            $('#remesasModal .dateData').html(tr.find('td.date').text());
+            $('#remesasModal .observationsData').html(tr.find('td.observations').text());
+
+            $('#remesasModal').modal('show');
+        }
+
+        function showModalSuppliers(btn) {
+            // limpiamos los campos
+            $('#suppliersModal input[name="codproveedor"]').val('');
+            $('#suppliersModal #findSupplierInput').val('');
+            $('#suppliersModal .amountGreaterOrEqual').val('');
+            $('#suppliersModal .amountLessThanOrEqual').val('');
+            $('#suppliersModal .methodPayment option:first').prop('selected', true);
+            autocompleteSupplier();
+
+            // obtenemos el tr al que pertenece el btn
+            let tr = $(btn).closest('tr');
+
+            // copiamos y pegamos los datos del tr en el modal
+            $('#suppliersModal .idmovement').html(tr.data('idmovement'));
+            $('#suppliersModal .amountData').html(tr.find('td.amount').text());
+            $('#suppliersModal .dateData').html(tr.find('td.date').text());
+            $('#suppliersModal .observationsData').html(tr.find('td.observations').text());
+
+            $('#suppliersModal').modal('show');
+        }
+
+        $(document).ready(function () {
+            $('button#deleteClient').on('click', function () {
+                $('input[name="codcliente"]').val('');
+                $('input#findClientInput').val('');
+                autocompleteClient();
+            });
+
+            $('button#deleteSupplier').on('click', function () {
+                $('input[name="codproveedor"]').val('');
+                $('input#findSupplierInput').val('');
+                autocompleteSupplier();
+            });
+
+            $('#findClientInput').autocomplete({
+                source: function (request, response) {
+                    let formData = {};
+                    formData["action"] = "autocomplete-client";
+                    formData["query"] = request.term;
+                    formData["ajax"] = true;
+
+                    $.ajax({
+                        method: "POST",
+                        url: window.location.href,
+                        data: formData,
+                        dataType: "json",
+                        success: function (results) {
+                            let values = [];
+                            results.clients.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        const value = ui.item.value.split(" | ");
+                        $("#clientsModal input[name=\"codcliente\"]").val(value[0]);
+                        autocompleteClient();
+                    }
+                },
+                open: function (event, ui) {
+                    $(this).autocomplete('widget').css('z-index', 1500);
+                    return false;
+                }
+            });
+
+            $('#findSupplierInput').autocomplete({
+                source: function (request, response) {
+                    let formData = {};
+                    formData["action"] = "autocomplete-supplier";
+                    formData["query"] = request.term;
+                    formData["ajax"] = true;
+
+                    $.ajax({
+                        method: "POST",
+                        url: window.location.href,
+                        data: formData,
+                        dataType: "json",
+                        success: function (results) {
+                            let values = [];
+                            results.suppliers.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        const value = ui.item.value.split(" | ");
+                        $("#suppliersModal input[name=\"codproveedor\"]").val(value[0]);
+                        autocompleteSupplier();
+                    }
+                },
+                open: function (event, ui) {
+                    $(this).autocomplete('widget').css('z-index', 1500);
+                    return false;
+                }
+            });
+
+            // cada vez que cambie el select de cuentas bancarias
+            // se recargan los movimientos
+            $('#codcuenta').change(function () {
+                getBankMovements();
+            });
+
+            getBankMovements();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditOrdenProduccion.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la vista EditOrdenProduccion.
+
+        IMPORTANTE:
+        Añade un footer falso con el modal de visualización de productos.
+        Este modal se muestra al pulsar el botón "product" en las vistas de
+        EditOrdenProducto y EditOrdenIngrediente.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12" valign="bottom">
+            <column name="id" numcolumns="1" display="none" order="100">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="recipe" order="120">
+                <widget type="autocomplete" fieldname="idreceta" required="true" readonly="dinamic">
+                    <values source="produccion_recetas" fieldcode="idreceta" fieldtitle="CONCAT(codreceta, ' - ', descripcion)" />
+                </widget>
+            </column>
+            <column name="date" numcolumns="2" order="130">
+                <widget type="date" fieldname="fecha" />
+            </column>
+            <column name="time" numcolumns="2" order="140">
+                <widget type="time" fieldname="hora" />
+            </column>
+            <column name="expiration" numcolumns="2" order="150">
+                <widget type="date" fieldname="vencimiento" />
+            </column>
+            <column name="total-cost" numcolumns="2" order="160">
+                <widget type="money" fieldname="coste" readonly="true" />
+            </column>
+        </group>
+        <group name="other" numcolumns="12" valign="bottom">
+            <column name="stock" numcolumns="3" order="200">
+                <widget type="select" fieldname="usarstock" translate="true" required="true">
+                    <values title="use-available-stock">0</values>
+                    <values title="use-real-stock">1</values>
+                </widget>
+            </column>
+            <column name="status" numcolumns="2" order="210">
+                <widget type="select" fieldname="estado" translate="true" readonly="true">
+                    <values title="pending">0</values>
+                    <values title="started">10</values>
+                    <values title="verified">15</values>
+                    <values title="finished">20</values>
+                    <values title="cancelled">99</values>
+                </widget>
+            </column>
+            <column name="user" numcolumns="2" order="220">
+                <widget type="autocomplete" fieldname="nick" required="true">
+                    <values source="users" fieldcode="nick" fieldtitle="nick" />
+                </widget>
+            </column>
+            <column name="autoconfirm" order="230">
+                <widget type="checkbox" fieldname="confirmar" />
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="footer">
+            <group name="productionProductCard" id="production-product-card" class="d-none" html="Block/ProductionProductModal.html.twig" />
+        </row>
+    </rows>
+    <modals>
+        <group name="cancel" title="cancel-production-order" icon="fa-solid fa-ban">
+            <column name="id" numcolumns="1" display="none" order="100">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="notes" numcolumns="12" order="110">
+                <widget type="textarea" fieldname="cancelnotes" required="true" rows="5" />
+            </column>
+        </group>
+    </modals>
+</view>

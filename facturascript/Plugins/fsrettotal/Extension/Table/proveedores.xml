@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : proveedores.xml
+    Author     : Raúl Jiménez <raljopa@gmailcom>
+    Description:
+        New fields for proveedores table
+-->
+<table>
+    <column>
+        <name>irpf_sobre_total</name>
+        <type>tinyint</type>
+    </column>
+</table>

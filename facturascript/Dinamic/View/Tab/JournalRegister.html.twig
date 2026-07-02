@@ -1,0 +1,152 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+*/
+#}
+{% import _self as macros %}
+{% set currentView = fsc.getCurrentView() %}
+{% set viewName = currentView.getViewName() %}
+{% set formName = 'form' ~ viewName %}
+
+<div class="container">
+    <form id="{{ formName }}" method="post">
+        <input type="hidden" name="action" />
+        <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+        <div class="card shadow mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <h2 class="h4 mb-3">
+                            <i class="fa-solid fa-calendar fa-fw"></i> {{ trans('period') }}
+                        </h2>
+                        <div class="form-row">
+                            <div class="col-md-5">
+                                {{ _self.selectYear(fsc) }}
+                            </div>
+                            <div class="col-md-7">
+                                {{ _self.selectMonth(fsc) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <h2 class="h4 mb-3">
+                            <i class="fa-solid fa-id-card fa-fw"></i> {{ trans('employees') }}
+                        </h2>
+                        <div class="form-row">
+                            <div class="col-md-5">
+                                {{ _self.selectState(fsc) }}
+                            </div>
+                            <div class="col-md-7">
+                                {{ _self.selectEmployee(fsc) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <a href="#" class="btn btn-warning mr-3" onclick="listViewSetAction('{{ viewName }}', 'print-template');">
+                    <i class="fa-solid fa-print fa-fw" aria-hidden="true"></i>
+                    {{ trans('print-template') }}
+                </a>
+                <a href="#" class="btn btn-success mr-3" onclick="listViewSetAction('{{ viewName }}', 'print-detail');">
+                    <i class="fa-solid fa-print fa-fw" aria-hidden="true"></i>
+                    {{ trans('print-report') }}
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% macro selectEmployee(fsc) %}
+    {%  set idemployee = fsc.request.get('employee') %}
+    <input type="hidden" name="employee" value="{{ idemployee }}">
+    <div class="form-group">
+        {{ trans('only') }}
+        <div class="input-group">
+            <span class="input-group-prepend" title="{{ trans('employee') }}">
+                <span class="input-group-text">
+                    <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+                </span>
+            </span>
+            <input type="text" value="{{ fsc.employeeName(idemployee) }}"
+                   class="form-control filter-autocomplete ui-autocomplete-input"
+                   data-name="employee" data-field="employee"
+                   data-source="Employee" data-fieldcode="id" data-fieldtitle="nombre"
+                   placeholder="{{ trans('employee') }}" autocomplete="off">
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro selectMonth(fsc) %}
+    {% set month = 'now'|date('m') %}
+    <div class="form-group">
+        {{ trans('month') }}
+        <div class="input-group">
+            <span class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="fa-solid fa-calendar-check fa-fw" aria-hidden="true"></i>
+                </span>
+            </span>
+            <select name="month" class="form-control">
+                <option value="01"{% if month == '01' %} selected{% endif %}>{{ trans('january') }}</option>
+                <option value="02"{% if month == '02' %} selected{% endif %}>{{ trans('february') }}</option>
+                <option value="03"{% if month == '03' %} selected{% endif %}>{{ trans('march') }}</option>
+                <option value="04"{% if month == '04' %} selected{% endif %}>{{ trans('april') }}</option>
+                <option value="05"{% if month == '05' %} selected{% endif %}>{{ trans('may') }}</option>
+                <option value="06"{% if month == '06' %} selected{% endif %}>{{ trans('june') }}</option>
+                <option value="07"{% if month == '07' %} selected{% endif %}>{{ trans('july') }}</option>
+                <option value="08"{% if month == '08' %} selected{% endif %}>{{ trans('august') }}</option>
+                <option value="09"{% if month == '09' %} selected{% endif %}>{{ trans('september') }}</option>
+                <option value="10"{% if month == '10' %} selected{% endif %}>{{ trans('october') }}</option>
+                <option value="11"{% if month == '11' %} selected{% endif %}>{{ trans('november') }}</option>
+                <option value="12"{% if month == '12' %} selected{% endif %}>{{ trans('december') }}</option>
+            </select>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro selectState(fsc) %}
+    <div class="form-group">
+        {{ trans('state') }}
+        <div class="input-group">
+            <span class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="fa-solid fa-user-cog fa-fw" aria-hidden="true"></i>
+                </span>
+            </span>
+            <select name="state" class="form-control">
+                <option value="active">{{ trans('only-active') }}</option>
+                <option value="suspended">{{ trans('only-suspended') }}</option>
+                <option value="all">{{ trans('all') }}</option>
+            </select>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro selectYear(fsc) %}
+    {% set year = 'now'|date('Y') %}
+    <div class="form-group">
+        {{ trans('year') }}
+        <div class="input-group">
+            <span class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="fa-solid fa-calendar fa-fw" aria-hidden="true"></i>
+                </span>
+            </span>
+            <select name="year" class="form-control">
+                <option value="{{ year }}">{{ year }}</option>
+                <option value="{{ year - 1 }}">{{ year - 1 }}</option>
+                <option value="{{ year - 2 }}">{{ year - 2 }}</option>
+                <option value="{{ year - 3 }}">{{ year - 3 }}</option>
+            </select>
+        </div>
+    </div>
+{% endmacro %}

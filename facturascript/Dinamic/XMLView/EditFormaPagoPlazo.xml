@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="payment-method" display="none" order="100">
+                <widget type="select" fieldname="codpago" readonly="true" required="true">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="percentage" order="110">
+                <widget type="percentage" fieldname="aplazado" min="0" max="100" required="true"/>
+            </column>
+            <column name="days" order="120">
+                <widget type="number" fieldname="dias" min="0" required="true"/>
+            </column>
+            <column name="months" order="130">
+                <widget type="number" fieldname="meses" min="0" required="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

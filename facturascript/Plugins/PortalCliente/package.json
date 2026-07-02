@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@fancyapps/ui": "^5.0.36",
+    "@ttskch/select2-bootstrap4-theme": "^1.5.2",
+    "easymde": "^2.18.0",
+    "select2": "^4.0.13"
+  }
+}

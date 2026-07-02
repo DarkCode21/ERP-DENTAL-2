@@ -1,0 +1,244 @@
+{% extends "Master/MenuBgTemplate.html.twig" %}
+
+{% block body %}
+<div class="container-fluid mt-2">
+
+    {# ── Cabecera ── #}
+    <div class="row mb-3 align-items-center">
+        <div class="col">
+            <h4 class="mb-0">
+                <i class="fa-solid fa-fire-burner mr-2"></i>
+                {% if fsc.estacion %}
+                    Panel de {{ fsc.estacion.nombre }}
+                {% else %}
+                    {{ i18n.trans('kitchen-panel') }}
+                {% endif %}
+            </h4>
+        </div>
+        <div class="col-auto d-flex">
+            <button id="btnRefresh" type="button" class="btn btn-sm btn-outline-secondary mr-2" onclick="toggleAutoRefresh()">
+                <i class="fa-solid fa-rotate" id="iconRefresh"></i>
+                <span id="labelRefresh">{{ i18n.trans('auto-refresh-on') }}</span>
+            </button>
+            <a href="{{ fsc.url() }}{% if fsc.estacion %}?idestacion={{ fsc.estacion.idestacion }}{% endif %}" class="btn btn-sm btn-secondary mr-2">
+                <i class="fa-solid fa-arrows-rotate mr-1"></i>{{ i18n.trans('refresh') }}
+            </a>
+            <a href="{{ asset('PanelCamarero') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="fa-solid fa-arrow-left mr-1"></i>{{ i18n.trans('back') }}
+            </a>
+        </div>
+    </div>
+
+    <input type="hidden" id="cocina-refresh-token" value="{{ formToken(false) }}">
+    <div id="cocina-content">
+    {% if fsc.grupos is empty %}
+        <div class="card text-center py-5">
+            <div class="card-body text-muted">
+                <i class="fa-solid fa-check-circle fa-3x mb-3 text-success"></i>
+                <h5>{{ i18n.trans('no-pending-orders') }}</h5>
+            </div>
+        </div>
+    {% else %}
+        <div class="row">
+            {% for grupo in fsc.grupos %}
+            {% set comanda    = grupo.comanda %}
+            {% set mesa       = grupo.mesa %}
+            {% set lineas     = grupo.lineas %}
+            {% set elapsedMin = grupo.elapsedMin %}
+
+            {# Color del tiempo: verde <10, naranja 10-20, rojo >20 #}
+            {% set timeClass = 'badge-success' %}
+            {% if elapsedMin >= 20 %}{% set timeClass = 'badge-danger' %}
+            {% elseif elapsedMin >= 10 %}{% set timeClass = 'badge-warning' %}{% endif %}
+
+            {# ¿Todas las líneas padre están preparadas? #}
+            {% set todasPreparadas = true %}
+            {% for l in lineas %}{% if not l.idlinea_padre and l.estado == 'pendiente' %}{% set todasPreparadas = false %}{% endif %}{% endfor %}
+
+            <div class="col-12 col-sm-6 col-xl-4 mb-3">
+                <div class="card h-100 {{ todasPreparadas ? 'border-success' : 'border-warning' }}">
+
+                    {# Cabecera tarjeta #}
+                    <div class="card-header {{ todasPreparadas ? 'bg-success text-white' : 'bg-warning text-dark' }} py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fa-solid fa-{{ mesa ? 'table-cells' : (comanda.tipo == 'delivery' ? 'truck' : 'bag-shopping') }} mr-1"></i>
+                            <strong>{{ mesa ? mesa.nombre : (comanda.tipo == 'delivery' ? 'Delivery' : 'Para llevar') }}</strong>
+                            <span class="small ml-1" style="opacity:0.75">#{{ comanda.idcomanda }}</span>
+                        </div>
+                        <span class="badge {{ timeClass }} ml-2">
+                            <i class="fa-regular fa-clock mr-1"></i>{{ elapsedMin }} min
+                        </span>
+                    </div>
+
+                    {# Líneas #}
+                    <div class="card-body p-0">
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                            {% for linea in lineas %}
+                                {% set esSub = linea.idlinea_padre ? true : false %}
+                                <tr class="{{ not esSub and linea.estado == 'preparado' ? 'table-success' : (esSub ? 'text-muted' : '') }}">
+                                    <td class="{{ esSub ? 'pl-4' : 'pl-3' }}">
+                                        {% if esSub %}
+                                            <span class="text-muted mr-1" style="font-size:.8em;">↳</span>
+                                            <span class="small">{{ linea.descripcion }}</span>
+                                        {% else %}
+                                            <span class="font-weight-bold">{{ linea.cantidad|number_format(0) }}×</span>
+                                            {{ linea.descripcion }}
+                                            {% if not linea.enviado %}
+                                                <span class="badge badge-danger ml-1">Nuevo</span>
+                                            {% endif %}
+                                            {% if linea.observaciones %}
+                                                <div class="text-muted small font-italic">{{ linea.observaciones }}</div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-right pr-2" style="width:1%;">
+                                        {% if not esSub %}
+                                            {% if linea.estado == 'pendiente' %}
+                                                <form method="post" action="{{ fsc.url() }}" class="d-inline">
+                                                    {{ formToken() }}
+                                                    <input type="hidden" name="action"   value="mark-prepared">
+                                                    <input type="hidden" name="idlinea"  value="{{ linea.idlinea }}">
+                                                    {% if fsc.estacion %}<input type="hidden" name="idestacion" value="{{ fsc.estacion.idestacion }}">{% endif %}
+                                                    <button type="submit" class="btn btn-sm btn-outline-success px-2" title="Listo">
+                                                        <i class="fa-solid fa-check"></i>
+                                                    </button>
+                                                </form>
+                                            {% else %}
+                                                <form method="post" action="{{ fsc.url() }}" class="d-inline">
+                                                    {{ formToken() }}
+                                                    <input type="hidden" name="action"   value="mark-served">
+                                                    <input type="hidden" name="idlinea"  value="{{ linea.idlinea }}">
+                                                    {% if fsc.estacion %}<input type="hidden" name="idestacion" value="{{ fsc.estacion.idestacion }}">{% endif %}
+                                                    <button type="submit" class="btn btn-sm btn-success px-2" title="Entregado">
+                                                        <i class="fa-solid fa-bell-concierge"></i>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {# Footer: botón según estado global #}
+                    <div class="card-footer p-2 {{ todasPreparadas ? 'd-flex gap-2' : '' }}">
+                        {% if not todasPreparadas %}
+                            <form method="post" action="{{ fsc.url() }}">
+                                {{ formToken() }}
+                                <input type="hidden" name="action"    value="mark-all-prepared">
+                                <input type="hidden" name="idcomanda" value="{{ comanda.idcomanda }}">
+                                {% if fsc.estacion %}<input type="hidden" name="idestacion" value="{{ fsc.estacion.idestacion }}">{% endif %}
+                                <button type="submit" class="btn btn-warning btn-sm w-100">
+                                    <i class="fa-solid fa-check-double mr-1"></i>
+                                    Todo preparado
+                                </button>
+                            </form>
+                        {% else %}
+                            <form method="post" action="{{ fsc.url() }}" class="flex-fill">
+                                {{ formToken() }}
+                                <input type="hidden" name="action"    value="mark-all-served">
+                                <input type="hidden" name="idcomanda" value="{{ comanda.idcomanda }}">
+                                {% if fsc.estacion %}<input type="hidden" name="idestacion" value="{{ fsc.estacion.idestacion }}">{% endif %}
+                                <button type="submit" class="btn btn-success btn-sm w-100">
+                                    <i class="fa-solid fa-bell-concierge mr-1"></i>
+                                    Todo entregado
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    </div>
+
+</div>
+
+<script>
+    var _cocinaSndBase = '{{ asset("PanelCocina") }}'.replace(/\/[^\/]+$/, '') + '/Plugins/RestauranteTPV/Assets/Sound/';
+    function cocinaPlaySound(n) {
+        try { var snd = new Audio(_cocinaSndBase + n + '.mp3'); snd.play().catch(function(){}); } catch(e){}
+    }
+
+    var _cocina = {
+        url:         '{{ fsc.url() }}{% if fsc.estacion %}?idestacion={{ fsc.estacion.idestacion }}{% endif %}',
+        postUrl:     '{{ fsc.url() }}',
+        idestacion:  '{% if fsc.estacion %}{{ fsc.estacion.idestacion }}{% endif %}',
+        refreshSec:  {{ fsc.autoRefresh }},
+        autoServMs:  240 * 1000,
+        autoServKey: 'tpv_cocina_autoserv_ts{% if fsc.estacion %}_{{ fsc.estacion.idestacion }}{% endif %}',
+        interval:    null
+    };
+
+    if (!sessionStorage.getItem(_cocina.autoServKey)) {
+        sessionStorage.setItem(_cocina.autoServKey, Date.now());
+    }
+
+    function cocinaRefresh() {
+        fetch(_cocina.url).then(function(r) { return r.text(); }).then(function(html) {
+            var doc        = new DOMParser().parseFromString(html, 'text/html');
+            var newContent = doc.getElementById('cocina-content');
+            var curContent = document.getElementById('cocina-content');
+            if (newContent && curContent) {
+                var oldCount = curContent.querySelectorAll('.card').length;
+                var newCount = newContent.querySelectorAll('.card').length;
+                curContent.innerHTML = newContent.innerHTML;
+                if (newCount > oldCount) { cocinaPlaySound(4); }
+            }
+            var newTok = doc.getElementById('cocina-refresh-token');
+            var curTok = document.getElementById('cocina-refresh-token');
+            if (newTok && curTok) { curTok.value = newTok.value; }
+        }).catch(function() {});
+    }
+
+    function cocinaAutoServ() {
+        sessionStorage.setItem(_cocina.autoServKey, Date.now());
+        var token = document.getElementById('cocina-refresh-token');
+        if (!token) { cocinaRefresh(); return; }
+        var body = new URLSearchParams();
+        body.append('multireqtoken', token.value);
+        body.append('action', 'autoserv');
+        if (_cocina.idestacion) { body.append('idestacion', _cocina.idestacion); }
+        fetch(_cocina.postUrl, {
+            method:  'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body:    body.toString()
+        }).then(function() { cocinaRefresh(); }).catch(function() { cocinaRefresh(); });
+    }
+
+    document.addEventListener('submit', function(e) {
+        var a = e.target.querySelector('input[name="action"]');
+        if (a && (a.value === 'mark-prepared' || a.value === 'mark-all-prepared')) { cocinaPlaySound(5); }
+    });
+
+    function startAutoRefresh() {
+        if (_cocina.refreshSec > 0) {
+            _cocina.interval = setInterval(function() {
+                var now  = Date.now();
+                var last = parseInt(sessionStorage.getItem(_cocina.autoServKey) || '0');
+                if (now - last >= _cocina.autoServMs) {
+                    cocinaAutoServ();
+                } else {
+                    cocinaRefresh();
+                }
+            }, _cocina.refreshSec * 1000);
+            document.getElementById('labelRefresh').textContent = '{{ i18n.trans('auto-refresh-on') }}';
+            document.getElementById('iconRefresh').className = 'fa-solid fa-rotate fa-spin';
+        }
+    }
+    function stopAutoRefresh() {
+        clearInterval(_cocina.interval); _cocina.interval = null;
+        document.getElementById('labelRefresh').textContent = '{{ i18n.trans('auto-refresh-off') }}';
+        document.getElementById('iconRefresh').className = 'fa-solid fa-rotate';
+    }
+    function toggleAutoRefresh() {
+        if (_cocina.interval) { stopAutoRefresh(); } else { startAutoRefresh(); }
+    }
+    startAutoRefresh();
+</script>
+{% endblock %}

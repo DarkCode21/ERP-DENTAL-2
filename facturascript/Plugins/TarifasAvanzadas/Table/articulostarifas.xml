@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : articulostarifas.xml
+    Description:
+        Estructura de la tabla articulostarifas.
+-->
+<table>
+    <column>
+        <name>codtarifa</name>
+        <type>character varying(6)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>pvp</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>referencia</name>
+        <type>character varying(30)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>articulostarifas_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_articulostarifas_tarif_ref</name>
+        <type>UNIQUE (codtarifa,referencia)</type>
+    </constraint>
+    <constraint>
+        <name>ca_articulostarifas_tarifas</name>
+        <type>FOREIGN KEY (codtarifa) REFERENCES tarifas (codtarifa) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_articulostarifas_variantes</name>
+        <type>FOREIGN KEY (referencia) REFERENCES variantes (referencia) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

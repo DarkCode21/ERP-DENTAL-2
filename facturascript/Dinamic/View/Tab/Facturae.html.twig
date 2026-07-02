@@ -1,0 +1,570 @@
+{% set firstView = fsc.views | first %}
+{% set factura = firstView.model %}
+{% set currentView = fsc.getCurrentView() %}
+{% set facturae = currentView.model %}
+
+{% if facturae.signed() %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <h2 class="h4 mb-1">
+                            <i class="fa-solid fa-download"></i> Factura electrónica ya generada y firmada
+                        </h2>
+                        <p>
+                            Puedes descargar la factura electrónica y entregarla en el portal de la administración
+                            <a href="https://face.gob.es" target="_blank">https://face.gob.es</a>
+                            o bien
+                            <a href="https://efact.aoc.cat" target="_blank">https://efact.aoc.cat</a>
+                        </p>
+                        <form action="{{ factura.url() }}" method="post" enctype="multipart/form-data">
+                            {{ formToken() }}
+                            <input type="hidden" name="action" value="download-facturae"/>
+                            <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                            <input type="hidden" name="idfacturae" value="{{ facturae.id }}"/>
+                            <button type="submit" class="btn btn-primary">{{ trans('download') }}</button>
+                            <a href="https://face.gob.es" target="_blank" class="btn btn-secondary">
+                                face.gob.es
+                            </a>
+                            <a href="https://efact.aoc.cat/bustia/multiInvoicView.htm" target="_blank"
+                               class="btn btn-secondary">efact.aoc.cat
+                            </a>
+                        </form>
+                    </div>
+                </div>
+                {% if facturae.numeroregistro %}
+                    <div class="card border-success shadow mb-4">
+                        <div class="card-body">
+                            <h2 class="h4 mb-1">
+                                <i class="fa-solid fa-paper-plane"></i> Facturae ya enviada a FACE
+                            </h2>
+                            <p class="mb-0">
+                                La factura ya fué enviada a face.gob.es y tiene el número de registro
+                                <b>{{ facturae.numeroregistro }}</b>
+                            </p>
+                        </div>
+                    </div>
+                {% else %}
+                    <form action="{{ factura.url() }}" method="post" enctype="multipart/form-data">
+                        {{ formToken() }}
+                        <input type="hidden" name="action" value="send-face"/>
+                        <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                        <input type="hidden" name="idfacturae" value="{{ facturae.id }}"/>
+                        <div class="card border-success shadow mb-4">
+                            <div class="card-body">
+                                <h2 class="h4 mb-1">
+                                    <i class="fa-solid fa-paper-plane"></i> Enviar a FACE
+                                </h2>
+                                <p>
+                                    Selecciona tu certificado de Hacienda, un archivo con extensión <b>p12</b> o
+                                    <b>pfx</b>, escribe la contraseña y pulsa el <b>botón enviar</b> para enviar la
+                                    factura electrónica a face.gob.es
+                                </p>
+                                <div class="form-row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <input name="fcert" type="file" accept=".p12,.pfx" required=""/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fa fa-key" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" name="certpass" class="form-control"
+                                                       placeholder="{{ trans('password') }}" autocomplete="false"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <button type="submit" class="btn btn-success">{{ trans('send') }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="{{ factura.url() }}" method="post" enctype="multipart/form-data">
+                        {{ formToken() }}
+                        <input type="hidden" name="action" value="delete-facturae"/>
+                        <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+                        <input type="hidden" name="idfacturae" value="{{ facturae.id }}"/>
+                        <div class="card border-danger shadow mb-4">
+                            <div class="card-body">
+                                <h2 class="h4 mb-1">
+                                    <i class="fa-solid fa-edit"></i> ¿Quieres rectificar?
+                                </h2>
+                                <p>
+                                    Para volver a rellenar el formulario y firmar la factura electrónica, pulsa el botón
+                                    <b>{{ trans('undo') }}</b>.
+                                </p>
+                                <button type="submit" class="btn btn-danger">{{ trans('undo') }}</button>
+                            </div>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% elseif facturae.validate() == false %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                {% for error in facturae.validationErrors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    {{ _self.genFacturaeForm(currentView, factura, facturae) }}
+{% endif %}
+
+{% macro genFacturaeForm(currentView, factura, facturae) %}
+    {% set bank = factura.getPaymentMethod().getBankAccount() %}
+    <form action="{{ factura.url() }}" enctype="multipart/form-data" method="post" name="f_factura_e">
+        {{ formToken() }}
+        <input type="hidden" name="action" value="edit-facturae"/>
+        <input type="hidden" name="activetab" value="{{ currentView.getViewName() }}"/>
+        <input type="hidden" name="idfacturae" value="{{ facturae.id }}"/>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="alert alert-info">
+                        {{ trans('fill-facturae') }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        {{ trans('expiration') }}
+                        <input type="date" name="vencimiento" value="{{ facturae.vencimiento | date('Y-m-d') }}"
+                               class="form-control" autocomplete="off"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <a href="{{ bank.url() }}">{{ trans('bank-account') }}</a>
+                        <select name="iban" class="form-control">
+                            {% for item in bank.all() %}
+                                {% if item.iban == facturae.iban %}
+                                    <option value="{{ item.iban }}" selected>{{ item.descripcion }}</option>
+                                {% else %}
+                                    <option value="{{ item.iban }}">{{ item.descripcion }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    {{ trans('start-date') }}
+                    {% if facturae.startdate %}
+                        <input type="date" name="startdate" value="{{ facturae.startdate | date('Y-m-d') }}"
+                               class="form-control mb-3" autocomplete="off"/>
+                    {% else %}
+                        <input type="date" name="startdate" class="form-control mb-3" autocomplete="off"/>
+                    {% endif %}
+                </div>
+                <div class="col-sm-2">
+                    {{ trans('end-date') }}
+                    {% if facturae.endtdate %}
+                        <input type="date" name="enddate" value="{{ facturae.enddate | date('Y-m-d') }}"
+                               class="form-control mb-3" autocomplete="off"/>
+                    {% else %}
+                        <input type="date" name="enddate" class="form-control mb-3" autocomplete="off"/>
+                    {% endif %}
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        {{ trans('filereference-exp') }}
+                        <input type="text" name="filereference" value="{{ facturae.filereference | raw }}"
+                               maxlength="50" placeholder="{{ trans('optional') }}" class="form-control"
+                               autocomplete="off"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        {{ trans('description') }}
+                        <textarea name="description" class="form-control"
+                                  placeholder="{{ trans('optional') }}">{{ facturae.description | raw }}</textarea>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="form-group">
+                        {{ trans('legal-literals') }}
+                        <textarea name="legalliterals" class="form-control"
+                                  placeholder="{{ trans('optional') }}">{{ facturae.legalliterals | raw }}</textarea>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group form-check">
+                        <label>
+                            {% if facturae.observaciones %}
+                                <input type="checkbox" name="observaciones" value="1" class="form-check-input" checked/>
+                            {% else %}
+                                <input type="checkbox" name="observaciones" value="1" class="form-check-input"/>
+                            {% endif %}
+                            {{ trans('include-invoice-observations') }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="accordion shadow-sm mb-3" id="accordionFacturae">
+                        <div class="card">
+                            <div class="card-header" id="heading1">
+                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                        data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                    <i class="fa-solid fa-chevron-down mr-1"></i>
+                                    {{ trans('issuer-contract') }}
+                                </button>
+                            </div>
+                            <div id="collapse1" class="collapse show" aria-labelledby="heading1"
+                                 data-parent="#accordionFacturae">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm">
+                                            {{ trans('transaction-ref') }}
+                                            <input type="text" name="issuertransref"
+                                                   value="{{ facturae.issuertransref | raw }}"
+                                                   maxlength="50" placeholder="{{ trans('optional') }}"
+                                                   class="form-control" autocomplete="off"/>
+                                        </div>
+                                        <div class="col-sm">
+                                            {{ trans('contract-ref') }}
+                                            <input type="text" name="issuercontraref"
+                                                   value="{{ facturae.issuercontraref | raw }}"
+                                                   maxlength="50" placeholder="{{ trans('optional') }}"
+                                                   class="form-control" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading2">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                        data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+                                    <i class="fa-solid fa-chevron-down mr-1"></i>
+                                    {{ trans('receiver-contract') }}
+                                </button>
+                            </div>
+                            <div id="collapse2" class="collapse" aria-labelledby="heading2"
+                                 data-parent="#accordionFacturae">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm">
+                                            {{ trans('transaction-ref') }}
+                                            <input type="text" name="receivertransref"
+                                                   value="{{ facturae.receivertransref | raw }}"
+                                                   maxlength="50" placeholder="{{ trans('optional') }}"
+                                                   class="form-control" autocomplete="off"/>
+                                        </div>
+                                        <div class="col-sm">
+                                            {{ trans('contract-ref') }}
+                                            <input type="text" name="receivercontraref"
+                                                   value="{{ facturae.receivercontraref | raw }}"
+                                                   maxlength="50" placeholder="{{ trans('optional') }}"
+                                                   class="form-control" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading3">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                        data-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
+                                    <i class="fa-solid fa-chevron-down mr-1"></i> {{ trans('accounting-office') }}
+                                </button>
+                                <span class="text-muted">{{ trans('accounting-office-p') }}</span>
+                            </div>
+                            <div id="collapse3" class="collapse" aria-labelledby="heading3"
+                                 data-parent="#accordionFacturae">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm-2">
+                                            {{ trans('code') }}
+                                            <input type="text" name="codoficina" value="{{ facturae.codoficina | raw }}"
+                                                   maxlength="50" placeholder="{{ trans('optional') }}"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('name') }}
+                                            <input type="text" name="nomoficina" value="{{ facturae.nomoficina | raw }}"
+                                                   maxlength="100" placeholder="{{ trans('optional') }}"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('address') }}
+                                            <input type="text" name="diroficina" value="{{ facturae.diroficina | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="100"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('zip-code') }}
+                                            <input type="text" name="cpoficina" value="{{ facturae.cpoficina | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="10"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('city') }}
+                                            <input type="text" name="ciuoficina" value="{{ facturae.ciuoficina | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="50"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('province') }}
+                                            <input type="text" name="proficina" value="{{ facturae.proficina | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="50"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading4">
+                                <button class="btn btn-link collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapse4" aria-expanded="false"
+                                        aria-controls="collapse4">
+                                    <i class="fa-solid fa-chevron-down mr-1"></i> {{ trans('managing-body') }}
+                                </button>
+                                <span class="text-muted">{{ trans('managing-body-p') }}</span>
+                            </div>
+                            <div id="collapse4" class="collapse" aria-labelledby="heading4"
+                                 data-parent="#accordionFacturae">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm-2">
+                                            {{ trans('code') }}
+                                            <input type="text" name="codorgano" value="{{ facturae.codorgano | raw }}"
+                                                   maxlength="50" placeholder="{{ trans('optional') }}"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('name') }}
+                                            <input type="text" name="nomorgano" value="{{ facturae.nomorgano | raw }}"
+                                                   maxlength="100" placeholder="{{ trans('optional') }}"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('address') }}
+                                            <input type="text" name="dirorgano" value="{{ facturae.dirorgano | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="100"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('zip-code') }}
+                                            <input type="text" name="cporgano" value="{{ facturae.cporgano | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="10"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('city') }}
+                                            <input type="text" name="ciuorgano" value="{{ facturae.ciuorgano | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="50"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('province') }}
+                                            <input type="text" name="prorgano" value="{{ facturae.prorgano | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="50"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading5">
+                                <button class="btn btn-link collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapse5" aria-expanded="false"
+                                        aria-controls="collapse5">
+                                    <i class="fa-solid fa-chevron-down mr-1"></i> {{ trans('processing-unit') }}
+                                </button>
+                                <span class="text-muted">{{ trans('processing-unit-p') }}</span>
+                            </div>
+                            <div id="collapse5" class="collapse" aria-labelledby="heading5"
+                                 data-parent="#accordionFacturae">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm-2">
+                                            {{ trans('code') }}
+                                            <input type="text" name="codunidad" value="{{ facturae.codunidad | raw }}"
+                                                   maxlength="50" placeholder="{{ trans('optional') }}"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('name') }}
+                                            <input type="text" name="nomunidad" value="{{ facturae.nomunidad | raw }}"
+                                                   maxlength="100" placeholder="{{ trans('optional') }}"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('address') }}
+                                            <input type="text" name="dirunidad" value="{{ facturae.dirunidad | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="100"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('zip-code') }}
+                                            <input type="text" name="cpunidad" value="{{ facturae.cpunidad | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="10"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('city') }}
+                                            <input type="text" name="ciuunidad" value="{{ facturae.ciuunidad | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="50"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('province') }}
+                                            <input type="text" name="prunidad" value="{{ facturae.prunidad | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="50"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading6">
+                                <button class="btn btn-link collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapse6" aria-expanded="false"
+                                        aria-controls="collapse6">
+                                    <i class="fa-solid fa-chevron-down mr-1"></i> {{ trans('proposing-body') }}
+                                </button>
+                                <span class="text-muted">{{ trans('proposing-body-p') }}</span>
+                            </div>
+                            <div id="collapse6" class="collapse" aria-labelledby="heading6"
+                                 data-parent="#accordionFacturae">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-sm-2">
+                                            {{ trans('code') }}
+                                            <input type="text" name="codorganop" value="{{ facturae.codorganop | raw }}"
+                                                   maxlength="50" placeholder="{{ trans('optional') }}"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('name') }}
+                                            <input type="text" name="nomorganop" value="{{ facturae.nomorganop | raw }}"
+                                                   maxlength="100" placeholder="{{ trans('optional') }}"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('address') }}
+                                            <input type="text" name="dirorganop" value="{{ facturae.dirorganop | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="100"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('zip-code') }}
+                                            <input type="text" name="cporganop" value="{{ facturae.cporganop | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="10"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('city') }}
+                                            <input type="text" name="ciuorganop" value="{{ facturae.ciuorganop | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="50"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            {{ trans('province') }}
+                                            <input type="text" name="prorganop" value="{{ facturae.prorganop | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="50"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            {{ trans('proposing-body-desc') }}
+                                            <input type="text" name="desorganop" value="{{ facturae.desorganop | raw }}"
+                                                   placeholder="{{ trans('optional') }}" maxlength="100"
+                                                   class="form-control mb-2"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-sm-12">
+                    <div class="card-deck">
+                        <div class="card border-primary shadow mb-3">
+                            <div class="card-body">
+                                <h3 class="h4 mb-1">
+                                    <i class="fa-solid fa-at mr-2"></i> AutoFirma
+                                </h3>
+                                <p class="text-muted">{{ trans('autofirma-explanation') }}</p>
+                                <a href="https://firmaelectronica.gob.es/Home/Descargas.html" target="_blank"
+                                   class="btn btn-sm btn-outline-secondary">
+                                    <i class="fa-solid fa-download"></i> {{ trans('download') }}
+                                </a>
+                            </div>
+                            <div class="card-footer p-2">
+                                <button type="button" class="btn btn-primary mr-2" onclick="createFacturae(this);">
+                                    <i class="fa-solid fa-signature mr-1"></i> {{ trans('sign-invoice') }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card border-info shadow mb-3">
+                            <div class="card-body">
+                                <h3 class="h4 mb-1">
+                                    <i class="fa-solid fa-file-signature mr-2"></i> {{ trans('sign-invoice') }}
+                                </h3>
+                                <p class="text-muted">{{ trans('sign-invoice-p') }}</p>
+                                <div class="form-group">
+                                    <input name="fcert" type="file" accept=".p12,.pfx"/>
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fa fa-key" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" name="certpass" class="form-control"
+                                           placeholder="{{ trans('password') }}" autocomplete="false"/>
+                                </div>
+                            </div>
+                            <div class="card-footer p-2">
+                                <button type="submit" name="sign" value="1" class="btn btn-info mr-2">
+                                    <i class="fa-solid fa-signature mr-1"></i> {{ trans('sign-invoice') }}
+                                </button>
+                                <div class="form-check form-check-inline">
+                                    <label>
+                                        <input type="checkbox" name="sendface" value="1" class="form-check-input"/>
+                                        {{ trans('autosend-to-face') }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card border-warning shadow mb-3">
+                            <div class="card-body">
+                                <h3 class="h4 mb-1">
+                                    <i class="fa-regular fa-file-code mr-2"></i> {{ trans('gen-only-xml') }}
+                                </h3>
+                                <p class="text-muted">{{ trans('gen-only-xml-p') }}</p>
+                            </div>
+                            <div class="card-footer p-2">
+                                <button type="submit" name="sign" value="0" class="btn btn-warning mr-2">
+                                    <i class="fa-solid fa-code mr-1"></i> {{ trans('gen-only-xml') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endmacro %}

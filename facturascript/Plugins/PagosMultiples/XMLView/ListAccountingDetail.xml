@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of PagosMultiples plugin for FacturaScripts.
+    FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    PagosMultiples Copyright (C) 2022-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ListReceiptGroupAccounting.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the list view of PartidaAsiento model
+-->
+<view>
+    <columns>
+        <column name="id" display="none" order="100">
+            <widget type="text" fieldname="idpartida" />
+        </column>
+        <column name="accounting-entry" order="110">
+            <widget type="autocomplete" fieldname="idasiento">
+                <values source="asientos" fieldcode="idasiento" fieldtitle="numero" />
+            </widget>
+        </column>
+        <column name="subaccount" order="120">
+            <widget type="text" fieldname="codsubcuenta" />
+        </column>
+        <column name="concept" order="130">
+            <widget type="text" fieldname="concepto" />
+        </column>
+        <column name="debit" display="right" order="140">
+            <widget type="money" fieldname="debe">
+                <option color="danger">lt:0</option>
+            </widget>
+        </column>
+        <column name="credit" display="right" order="150">
+            <widget type="money" fieldname="haber">
+                <option color="danger">lt:0</option>
+            </widget>
+        </column>
+        <column name="date" display="right" order="160">
+            <widget type="date" fieldname="fecha" />
+        </column>
+    </columns>
+</view>

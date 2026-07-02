@@ -1,0 +1,68 @@
+<!DCOTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        {% block css %}
+            <link rel="stylesheet" href="./Plugins/FSReports/View/CSS/{{ fsc.Pdfparams.cssFile }}.css" media="all">
+        {% endblock %}
+
+    </head>
+    {% block body %}
+        <table class="listado">
+            <thead>
+                <tr>
+                    <th  class="text-center" colspan="7"> Ventas</th></tr>
+                <tr>
+                    <th class="text-center">Cliente</th>
+                    <th class="text-left">NIF/CIF</th>
+                    <th class="text-right">T1</th>
+                    <th class="text-right">T2</th>
+                    <th class="text-right">T3</th>
+                    <th class="text-right">T4</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in fsc.salesResume() %}
+                    <tr>
+                        <td class="text-left">{{ value.nombrecliente }}</td>
+                        <td class="text-left">{{ value.cifnif }}</td>
+                        <td class="text-right">{{ value.T1|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.T2|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.T3|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.T4|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.total|number_format(2, ',', '.') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table class="listado">
+            <thead>
+                <tr><th class="text-center" colspan="7">Compras</th></tr>
+                <tr>
+                    <th class="text-center">Proveedor</th>
+                    <th class="text-left">NIF/CIF</th>
+                    <th class="text-right">T1</th>
+                    <th class="text-right">T2</th>
+                    <th class="text-right">T3</th>
+                    <th class="text-right">T4</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value in fsc.purchasesResume() %}
+                    <tr>
+                        <td class="text-left">{{ value.nombre }}</td>
+                        <td class="text-left">{{ value.cifnif }}</td>
+                        <td class="text-right">{{ value.T1|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.T2|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.T3|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.T4|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ value.total|number_format(2, ',', '.') }}</td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    {% endblock %}

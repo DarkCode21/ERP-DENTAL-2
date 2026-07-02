@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="ticketbai-sent-date" display="none" order="600">
+            <widget type="datetime" fieldname="tbai_sent_date"/>
+        </column>
+    </columns>
+</view>

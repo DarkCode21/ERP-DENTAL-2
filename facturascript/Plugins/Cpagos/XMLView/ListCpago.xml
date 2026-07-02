@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="supplier" order="100">
+            <widget type="autocomplete" fieldname="codproveedor" onclick="EditProveedor" readonly="dinamic" required="true" display="center">
+                <values source="proveedores" fieldcode="codproveedor" fieldtitle="razonsocial" />
+            </widget>
+        </column>
+        <column name="creationdate" title="creation-date" display="center" order="120">
+            <widget type="date" fieldname="creationdate"/>
+        </column>
+        <column name="Fecha de pago" title="Fecha de pago" display="center" order="120">
+            <widget type="date" fieldname="paymentdate"/>
+        </column>
+        <column name="user" order="100" display="center">
+            <widget type="select" fieldname="user">
+                <values source="users" fieldcode="nick" fieldtitle="nick"></values>
+            </widget>
+        </column>
+        <column name="total" order="110" display="center">
+            <widget type="money" fieldname="linetotal" />
+        </column>
+        <column name="Pagado" order="120" display="none">
+            <widget type="checkbox" fieldname="verified"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="success" fieldname="verified">1</option>
+            <option color="warning" fieldname="verified">0</option>
+        </row>
+    </rows>
+</view>

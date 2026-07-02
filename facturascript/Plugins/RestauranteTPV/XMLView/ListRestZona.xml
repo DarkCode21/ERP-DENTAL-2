@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="id" display="none" order="0">
+            <widget type="text" fieldname="idzona"/>
+        </column>
+        <column name="name" order="100">
+            <widget type="text" fieldname="nombre"/>
+        </column>
+        <column name="prefix" order="150">
+            <widget type="text" fieldname="prefijo"/>
+        </column>
+        <column name="description" order="200">
+            <widget type="text" fieldname="descripcion"/>
+        </column>
+    </columns>
+    <rows/>
+</view>

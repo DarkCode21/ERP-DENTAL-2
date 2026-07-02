@@ -1,0 +1,71 @@
+{#
+* Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+* Author Erick Lizana Nevado <hola@danielfg.es>
+#}
+
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% set installedPlugins = fsc.getPlugins() %}
+
+{% block body %}
+    {{ parent() }}
+	<!-- <div class="container-fluid"> -->
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-sm-8">
+						<h4>Listado de Integraciones y Estado </h4>
+						<small class="h5">A continuación mostramos las conexiones con otras herramientas que dispones</small>
+					</div>
+					<div class="col-sm text-right">
+						<h1 class="h3">
+							{{ i18n.trans('conections') }} <i class="fab fa-confluence" aria-hidden="true"></i>
+						</h1>
+					</div>
+				</div>
+
+				<div class="row">
+				    {% for plugin in installedPlugins %}
+					<div class="col-3 d-flex">
+						<div class="card my-2" style="height: -webkit-fill-available;">
+							<div class="card-header bg-white">
+								<img src="/MyFiles/Public/Integraciones/{{plugin.name}}.png" width="64"  alt="logo {{plugin.name}}"/>
+								<strong class="ml-1"> {{ plugin.name }}</strong>
+							</div>
+							<div class="card-body">
+								{{ plugin.description | nl2br }}
+							</div>
+							<div class="card-footer">
+								{% if plugin.enabled %}
+									<a class="btn btn-sm btn-secondary btn-spin-action" 
+								   href="{{ fsc.url() }}?action=disable&plugin={{ plugin.name }}&multireqtoken={{ formToken(false) }}">
+										<i class="fas fa-times fa-fw" aria-hidden="true"></i>
+										<span class="d-none d-sm-inline-block">{{ i18n.trans('disable') }}</span>
+									</a>
+								{% elseif plugin.compatible %}
+									{% if not constant('FS_DISABLE_RM_PLUGINS') %}
+										<!--
+										<a class="btn btn-sm btn-danger mr-1 btn-spin-action" href="#"
+											   onclick="deletePlugin('{{ plugin.name }}');">
+											<i class="fas fa-trash-alt fa-fw" aria-hidden="true"></i>
+											<span class="d-none d-sm-inline-block">{{ i18n.trans('delete') }}</span>
+										</a>
+										-->
+									{% endif %}
+									<a class="btn btn-sm btn-success btn-spin-action" 
+									   href="{{ fsc.url() }}?action=enable&plugin={{ plugin.name }}&multireqtoken={{ formToken(false) }}">
+										<i class="fas fa-check fa-fw" aria-hidden="true"></i>
+										<span class="d-none d-sm-inline-block">{{ i18n.trans('enable') }}</span>
+									</a>
+								{% else %}
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+					<!-- onclick="animateSpinner('add');" -->
+				</div>
+			</div>
+		</div>
+	<!-- </div> -->
+{% endblock %}

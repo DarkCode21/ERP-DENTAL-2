@@ -1,0 +1,11 @@
+<view>
+    <!--
+	<columns>
+        <group name="data" numcolumns="12">
+            <column name="price-count"  order="210">
+                <widget type="text" fieldname="pricecount"  />
+            </column>
+        </group>
+    </columns>
+	-->
+</view>

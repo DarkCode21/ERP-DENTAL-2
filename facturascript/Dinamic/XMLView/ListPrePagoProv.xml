@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) Carlos García Gómez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="id" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="supplier" order="110">
+            <widget type="autocomplete" fieldname="codproveedor">
+                <values source="proveedores" fieldcode="codproveedor" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="amount" display="right" order="120">
+            <widget type="money" fieldname="amount"/>
+        </column>
+        <column name="method-payment" order="130">
+            <widget type="select" fieldname="codpago">
+                <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+            </widget>
+        </column>
+        <column name="payment-date" order="140">
+            <widget type="date" fieldname="payment_date"/>
+        </column>
+        <column name="model-name" display="none" order="150">
+            <widget type="text" fieldname="modelname"/>
+        </column>
+        <column name="document" order="160">
+            <widget type="text" fieldname="document"/>
+        </column>
+        <column name="model-code" display="none" order="170">
+            <widget type="text" fieldname="modelid"/>
+        </column>
+        <column name="notes" order="180">
+            <widget type="textarea" fieldname="notes"/>
+        </column>
+        <column name="creation-date" display="right" order="190">
+            <widget type="datetime" fieldname="creationdate"/>
+        </column>
+        <column name="user" display="none" order="200">
+            <widget type="text" fieldname="nick"/>
+        </column>
+        <column name="last-update" display="none" order="210">
+            <widget type="datetime" fieldname="lastupdate"/>
+        </column>
+        <column name="last-user" display="none" order="220">
+            <widget type="text" fieldname="lastnick"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="warning" title="no-editable" fieldname="editable">0</option>
+        </row>
+    </rows>
+    <modals>
+        <group name="add-pre-payment" title="payment" icon="fa-solid fa-coins">
+            <column name="amount" display="right" numcolumns="12" order="100">
+                <widget type="money" fieldname="amount" required="true"/>
+            </column>
+            <column name="method-payment" numcolumns="12" order="110">
+                <widget type="select" fieldname="codpago" required="true">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="payment-date" order="120">
+                <widget type="date" fieldname="payment_date" required="true"/>
+            </column>
+            <column name="notes" numcolumns="12" order="130">
+                <widget type="textarea" fieldname="notes"/>
+            </column>
+        </group>
+    </modals>
+</view>

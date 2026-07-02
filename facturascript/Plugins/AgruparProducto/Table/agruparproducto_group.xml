@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    This file is part of AgruparProducto plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+    AgruparProducto Copyright (C) 2022-2022 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : agruparproducto_group.xml
+    Author     : Jose Antonio Cuello Principal
+    Description:
+        Structure for the product grouping table.
+-->
+
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>name</name>
+        <type>character varying(50)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>agruparproducto_group_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+</table>

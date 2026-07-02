@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="login-screen" title="color" icon="fa-solid fa-palette" valign="center" numcolumns="12">
+            <column name="login-primary-color" order="100">
+                <widget type="color" fieldname="login_primary_color"/>
+            </column>
+            <column name="login-secondary-color" order="110">
+                <widget type="color" fieldname="login_secondary_color"/>
+            </column>
+            <column name="login-image" order="120">
+                <widget type="library" fieldname="login_image_id" icon="fa-solid fa-image"
+                        onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+            <column name="login-background-image" order="120">
+                <widget type="library" fieldname="login_background_id" icon="fa-solid fa-image"
+                        onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+            <column name="favicon" order="120">
+                <widget type="library" fieldname="login_favicon_id" icon="fa-solid fa-image"
+                        onclick="EditAttachedFile" accept=".ico"/>
+            </column>
+        </group>
+        <group name="login-footer" title="footer" icon="fa-solid fa-code" valign="center" numcolumns="12">
+            <column name="login-footer-content" numcolumns="12" order="100">
+                <widget type="textarea" fieldname="login_footer_content" rows="10"/>
+            </column>
+        </group>
+        <column name="name" display="none" order="0">
+            <widget type="text" fieldname="name" readonly="true" required="true"/>
+        </column>
+    </columns>
+</view>

@@ -1,0 +1,1 @@
+[{"title":"Iniciar sesión","drawable":"","submenu":"","tabs":[{"title":"Entrar","image":"","provider":"webview","arguments":["https://dev7.erpcloud.com.es/login"]}],"iap":false},{"title":"Trabajo Inicio/Fin","drawable":"","submenu":"","tabs":[{"title":"Empleado","image":"","provider":"webview","arguments":["https://dev7.erpcloud.com.es/EmployeePanel"]}],"iap":false}]

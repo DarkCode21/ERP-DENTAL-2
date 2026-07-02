@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="contact" numcolumns="12">
+            <column name="emailto" title="other-emails" description="accepts-emails-commas" numcolumns="4" order="141">
+                <widget type="text" fieldname="emailto" icon="fas fa-envelope"/>
+            </column>
+            <column name="emailcc" title="email-cc" description="accepts-emails-commas" numcolumns="4" order="142">
+                <widget type="text" fieldname="emailcc" icon="fas fa-envelope"/>
+            </column>
+            <column name="emailbcc" title="email-bcc" description="accepts-emails-commas" numcolumns="4" order="143">
+                <widget type="text" fieldname="emailbcc" icon="fas fa-envelope"/>
+            </column>
+        </group>
+    </columns>
+</view>

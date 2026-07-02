@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Tabla: rest_comandas_lineas
+    Descripción: Líneas de una comanda. Cada línea es un producto pedido
+    con su estado de preparación.
+    Estados posibles: pendiente | preparado | servido | cancelado
+-->
+<table>
+    <column>
+        <name>idlinea</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idcomanda</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>referencia</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>cantidad</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>1</default>
+    </column>
+    <column>
+        <name>pvpunitario</name>
+        <type>double precision</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>character varying(20)</type>
+        <null>NO</null>
+        <default>'pendiente'</default>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>idlinea_padre</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>enviado</name>
+        <type>tinyint(1)</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <constraint>
+        <name>pk_rest_comandas_lineas</name>
+        <type>PRIMARY KEY (idlinea)</type>
+    </constraint>
+    <constraint>
+        <name>fk_rest_lineas_comanda</name>
+        <type>FOREIGN KEY (idcomanda) REFERENCES rest_comandas (idcomanda) ON DELETE CASCADE</type>
+    </constraint>
+</table>

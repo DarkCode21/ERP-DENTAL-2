@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id"/>
+            </column>
+            <column name="customer" order="110">
+                <widget type="autocomplete" fieldname="codcliente">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="contact" order="120">
+                <widget type="autocomplete" fieldname="idcontacto">
+                    <values source="contactos" fieldcode="idcontacto" fieldtitle="pc_nick"/>
+                </widget>
+            </column>
+            <column name="title" order="130">
+                <widget type="text" fieldname="title"/>
+            </column>
+            <column name="creation-date" display="right" order="140">
+                <widget type="datetime" fieldname="creation_date" required="true"/>
+            </column>
+            <column name="last-update" display="right" order="150">
+                <widget type="datetime" fieldname="last_update"/>
+            </column>
+        </group>
+    </columns>
+</view>

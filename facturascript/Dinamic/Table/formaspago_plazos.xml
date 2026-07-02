@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : formaspago_plazos.xml
+    Description:
+        Structure for the formaspago_plazos table.
+-->
+<table>
+    <column>
+        <name>aplazado</name>
+        <type>double precision</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>codpago</name>
+        <type>character varying(10)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>dias</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>meses</name>
+        <type>integer</type>
+        <default>0</default>
+    </column>
+    <constraint>
+        <name>formaspago_plazos_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_formaspago_plazos_formaspago</name>
+        <type>FOREIGN KEY (codpago) REFERENCES formaspago (codpago) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+-->
+<table>
+    <column>
+        <name>autoaplicar</name>
+        <type>boolean</type>
+        <default>true</default>
+    </column>
+    <column>
+        <name>codserie</name>
+        <type>character varying(4)</type>
+    </column>
+    <column>
+        <name>color1</name>
+        <type>character varying(7)</type>
+    </column>
+    <column>
+        <name>footertext</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>hidebillingaddress</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>hidetotals</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>hideobservations</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>hidepaymentmethods</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>hidereceipts</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>hideshippingaddress</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>hide_breakdowns</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>hide_vat_breakdown</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idimagefooter</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idimagetext</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idlogo</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>linecolalignments</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>linecols</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>linecoltypes</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>linesheight</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>orientation</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>primarynumero2</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>size</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>texto</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>thankstext</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>thankstitle</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>tipodoc</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>titulo</name>
+        <type>character varying(30)</type>
+    </column>
+    <constraint>
+        <name>formatos_documentos_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_formatos_documentos_series</name>
+        <type>FOREIGN KEY (codserie) REFERENCES series (codserie) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_formatos_documentos_empresas</name>
+        <type>FOREIGN KEY (idempresa) REFERENCES empresas (idempresa) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_formatos_documentos_attached_files</name>
+        <type>FOREIGN KEY (idlogo) REFERENCES attached_files (idfile) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

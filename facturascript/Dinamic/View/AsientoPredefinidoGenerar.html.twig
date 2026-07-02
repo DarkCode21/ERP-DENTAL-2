@@ -1,0 +1,47 @@
+<form action="{{ fsc.getModel().url() }}&activetab=Generar" method="post">
+    {{ formToken() }}
+    <div class="card shadow mb-5">
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col-sm-2">
+                    {{ trans("company") }}
+                    <select name="idempresa" class="form-control mb-3">
+                        {% for empresa in fsc.empresa.all({}, {'nombre': 'ASC'}) %}
+                            {% if empresa.idempresa == settings('default', 'idempresa') %}
+                                <option value="{{ empresa.idempresa }}" selected>{{ empresa.nombre }}</option>
+                            {% else %}
+                                <option value="{{ empresa.idempresa }}">{{ empresa.nombre }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    {{ trans("date") }}
+                    <input type="date" class="form-control mb-3" name="fecha" value="{{ 'now' | date('Y-m-d') }}"
+                           required>
+                </div>
+                <div class="col-sm-2">
+                    {{ trans("channel") }}
+                    <input type="number" class="form-control mb-3" name="canal" value=""/>
+                </div>
+                {% for variable in fsc.views.EditAsientoPredefinidoVariable.cursor %}
+                    <div class="col-sm-3">
+                        {{ variable.mensaje }}
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">{{ variable.codigo }}</span>
+                            </div>
+                            <input type="number" value="0" step="any" class="form-control"
+                                   name="var_{{ variable.codigo }}" required>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card-footer text-right p-2">
+            <button type="submit" class="btn btn-success" name="action" value="gen-accounting">
+                {{ trans("generate") }}
+            </button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="idestacion" display="none" order="0">
+            <widget type="text" fieldname="idestacion"/>
+        </column>
+        <column name="name" order="100">
+            <widget type="text" fieldname="nombre" required="true" maxlength="100"/>
+        </column>
+        <column name="description" order="200" numcolumns="8">
+            <widget type="text" fieldname="descripcion"/>
+        </column>
+        <column name="escpos-tipo-kot" title="printer-type" numcolumns="2" order="290">
+            <widget type="select" fieldname="escpos_tipo">
+                <values title="TCP / Red">tcp</values>
+                <values title="USB">usb</values>
+            </widget>
+        </column>
+        <column name="escpos-ip-kot" title="printer-ip-kot" numcolumns="3" order="300">
+            <widget type="text" fieldname="escpos_ip" maxlength="50"/>
+        </column>
+        <column name="escpos-port-kot" title="printer-port-kot" numcolumns="2" order="310">
+            <widget type="number" fieldname="escpos_port" step="1" min="1" max="65535"/>
+        </column>
+        <column name="escpos-usb-kot" title="printer-usb-device" numcolumns="5" order="320">
+            <widget type="text" fieldname="escpos_usb" maxlength="100"/>
+        </column>
+        <column name="escpos-relay-url-kot" title="relay-url" numcolumns="6" order="330">
+            <widget type="text" fieldname="escpos_relay_url" maxlength="200"/>
+        </column>
+    </columns>
+</view>

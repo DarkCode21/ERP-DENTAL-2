@@ -1,0 +1,22 @@
+{
+    "applied-stock-count": "Appliqué le stock du comptage %code%",
+    "initial-stock-movements": "Comptage initial automatique",
+    "new-quantity": "Nueva cantidad",
+    "new-quantity-description": "Introduzca la cantidad",
+    "no-movements-to-rebuild-stock": "Pas de mouvements de stock pour pouvoir le reconstruire",
+    "preload": "Précharge",
+    "preload-products": "Précharger tous les produits",
+    "reason-for-change": "Motivo del cambio",
+    "rebuild-movements": "Reconstituer les mouvements",
+    "rebuilt-stock": "Stock reconstitué",
+    "reconstructed-movements": "Mouvements reconstruits",
+    "start-with-one-stock": "Commencer par un stock à un",
+    "start-with-product-stock": "Initialisation avec le stock actuel",
+    "start-with-zero-stock": "Initialisation avec le stock 0",
+    "stock-count": "Inventaire",
+    "stock-count-line-p": "Ajoutez des lignes à cet inventaire en tapant\/numérisant un code-barres ou une référence. Si le produit se trouve déjà dans la liste, la quantité augmentera.",
+    "stock-counts": "Inventaires",
+    "valued-stock-cost": "Actions évaluées au coût",
+    "valued-stock-price": "Actions évaluées au prix du marché",
+    "without-stock-count": "Exclure les comptes"
+}

@@ -1,0 +1,18 @@
+[
+    {
+        "servidor": "{green.disbit.com:993\/imap\/ssl\/novalidate-cert}",
+        "usuario": "info@facturascloud.com.es",
+        "estado": 1,
+        "mensaje": "Conexi\u00f3n exitosa",
+        "carpetas": [
+            "INBOX",
+            "INBOX.Elementos enviados",
+            "INBOX.Trash",
+            "INBOX.Drafts",
+            "INBOX.Sent",
+            "INBOX.Spam",
+            "INBOX.Papelera",
+            "INBOX.Borrador"
+        ]
+    }
+]

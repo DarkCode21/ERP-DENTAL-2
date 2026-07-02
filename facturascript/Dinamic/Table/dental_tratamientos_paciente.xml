@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idpaciente</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>referencia_servicio</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>idespecialista</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idpresupuesto</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>idfactura</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>fecha_inicio</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>fecha_fin</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>estado_clinico</name>
+        <type>character varying(20)</type>
+        <default>'propuesto'</default>
+    </column>
+    <column>
+        <name>estado_economico</name>
+        <type>character varying(20)</type>
+        <default>'pendiente'</default>
+    </column>
+    <column>
+        <name>precio</name>
+        <type>decimal(12,2)</type>
+    </column>
+    <column>
+        <name>descuento</name>
+        <type>decimal(5,2)</type>
+        <default>0</default>
+    </column>
+    <column>
+        <name>observaciones</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>created_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <column>
+        <name>updated_at</name>
+        <type>timestamp</type>
+        <default>current_timestamp</default>
+    </column>
+    <constraint>
+        <name>dental_tratamientos_paciente_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>dental_tratamientos_paciente_fk_paciente</name>
+        <type>FOREIGN KEY (idpaciente) REFERENCES dental_pacientes(id) ON DELETE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>dental_tratamientos_paciente_fk_especialista</name>
+        <type>FOREIGN KEY (idespecialista) REFERENCES dental_especialistas(id) ON DELETE SET NULL</type>
+    </constraint>
+    <constraint>
+        <name>dental_tratamientos_paciente_fk_presupuesto</name>
+        <type>FOREIGN KEY (idpresupuesto) REFERENCES presupuestoscli(idpresupuesto) ON DELETE SET NULL</type>
+    </constraint>
+    <constraint>
+        <name>dental_tratamientos_paciente_fk_factura</name>
+        <type>FOREIGN KEY (idfactura) REFERENCES facturascli(idfactura) ON DELETE SET NULL</type>
+    </constraint>
+</table>

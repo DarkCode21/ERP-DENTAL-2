@@ -1,0 +1,17 @@
+{
+    "cant-delete-remittance-receipts": "Ezin da ordainagiriak dauzkan bidalketa bat ezabatu.",
+    "charge-date": "Kobratzeko data",
+    "charges": "Karguak",
+    "creditor-id": "Artzekodunaren IDa",
+    "customer-have-no-iban": "%customer% ez du IBAN-a daukan bankuko konturik.",
+    "group-receipts-by-customer": "Ordainagiriak bezeroaren arabera multzokatu",
+    "ready": "Prestatua",
+    "receipt-inside-remittance": "Bidalketa baten barruan dagoen ordainagiria ezin da ezabatu.",
+    "rectify": "Zuzendu",
+    "remittance": "Bidalketa",
+    "remittance-charged": "Bidalketa kobratuta",
+    "remittance-paid": "Remesa pagada",
+    "remittance-ready-to-download": "Bidalketa deskargatzeko prest",
+    "remittance-sent": "Bidalketa bidalita",
+    "remittances": "Bidalketak"
+}

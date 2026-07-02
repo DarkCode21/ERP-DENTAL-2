@@ -1,0 +1,86 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #ebeeef;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .strike {
+            display: block;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 20px;
+        }
+
+        .strike > span {
+            position: relative;
+            display: inline-block;
+            color: gray;
+        }
+
+        .strike > span:before,
+        .strike > span:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 9999px;
+            height: 1px;
+            background: silver;
+        }
+
+        .strike > span:before {
+            right: 100%;
+            margin-right: 15px;
+        }
+
+        .strike > span:after {
+            left: 100%;
+            margin-left: 15px;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    {{ parent() }}
+    <div class="d-flex flex-column align-items-center justify-content-center w-100 vh-100">
+        <div class="login-form">
+            <h1 class="h3 text-center">{{ trans('client-portal') }}</h1>
+            <div class="card shadow">
+                <form action="{{ fsc.url() }}" method="post" onsubmit="animateSpinner('add')">
+                    {{ formToken() }}
+                    <input type="hidden" name="action" value="login"/>
+                    <input type="hidden" name="return" value="{{ fsc.return }}"/>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" name="pc_nick" class="form-control text-center"
+                                   placeholder="{{ trans('nick') }}" value="{{ fsc.pc_nick }}"
+                                   maxlength="100" required>
+                        </div>
+                        <div class="form-group mb-0">
+                            <input type="password" name="pc_password" class="form-control text-center"
+                                   placeholder="{{ trans('password') }}" maxlength="100" required>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-block btn-primary btn-spin-action">
+                            {{ trans('login') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

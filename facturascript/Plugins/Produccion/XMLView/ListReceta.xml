@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : ListReceta.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la vista ListReceta.
+-->
+<view>
+    <columns>
+        <column name="recipe" order="100">
+            <widget type="text" fieldname="idreceta"  />
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="codreceta"  />
+        </column>
+        <column name="description" order="120">
+            <widget type="text" fieldname="descripcion" />
+        </column>
+        <column name="reference" order="130">
+            <widget type="text" fieldname="referencia" />
+        </column>
+        <column name="quantity" order="140">
+            <widget type="number" fieldname="cantidad" />
+        </column>
+        <column name="warehouse-source" display="none" order="150">
+            <widget type="select" fieldname="codalmacen" onclick="EditAlmacen">
+                <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre" />
+            </widget>
+        </column>
+        <column name="warehouse-target" order="160">
+            <widget type="select" fieldname="codalmacen2" onclick="EditAlmacen">
+                <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre" />
+            </widget>
+        </column>
+        <column name="notes" order="170">
+            <widget type="textarea" fieldname="observaciones" />
+        </column>
+        <column name="ingredients" display="right" order="180">
+            <widget type="number" decimal="0" fieldname="items" />
+        </column>
+        <column name="cost" display="none" order="190">
+            <widget type="money" fieldname="coste" />
+        </column>
+        <column name="priceitems" display="none" order="200">
+            <widget type="money" fieldname="priceitems" />
+        </column>
+        <column name="last-production" display="right" order="210">
+            <widget type="datetime" fieldname="ultimaproduccion" />
+        </column>
+    </columns>
+
+    <modals>
+        <group name="new-from-pack" title="new-from-box" icon="fa-regular fa-rectangle-list">
+            <column name="pack" numcolumns="12">
+                <widget type="autocomplete" fieldname="source_pack" required="true">
+                    <values source="productopack_pack" fieldcode="id" fieldtitle="name" />
+                </widget>
+            </column>
+            <column name="warehouse" numcolumns="12">
+                <widget type="autocomplete" fieldname="source_warehouse" required="true">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre" />
+                </widget>
+            </column>
+        </group>
+
+        <group name="change-reference" title="change-reference" class="modal-lg" icon="fa-solid fa-arrow-right-arrow-left">
+            <column name="source" title="reference-source" order="110" numcolumns="12">
+                <widget type="autocomplete" fieldname="refsource" required="true">
+                    <values source="Variante" fieldcode="referencia" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="target" title="reference-target" order="120" numcolumns="12">
+                <widget type="autocomplete" fieldname="reftarget" required="true">
+                    <values source="Variante" fieldcode="referencia" fieldtitle="descripcion" />
+                </widget>
+            </column>
+            <column name="replacein" title="replace-in" order="130" numcolumns="6">
+                <widget type="select" fieldname="replacein" translate="true" required="true">
+                    <values title="only-ingredient">1</values>
+                    <values title="only-produced">2</values>
+                    <values title="ingredient-and-produced">3</values>
+                </widget>
+            </column>
+            <column name="applyto" title="apply-to" order="140" numcolumns="6">
+                <widget type="select" fieldname="applyto" translate="true" required="true">
+                    <values title="selected-recipes">1</values>
+                    <values title="all-recipes">2</values>
+                </widget>
+            </column>
+            <column name="confirm" title="change-reference-confirm" class="border-top border-light text-danger pt-3 mt-3" order="150" numcolumns="12">
+                <widget type="checkbox" fieldname="confirm" required="true" />
+            </column>
+        </group>
+    </modals>
+</view>

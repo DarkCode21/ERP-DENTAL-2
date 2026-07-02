@@ -1,0 +1,16 @@
+{
+    "adm-reportico": "AdmReportico",
+    "controller-report-launched": "Controller von dem aus der Bericht gestartet wird",
+    "dir-projects": "Verzeichnis Projekte",
+    "external-link": "Klicken Sie hier, und der Bericht wird in einem neuen Browserfenster geöffnet",
+    "ok-report": "OK Bericht",
+    "open-new-pag": "Reportico wird in einem neuen Browser-Tab geöffnet",
+    "organize-reports": "Hilft uns, Berichte in verschiedenen Projekten zu organisieren",
+    "report-file": "Berichtsdatei im XML-Format",
+    "reportico": "Reportico",
+    "reportico-reports": "Reportico-Berichte",
+    "select-only-1-report": "Wählen Sie nur 1 Bericht aus",
+    "summary-description": "Zusammenfassende Beschreibung des Berichts",
+    "url-to-reportico": "URL zu Reportico (http:\/\/LoQueSea oder https:\/\/LoQueSea)",
+    "view-not-supported": "Die Ansicht >>>%view%<<< wird nicht unterstützt"
+}

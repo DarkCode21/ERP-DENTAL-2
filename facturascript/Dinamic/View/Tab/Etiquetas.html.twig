@@ -1,0 +1,259 @@
+{% set mainViewName = fsc.getMainViewName() %}
+{% set currentView = fsc.getCurrentView() %}
+
+<script type="text/javascript">
+    function setMaxTagQuantity() {
+        let printQtyInputs = document.getElementsByClassName("tag-quantity");
+        for (let i = 0; i < printQtyInputs.length; i++) {
+            printQtyInputs.item(i).value = printQtyInputs.item(i).getAttribute("data-max-value");
+        }
+    }
+
+    function setTagQuantity(quantity) {
+        let printQtyInputs = document.getElementsByClassName("tag-quantity");
+        for (let i = 0; i < printQtyInputs.length; i++) {
+            printQtyInputs.item(i).value = quantity;
+        }
+    }
+</script>
+
+<div class="{{ currentView.settings.card ? 'card shadow pt-3' : '' }}">
+    <form action="PrintEtiquetas" method="post">
+        {% if mainViewName is not empty %}
+            <input type="hidden" name="model" value="{{ fsc.views[mainViewName].model.modelClassName() }}"/>
+            <input type="hidden" name="code" value="{{ fsc.views[mainViewName].model.primaryColumnValue() }}"/>
+            <input type="hidden" name="return" value="{{ fsc.views[mainViewName].model.url() }}&activetab=Etiquetas"/>
+        {% else %}
+            <input type="hidden" name="return" value="{{ fsc.url() }}"/>
+        {% endif %}
+        <div class="container-fluid">
+            <div class="form-row align-items-end">
+                <div class="col">
+                    <div class="form-group">
+                        {{ i18n.trans('format') }}
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="far fa-file"></i>
+                                </span>
+                            </div>
+                            <select name="format" class="form-control">
+                                <option>APLI 10490</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        {{ i18n.trans('initial-row') }}
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-th"></i>
+                                </span>
+                            </div>
+                            <select name="initrow" class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        {{ i18n.trans('initial-column') }}
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fas fa-th"></i>
+                                </span>
+                            </div>
+                            <select name="initcol" class="form-control">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-2 text-right">
+                        <button type="submit" class="btn btn-primary">
+                            {{ i18n.trans('print') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row align-items-end">
+                <div class="col-auto">
+                    <div class="form-group form-check">
+                        <input class="form-check-input" type="checkbox" name="printbarcodes" value="1" checked="true"
+                               id="tagCodbarCheck">
+                        <label for="tagCodbarCheck">{{ i18n.trans('barcode') }}</label>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="form-group form-check">
+                        <input class="form-check-input" type="checkbox" name="printprices" value="1" checked="true"
+                               id="tagPricesCheck">
+                        <label for="tagPricesCheck">{{ i18n.trans('price') }}</label>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="form-group form-check">
+                        <input class="form-check-input" type="checkbox" name="printdesc" value="1" id="tagDescCheck">
+                        <label for="tagDescCheck">{{ i18n.trans('description') }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-auto">
+                    <div class="form-group form-check">
+                        <input class="form-check-input" type="checkbox" name="withbarcode" value="1" id="tagBarcodeCheck">
+                        <label for="tagBarcodeCheck">{{ i18n.trans('only-with-barcode') }}</label>
+                    </div>
+                </div>
+            </div>
+            {% if mainViewName is empty %}
+                <div class="form-row">
+                    <div class="col-3">
+                        <label>{{ i18n.trans('add-product') }}</label>
+                        <div class="input-group mb-3">
+                            <input id="addProduct" class="form-control ui-autocomplete-input" placeholder="{{ i18n.trans('reference') }}"/>
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="form-row">
+                <div class="col">
+                    <h3 class="h4">
+                        <i class="far fa-clone"></i> {{ i18n.trans('number-labels-per-product') }}
+                    </h3>
+                </div>
+                <div class="col">
+                    <div class="mb-3 text-right">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="setTagQuantity('0');">
+                            {{ i18n.trans('no-tag') }}
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="setTagQuantity('1');">
+                            {{ i18n.trans('one-per-product') }}
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="setMaxTagQuantity();">
+                            {{ i18n.trans('all-tags') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="products" class="form-row">
+                {% if mainViewName is not empty %}
+                    {% for key, tag in fsc.getAvailableTags() %}
+                        <div class="col-sm-2">
+                            <a href="{{ tag.url }}" target="_blank">{{ tag.reference }}</a>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="far fa-clone"></i>
+                                    </span>
+                                </div>
+                                <input type="number" name="quantity{{ key }}" value="{{ tag.quantity }}"
+                                       data-max-value="{{ tag.quantity }}" class="form-control tag-quantity"/>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if mainViewName is empty %}
+    <script>
+        function addProductHtml(reference) {
+            let cont = $('#products .product').length + 1;
+            let html = '<div data-product="product' + cont + '" class="product col-sm-2">'
+                + '<label>' + reference + '</label>'
+                + '<div class="input-group mb-3">'
+                + '<div class="input-group-prepend">'
+                + '<span class="input-group-text">'
+                + '<i class="far fa-clone"></i>'
+                + '</span>'
+                + '</div>'
+                + '<input type="number" name="quantity[]" value="1" class="form-control"/>'
+                + '<input type="hidden" name="reference[]" value="' + reference + '" class="form-control"/>'
+                + '<div class="input-group-append">'
+                + '<button class="btn btn-outline-danger" type="button">'
+                + '<i class="fas fa-trash-alt"></i>'
+                + '</button>'
+                + '</div>'
+                + '</div>'
+                + '</div>';
+
+            $('#products').append(html);
+        }
+
+        $(document).on('click', '.product .btn', function(){
+            $(this).closest('.product').remove();
+        });
+
+        $(document).ready(function () {
+            $("#addProduct").autocomplete({
+                autoFocus: true,
+                source: function (request, response) {
+                    $.ajax({
+                        method: "POST",
+                        url: '{{ fsc.url() }}',
+                        data: {action: 'autocomplete-product', term: request.term},
+                        dataType: "json",
+                        success: function (results) {
+                            let values = [];
+                            results.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        const value = ui.item.value.split(" | ");
+                        addProductHtml(value[0]);
+                    }
+                    $(this).val('');
+                    return false;
+                },
+                open: function (event, ui) {
+                    $(this).autocomplete('widget').css('z-index', 1500);
+                    return false;
+                }
+            });
+        });
+    </script>
+{% endif %}

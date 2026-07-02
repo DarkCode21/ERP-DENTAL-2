@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<view>
+    <rows>
+        <row type="actions">
+            <button type="action" action="show-contact" label="contact" color="info" icon="fas fa-address-book"/>
+        </row>
+    </rows>
+</view>

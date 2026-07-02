@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditEmployeeLeave.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditEmployeeLeave
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" numcolumns="2" order="100">
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="employee" display="none" order="110">
+                <widget type="select" fieldname="idemployee" readonly="true" required="true">
+                    <values source="rrhh_employees" fieldcode="id" fieldtitle="nombre"></values>
+                </widget>
+            </column>
+            <column name="cause" order="120">
+                <widget type="select" fieldname="cause" required="true" translate="true">
+                    <values title="accident">1</values>
+                    <values title="disease">2</values>
+                    <values title="others">99</values>
+                </widget>
+            </column>
+            <column name="starting-date" order="210">
+                <widget type="date" fieldname="startdate" icon="fa-solid fa-sign-in-alt" />
+            </column>
+            <column name="end-date" order="220">
+                <widget type="date" fieldname="enddate" icon="fa-solid fa-sign-out-alt" />
+            </column>
+            <column name="totaldays" order="230">
+                <widget type="number" fieldname="totaldays" readonly="true" icon="fa-solid fa-calculator" />
+            </column>
+        </group>
+
+        <group name="notes" numcolumns="12">
+            <column name="notes" numcolumns="12" order="160">
+                <widget type="textarea" fieldname="note" rows="2" icon="fa-solid fa-sticky-note" />
+            </column>
+        </group>
+    </columns>
+</view>

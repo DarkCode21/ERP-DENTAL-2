@@ -1,0 +1,23 @@
+{
+    "accepted-with-errors": "Erroreekin onartuta",
+    "error-cert-not-found": "Ez da ziurtagiria aurkitu",
+    "error-read-cert": "Errore bat gertatu da ziurtagiria irakurtzean",
+    "error-write-cert": "Errore bat gertatu da ziurtagiria idaztean",
+    "incorrect": "Incorrecto",
+    "no-location-for-port": "Portuaren kokapena ez da aurkitu: %port%",
+    "not-sent": "No enviado",
+    "pct-irpf": "PFEZ %",
+    "pct-supplied": "% Hornitua",
+    "regimen-key": "Erregimenaren gakoa",
+    "report-sii": "SII txostena",
+    "send-to-aeat": "AEAT-era bidali",
+    "set-decimals-to-two": "Debe configurar los decimales a 2",
+    "sii-sent": "Fecha envío SII",
+    "sii-status": "Estado SII",
+    "type-invoice": "Faktura mota",
+    "wrong-total-tax-calculation": "Zerga osoaren kalkulu okerra",
+    "xml-processing": "%total% XML-tik %num% prozesatu dira",
+    "xml-sent-error": "%num%. XMLa bidali gabe",
+    "xml-sent-success": "%num%. XMLa bidalita",
+    "xml-sent-warning": "%num% XMLa oharrekin bidalita"
+}

@@ -1,0 +1,239 @@
+{#
+* Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+* Author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/MenuBgTemplate.html.twig" %}
+{% import 'Macro/Forms.html.twig' as forms %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container-fluid mb-1">
+		<div class="form-row">
+			<div class="col-md-12 text-right">
+                <h1 class="h4 mb-0 d-none d-md-inline-block">
+					{{ i18n.trans('name-plugin-report') }} <i class="fas fa-cash-register ml-3" aria-hidden="true"></i>
+                </h1>
+            </div>
+		</div>
+
+		<form id="reportForm" class="row pb-5 d-flex justify-content-center" 
+				method="post" name="reportForm" onsubmit="return searchReport();">
+			<input type="hidden" name="action" value="find-report">
+			<input type="hidden" name="multireqtoken" value="{{ fsc.multiRequestProtection.newToken(fsc.user.logkey) }}"/>
+                          
+			<div class="col-2">
+				<div class="h5 text-success text-center">Fecha Inicio</div>
+				<input type="date" id="f_inicio" class="form-control ml-auto mr-auto text-center" name="f_inicio" value="{{fsc.f_inicio}}" />
+			</div>
+		
+			<div class="col-2">
+				<div class="h5 text-success text-center">Fecha Fin</div>
+				<input type="date" id="f_fin" class="form-control ml-auto mr-auto text-center" name="f_fin" value="{{fsc.f_fin}}" />
+			</div>
+
+            <div class="col-3">
+                <div class="h5 text-success text-center">Serie</div>
+                <select id="codserie" class="form-control ml-auto mr-auto text-center" name="codserie" onchange="return searchReport();">
+                    {% for code, title in fsc.getSeriesValues() %}
+                        <option value="{{ code }}" {{ code == fsc.codserie ? 'selected' : '' }}>{{ title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+			
+			<div class="col-2 mt-4 pt-3">
+				<div class="form-check">
+        			<input class="form-check-input" type="checkbox" id="s_ventas" name="s_ventas" value="true" onchange="return searchReport();">
+        			<label class="form-check-label" for="s_ventas">
+        			Solo Ventas
+					</label>
+      			</div>
+			</div>
+			
+			<div class="col-1 mt-4 pt-2">
+				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+			</div>
+			<div class="col-1 mt-4 pt-2 pl-3">
+				<button type="button" onclick="imprimir();" class="btn btn-outline-danger"><i class="fas fa-print"></i></button>
+			</div>	
+		</form>
+		
+	</div>
+	<div class="container-fluid" style="margin-top: -50px;">
+		<div id="render-report"></div>
+	</div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+    <style>
+        img.photo-modal, img.photo-cart {
+            max-width: 50px;
+            max-height: 50px;
+            width: 100%;
+            height: 100%;
+        }
+
+        img.photo-default {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            overflow: hidden;
+        }
+
+        #floatCart {
+            position: fixed;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        #btnPark {
+            position: relative;
+        }
+
+        .w-9 {
+            max-width: 9%;
+            width: 100%;
+        }
+
+        .text-orange, .text-orange:hover {
+            color: #ff9557;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        #productList .card {
+            /*height: 130px;*/
+        }
+
+        #productList .card .add-product {
+            height: 90%;
+        }
+
+        .ui-autocomplete {
+            z-index: 5000;
+        }
+		.money {
+			text-align: right;
+			font-weight:bold;
+		}
+
+        /* Animations Spinner */
+        .spinner-add,
+        .spinner-remove {
+            animation-fill-mode: both;
+            animation-duration: .4s;
+        }
+
+        .spinner-add {
+            animation-name: spinner-add;
+        }
+
+        @keyframes spinner-add {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .spinner-remove {
+            animation-name: spinner-remove;
+        }
+
+        @keyframes spinner-remove {
+            to {
+                transform: scale(0);
+            }
+        }
+
+        @media (min-width: 992px) {
+            #cart {
+                position: fixed;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+    <script>
+		function imprimir () {
+			var printContents = document.getElementById('render-report').innerHTML;
+			var originalContents = document.body.innerHTML;
+
+			var document_html = window.open('', 'PRINT', 'height=600,width=800');
+    	
+	    	document_html.document.write('<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">');
+	    	document_html.document.write(printContents);
+   			
+			setTimeout(function() {
+				document_html.print();
+				document_html.document.close();
+				document_html.focus();
+				document_html.close();
+				return true;
+			}, 2000)   
+		}
+		
+        function searchReport() {
+            let formData = new FormData(document.forms['reportForm']);
+            return sendForm(formData);
+        }
+
+        function sendForm(formData) {
+            animateSpinner('add');
+
+            formData.append('ajax', true);
+
+            console.log(Object.fromEntries(formData));
+
+            fetch('{{ fsc.url() }}', {
+                method: 'POST',
+                body: formData
+            }).then(function (response) {
+                if (response.ok) {
+                    animateSpinner('remove', true);
+                    return response.json();
+                }
+
+                animateSpinner('remove', false);
+                return Promise.reject(response);
+            }).then(function (data) {
+                console.log(data);
+
+                if (data.refresh) {
+                    $('#btnChangeTerminal').click();
+                }
+
+                if (formData.get('action') === 'find-report') {
+					$('#render-report').html("");
+					if (data.reporte) {
+	                    $('#render-report').html(data.reporte);
+					} else {
+						alert(data.messages);
+					}
+				}
+
+                if (Array.isArray(data.messages)) {
+                    data.messages.forEach(item => alert(item.message));
+                }
+            }).catch(function (error) {
+                alert('error');
+                console.warn(error);
+            });
+
+            return false;
+        }
+
+
+        $(document).ready(function () {
+        	searchReport();
+		});
+    </script>
+{% endblock %}

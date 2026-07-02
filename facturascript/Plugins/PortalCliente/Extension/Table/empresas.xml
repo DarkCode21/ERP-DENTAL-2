@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<table>
+    <column>
+        <name>pc_paypal_codpago</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>pc_paypal_legend</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>pc_paypal_pk</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>pc_paypal_sk</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>pc_paypal_sandbox</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>pc_redsys_codpago</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>pc_redsys_legend</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>pc_redsys_pk</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>pc_redsys_sk</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>pc_redsys_sandbox</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>pc_redsys_terminal</name>
+        <type>character varying(30)</type>
+    </column>
+    <column>
+        <name>pc_stripe_codpago</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>pc_stripe_legend</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>pc_stripe_pk</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>pc_stripe_sk</name>
+        <type>text</type>
+    </column>
+    <constraint>
+        <name>ca_empresas_stripe_codpago</name>
+        <type>FOREIGN KEY (pc_stripe_codpago) REFERENCES formaspago (codpago) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+</table>

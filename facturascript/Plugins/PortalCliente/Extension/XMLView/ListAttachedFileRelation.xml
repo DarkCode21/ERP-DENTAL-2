@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="pc-show" title="show-on-client-portal" display="center" order="125">
+            <widget type="checkbox" fieldname="pc_show"/>
+        </column>
+        <column name="pc-show-paid" title="show-on-client-portal-when-paying" display="center" order="126">
+            <widget type="checkbox" fieldname="pc_show_paid"/>
+        </column>
+    </columns>
+</view>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : ReportAttendance.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller ReportAttendance
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="idemployee" />
+        </column>
+        <column name="employee" order="110">
+            <widget type="text" fieldname="name" />
+        </column>
+        <column name="date" order="120">
+            <widget type="text" fieldname="date" />
+        </column>
+        <column name="input" order="130">
+            <widget type="text" fieldname="input" />
+        </column>
+        <column name="inputdelay" title="delay" order="140">
+            <widget type="number" decimal="0" fieldname="inputdelay" />
+        </column>
+        <column name="output" order="150">
+            <widget type="text" fieldname="exit" />
+        </column>
+        <column name="hours" order="170">
+            <widget type="number" decimal="4" fieldname="total" />
+        </column>
+        <column name="total" order="180">
+            <widget type="number" decimal="4" fieldname="totalday" />
+        </column>
+        <column name="incidences" order="190">
+            <widget type="text" fieldname="translatedIncidenceDesc" />
+        </column>
+    </columns>
+
+    <rows>
+        <row type="status" fieldname="incidenceError">
+            <option title="incidences" color="danger">1</option>
+        </row>
+        <row type="actions">
+            <button type="js" label='help' color="primary" action="$('#header-help-attendance').toggle()" icon="fa-solid fa-question-circle" />
+        </row>
+        <row type="header">
+            <group name="help" id="header-help-attendance" class="collapse" html="Block/AttendanceIncidenceInfo.html.twig"></group>
+        </row>
+        <row type="footer">
+            <group name="buttons">
+                <button type="js" label='help' color="primary" action="$('#footer-help-attendance').toggle()" icon="fa-solid fa-question-circle" />
+            </group>
+            <group name="help" id="footer-help-attendance" class="collapse show" html="Block/AttendanceIncidenceInfo.html.twig"></group>
+        </row>
+    </rows>
+</view>

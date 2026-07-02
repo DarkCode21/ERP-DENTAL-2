@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <!-- ── Opciones generales TPV ───────────────────────────── -->
+        <group name="tpv-options" title="options" icon="fa-solid fa-sliders" numcolumns="12" valign="bottom">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+
+            <!-- Sonidos activados/desactivados -->
+            <column name="tpv-sounds" title="sounds" numcolumns="2" order="10">
+                <widget type="checkbox" fieldname="sonidos_activos"/>
+            </column>
+
+            <!-- Tipo de servicio por defecto al abrir mesa nueva -->
+            <column name="tpv-default-service" title="default-service" numcolumns="3" order="30">
+                <widget type="select" fieldname="servicio_defecto" required="true" translate="true">
+                    <values title="in-table">in-table</values>
+                    <values title="take-away">take-away</values>
+                    <values title="delivery">delivery</values>
+                </widget>
+            </column>
+
+            <!-- Vista del modal de mesas -->
+            <column name="vista-mesas" title="table-map-view" numcolumns="3" order="40">
+                <widget type="select" fieldname="vista_mesas" translate="true">
+                    <values title="clasico">clasico</values>
+                    <values title="posicion">posicion</values>
+                </widget>
+            </column>
+
+        </group>
+
+        <!-- ── Sonidos (archivos) ─────────────────────────────── -->
+        <group name="tpv-sounds-files" title="sound-files" icon="fa-solid fa-volume-high" numcolumns="12" valign="bottom">
+            <!--
+                Nombre del archivo de audio en la carpeta Plugins/RestauranteTPV/Assets/Sound/
+                Sube el archivo usando el botón de carga que aparece debajo y escribe aquí su nombre.
+            -->
+            <column name="audio-beep1" title="sound-add-product" numcolumns="3" order="200">
+                <widget type="text" fieldname="audio_beep1"/>
+            </column>
+
+            <column name="audio-beep2" title="sound-qty-change" numcolumns="3" order="210">
+                <widget type="text" fieldname="audio_beep2"/>
+            </column>
+
+        </group>
+
+        <!-- ── Facturación ──────────────────────────────────────── -->
+        <group name="billing" title="billing" icon="fa-solid fa-file-invoice" numcolumns="12" valign="bottom">
+
+            <!--
+                Cliente por defecto cuando el camarero no selecciona ninguno al cobrar.
+                Se recomienda crear un cliente genérico tipo "Cliente TPV" o "Consumidor final".
+                Si se deja vacío se usará el primer cliente del sistema.
+            -->
+            <column name="default-customer" numcolumns="4" order="100">
+                <widget type="autocomplete" fieldname="codcliente">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre"/>
+                </widget>
+            </column>
+
+            <!--
+                Código exacto de la serie para facturas/pedidos (p.ej. A, B, S).
+                Si se deja vacío se usa la serie por defecto del sistema.
+            -->
+            <column name="default-serie" title="serie" numcolumns="2" order="110">
+                <widget type="select" fieldname="codserie" onclick="EditSerie">
+                    <values source="series" fieldcode="codserie" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+
+        </group>
+
+        <!-- ── Impresoras POS (ESC/POS por red) ────────────────── -->
+        <group name="printers" title="printers" icon="fa-solid fa-print" numcolumns="12" valign="bottom">
+
+            <!--
+                URL del relay ESC/POS. Por defecto http://localhost:9091
+                Para moviles en la misma WiFi poner la IP local del PC: http://192.168.1.X:9091
+            -->
+            <column name="escpos-relay-url" title="relay-url" numcolumns="4" order="295">
+                <widget type="text" fieldname="escpos_relay_url" maxlength="200"/>
+            </column>
+
+            <!--
+                IP de la impresora térmica de tickets (p.ej. 192.168.1.200).
+                Déjalo vacío para desactivar la impresión ESC/POS directa.
+            -->
+            <column name="escpos-ip" title="printer-ip" numcolumns="3" order="300">
+                <widget type="text" fieldname="escpos_ip_ticket"/>
+            </column>
+
+            <!--
+                Puerto TCP de la impresora (por defecto 9100).
+            -->
+            <column name="escpos-port" title="printer-port" numcolumns="2" order="310">
+                <widget type="number" fieldname="escpos_port_ticket" step="1" min="1" max="65535"/>
+            </column>
+
+            <!--
+                Tipo de conexión: tcp o usb.
+            -->
+            <column name="escpos-tipo" title="printer-tipo" numcolumns="2" order="320">
+                <widget type="select" fieldname="escpos_tipo_ticket">
+                    <values title="TCP / Red">tcp</values>
+                    <values title="USB">usb</values>
+                </widget>
+            </column>
+
+            <!--
+                Ruta del dispositivo USB (p.ej. /dev/usb/lp0). Solo si tipo=usb.
+            -->
+            <column name="escpos-usb" title="printer-usb" numcolumns="3" order="330">
+                <widget type="text" fieldname="escpos_usb_ticket"/>
+            </column>
+
+        </group>
+    </columns>
+</view>

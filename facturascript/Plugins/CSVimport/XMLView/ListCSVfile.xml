@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of CSVimport plugin for FacturaScripts.
+ * Copyright (C) 2020-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="id"/>
+        </column>
+        <column name="name" order="110">
+            <widget type="text" fieldname="name"/>
+        </column>
+        <column name="profile" order="120">
+            <widget type="select" fieldname="profile" required="true">
+                <values/>
+            </widget>
+        </column>
+        <column name="template" order="130">
+            <widget type="text" fieldname="template"/>
+        </column>
+        <column name="import-mode" numcolumns="2" order="140">
+            <widget type="select" fieldname="mode" translate="true" required="true">
+                <values title="only-insert">insert</values>
+                <values title="only-update">update</values>
+                <values title="insert-update">insert-update</values>
+            </widget>
+        </column>
+        <column name="url-file" order="150">
+            <widget type="text" fieldname="url"/>
+        </column>
+        <column name="size" display="right" order="160">
+            <widget type="bytes" fieldname="size"/>
+        </column>
+        <column name="date" display="right" order="170">
+            <widget type="date" fieldname="date"/>
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="warning" fieldname="size" title="empty">null:</option>
+            <option color="info" fieldname="expiration" title="scheduled">gt:0</option>
+        </row>
+    </rows>
+</view>

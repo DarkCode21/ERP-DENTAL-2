@@ -1,0 +1,15 @@
+{
+    "code": 1,
+    "message": "Uncaught Error: Class &quot;FacturaScripts\\Dinamic\\Lib\\AssetManager&quot; not found in \/Core\/Base\/Controller.php:146\n\nStack trace:\n#0 \/Core\/Lib\/ExtendedController\/BaseController.php(99): FacturaScripts\\Core\\Base\\Controller-&gt;__construct(&#39;ListPaciente&#39;, &#39;\/ListPaciente&#39;)\n#1 \/Core\/Lib\/ExtendedController\/ListController.php(46): FacturaScripts\\Core\\Lib\\ExtendedController\\BaseController-&gt;__construct(&#39;ListPaciente&#39;, &#39;\/ListPaciente&#39;)\n#2 \/Core\/Kernel.php(371): FacturaScripts\\Core\\Lib\\ExtendedController\\ListController-&gt;__construct(&#39;ListPaciente&#39;, &#39;\/ListPaciente&#39;)\n#3 \/Core\/Kernel.php(190): FacturaScripts\\Core\\Kernel::runController(&#39;\/ListPaciente&#39;)\n#4 \/index.php(63): FacturaScripts\\Core\\Kernel::run(&#39;\/ListPaciente&#39;)\n#5 {main}\n  thrown",
+    "file": "\/Core\/Base\/Controller.php",
+    "line": 146,
+    "fragment": "        $this->uri = $uri;\n141        $this->uri = $uri;\n142\n143        $pageData = $this->getPageData();\n144        $this->title = empty($pageData) ? $this->className : Tools::lang()->trans($pageData['title']);\n145\n<spam style=\"padding-top: 0.1rem; padding-bottom: 0.1rem; background-color: red; color: white\">146        AssetManager::clear();<\/spam>\n147        AssetManager::setAssetsForPage($className);\n148\n149        $this->checkPhpVersion(8.0);\n150    }\n151",
+    "hash": "3a52402b5ab89348481c1bb352c3768d",
+    "url": "\/ListPaciente",
+    "report_url": "https:\/\/facturascripts.com\/errores\/3a52402b5ab89348481c1bb352c3768d",
+    "report_qr": "https:\/\/api.qrserver.com\/v1\/create-qr-code\/?size=150x150&data=https%3A%2F%2Ffacturascripts.com%2Ferrores%2F3a52402b5ab89348481c1bb352c3768d",
+    "core_version": 2024.95,
+    "php_version": "8.1.32",
+    "os": "Linux",
+    "plugin_list": "AsientosPredefinidos,AtributosEmpresa,ColumnaSaldoBalance,Contratos,EnviarDocumentos,Etiquetas,FacturasCompraUniq,ImpFactCompras,Informes,Integraciones,Modelo111,Modelo130,Modelo303,Nominas,PlantillasPDF,PreciosConImpuestos,PrePagos,Proyectos,PunteoCuentasPlus,SaldosMayor,StockAvanzado,LoginLog,EstadosCuenta,IeSepaMandato,Suscripcion,TarifasAvanzadas,TarifasVariantesAvanzadas,Backup,DiarioAgrupado,PlazosPago,Tickets,AgruparProducto,CSVimport,ConciliacionBancaria,AdmReportico,Amortizaciones,ImportFacEmail,InformesCaja,HumanResources,Soporte,AltasRep,erp_interiberica,Verifactu,Anticipos,PlantillaDetallada,RichiTheme,Modelo347,ReportTaxesPivot,Facturae,CRM,RemesasSEPA,Trazabilidad,LogsFields,LoginScreen,TPVneo,Produccion,Dental"
+}

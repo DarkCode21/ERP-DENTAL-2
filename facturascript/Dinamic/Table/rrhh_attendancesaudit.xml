@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : rrhh_attendancesaudit.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Structure for the audit of the attendance table.
+-->
+<table>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idattendance</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>action</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>olddata</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>newdata</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>reason</name>
+        <type>text</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>dateaction</name>
+        <type>timestamp</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>varchar(30)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>pk_rrhh_attendancesaudit</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>ca_rrhh_attendancesaudit_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

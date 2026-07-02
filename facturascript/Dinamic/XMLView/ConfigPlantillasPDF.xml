@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2019-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="general" numcolumns="12">
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+            <column name="template" numcolumns="12" order="100">
+                <widget type="radio" images="true" path="/Dinamic/Assets/Images/PlantillasPDF/" fieldname="template" required="true"/>
+            </column>
+            <column name="size" numcolumns="2" order="110">
+                <widget type="select" fieldname="size" required="true">
+                    <values>A3</values>
+                    <values>A4</values>
+                    <values>A5</values>
+                    <values>Legal</values>
+                    <values>Letter</values>
+                </widget>
+            </column>
+            <column name="orientation" numcolumns="2" order="120">
+                <widget type="select" fieldname="orientation" translate="true" required="true">
+                    <values>landscape</values>
+                    <values>portrait</values>
+                </widget>
+            </column>
+            <column name="logo" numcolumns="4" order="130">
+                <widget type="library" fieldname="idlogo" icon="fas fa-image" onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+            <column name="logo-size" numcolumns="2" order="140">
+                <widget type="number" decimals="0" min="0" max="400" fieldname="logosize" icon="fas fa-arrows-alt-v" required="true"/>
+            </column>
+            <column name="logo-align" numcolumns="2" order="150">
+                <widget type="select" fieldname="logoalign" icon="fas fa-arrows-alt-h" translate="true" required="true">
+                    <values>left</values>
+                    <values>center</values>
+                    <values>right</values>
+                    <values>full-size</values>
+                </widget>
+            </column>
+            <column name="top-margin" numcolumns="2" order="160">
+                <widget type="number" decimals="0" min="0" max="400" fieldname="topmargin" icon="fas fa-long-arrow-alt-up" required="true"/>
+            </column>
+            <column name="bottom-margin" numcolumns="2" order="170">
+                <widget type="number" decimals="0" min="0" max="400" fieldname="bottommargin" icon="fas fa-long-arrow-alt-down" required="true"/>
+            </column>
+            <column name="font" numcolumns="4" order="180">
+                <widget type="select" fieldname="font" required="true"/>
+            </column>
+            <column name="font-size" numcolumns="2" order="190">
+                <widget type="number" decimals="0" min="1" max="50" fieldname="fontsize" icon="fas fa-text-height"/>
+            </column>
+            <column name="title-font-size" numcolumns="2" order="200">
+                <widget type="number" decimals="0" min="1" max="50" fieldname="titlefontsize" icon="fas fa-text-height"/>
+            </column>
+            <column name="color-1" numcolumns="3" order="210">
+                <widget type="color" fieldname="color1"/>
+            </column>
+            <column name="color-2" numcolumns="3" order="220">
+                <widget type="color" fieldname="color2"/>
+            </column>
+            <column name="color-3" numcolumns="3" order="230">
+                <widget type="color" fieldname="color3"/>
+            </column>
+            <column name="font-color" numcolumns="3" order="240">
+                <widget type="color" fieldname="fontcolor"/>
+            </column>
+        </group>
+        <group name="options" numcolumns="12">
+            <column name="show-customer-code" numcolumns="3" order="100">
+                <widget type="checkbox" fieldname="showcustomercode"/>
+            </column>
+            <column name="show-customer-phones" numcolumns="3" order="110">
+                <widget type="checkbox" fieldname="showcustomerphones"/>
+            </column>
+            <column name="show-customer-email" numcolumns="3" order="120">
+                <widget type="checkbox" fieldname="showcustomeremail"/>
+            </column>
+            <column name="show-numero2" numcolumns="3" order="130">
+                <widget type="checkbox" fieldname="shownumero2"/>
+            </column>
+            <column name="show-numproveedor" numcolumns="3" order="140">
+                <widget type="checkbox" fieldname="shownumproveedor"/>
+            </column>
+            <column name="show-payment-date" numcolumns="3" order="150">
+                <widget type="checkbox" fieldname="showpaymentdate"/>
+            </column>
+            <column name="show-agent" numcolumns="3" order="160">
+                <widget type="checkbox" fieldname="showagent"/>
+            </column>
+            <column name="show-invoice-alert-sketch" numcolumns="3" order="170">
+                <widget type="checkbox" fieldname="showinvoicesketch"/>
+            </column>
+            <column name="hide-shipping-addresses" numcolumns="3" order="180">
+                <widget type="checkbox" fieldname="hideshipping"/>
+            </column>
+            <column name="hide-number-invoice" numcolumns="3" order="190">
+                <widget type="checkbox" fieldname="hidenumberinvoice"/>
+            </column>
+            <column name="hide-serie-invoice" numcolumns="3" order="200">
+                <widget type="checkbox" fieldname="hideserieinvoice"/>
+            </column>
+            <column name="hide-observations" numcolumns="3" order="210">
+                <widget type="checkbox" fieldname="hideobservations"/>
+            </column>
+            <column name="hide-payment-methods" numcolumns="3" order="220">
+                <widget type="checkbox" fieldname="hidepaymentmethods"/>
+            </column>
+            <column name="hide-receipts" numcolumns="3" order="230">
+                <widget type="checkbox" fieldname="hidereceipts"/>
+            </column>
+            <column name="hide-expiration-payment" numcolumns="3" order="240">
+                <widget type="checkbox" fieldname="hideexpirationpayment"/>
+            </column>
+        </group>
+        <group name="lines" title="lines" icon="fas fa-list" numcolumns="12">
+            <column name="line-columns" description="line-columns-desc" numcolumns="7" order="100">
+                <widget type="text" fieldname="linecols"/>
+            </column>
+            <column name="line-column-alignments" description="line-column-alignments-desc" numcolumns="5" order="110">
+                <widget type="text" fieldname="linecolalignments"/>
+            </column>
+            <column name="line-column-types" description="line-column-types-desc" numcolumns="7" order="120">
+                <widget type="text" fieldname="linecoltypes"/>
+            </column>
+            <column name="lines-height" numcolumns="5" order="130">
+                <widget type="number" decimals="0" min="0" max="650" fieldname="linesheight" icon="fas fa-arrows-alt-v" required="true"/>
+            </column>
+        </group>
+        <group name="end-texts" title="end-text" icon="fas fa-font" numcolumns="12">
+            <column name="end-text" numcolumns="12" order="100">
+                <widget type="textarea" fieldname="endtext"/>
+            </column>
+            <column name="end-font-size" order="110">
+                <widget type="number" decimals="0" min="1" max="50" fieldname="endfontsize" icon="fas fa-text-height"/>
+            </column>
+            <column name="end-text-align" order="120">
+                <widget type="select" fieldname="endalign" icon="fas fa-align-left" translate="true" required="true">
+                    <values>left</values>
+                    <values>center</values>
+                    <values>right</values>
+                    <values>justify</values>
+                </widget>
+            </column>
+            <column name="image-text" title="image" order="130">
+                <widget type="library" fieldname="idimagetext" icon="fas fa-image" onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+            <column name="image-text-size" title="image-size" order="140">
+                <widget type="number" decimals="0" min="0" max="400" fieldname="imagetextsize" icon="fas fa-arrows-alt-v" required="true"/>
+            </column>
+        </group>
+        <group name="thanks-texts" title="thanks-text" icon="fas fa-font" numcolumns="12">
+            <column name="thanks-title" numcolumns="12" order="150">
+                <widget type="text" fieldname="thankstitle"/>
+            </column>
+            <column name="thanks-text" numcolumns="12" order="160">
+                <widget type="textarea" fieldname="thankstext"/>
+            </column>
+        </group>
+        <group name="footer-texts" title="footer-text" icon="fas fa-font" numcolumns="12">
+            <column name="footer-text" description="footer-text-description" numcolumns="12" order="100">
+                <widget type="textarea" fieldname="footertext"/>
+            </column>
+            <column name="footer-font-size" order="110">
+                <widget type="number" decimals="0" min="1" max="50" fieldname="footerfontsize" icon="fas fa-text-height"/>
+            </column>
+            <column name="footer-text-align" order="120">
+                <widget type="select" fieldname="footeralign" icon="fas fa-align-left" translate="true" required="true">
+                    <values>left</values>
+                    <values>center</values>
+                    <values>right</values>
+                    <values>justify</values>
+                </widget>
+            </column>
+            <column name="image-footer" title="image" order="130">
+                <widget type="library" fieldname="idimagefooter" icon="fas fa-image" onclick="EditAttachedFile" accept=".gif,.jpg,.png"/>
+            </column>
+            <column name="image-footer-size" title="image-size" order="140">
+                <widget type="number" decimals="0" min="0" max="400" fieldname="imagefootersize" icon="fas fa-arrows-alt-v" required="true"/>
+            </column>
+        </group>
+        <group name="qr-code" title="qr-code" icon="fas fa-qrcode" numcolumns="12">
+            <column name="qr-field" description="qr-field-p" numcolumns="4" order="100">
+                <widget type="text" fieldname="qrfield"/>
+            </column>
+            <column name="qr-size" description="pixels" numcolumns="3" order="110">
+                <widget type="number" decimals="0" min="50" max="200" fieldname="qrsize"/>
+            </column>
+            <column name="qr-position-x" description="millimeters" numcolumns="3" order="120">
+                <widget type="number" decimals="0" min="0" fieldname="qrpositionx"/>
+            </column>
+            <column name="qr-position-y" description="millimeters" numcolumns="2" order="130">
+                <widget type="number" decimals="0" min="0" fieldname="qrpositiony"/>
+            </column>
+            <column name="color" numcolumns="3" order="140">
+                <widget type="color" fieldname="qrcolor"/>
+            </column>
+            <column name="background-color" numcolumns="3" order="150">
+                <widget type="color" fieldname="qrbgcolor"/>
+            </column>
+            <column name="background-transparent" numcolumns="12" order="160">
+                <widget type="checkbox" fieldname="qrtransparent"/>
+            </column>
+        </group>
+        <group name="advanced" title="advanced" icon="fas fa-toolbox" numcolumns="12">
+            <column name="password" description="pdf-password-p" numcolumns="3" order="100">
+                <widget type="text" fieldname="password" maxlength="15"/>
+            </column>
+            <column name="product-image-width" numcolumns="3" order="110">
+                <widget type="number" fieldname="productimagewidth" decimals="0" min="25" max="120"/>
+            </column>
+            <column name="product-image-height" numcolumns="3" order="120">
+                <widget type="number" fieldname="productimageheight" decimals="0" min="25" max="120"/>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="actions">
+            <button type="action" label="preview" action="preview" color="secondary" icon="fas fa-eye"/>
+        </row>
+    </rows>
+</view>

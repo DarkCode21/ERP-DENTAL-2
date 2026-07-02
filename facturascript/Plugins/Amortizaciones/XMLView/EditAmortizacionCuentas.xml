@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Amortizaciones plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Amortizaciones  Copyright (C) 2023-2024 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditAmortizacionCuenta.xml
+    Author     : Jose Antonio Cuello Principal <yopli2000@gmail.com>
+    Description:
+        Structure of edit the accounts of one amortization.
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12" title="subaccounts" icon="fas fa-book">
+            <column name="codsubcuentacierre" title="subaccount-closing" order="100">
+                <widget type="autocomplete" fieldname="codsubcuentacierre">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentadebe" title="subaccount-debit" order="110">
+                <widget type="autocomplete" fieldname="codsubcuentadebe">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentainteres" title="subaccount-interest" display="none" order="115">
+                <widget type="autocomplete" fieldname="codsubcuentainteres">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentahaber" title="subaccount-credit" order="120">
+                <widget type="autocomplete" fieldname="codsubcuentahaber">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentabeneficios" title="subaccount-benefits" order="130">
+                <widget type="autocomplete" fieldname="codsubcuentabeneficios">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+            <column name="codsubcuentaperdidas" title="subaccount-lost" order="140">
+                <widget type="autocomplete" fieldname="codsubcuentaperdidas">
+                    <values source="subcuentas" fieldcode="codsubcuenta"/>
+                </widget>
+            </column>
+        </group>
+        <group name="hidden">
+            <column name="code" numcolumns="2" display="none" order="0" >
+                <widget type="number" fieldname="idamortizacion" readonly="true" />
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="footer">
+            <group name="help" id="footer-help-subaccounts" class="collapse show" html="Block/AmortizacionSubcuentasInfo.html.twig"></group>
+        </row>
+    </rows>
+</view>

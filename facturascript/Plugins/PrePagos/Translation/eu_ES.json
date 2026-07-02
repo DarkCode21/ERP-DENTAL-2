@@ -1,0 +1,11 @@
+{
+    "accounting-prepaid": "Pre-pago %code%",
+    "accounting-prepaid-customer-delivery-note": "%code% bezeroari dagokion prepago albarana",
+    "accounting-prepaid-customer-estimation": "Prepago bezeroaren aurrekontua %code%",
+    "accounting-prepaid-customer-order": "%code% bezeroaren eskaera aurretik ordainduta",
+    "amount-greater-zero": "Zenbatekoa handiagoa izan behar da zero baino.",
+    "document-company-different-from-payment-method-company": "Dokumentuaren enpresa ordainketa metodoaren enpresetik desberdina da",
+    "document-not-found": "Dokumentua ez da aurkitu",
+    "no-editable": "Ez da editagarria",
+    "only-one-document-allowed": "Dokumentu bat bakarrik onartzen da"
+}

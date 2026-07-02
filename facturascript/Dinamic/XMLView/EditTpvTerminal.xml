@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" order="0">
+                <widget type="text" fieldname="idtpv"/>
+            </column>
+            <column name="name" numcolumns="2" order="100">
+                <widget type="text" fieldname="name" required="true"/>
+            </column>
+            <column name="warehouse" numcolumns="2" order="110">
+                <widget type="select" fieldname="codalmacen" required="true" onclick="EditAlmacen">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="serie" numcolumns="2" order="120">
+                <widget type="select" fieldname="codserie" required="true" onclick="EditSerie">
+                    <values source="series" fieldcode="codserie" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="customer" titleurl="ListCliente" numcolumns="2" order="130">
+                <widget type="autocomplete" fieldname="codcliente" onclick="EditCliente" required="true">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="payment-method-cash" numcolumns="2" order="140">
+                <widget type="select" fieldname="codpago" required="true" onclick="EditFormaPago">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="currency" numcolumns="2" order="150">
+                <widget type="select" fieldname="coddivisa" required="true" onclick="EditDivisa">
+                    <values source="divisas" fieldcode="coddivisa" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="doc-type" numcolumns="2" order="160">
+                <widget type="select" fieldname="doctype" translate="true" required="true">
+                    <values title="invoice">FacturaCliente</values>
+                    <values title="delivery-note">AlbaranCliente</values>
+                </widget>
+            </column>
+            <column name="days-until-expiration" description="cart-parking" numcolumns="2" order="170">
+                <widget type="number" min="0" fieldname="budgetdateend" required="true"/>
+            </column>
+            <column name="printer" numcolumns="2" titleurl="ListTicketPrinter" order="180">
+                <widget type="select" fieldname="idprinter" onclick="EditTicketPrinter">
+                    <values source="tickets_printers" fieldcode="id" fieldtitle="name"/>
+                </widget>
+            </column>
+            <column name="ticket-format" title="ticket" numcolumns="2" order="190">
+                <widget type="select" fieldname="ticketformat"/>
+            </column>
+            <column name="close-agent" numcolumns="2" order="200">
+                <widget type="number" min="0" fieldname="closeagent" required="true"/>
+            </column>
+            <column name="product-limit" numcolumns="2" order="210">
+                <widget type="number" min="0" fieldname="productlimit" required="true"/>
+            </column>
+        </group>
+        <group name="advanced" numcolumns="12" valign="bottom">
+            <column name="active" order="100">
+                <widget type="checkbox" fieldname="active"/>
+            </column>
+            <column name="change-price-tpv" order="110">
+                <widget type="checkbox" fieldname="changeprice"/>
+            </column>
+            <column name="add-discount-tpv" order="120">
+                <widget type="checkbox" fieldname="adddiscount"/>
+            </column>
+            <column name="add-empty-line-tpv" order="130">
+                <widget type="checkbox" fieldname="addemptyline"/>
+            </column>
+            <column name="activate-sound" order="140">
+                <widget type="checkbox" fieldname="sound"/>
+            </column>
+			<column name="activate-print-direct" order="150">
+                <widget type="checkbox" fieldname="printdirect"/>
+            </column>
+        </group>
+    </columns>
+</view>

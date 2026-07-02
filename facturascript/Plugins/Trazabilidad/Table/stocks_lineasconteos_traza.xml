@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>creation_date</name>
+        <type>timestamp</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idconteo</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idlinea</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idlote</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>last_nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>last_update</name>
+        <type>timestamp</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>quantity</name>
+        <type>double precision</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>stocks_lineasconteos_traza_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_stocks_lineasconteos_traza</name>
+        <type>UNIQUE (idconteo,idlinea,idlote)</type>
+    </constraint>
+    <constraint>
+        <name>ca_stocks_lineasconteos_traza_users_last_nick</name>
+        <type>FOREIGN KEY (last_nick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_stocks_lineasconteos_traza_users_nick</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_traza_lineasconteos</name>
+        <type>FOREIGN KEY (idlinea) REFERENCES stocks_lineasconteos (idlinea) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_traza_lineasconteos_conteos</name>
+        <type>FOREIGN KEY (idconteo) REFERENCES stocks_conteos (idconteo) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_traza_lineasconteos_lotes</name>
+        <type>FOREIGN KEY (idlote) REFERENCES productos_lotes (idlote) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

@@ -1,0 +1,1372 @@
+{
+    "\/": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\AdminPlugins",
+        "customId": "",
+        "position": 0
+    },
+    "\/AdminPlugins": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\AdminPlugins",
+        "customId": "",
+        "position": 0
+    },
+    "\/Updater": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Updater",
+        "customId": "",
+        "position": 0
+    },
+    "\/About": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\About",
+        "customId": "",
+        "position": 0
+    },
+    "\/Actualizaciones": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Actualizaciones",
+        "customId": "",
+        "position": 0
+    },
+    "\/AdminPlantillasPDF": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\AdminPlantillasPDF",
+        "customId": "",
+        "position": 0
+    },
+    "\/AdminProduccion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\AdminProduccion",
+        "customId": "",
+        "position": 0
+    },
+    "\/AdminProyectos": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\AdminProyectos",
+        "customId": "",
+        "position": 0
+    },
+    "\/AdminRichiTheme": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\AdminRichiTheme",
+        "customId": "",
+        "position": 0
+    },
+    "\/AltasRep": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\AltasRep",
+        "customId": "",
+        "position": 0
+    },
+    "\/ApiControllerVerifactu": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiControllerVerifactu",
+        "customId": "",
+        "position": 0
+    },
+    "\/ApiCountingExecute": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiCountingExecute",
+        "customId": "",
+        "position": 0
+    },
+    "\/ApiCreateFacturaCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiCreateFacturaCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ApiCreateFacturaRectificativaCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiCreateFacturaRectificativaCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ApiExportFacturaCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiExportFacturaCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ApiRoot": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiRoot",
+        "customId": "",
+        "position": 0
+    },
+    "\/ApiTransferExecute": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiTransferExecute",
+        "customId": "",
+        "position": 0
+    },
+    "\/Backup": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Backup",
+        "customId": "",
+        "position": 0
+    },
+    "\/ConciliateBankMovements": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ConciliateBankMovements",
+        "customId": "",
+        "position": 0
+    },
+    "\/ConfigEmail": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ConfigEmail",
+        "customId": "",
+        "position": 0
+    },
+    "\/CopyModel": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\CopyModel",
+        "customId": "",
+        "position": 0
+    },
+    "\/Cron": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Cron",
+        "customId": "",
+        "position": 0
+    },
+    "\/Dashboard": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Dashboard",
+        "customId": "",
+        "position": 0
+    },
+    "\/Deploy": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Deploy",
+        "customId": "",
+        "position": 0
+    },
+    "\/DocumentStitcher": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\DocumentStitcher",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAbsenceConcept": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAbsenceConcept",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAgenciaTransporte": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAgenciaTransporte",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAgente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAgente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAlbaranCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAlbaranCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAlbaranProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAlbaranProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAlmacen": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAlmacen",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAmortizacion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAmortizacion",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAmortizacionPlantilla": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAmortizacionPlantilla",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAmortizacionSubcuenta": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAmortizacionSubcuenta",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAnticipo": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAnticipo",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAnticipoP": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAnticipoP",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditApiKey": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditApiKey",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditArchivo": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditArchivo",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditArchivoFromPaciente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditArchivoFromPaciente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAsiento": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAsiento",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAsientoPredefinido": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAsientoPredefinido",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAtributo": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAtributo",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAttachedFile": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAttachedFile",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAttendance": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAttendance",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditAttendanceAudit": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditAttendanceAudit",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditBalanceCode": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditBalanceCode",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditBiometricDevice": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditBiometricDevice",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCSVfile": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCSVfile",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCita": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCita",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCitaFromPaciente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCitaFromPaciente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCiudad": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCiudad",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCodigoPostal": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCodigoPostal",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditConceptoPartida": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditConceptoPartida",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditContacto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditContacto",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditConteoStock": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditConteoStock",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditContract": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditContract",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditContratoServicio": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditContratoServicio",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCourseArea": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCourseArea",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCourseCost": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCourseCost",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCourseMethod": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCourseMethod",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCourseObjective": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCourseObjective",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCourseTraining": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCourseTraining",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCrmFuente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCrmFuente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCrmInteres": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCrmInteres",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCrmLista": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCrmLista",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCrmNota": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCrmNota",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCrmOportunidad": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCrmOportunidad",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCrmOportunidadEstado": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCrmOportunidadEstado",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCronJob": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCronJob",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCuenta": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCuenta",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCuentaBanco": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCuentaBanco",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditCuentaEspecial": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditCuentaEspecial",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditDepartment": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditDepartment",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditDescuentoCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditDescuentoCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditDiario": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditDiario",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditDisciplinaryOffense": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditDisciplinaryOffense",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditDivisa": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditDivisa",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditDocumentType": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditDocumentType",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEjercicio": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEjercicio",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmailNotification": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmailNotification",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmailSent": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmailSent",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmpleado": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmpleado",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployee": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployee",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeeContract": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeeContract",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeeHoliday": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeeHoliday",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeeLeave": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeeLeave",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeeOvertimeClosing": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeeOvertimeClosing",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeePayRoll": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeePayRoll",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeePayRollSalary": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeePayRollSalary",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeeSalary": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeeSalary",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeeVoucher": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeeVoucher",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmployeeWorkShift": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmployeeWorkShift",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEmpresa": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEmpresa",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEspecialidad": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEspecialidad",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEspecialista": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEspecialista",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEstadoDocumento": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEstadoDocumento",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditEstadosCuenta": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditEstadosCuenta",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditFabricante": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditFabricante",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditFacturaCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditFacturaCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditFacturaProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditFacturaProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditFamilia": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditFamilia",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditFormaPago": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditFormaPago",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditFormatoDocumento": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditFormatoDocumento",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditGabinete": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditGabinete",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditGrupoClientes": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditGrupoClientes",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditHistorial": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditHistorial",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditImpuesto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditImpuesto",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditLogMessage": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditLogMessage",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditMovimientoBanco": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditMovimientoBanco",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditNomina": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditNomina",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditNotaProyecto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditNotaProyecto",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditNumSerieCounter": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditNumSerieCounter",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditOrdenProduccion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditOrdenProduccion",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditOvertimeClosing": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditOvertimeClosing",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPageOption": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPageOption",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPais": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPais",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPayRoll": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPayRoll",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPedidoCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPedidoCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPedidoProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPedidoProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPrePagoCli": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPrePagoCli",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPrePagoProv": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPrePagoProv",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPresupuestoCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPresupuestoCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPresupuestoProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPresupuestoProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditProductGrouping": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditProductGrouping",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditProducto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditProducto",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditProductoLote": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditProductoLote",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditProvincia": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditProvincia",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditProyecto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditProyecto",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPublicHoliday": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPublicHoliday",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditPuntoInteresCiudad": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditPuntoInteresCiudad",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReceta": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReceta",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReciboCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReciboCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReciboProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReciboProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditRegularizacionImpuesto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditRegularizacionImpuesto",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditRemesaSEPA": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditRemesaSEPA",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReport": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReport",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReportAmount": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReportAmount",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReportBalance": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReportBalance",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReportBoard": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReportBoard",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReportLedger": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReportLedger",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditReportico": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditReportico",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditRetencion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditRetencion",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditRole": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditRole",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditSalaryConcept": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditSalaryConcept",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditSanction": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditSanction",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditSecuenciaDocumento": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditSecuenciaDocumento",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditSerie": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditSerie",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditSettings": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditSettings",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditSubcuenta": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditSubcuenta",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditTareaProyecto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditTareaProyecto",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditTarifa": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditTarifa",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditTicket": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditTicket",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditTicketPrinter": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditTicketPrinter",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditTpvTerminal": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditTpvTerminal",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditTransferenciaStock": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditTransferenciaStock",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditTratamientoPaciente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditTratamientoPaciente",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditUser": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditUser",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditVerifactuRequerimiento": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditVerifactuRequerimiento",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditVersion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditVersion",
+        "customId": "",
+        "position": 0
+    },
+    "\/EditWorkEvent": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EditWorkEvent",
+        "customId": "",
+        "position": 0
+    },
+    "\/EmployeePanel": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\EmployeePanel",
+        "customId": "",
+        "position": 0
+    },
+    "\/Etiquetas": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Etiquetas",
+        "customId": "",
+        "position": 0
+    },
+    "\/Files": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Files",
+        "customId": "",
+        "position": 0
+    },
+    "\/ImpFactCompras": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ImpFactCompras",
+        "customId": "",
+        "position": 0
+    },
+    "\/ImportFacturae": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ImportFacturae",
+        "customId": "",
+        "position": 0
+    },
+    "\/InformeCaja": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\InformeCaja",
+        "customId": "",
+        "position": 0
+    },
+    "\/Installer": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Installer",
+        "customId": "",
+        "position": 0
+    },
+    "\/Integracion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Integracion",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAgenciaTransporte": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAgenciaTransporte",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAgente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAgente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAlbaranCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAlbaranCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAlbaranProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAlbaranProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAlmacen": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAlmacen",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAmortizacion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAmortizacion",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAnticipo": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAnticipo",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAnticipoP": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAnticipoP",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListArchivo": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListArchivo",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAsiento": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAsiento",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAtributo": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAtributo",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAttachedFile": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAttachedFile",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListAttendance": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListAttendance",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListBasicData": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListBasicData",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListCita": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListCita",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListContacto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListContacto",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListContratoServicio": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListContratoServicio",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListCorreoInformacion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListCorreoInformacion",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListCourseTraining": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListCourseTraining",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListCrmNota": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListCrmNota",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListCrmOportunidad": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListCrmOportunidad",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListCuenta": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListCuenta",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListEjercicio": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListEjercicio",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListEmpleado": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListEmpleado",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListEmployee": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListEmployee",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListEmpresa": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListEmpresa",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListEspecialidad": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListEspecialidad",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListEspecialista": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListEspecialista",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListEstadosCuenta": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListEstadosCuenta",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListFabricante": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListFabricante",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListFacturaCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListFacturaCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListFacturaCliente2": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListFacturaCliente2",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListFacturaProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListFacturaProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListFamilia": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListFamilia",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListFormaPago": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListFormaPago",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListGabinete": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListGabinete",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListHistorial": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListHistorial",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListImpuesto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListImpuesto",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListLogMessage": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListLogMessage",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListPais": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListPais",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListPedidoCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListPedidoCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListPedidoProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListPedidoProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListPresupuestoCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListPresupuestoCliente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListPresupuestoProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListPresupuestoProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListProducto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListProducto",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListProveedor": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListProveedor",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListProyecto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListProyecto",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListReceta": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListReceta",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListRegularizacionImpuesto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListRegularizacionImpuesto",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListRemesaSEPA": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListRemesaSEPA",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListReport": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListReport",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListReportAccounting": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListReportAccounting",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListReportico": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListReportico",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListSerie": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListSerie",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListTareaProyecto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListTareaProyecto",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListTarifa": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListTarifa",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListTicketPrinter": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListTicketPrinter",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListTratamientoPaciente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListTratamientoPaciente",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListUser": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListUser",
+        "customId": "",
+        "position": 0
+    },
+    "\/ListVersion": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ListVersion",
+        "customId": "",
+        "position": 0
+    },
+    "\/Login": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Login",
+        "customId": "",
+        "position": 0
+    },
+    "\/MegaSearch": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\MegaSearch",
+        "customId": "",
+        "position": 0
+    },
+    "\/Modelo111": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Modelo111",
+        "customId": "",
+        "position": 0
+    },
+    "\/Modelo130": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Modelo130",
+        "customId": "",
+        "position": 0
+    },
+    "\/Modelo347": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Modelo347",
+        "customId": "",
+        "position": 0
+    },
+    "\/Myfiles": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Myfiles",
+        "customId": "",
+        "position": 0
+    },
+    "\/Nomina": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Nomina",
+        "customId": "",
+        "position": 0
+    },
+    "\/Odontograma": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Odontograma",
+        "customId": "",
+        "position": 0
+    },
+    "\/Paciente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Paciente",
+        "customId": "",
+        "position": 0
+    },
+    "\/PanelDental": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\PanelDental",
+        "customId": "",
+        "position": 0
+    },
+    "\/PrintEtiquetas": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\PrintEtiquetas",
+        "customId": "",
+        "position": 0
+    },
+    "\/RenewContratoServicio": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\RenewContratoServicio",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportAttendance": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportAttendance",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportBreakdown": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportBreakdown",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportProducto": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportProducto",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportResult": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportResult",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportStock": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportStock",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportTaxes": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportTaxes",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportTaxesPivot": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportTaxesPivot",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportTransport": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportTransport",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportTreasury": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportTreasury",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportVerifactu": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportVerifactu",
+        "customId": "",
+        "position": 0
+    },
+    "\/ReportVerifactuErrors": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ReportVerifactuErrors",
+        "customId": "",
+        "position": 0
+    },
+    "\/Root": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Root",
+        "customId": "",
+        "position": 0
+    },
+    "\/SendMail": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\SendMail",
+        "customId": "",
+        "position": 0
+    },
+    "\/SendPendingDocs": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\SendPendingDocs",
+        "customId": "",
+        "position": 0
+    },
+    "\/SendTicket": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\SendTicket",
+        "customId": "",
+        "position": 0
+    },
+    "\/Soporte": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Soporte",
+        "customId": "",
+        "position": 0
+    },
+    "\/TPVneo": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\TPVneo",
+        "customId": "",
+        "position": 0
+    },
+    "\/Wizard": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Wizard",
+        "customId": "",
+        "position": 0
+    },
+    "\/api": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiRoot",
+        "customId": "",
+        "position": 1
+    },
+    "\/api\/3\/crearFacturaCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiCreateFacturaCliente",
+        "customId": "",
+        "position": 1
+    },
+    "\/api\/3\/crearFacturaRectificativaCliente": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiCreateFacturaRectificativaCliente",
+        "customId": "",
+        "position": 1
+    },
+    "\/cron": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Cron",
+        "customId": "",
+        "position": 1
+    },
+    "\/deploy": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Deploy",
+        "customId": "",
+        "position": 1
+    },
+    "\/login": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Login",
+        "customId": "",
+        "position": 1
+    },
+    "\/api\/3\/exportarFacturaCliente\/*": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiExportFacturaCliente",
+        "customId": "",
+        "position": 2
+    },
+    "\/api\/*": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\ApiRoot",
+        "customId": "",
+        "position": 2
+    },
+    "\/Core\/Assets\/*": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Files",
+        "customId": "",
+        "position": 2
+    },
+    "\/Dinamic\/Assets\/*": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Files",
+        "customId": "",
+        "position": 2
+    },
+    "\/MyFiles\/*": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Myfiles",
+        "customId": "",
+        "position": 2
+    },
+    "\/node_modules\/*": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Files",
+        "customId": "",
+        "position": 2
+    },
+    "\/Plugins\/*": {
+        "controller": "\\FacturaScripts\\Dinamic\\Controller\\Files",
+        "customId": "",
+        "position": 2
+    }
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="codproveedor" numcolumns="4" order="100">
+                <widget type="autocomplete" fieldname="codproveedor" onclick="EditProveedor">
+                    <values source="proveedores" fieldcode="codproveedor" fieldtitle="nombre" />
+                </widget>
+            </column>
+            <column name="creationdate" title="Fecha de Contraseña" order="120">
+                <widget type="date" fieldname="creationdate" maxlength="255" required="true"/>
+            </column>
+            <column name="Fecha de pago" title="Fecha de pago" order="130">
+                <widget type="date" fieldname="paymentdate"/>
+            </column>
+            <column name="user" order="100" display="none">
+                <widget type="select" fieldname="user">
+                    <values source="users" fieldcode="nick" fieldtitle="nick"></values>
+                </widget>
+            </column>
+            <column name="Total de Contraseña" order="175" display="center">
+                <widget type="money" fieldname="linetotal" readonly="true"/>
+            </column>
+            <column name="payment" title="method-payment" order="150">
+                <widget type="select" fieldname="codpago" onclick="EditFormaPago" required="true">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion" />
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

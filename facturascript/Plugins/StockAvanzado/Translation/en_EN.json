@@ -1,0 +1,22 @@
+{
+    "applied-stock-count": "Applied the stock of the count %code%",
+    "initial-stock-movements": "Automatic initial count",
+    "new-quantity": "New quantity",
+    "new-quantity-description": "Enter quantity",
+    "no-movements-to-rebuild-stock": "There are no stock movements to rebuild",
+    "preload": "Preload",
+    "preload-products": "Preload all products",
+    "reason-for-change": "Reason for change",
+    "rebuild-movements": "Rebuild movements",
+    "rebuilt-stock": "Rebuilt stock",
+    "reconstructed-movements": "Reconstructed movements",
+    "start-with-one-stock": "Start with one stock",
+    "start-with-product-stock": "Initialize with stock 0",
+    "start-with-zero-stock": "Initialize with stock 0",
+    "stock-count": "Stock count",
+    "stock-count-line-p": "Add lines to this count by typing\/scanning a barcode or reference. If the product was already in the list, the quantity increases",
+    "stock-counts": "Stock counts",
+    "valued-stock-cost": "Stock valued at cost",
+    "valued-stock-price": "Stock valued at price",
+    "without-stock-count": "Exclude counts"
+}

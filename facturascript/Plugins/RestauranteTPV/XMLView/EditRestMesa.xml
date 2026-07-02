@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="6">
+            <column name="name" order="100">
+                <widget type="text" fieldname="nombre"/>
+            </column>
+            <column name="zone" order="200">
+                <widget type="select" fieldname="idzona">
+                    <values source="rest_zonas" fieldcode="idzona" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="capacity" order="300">
+                <widget type="number" fieldname="capacidad" required="true"/>
+            </column>
+            <column name="state" order="400">
+                <widget type="select" fieldname="estado" translate="true">
+                    <values title="libre">libre</values>
+                    <values title="ocupada">ocupada</values>
+                    <values title="reservada">reservada</values>
+                </widget>
+            </column>
+            <column name="pos-x" order="500" titleurl="Posición X (mapa)">
+                <widget type="number" fieldname="pos_x"/>
+            </column>
+            <column name="pos-y" order="600" titleurl="Posición Y (mapa)">
+                <widget type="number" fieldname="pos_y"/>
+            </column>
+        </group>
+    </columns>
+</view>

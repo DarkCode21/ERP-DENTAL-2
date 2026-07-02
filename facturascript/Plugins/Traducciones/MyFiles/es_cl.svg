@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="18.520834mm"
+   height="12.435416mm"
+   viewBox="0 0 18.520834 12.435416"
+   version="1.1"
+   id="svg11070"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="es_cl.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview11072"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.914906"
+     inkscape:cx="46.452859"
+     inkscape:cy="-21.313665"
+     inkscape:window-width="1706"
+     inkscape:window-height="1243"
+     inkscape:window-x="3330"
+     inkscape:window-y="120"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs11067">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1901">
+      <path
+         id="path1903"
+         d="M 1727.4838,-30.750004 V 569.25 h 1000 V -30.750004 Z"
+         inkscape:connector-curvature="0"
+         style="fill:#00247d;stroke-width:20" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1897">
+      <path
+         id="path1899"
+         d="M 1727.4838,-30.750004 V 569.25 h 1000 V -30.750004 Z"
+         inkscape:connector-curvature="0"
+         style="fill:#00247d;stroke-width:20" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-92.799174,-155.15099)">
+    <g
+       style="display:inline"
+       id="chile"
+       transform="matrix(0.77721354,0,0,0.77721354,95.908028,158.25984)"
+       inkscape:label="chile">
+      <path
+         id="path11365-6"
+         d="M 19.829787,12 H -4 V -3.8865248 h 23.829787 z"
+         inkscape:connector-curvature="0"
+         style="fill:#ed5565;fill-opacity:1;stroke-width:0.992908" />
+      <path
+         id="path11367-2"
+         d="M 3.9432624,4.0567376 H 19.829787 V -3.8865248 H -4 Z"
+         inkscape:connector-curvature="0"
+         style="fill:#f5f7fa;fill-opacity:1;stroke-width:0.992908" />
+      <path
+         id="path11369-2"
+         d="M 4,4 H -4 V -4 H 4 Z"
+         inkscape:connector-curvature="0"
+         style="fill:#4758a9;fill-opacity:1" />
+      <g
+         id="f-76"
+         style="fill:#f5f7fa;fill-opacity:1">
+        <g
+           id="t-63"
+           style="fill:#f5f7fa;fill-opacity:1">
+          <path
+             id="o-8"
+             transform="rotate(18,0,-2)"
+             d="M 0,-2 V 0 H 1 Z"
+             inkscape:connector-curvature="0"
+             style="fill:#f5f7fa;fill-opacity:1" />
+          <use
+             id="use11372"
+             transform="scale(-1,1)"
+             xlink:href="#o-8"
+             x="0"
+             y="0"
+             width="100%"
+             height="100%"
+             style="fill:#f5f7fa;fill-opacity:1" />
+        </g>
+        <use
+           id="use11375"
+           transform="rotate(72)"
+           xlink:href="#t-63"
+           x="0"
+           y="0"
+           width="100%"
+           height="100%"
+           style="fill:#f5f7fa;fill-opacity:1" />
+      </g>
+      <use
+         id="use11378"
+         transform="rotate(-72)"
+         xlink:href="#t-63"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%"
+         style="fill:#f5f7fa;fill-opacity:1" />
+      <use
+         id="use11380"
+         transform="rotate(144)"
+         xlink:href="#f-76"
+         x="0"
+         y="0"
+         width="100%"
+         height="100%"
+         style="fill:#f5f7fa;fill-opacity:1" />
+    </g>
+  </g>
+</svg>

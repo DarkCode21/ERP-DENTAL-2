@@ -1,0 +1,14 @@
+<!--
+    * Extension from view EditProveedor
+    * Add new field to EditProveedor
+    * @author Raúl Jiménez <raljopa@gmail.com>
+-->
+<view>
+    <columns>
+        <group name="comercial" title="commercial-terms" numcolumns="12">
+            <column name="irpf_sobre_total" order="195" numcolumns="1" title="total-document-retention">
+                <widget type="checkbox" fieldname="irpf_sobre_total"/>
+            </column>
+        </group>
+    </columns>
+</view>

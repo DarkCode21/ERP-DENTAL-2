@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2020-2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" display="none" order="100">
+                <widget type="text" fieldname="id" required="true"/>
+            </column>
+            <column name="file" order="110">
+                <widget type="file" fieldname="path" accept=".csv,.xls,.xlsx,.ods" readonly="dinamic"/>
+            </column>
+            <column name="size" numcolumns="2" order="120">
+                <widget type="number" decimal="0" fieldname="size" readonly="true"/>
+            </column>
+            <column name="date" numcolumns="2" order="130">
+                <widget type="date" fieldname="date" readonly="true"/>
+            </column>
+        </group>
+        <group name="remote" numcolumns="12">
+            <column name="url-file" description="url-file-p" order="100">
+                <widget type="text" fieldname="url"/>
+            </column>
+            <column name="download-period" numcolumns="2" order="110">
+                <widget type="number" min="0" decimal="0" fieldname="expiration"/>
+            </column>
+            <column name="download-period-type" numcolumns="2" order="120">
+                <widget type="select" fieldname="expirationtype" translate="true" required="true">
+                    <values fieldtitle="hours">hours</values>
+                    <values fieldtitle="days">days</values>
+                    <values fieldtitle="weeks">weeks</values>
+                    <values fieldtitle="months">months</values>
+                    <values fieldtitle="years">years</values>
+                </widget>
+            </column>
+        </group>
+        <group name="options" numcolumns="12" valign="bottom">
+            <column name="template" order="100">
+                <widget type="text" fieldname="template" maxlength="50"/>
+            </column>
+            <column name="profile" order="110">
+                <widget type="select" fieldname="profile" translate="true" required="true">
+                    <values/>
+                </widget>
+            </column>
+            <column name="supplier" display="none" order="115">
+                <widget type="select" fieldname="codproveedor" readonly="true" onclick="EditProveedor">
+                    <values source="proveedores" fieldcode="codproveedor" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="import-mode" order="120">
+                <widget type="select" fieldname="mode" translate="true" required="true">
+                    <values title="only-insert">insert</values>
+                    <values title="only-update">update</values>
+                    <values title="insert-update">insert-update</values>
+                </widget>
+            </column>
+            <column name="start-line" numcolumns="2" order="130">
+                <widget type="number" min="0" decimal="0" fieldname="startline"/>
+            </column>
+            <column name="no-utf8-file" order="140">
+                <widget type="checkbox" fieldname="noutf8file"/>
+            </column>
+            <column name="has-no-titles" order="150">
+                <widget type="checkbox" fieldname="no_titles"/>
+            </column>
+        <column name="account" display="none" order="115">
+                <widget type="select" fieldname="codcuenta" readonly="true" onclick="EditCuentaBanco">
+                    <values source="subcuentas" fieldcode="codcuenta" fieldtitle="codcuenta"/>
+                </widget>
+            </column></group>
+    </columns>
+    <modals>
+        <group name="upload-new-file" title="upload-file" icon="fas fa-file-upload">
+            <column name="file" order="100">
+                <widget type="file" fieldname="newfile" accept=".csv,.xls,.xlsx,.ods" required="true"/>
+            </column>
+        </group>
+    </modals>
+</view>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditEmployee.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditEmployee
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="id" numcolumns="2" display="none" order="0" >
+                <widget type="number" fieldname="id" icon="fa-solid fa-globe" readonly="true" />
+            </column>
+            <column name="name" order="100">
+                <widget type="text" fieldname="nombre" maxlength="100" required="true" icon="fa-solid fa-user" />
+            </column>
+            <column name="fiscal-id" numcolumns="1" order="110">
+                <widget type="select" fieldname="tipoidfiscal">
+                    <values source="idsfiscales" fieldcode="tipoidfiscal" fieldtitle="tipoidfiscal"></values>
+                </widget>
+            </column>
+            <column name="fiscal-number" numcolumns="3" order="120">
+                <widget type="text" fieldname="cifnif" maxlength="30" required="true" icon="fa-solid fa-id-card"/>
+            </column>
+            <column name="social-security" numcolumns="3" order="130">
+                <widget type="text" fieldname="insuranceid" maxlength="30" required="true" icon="fa-solid fa-briefcase-medical" />
+            </column>
+        </group>
+        <group name="contact" numcolumns="12" title="contact-information" icon="fa-solid fa-street-view">
+            <column name="address" order="100">
+                <widget type="select" fieldname="idcontact">
+                    <values></values>
+                </widget>
+            </column>
+            <column name="phone" numcolumns="3" order="110">
+                <widget type="text" fieldname="telefono1" maxlength="30" icon="fa-solid fa-mobile-alt" />
+            </column>
+            <column name="phone2" numcolumns="3" order="120">
+                <widget type="text" fieldname="telefono2" maxlength="30" icon="fa-solid fa-phone" />
+            </column>
+            <column name="email" numcolumns="3" order="130">
+                <widget type="email" fieldname="email" maxlength="50" icon="fa-solid fa-envelope" />
+            </column>
+        </group>
+        <group name="rrhh-data" numcolumns="12" title="human-resource" icon="fa-solid fa-users">
+            <column name="discharge-date" title="discharge-date-label" numcolumns="3" order="100">
+                <widget type="date" fieldname="fechaalta" icon="fa-solid fa-sign-in-alt" />
+            </column>
+            <column name="birthday" numcolumns="3" order="110">
+                <widget type="date" fieldname="birthday" icon="fa-solid fa-birthday-cake" />
+            </column>
+            <column name="department" numcolumns="6" order="120">
+                <widget type="select" fieldname="iddepartment" >
+                    <values source="rrhh_departments" fieldcode="id" fieldtitle="name"></values>
+                </widget>
+            </column>
+            <column name="company" numcolumns="3" order="200">
+                <widget type="select" fieldname="idcompany" >
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"></values>
+                </widget>
+            </column>
+            <column name="credential" numcolumns="3" order="210">
+                <widget type="text" fieldname="credentialid" maxlength="13" icon="fa-solid fa-fingerprint" hint="credential-hint" />
+            </column>
+            <column name="gender" numcolumns="3" order="220">
+                <widget type="select" fieldname="gender" translate="true">
+                    <values title="man">1</values>
+                    <values title="woman">2</values>
+                    <vales title="other">3</vales>
+                </widget>
+            </column>
+            <column name="civil-status" numcolumns="3" order="230">
+                <widget type="select" fieldname="marital" translate="true">
+                    <values title="single">1</values>
+                    <values title="married">2</values>
+                    <vales title="widower">3</vales>
+                    <vales title="divorced">4</vales>
+                </widget>
+            </column>
+            <column name="bank-account" numcolumns="5" order="300">
+                <widget type="text" fieldname="bankaccountid" maxlength="24" icon="fa-solid fa-university" />
+            </column>
+            <column name="user" numcolumns="2" order="310">
+                <widget type="select" fieldname="nick">
+                    <values source="users" fieldcode="nick" />
+                </widget>
+            </column>
+        </group>
+    </columns>
+    <modals>
+        <group name="discharge" title="discharge" icon="fas fa-sign-out-alt">
+           <column name="date" numcolumns="12">
+                <widget type="date" fieldname="discharge_date" required="true" />
+            </column>
+            <column name="description" numcolumns="12">
+                <widget type="textarea" fieldname="discharge_description" required="true" rows="5"/>
+            </column>
+        </group>
+    </modals>
+</view>

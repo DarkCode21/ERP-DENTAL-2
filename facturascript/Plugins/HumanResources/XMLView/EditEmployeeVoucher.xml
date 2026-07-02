@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of HumanResources plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2025 Carlos Garcia Gomez <carlos@facturascripts.com>
+    HumanResources  Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    This program and its files are under the terms of the license specified in the LICENSE file.
+
+    Document   : EditEmployeevoucher.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Initial description for the controller EditEmployeevoucher
+-->
+<view>
+    <columns>
+        <group name="header" numcolumns="12" valign="bottom">
+            <column name="code" display="none" order="100" >
+                <widget type="text" fieldname="id" readonly="true" />
+            </column>
+            <column name="employee" numcolumns="4" order="110">
+                <widget type="autocomplete" fieldname="idemployee" required="true" readonly="dinamic" icon="fa-solid fa-user">
+                    <values source="rrhh_employees" fieldcode="id" fieldtitle="nombre"></values>
+                </widget>
+            </column>
+            <column name="company" numcolumns="3" order="120">
+                <widget type="select" fieldname="idcompany" required="true">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"></values>
+                </widget>
+            </column>
+            <column name="channel" numcolumns="1" order="130">
+                <widget type="number" decimal="0" fieldname="channel" />
+            </column>
+            <column name="date" numcolumns="2" order="140">
+                <widget type="date" fieldname="startdate" icon="fa-solid fa-calendar" />
+            </column>
+            <column name="payment-date" numcolumns="2" order="150">
+                <widget type="date" fieldname="enddate" icon="fa-solid fa-calendar" readonly="true" />
+            </column>
+        </group>
+        <group name="detail" numcolumns="12">
+            <column name="description" order="210">
+                <widget type="text" fieldname="name" required="true" icon="fa-solid fa-align-left" />
+            </column>
+            <column name="amount" numcolumns="2" order="220">
+                <widget type="money" fieldname="amount" icon="fa-solid fa-coins"/>
+            </column>
+            <column name="pending" numcolumns="2" order="230">
+                <widget type="money" fieldname="pending" icon="fa-solid fa-coins" readonly="true" />
+            </column>
+        </group>
+    </columns>
+</view>

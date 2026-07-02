@@ -1,0 +1,41 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+*/
+#}
+<table class="table table-sm">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">{{ trans("date") }}</th>
+            <th scope="col" class="text-right">{{ trans("hours") }}</th>
+            <th scope="col" class="text-right">{{ trans("worked") }}</th>
+            <th scope="col" class="text-right">{{ trans("difference") }}</th>
+            <th scope="col">{{ trans("incidences") }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% set max = (model.hours | length) - 1 %}
+        {% for index in 0..max %}
+            {% set incidences = model.incidence[index] | split(',') %}
+            <tr>
+                <th scope="row">{{ model.getDate(index) }}</th>
+                <td class="text-right">{{ model.hours[index] }}</td>
+                <td class="text-right">{{ model.worked[index] }}</td>
+                <td class="text-right{% if model.difference[index] < 0 %} text-danger{% endif %}">{{ model.difference[index] }}</td>
+                <td class="text-danger">
+                    {% for item in incidences %}
+                        {% if item is not empty %}
+                            {{ item }}&nbsp;
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of Produccion plugin for FacturaScripts.
+    FacturaScripts  Copyright (C) 2015-2026 Carlos Garcia Gomez <carlos@facturascripts.com>
+    Produccion      Copyright (C) 2020-2026 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : EditOrdenIngrediente.xml
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        Estructura de la vista EditOrdenIngrediente.
+
+        IMPORTANTE:
+        Añade el botón para mostrar el producto asociado a la línea.
+        El modal está implementado en la vista EditOrdenProduccion.xml
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" numcolumns="1" display="none" order="100">
+                <widget type="number" fieldname="id" readonly="true"/>
+            </column>
+            <column name="production" title="production-order" numcolumns="1" display="none" order="110">
+                <widget type="text" fieldname="idorden" readonly="true"/>
+            </column>
+            <column name="traceability-type" display="none" order="115">
+                <widget type="text" fieldname="trazabilidad" readonly="true"/>
+            </column>
+            <column name="reference" description="reference-raw" numcolumns="2" order="120">
+                <widget type="autocomplete" fieldname="referencia" required="true">
+                    <values source="Variante" fieldcode="referencia" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="quantity" numcolumns="2" order="130">
+                <widget type="number" fieldname="cantidad" min="0" required="true"/>
+            </column>
+            <column name="batch-serial-number" title="batch-serial-number" numcolumns="2" order="135">
+                <widget type="select" fieldname="idlote">
+                    <values source="productos_lotes" fieldcode="idlote" fieldtitle="numserie"/>
+                </widget>
+            </column>
+            <column name="product" order="140">
+                <widget type="text" fieldname="productname" readonly="true"/>
+            </column>
+            <column name="unit-cost" numcolumns="2" order="150">
+                <widget type="money" fieldname="productcost" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="actions">
+            <button type="js" label="product" color="info" action="showProduct(this.form)" icon="fa-solid fa-magnifying-glass-plus"/>
+        </row>
+    </rows>
+</view>

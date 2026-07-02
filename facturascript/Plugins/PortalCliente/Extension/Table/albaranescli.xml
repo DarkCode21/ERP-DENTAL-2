@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2024-2025 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<table>
+    <column>
+        <name>pc_created</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>pc_payment_intent_stripe</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>pc_payment_paypal</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>pc_payment_redsys</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>pc_payment_redsys_order</name>
+        <type>character varying(12)</type>
+    </column>
+    <column>
+        <name>pc_paid</name>
+        <type>boolean</type>
+        <default>false</default>
+    </column>
+    <column>
+        <name>pc_uuid</name>
+        <type>character varying(13)</type>
+    </column>
+</table>

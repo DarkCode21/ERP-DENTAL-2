@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This file is part of DocumentosRecurrentes plugin for FacturaScripts.
+    FacturaScripts         Copyright (C) 2015-2021 Carlos Garcia Gomez <carlos@facturascripts.com>
+    DocumentosRecurrentes  Copyright (C) 2020-2021 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+
+    Document   : docrecurrentes_salesperiod.xml
+    Author     : Carlos Garcia Gomez    <carlos@facturascripts.com>
+    Author     : Jose Antonio Cuello    <yopli2000@gmail.com>
+    Description:
+        View structure for EditDocRecurringSalePeriod.
+-->
+<view>
+    <columns>
+        <group name="dates" numcolumns="12">
+            <column name="code" numcolumns="1" display="none" order="100">
+                <widget type="text" fieldname="id" required="true" readonly="true" />
+            </column>
+            <column name="start-date" numcolumns="3" order="110">
+                <widget type="date" fieldname="startdate" required="true" />
+            </column>
+            <column name="end-date" numcolumns="3" order="120" description="empty-for-not-end">
+                <widget type="date" fieldname="enddate" />
+            </column>
+            <column name="first-date" title="first-document" numcolumns="3" description="first-date-desc" order="130">
+                <widget type="date" fieldname="firstdate" />
+            </column>
+            <column name="first-pct" description="first-pct-desc" order="130">
+                <widget type="number" fieldname="firstpct" required="true" min="1" max="100" step="1" />
+            </column>
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table>
+    <column>
+        <name>codcuenta</name>
+        <type>character varying(10)</type>
+    </column>
+    <constraint>
+        <name>ca_csv_files_cuentasbanco</name>
+        <type>FOREIGN KEY (codcuenta) REFERENCES cuentasbanco (codcuenta) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

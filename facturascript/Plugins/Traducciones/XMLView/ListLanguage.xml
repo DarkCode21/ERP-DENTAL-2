@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2023 Daniel Fernández Giménez <hola@danielfg.es>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="flag" order="100">
+            <widget type="image" fieldname="idflag" height="20"/>
+        </column>
+        <column name="codeicu" order="110">
+            <widget type="text" fieldname="codicu"/>
+        </column>
+        <column name="name" order="120">
+            <widget type="text" fieldname="name"/>
+        </column>
+        <column name="country" order="130">
+            <widget type="select" fieldname="codpais">
+                <values source="paises" fieldcode="codpais" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="user" order="140" display="none">
+            <widget type="text" fieldname="nick"/>
+        </column>
+        <column name="creation-date" order="150" display="none">
+            <widget type="date" fieldname="creationdate"/>
+        </column>
+        <column name="last-user" order="160" display="none">
+            <widget type="text" fieldname="lastnick"/>
+        </column>
+        <column name="last-update" order="170" display="none">
+            <widget type="date" fieldname="lastupdate"/>
+        </column>
+    </columns>
+</view>

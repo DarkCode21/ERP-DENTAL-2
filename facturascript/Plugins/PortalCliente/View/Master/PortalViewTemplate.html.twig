@@ -1,0 +1,65 @@
+{#
+* Copyright (C) 2024 Daniel Fernández Giménez <hola@danielfg.es>
+* @author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/PortalTemplate.html.twig" %}
+
+{% block main %}
+    {{ parent() }}
+    <div class="bg-light pt-3">
+
+        {# -- First view -- #}
+        {% set firstView = fsc.views | first %}
+        {% set firstViewName = firstView.getViewName() %}
+        {% do fsc.setCurrentView(firstViewName) %}
+        {{ include(firstView.template) }}
+
+        {# -- Exclude first and inactive views -- #}
+        {% set enabledViews = [] %}
+        {% for viewName, view in fsc.views %}
+            {% if viewName == firstViewName %}
+            {% elseif view.settings.active %}
+                {% set enabledViews = enabledViews | merge([viewName]) %}
+            {% endif %}
+        {% endfor %}
+
+        {# -- Tabs -- #}
+        <div class="{{ enabledViews | length > 7 ? 'container-fluid' : 'container' }}">
+            <div class="row">
+                <div class="col">
+                    <div class="{{ enabledViews | length > 7 ? 'nav nav-pills justify-content-center mb-2' : 'nav nav-tabs' }}" role="tablist">
+                        {% for viewName, view in fsc.views %}
+                            {% if viewName == firstViewName %}
+                            {% elseif view.settings.active %}
+                                {% set active = (viewName == fsc.active) or (loop.index == 2 and firstViewName == fsc.active) ? ' active' : '' %}
+                                <a class="nav-item nav-link{{ active }}" id="{{ viewName }}-tab" data-toggle="tab" href="#{{ viewName }}"
+                                   role="tab" aria-controls="{{ viewName }}" aria-expanded="true">
+                                    <i class="{{ view.icon }} fa-fw" aria-hidden="true"></i>
+                                    <span class="d-none d-lg-inline-block">{{ view.title }}</span>
+                                    {% if view.count >= 1 %}
+                                        <span class="badge badge-secondary">{{ number(view.count, 0) }}</span>
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="tab-content pt-3">
+            {% for viewName, view in fsc.views %}
+                {% if viewName == firstViewName %}
+                {% elseif view.settings.active %}
+                    {% set active = (viewName == fsc.active) or (loop.index == 2 and firstViewName == fsc.active) ? ' show active' : '' %}
+                    <div class="tab-pane fade{{ active }}" id="{{ viewName }}" role="tabpanel" aria-labelledby="{{ viewName }}-tab">
+                        {% do fsc.setCurrentView(viewName) %}
+                        {{ include(view.template) }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

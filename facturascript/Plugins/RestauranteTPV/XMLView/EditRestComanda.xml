@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="table" numcolumns="3" order="100">
+                <widget type="select" fieldname="idmesa">
+                    <values source="rest_mesas" fieldcode="idmesa" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="waiter" numcolumns="3" order="110">
+                <widget type="autocomplete" fieldname="codcamarero">
+                    <values source="users" fieldcode="nick" fieldtitle="nick"/>
+                </widget>
+            </column>
+            <column name="date" numcolumns="2" order="120">
+                <widget type="date" fieldname="fecha" required="true"/>
+            </column>
+            <column name="hour" numcolumns="2" order="130">
+                <widget type="time" fieldname="hora" required="true"/>
+            </column>
+            <column name="state" numcolumns="2" order="140">
+                <widget type="select" fieldname="estado" required="true" translate="true">
+                    <values title="abierta">abierta</values>
+                    <values title="en-proceso">en-proceso</values>
+                    <values title="cobrada">cobrada</values>
+                    <values title="cancelada">cancelada</values>
+                </widget>
+            </column>
+        </group>
+        <group name="totals" numcolumns="12">
+            <column name="total" numcolumns="2" order="100">
+                <widget type="money" fieldname="total" readonly="true"/>
+            </column>
+            <column name="observations" numcolumns="10" order="110">
+                <widget type="textarea" fieldname="observaciones" rows="2"/>
+            </column>
+        </group>
+    </columns>
+</view>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="idempleado" />
+        </column>
+        <column name="company" order="110">
+            <widget type="select" fieldname="idempresa">
+                <values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto" />
+            </widget>
+        </column>
+        <column name="name" order="120">
+            <widget type="text" fieldname="nombre" />
+        </column>
+        <column name="idfiscal" order="130">
+            <widget type="text" fieldname="idfiscal" />
+        </column>
+		<column name="fiscal-number" order="135">
+            <widget type="text" fieldname="numfiscal" />
+        </column>
+        <column name="cccss" order="140">
+            <widget type="text" fieldname="cccss" />
+        </column>
+        <column name="address" order="150">
+            <widget type="textarea" fieldname="direccion" />
+        </column>
+        <column name="group-cotizacion" order="160">
+            <widget type="textarea" fieldname="grupocotizacion" />
+        </column>
+        <column name="city" order="160">
+            <widget type="text" fieldname="localidad" />
+        </column>
+    </columns>
+</view>

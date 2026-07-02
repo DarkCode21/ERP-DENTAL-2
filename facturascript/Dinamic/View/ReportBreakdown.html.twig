@@ -1,0 +1,500 @@
+{#
+* Copyright (C) 2019-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+* Author Daniel Fernández Giménez <hola@danielfg.es>
+#}
+
+{% extends "Master/MenuBghTemplate.html.twig" %}
+{% import 'Macro/Forms.html.twig' as forms %}
+
+{% block bodyHeaderOptions %}
+    {{ parent() }}
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container" style="margin-top: -70px;">
+        <form action="{{ fsc.url() }}" method="post">
+            <input type="hidden" name="generar" value="informe_ventas">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="h3 mb-1">
+                        <i class="{{ fsc.getPageData().icon }}"></i> {{ fsc.title }}
+                    </h1>
+                    <p class="text-muted mb-4">{{ trans('report-breakdown-p') }}</p>
+                    <div class="form-row">
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                <label class="mb-1">{{ trans('from-date') }}</label>
+                                <input type="date" name="desde" class="form-control" value="{{ fsc.desde }}"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                <label class="mb-1">{{ trans('until-date') }}</label>
+                                <input type="date" name="hasta" class="form-control" value="{{ fsc.hasta }}"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                {{ forms.simpleSelect('idempresa', 'idempresa', fsc.idempresa,
+                                    fsc.getSelectValues('empresas', 'idempresa', 'nombrecorto', false), trans('company')) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                {{ forms.simpleSelect('codalmacen', 'codalmacen', fsc.codalmacen,
+                                    fsc.getSelectValues('almacenes', 'codalmacen', 'nombre', true), trans('warehouse')) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                {{ forms.simpleSelect('codserie', 'codserie', fsc.codserie,
+                                    fsc.getSelectValues('series', 'codserie', 'descripcion', true), trans('serie')) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                {{ forms.simpleSelect('codpago', 'codpago', fsc.codpago,
+                                    fsc.getSelectValues('formaspago', 'codpago', 'descripcion', true), trans('method-payment')) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                {{ forms.simpleSelect('coddivisa', 'coddivisa', fsc.coddivisa,
+                                    fsc.getSelectValues('divisas', 'coddivisa', 'descripcion', false), trans('currency')) }}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                {{ forms.simpleSelect('codagente', 'codagente', fsc.codagente,
+                                    fsc.getSelectValues('agentes', 'codagente', 'nombre', true), trans('agent')) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-pills mt-3 mb-3" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a id="tabVentas" class="nav-link active" data-toggle="tab" role="tab" aria-selected="true"
+                               aria-controls="contentSaleReport" href="#contentSaleReport">
+                                {{ trans('sales') }}
+                            </a>
+                        </li>
+                        <li id="tabCompras" class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" role="tab" aria-selected="false"
+                               aria-controls="contentPurchaseReport" href="#contentPurchaseReport">
+                                {{ trans('purchases') }}
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="contentSaleReport"
+                             aria-labelledby="contentSaleReport-tab" role="tabpanel">
+                            <div class="form-row">
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        {{ forms.simpleSelect('codpais', 'codpais', fsc.codpais,
+                                            fsc.getSelectValues('paises', 'codpais', 'nombre', true), trans('country')) }}
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label class="mb-1">{{ trans('province') }}</label>
+                                        <select name="provincia" class="form-control" id="provinces"></select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label class="mb-1">{{ trans('minimum-amount') }}</label>
+                                        <input type="number" class="form-control" name="sale-minimo"
+                                               placeholder="{{ trans('optional') }}"
+                                               value="{{ fsc.sale_minimo }}">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label class="mb-1">{{ trans('customer') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="customer"
+                                                   placeholder="{{ trans('any-customer') }}"
+                                                   value="{{ fsc.cliente.nombre }}">
+                                            <input type="hidden" name="codcliente" value="{{ fsc.cliente.codcliente }}">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-secondary" type="button"
+                                                        onclick="cleanCustomer()">
+                                                    <span class="fa fa-times"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label class="mb-1">{{ trans('billing-address') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="billingAddress"
+                                                   placeholder="{{ trans('any-address') }}"
+                                                   value="{{ fsc.getAddress(fsc.billingAddress) }}">
+                                            <input type="hidden" name="idcontactofact" value="{{ fsc.billingAddress.idcontacto }}">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-secondary" type="button"
+                                                        onclick="cleanBillingAddress()">
+                                                    <span class="fa fa-times"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label class="mb-1">{{ trans('shipping-address') }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="shippingAddress"
+                                                   placeholder="{{ trans('any-address') }}"
+                                                   value="{{ fsc.getAddress(fsc.shippingAddress) }}">
+                                            <input type="hidden" name="idcontactoenv" value="{{ fsc.shippingAddress.idcontacto }}">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-secondary" type="button"
+                                                        onclick="cleanShippingAddress()">
+                                                    <span class="fa fa-times"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <p class="text-muted">{{ trans('sale-report-legend') }}</p>
+                                    <div class="form-group">
+                                        {{ trans('type') }}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="sale-unidades"
+                                                   id="saleUndFalse"
+                                                   value="0" {{ fsc.sale_unidades == 0 ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="saleUndFalse">
+                                                {{ trans('net') }}
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="sale-unidades"
+                                                   id="saleUndTrue"
+                                                   value="1" {{ fsc.sale_unidades == 1 ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="saleUndTrue">
+                                                {{ trans('quantities') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" id="contentPurchaseReport" aria-labelledby="contentPurchaseReport-tab"
+                             role="tabpanel">
+                            <div class="form-row">
+                                <div class="col-12 col-md-3">
+                                    <div class="form-group">
+                                        {{ trans('supplier') }}
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="supplier"
+                                                   placeholder="{{ trans('any-supplier') }}"
+                                                   value="{{ fsc.proveedor.nombre }}">
+                                            <input type="hidden" name="codproveedor"
+                                                   value="{{ fsc.proveedor.codproveedor }}">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-secondary" type="button"
+                                                        onclick="cleanSupplier()">
+                                                    <span class="fa fa-times"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="form-group">
+                                        {{ trans('minimum-amount') }}
+                                        <input type="number" class="form-control" name="purchase-minimo"
+                                               placeholder="{{ trans('optional') }}"
+                                               value="{{ fsc.purchase_minimo }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <p class="text-muted">{{ trans('purchase-report-legend') }}</p>
+                                    <div class="form-group">
+                                        {{ trans('type') }}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="purchase-unidades"
+                                                   id="purchaseUndFalse"
+                                                   value="0" {{ fsc.purchase_unidades == 0 ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="purchaseUndFalse">
+                                                {{ trans('net') }}
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="purchase-unidades"
+                                                   id="purchaseUndTrue"
+                                                   value="1" {{ fsc.purchase_unidades == 1 ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="purchaseUndTrue">
+                                                {{ trans('quantities') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-eye mr-2"></i>{{ trans('show') }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+
+    <script>
+        function cleanBillingAddress() {
+            $('#billingAddress, input[name="idcontactofact"]').val('')
+        }
+
+        function cleanCustomer() {
+            $('#customer, input[name="codcliente"]').val('')
+        }
+
+        function cleanShippingAddress() {
+            $('#shippingAddress, input[name="idcontactoenv"]').val('')
+        }
+
+        function cleanSupplier() {
+            $('#supplier, input[name="codproveedor"]').val('')
+        }
+
+        function loadProvinces() {
+            let formData = {};
+            formData["action"] = "get-provinces";
+            formData["codpais"] = $("#codpais option:selected").val();
+            formData["provincia"] = '{{ fsc.provincia }}';
+            $('#provinces').html('');
+
+            $.ajax({
+                method: "POST",
+                url: "{{ fsc.url() }}",
+                data: formData,
+                dataType: "json",
+                success: function (results) {
+                    $('#provinces').html(results);
+                },
+                error: function (msg) {
+                    alert(msg.status + " " + msg.responseText);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            loadProvinces();
+
+            $(document).on('click', '#tabVentas', function () {
+                $('input[name="generar"]').val('informe_ventas');
+            });
+
+            $(document).on('click', '#tabCompras', function () {
+                $('input[name="generar"]').val('informe_compras');
+            });
+
+            $('#codpais').change(function () {
+                loadProvinces();
+            });
+
+            $("#customer").autocomplete({
+                source: function (request, response) {
+                    let formData = {};
+                    formData["action"] = "autocomplete-customer";
+                    formData["query"] = $("#customer").val();
+                    $('input[name="codcliente"]').val('');
+
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ fsc.url() }}",
+                        data: formData,
+                        dataType: "json",
+                        success: function (results) {
+                            let values = [];
+                            results.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        $('input[name="codcliente"]').val(ui.item.key);
+
+                        let value = ui.item.value.split(" | ");
+                        if (value.length > 1) {
+                            ui.item.value = value[1];
+                        } else {
+                            ui.item.value = value[0];
+                        }
+                    }
+                }
+            });
+
+            $("#billingAddress").autocomplete({
+                source: function (request, response) {
+                    let formData = {};
+                    formData["action"] = "autocomplete-billing-address";
+                    formData["query"] = $("#billingAddress").val();
+                    formData["customer"] = $('input[name="codcliente"]').val();
+                    $('input[name="idcontactofact"]').val('');
+
+                    if (formData["customer"] === '') {
+                        return;
+                    }
+
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ fsc.url() }}",
+                        data: formData,
+                        dataType: "json",
+                        success: function (results) {
+                            let values = [];
+                            results.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        $('input[name="idcontactofact"]').val(ui.item.key);
+
+                        let value = ui.item.value.split(" | ");
+                        if (value.length > 1) {
+                            ui.item.value = value[1];
+                        } else {
+                            ui.item.value = value[0];
+                        }
+                    }
+                }
+            });
+
+            $("#shippingAddress").autocomplete({
+                source: function (request, response) {
+                    let formData = {};
+                    formData["action"] = "autocomplete-shipping-address";
+                    formData["query"] = $("#shippingAddress").val();
+                    formData["customer"] = $('input[name="codcliente"]').val();
+                    $('input[name="idcontactoenv"]').val('');
+
+                    if (formData["customer"] === '') {
+                        return;
+                    }
+
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ fsc.url() }}",
+                        data: formData,
+                        dataType: "json",
+                        success: function (results) {
+                            let values = [];
+                            results.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        $('input[name="idcontactoenv"]').val(ui.item.key);
+
+                        let value = ui.item.value.split(" | ");
+                        if (value.length > 1) {
+                            ui.item.value = value[1];
+                        } else {
+                            ui.item.value = value[0];
+                        }
+                    }
+                }
+            });
+
+            $("#supplier").autocomplete({
+                source: function (request, response) {
+                    let formData = {};
+                    formData["action"] = "autocomplete-supplier";
+                    formData["query"] = $("#supplier").val();
+                    $('input[name="codproveedor"]').val('');
+
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ fsc.url() }}",
+                        data: formData,
+                        dataType: "json",
+                        success: function (results) {
+                            let values = [];
+                            results.forEach(function (element) {
+                                if (element.key === null || element.key === element.value) {
+                                    values.push(element);
+                                } else {
+                                    values.push({key: element.key, value: element.key + " | " + element.value});
+                                }
+                            });
+                            response(values);
+                        },
+                        error: function (msg) {
+                            alert(msg.status + " " + msg.responseText);
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    if (ui.item.key !== null) {
+                        $('input[name="codproveedor"]').val(ui.item.key);
+
+                        let value = ui.item.value.split(" | ");
+                        if (value.length > 1) {
+                            ui.item.value = value[1];
+                        } else {
+                            ui.item.value = value[0];
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

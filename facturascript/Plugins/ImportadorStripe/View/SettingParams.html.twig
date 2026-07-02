@@ -1,0 +1,82 @@
+{% extends 'Master/MenuTemplate.html.twig' %}
+{% block body %}
+    <div class="p-4">
+        <p>A continuación puedes configurar las claves secretas de las diferentes cuentas que tengas de stripe para
+            permitir que factura script se comunique con él.<br>
+            Por seguridad las claves no serán visibles una vez añadidas, solo verás el nombre que hayas puesto para
+            identificarla.
+        </p>
+
+        <form id="frm_sk" method="post" name="frm_sk" action="SettingParams?action=add" style="display:flex">
+            <label for="name" style="flex:1; padding-right:5px">
+                Nombre de la cuenta en Stripe*
+                <input type="text" id="name" name="name" class="form-control"/>
+            </label>
+            <label for="sk" style="flex:2; padding-right: 5px">
+                Clave secreta (sk_xxx)*
+                <input type="text" id="sk" name="sk" class="form-control"/>
+            </label>
+            <label for="sk" style="flex:2; padding-right: 5px">
+                Serie
+                <select name="codserie" id="codserie" class="form-control">
+                    {% for serie in fsc.series %}
+                        <option value="{{ serie.codserie }}">{{ serie.descripcion }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <button style="height: 40px;     align-self: flex-end;    margin-bottom: 7px;" type="submit"
+                    class="btn btn-info">Guardar
+            </button>
+        </form>
+        <hr style="margin-bottom: 50px">
+
+        <div>
+            <p>Aquí puedes agregar un cliente y producto por defecto para cuando se generen facturas cuyo cliente / producto no esté vinculado.
+            </p>
+
+            <form id="frm_settings" method="post" name="frm_settings" action="SettingParams?action=addSettings" style="display:flex; gap: 20px;">
+                <label for="name" style="flex:1">
+                    Código del cliente por defecto *
+                    <input type="text" id="codcliente" name="codcliente" class="form-control" value="{{ fsc.codcliente }}"/>
+                </label>
+                <label for="sk" style="flex:1;">
+                    Código del producto por defecto *
+                    <input type="text" id="codproducto" name="codproducto" class="form-control" value="{{ fsc.codproducto }}"/>
+                </label>
+                <label for="sk" style="flex:1;">
+                    Email técnico para gestión de errores *
+                    <input type="text" id="adminEmail" name="adminEmail" class="form-control" value="{{ fsc.adminEmail }}"/>
+                </label>
+                <label for="enviarEmail" style="flex:1;">
+                    Enviar email al cliente cuando se genere la factura *
+                    <select name="enviarEmail" id="enviarEmail" class="form-control">
+                        <option value="0" {{ (fsc.enviarEmail == 0) ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ (fsc.enviarEmail == 1) ? 'selected' : ''}}>Si</option>
+                    </select>
+                </label>
+                <label for="mostrarStripeCus" style="flex:1;">
+                    Mostrar el cliente de stripe en la factura *
+                    <select name="mostrarStripeCus" id="mostrarStripeCus" class="form-control">
+                        <option value="0" {{ (fsc.mostrarStripeCus == 0) ? 'selected' : '' }}>No</option>
+                        <option value="1" {{ (fsc.mostrarStripeCus == 1) ? 'selected' : ''}}>Si</option>
+                    </select>
+                </label>
+                <button style="height: 40px;     align-self: flex-end;    margin-bottom: 7px;" type="submit"
+                        class="btn btn-info">Guardar
+                </button>
+            </form>
+        </div>
+
+        <hr style="margin-bottom: 50px">
+
+        <p>Claves de Stripe dadas de alta ( por seguridad solo se muestra el identificador que le pusiste al
+            crearlo):</p>
+        {% for sk in fsc.sks_stripe %}
+            <li>{{ sk.name }} - (Serie: {{ sk.codserie }}) - (Webhook: {{ asset('WebhookStripe') }}?source={{ sk.token }})
+                <a href="{{ asset('SettingParams') }}?action=del&name={{ sk.name }}">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </li>
+        {% endfor %}
+    </div>
+{% endblock %}

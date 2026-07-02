@@ -1,0 +1,262 @@
+<div data-idlinea="" class="modal fade" id="trazaModal" tabindex="-1" aria-labelledby="trazaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="trazaModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-sm mb-0">
+                    <thead>
+                    <tr>
+                        <th>{{ trans('batch-serial-number') }}</th>
+                        <th class="text-center">{{ trans('quantity') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody id="linesTrazaModal">
+                    </tbody>
+                </table>
+            </div>
+            <div id="divSaveTrazaModal" class="modal-body">
+                <button type="button" class="btn btn-sm btn-success btn-block" id="saveTrazaModal">
+                    <i class="fa-solid fa-save mr-1"></i>{{ trans('save') }}
+                </button>
+            </div>
+            <div id="divNewLineModal" class="modal-body border-top pb-0">
+                <div class="row w-100">
+                    <div class="col-md">
+                        <div class="mb-3">
+                            <select class="form-select form-select-sm text-center" id="newLineLoteModal"></select>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="mb-3">
+                            <input type="number" class="form-control form-control-sm text-center" id="newLineQtyModal"
+                                   placeholder="{{ trans('quantity') }}"/>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="button" class="btn btn-sm btn-primary btn-block" id="newLineModal">
+                            <i class="fa-solid fa-list mr-1"></i>{{ trans('new-line') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="divNewLoteModal" class="modal-footer text-center bg-light pb-0">
+                <div class="row w-100">
+                    <div class="col-md">
+                        <div class="mb-3">
+                            <input type="text" class="form-control form-control-sm text-center" id="newLoteNumserieModal"
+                                   maxlength="100" placeholder="{{ trans('batch-serial-number') }}"/>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="mb-3">
+                            <input type="number" class="form-control form-control-sm text-center" id="newLoteQtyModal"
+                                   placeholder="{{ trans('quantity') }}"/>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="mb-3">
+                            <input type="date" class="form-control form-control-sm text-center" placeholder="{{ trans('date') }}"
+                                   id="newLoteDateModal"/>
+                        </div>
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-block" id="newLoteModal">
+                            <i class="fa-solid fa-plus mr-1"></i>{{ trans('new-lote') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.traza-modal', function () {
+        let formData = new FormData();
+        formData.append('idlinea', $(this).data('idlinea'));
+        sendTrazaFormAction('showTrazaModal', formData);
+    });
+
+    $(document).on('click', '.traza-modal-completed', function () {
+        let formData = new FormData();
+        formData.append('idlinea', $(this).data('idlinea'));
+        sendTrazaFormAction('showTrazaModalCompleted', formData);
+    });
+
+    $(document).on('click', '#newLineModal', function(){
+        let formData = new FormData();
+        formData.append('idlote', $('#newLineLoteModal').val());
+        formData.append('qty', $('#newLineQtyModal').val());
+        formData.append('idlinea', $('#trazaModal').attr('data-idlinea'));
+        sendTrazaFormAction('newLineModal', formData);
+    });
+
+    $(document).on('click', '#newLoteModal', function(){
+        let formData = new FormData();
+        formData.append('numserie', $('#newLoteNumserieModal').val());
+        formData.append('qty', $('#newLoteQtyModal').val());
+        formData.append('date', $('#newLoteDateModal').val());
+        formData.append('idlinea', $('#trazaModal').attr('data-idlinea'));
+        sendTrazaFormAction('newLoteModal', formData);
+    });
+
+    $(document).on('click', '#saveTrazaModal', function(){
+        let formData = new FormData();
+        formData.append('idlinea', $('#trazaModal').attr('data-idlinea'));
+
+        // recorremos los tr de la tabla
+        $('#linesTrazaModal tr').each(function(){
+            let lineTraza = $(this).attr('data-idlinetraza');
+            let qty = $(this).find('input').val();
+            formData.append('lines['+lineTraza+']', qty);
+        });
+
+        sendTrazaFormAction('saveTrazaModal', formData);
+    });
+
+    $(document).on('click', '.deleteLineTraza', function(){
+        let formData = new FormData();
+        formData.append('idlinetraza', $(this).attr('data-idlinetraza'));
+        formData.append('idlinea', $('#trazaModal').attr('data-idlinea'));
+        sendTrazaFormAction('deleteLoteModal', formData);
+    });
+
+    $('#trazaModal').on('hidden.bs.modal', function (event) {
+        emptyNewLine();
+        emptyNewLote();
+        $('#trazaModal').attr('data-idlinea', '');
+        $('#trazaModalLabel').html('');
+    });
+
+    // si pulsas enter en cualquiera de los inputs del div divNewLineModal, se ejecuta el click en el botón newLineModal
+    $('#divNewLineModal input').keypress(function(e) {
+        if (e.which === 13) {
+            $('#newLineModal').click();
+        }
+    });
+
+    // si pulsas enter en cualquiera de los inputs del div divNewLoteModal, se ejecuta el click en el botón newLoteModal
+    $('#divNewLoteModal input').keypress(function(e) {
+        if (e.which === 13) {
+            $('#newLoteModal').click();
+        }
+    });
+
+    // si pulsas enter en cualquiera de los inputs del div linesTrazaModal, se ejecuta el click en el botón saveTrazaModal
+    $('#linesTrazaModal input').keypress(function(e) {
+        if (e.which === 13) {
+            $('#saveTrazaModal').click();
+        }
+    });
+
+    function checkBody(body) {
+        if (body === '') {
+            $('#linesTrazaModal').html('<tr><td class="text-center table-warning" colspan="3">{{ trans('no-data') }}</td></tr>');
+            $('#divSaveTrazaModal').hide();
+        } else {
+            $('#linesTrazaModal').html(body);
+            $('#divSaveTrazaModal').show();
+        }
+    }
+
+    function checkLotes(selectLotes) {
+        $('#newLineLoteModal').html(selectLotes);
+
+        if (selectLotes === '') {
+            $('#divNewLineModal').hide();
+        } else {
+            $('#divNewLineModal').show();
+        }
+    }
+
+    function emptyNewLine(emptySelect = true) {
+        $('#newLineQtyModal').val('');
+
+        if (emptySelect) {
+            $('#newLineLoteModal').val('');
+        }
+    }
+
+    function emptyNewLote() {
+        $('#newLoteNumserieModal').val('');
+        $('#newLoteQtyModal').val('');
+        $('#newLoteDateModal').val('');
+    }
+
+    function sendTrazaFormAction(action, formData) {
+        animateSpinner('add');
+        formData.append('action', action);
+        formData.append('ajaxTraza', true);
+
+        fetch(window.location, {
+            method: 'POST',
+            body: formData
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json();
+            }
+            return Promise.reject(response);
+        }).then(function (data) {
+            if (data.showTrazaModal) {
+                $('#trazaModalLabel').html(data.modalTitle);
+                $('#trazaModal').attr('data-idlinea', data.idlinea);
+                checkLotes(data.selectLotes);
+                checkBody(data.modalBody);
+                $('#trazaModal').modal('show');
+            }
+
+            if (data.showTrazaModalCompleted) {
+                $('#trazaModalLabel').html(data.modalTitle);
+                $('#trazaModal').attr('data-idlinea', data.idlinea);
+                checkBody(data.modalBody);
+                $('#divNewLineModal').hide();
+                $('#divNewLoteModal').hide();
+                $('#divSaveTrazaModal').hide();
+                $('#trazaModal').modal('show');
+            }
+
+            if (data.newLineModal) {
+                emptyNewLine(false);
+                checkLotes(data.selectLotes);
+                checkBody(data.modalBody);
+            }
+
+            if (data.newLoteModal) {
+                emptyNewLote();
+                checkLotes(data.selectLotes);
+                checkBody(data.modalBody);
+            }
+
+            if (data.saveTrazaModal) {
+                checkLotes(data.selectLotes);
+                checkBody(data.modalBody);
+            }
+
+            if (data.deleteLoteModal) {
+                checkLotes(data.selectLotes);
+                checkBody(data.modalBody);
+            }
+
+            if (Array.isArray(data.messages)) {
+                data.messages.forEach(function (msg) {
+                    if (msg.level === 'danger') {
+                        setToast(msg.message, msg.level, '', 0);
+                    } else {
+                        setToast(msg.message, msg.level);
+                    }
+                });
+            }
+
+            animateSpinner('remove');
+        }).catch(function (error) {
+            alert('error ConteoStockLines');
+            console.warn(error);
+            animateSpinner('remove', false);
+        });
+
+        return false;
+    }
+</script>

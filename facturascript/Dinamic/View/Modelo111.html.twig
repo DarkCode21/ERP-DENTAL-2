@@ -1,0 +1,122 @@
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block body %}
+    <form action="{{ fsc.url() }}" method="post">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <h1 class="h2">
+                        <i class="fa-solid fa-book fa-fw"></i> {{ trans(fsc.title) }}
+                    </h1>
+                    <p class="mb-0">{{ trans('model-111-p') }}</p>
+                    <p>{{ trans('model-190-p') }}</p>
+                </div>
+            </div>
+            <div class="row align-items-end">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        {{ trans('exercise') }}
+                        <select name="codejercicio" class="form-control" required>
+                            {% for company in fsc.empresa.all() %}
+                                <optgroup label="{{ company.nombrecorto }}">
+                                    {% for exercise in fsc.allExercises(company.idempresa) %}
+                                        {% if exercise.codejercicio == fsc.codejercicio %}
+                                            <option value="{{ exercise.codejercicio }}" selected>{{ exercise.nombre }}</option>
+                                        {% else %}
+                                            <option value="{{ exercise.codejercicio }}">{{ exercise.nombre }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        {{ trans('period') }}
+                        <select name="period" class="form-control" required>
+                            {% for period, label in fsc.allPeriods() %}
+                                {% if period == fsc.period %}
+                                    <option value="{{ period }}" selected>{{ trans(label) }}</option>
+                                {% else %}
+                                    <option value="{{ period }}">{{ trans(label) }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <button type="submit" name="action" value="show" class="btn btn-primary">
+                            <i class="fa-solid fa-eye fa-fw"></i> {{ trans('preview') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% if fsc.entryLines is not empty %}
+                <div class="row">
+                    <div class="col">
+                        <h2 class="h3 mt-3">
+                            <i class="fa-regular fa-clipboard fa-fw"></i> {{ trans('summary') }}
+                        </h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            {{ trans('number-recipients') }}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">01</span>
+                                </div>
+                                <input type="number" value="{{ fsc.numrecipients }}" class="form-control text-right"
+                                       readonly/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h3 class="h4 mt-3">
+                            <i class="fa-regular fa-copy fa-fw"></i> {{ trans('accounting-entries') }}
+                        </h3>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>{{ trans('accounting-entry') }}</th>
+                                    <th>{{ trans('subaccount') }}</th>
+                                    <th>{{ trans('counterpart') }}</th>
+                                    <th>{{ trans('concept') }}</th>
+                                    <th class="text-right">{{ trans('debit') }}</th>
+                                    <th class="text-right">{{ trans('credit') }}</th>
+                                    <th class="text-right">{{ trans('date') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in fsc.entryLines %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ item.url() }}">{{ item.numero }}</a>
+                                        </td>
+                                        <td>{{ item.codsubcuenta }}</td>
+                                        <td>{{ item.codcontrapartida }}</td>
+                                        <td>{{ item.concepto | raw }}</td>
+                                        <td class="text-right">{{ money(item.debe) }}</td>
+                                        <td class="text-right">{{ money(item.haber) }}</td>
+                                        <td class="text-right">{{ item.fecha }}</td>
+                                    </tr>
+                                {% else %}
+                                    <tr class="table-warning">
+                                        <td colspan="8">{{ trans('no-data') }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

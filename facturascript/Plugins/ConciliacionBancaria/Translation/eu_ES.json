@@ -1,0 +1,15 @@
+{
+    "bank-movement": "Banku-mugimenduak",
+    "conciliate": "Adiskidetu",
+    "conciliate-bank-movements": "Bankuen mugimenduak adiskidetu",
+    "import-banking-movements": "Banku-mugimenduak inportatu",
+    "link-mov-with-acc": "Mugimendua kontuak batera lotu",
+    "link-mov-with-acc-c": "Erabili nahi dituzun azken kontuak aukeratu baliokide kontuetan.",
+    "link-mov-with-acc-p": "Mugimendu hau zein kontuekin lotu nahi duzun hautatu kontuak. Edota eratu kontu berria 'berria' fitxategian.",
+    "link-up": "Lotu",
+    "reconcile-purchases-movement": "Erosketa mugimenduak adiskidetu",
+    "reconcile-remittances": "Bidalketak bateratu",
+    "reconcile-sales-movement": "Salmenta mugimenduak adiskidetu",
+    "reconciled": "Adiskidetu",
+    "reconciliate": "Adiskidetu"
+}

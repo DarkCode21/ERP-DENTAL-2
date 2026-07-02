@@ -1,0 +1,11 @@
+{
+    "accounting-prepaid": "Prépayé %code%",
+    "accounting-prepaid-customer-delivery-note": "Paiement anticipé bon de livraison client %code%",
+    "accounting-prepaid-customer-estimation": "Budget des clients prépayés %code%",
+    "accounting-prepaid-customer-order": "Commande prépayée %code%",
+    "amount-greater-zero": "Le montant doit être supérieur à zéro",
+    "document-company-different-from-payment-method-company": "La société du document est différente de celle du mode de paiement",
+    "document-not-found": "Document non trouvé",
+    "no-editable": "Non modifiable",
+    "only-one-document-allowed": "Un seul document est autorisé"
+}

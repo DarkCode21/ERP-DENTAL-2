@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Tabla: rest_estaciones
+    Estaciones de preparación (Cocina, Bar, etc.).
+    Cada estación tiene categorías de producto asignadas.
+-->
+<table>
+    <column>
+        <name>idestacion</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>escpos_tipo</name>
+        <type>character varying(5)</type>
+        <default>'tcp'</default>
+    </column>
+    <column>
+        <name>escpos_ip</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>escpos_port</name>
+        <type>integer</type>
+        <default>9100</default>
+    </column>
+    <column>
+        <name>escpos_usb</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>escpos_relay_url</name>
+        <type>character varying(200)</type>
+    </column>
+    <constraint>
+        <name>pk_rest_estaciones</name>
+        <type>PRIMARY KEY (idestacion)</type>
+    </constraint>
+</table>

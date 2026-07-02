@@ -1,0 +1,97 @@
+{#
+/**
+ * This file is part of HumanResources plugin for FacturaScripts.
+ * FacturaScripts Copyright (C) 2015-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * HumanResources Copyright (C) 2018-2025 Jose Antonio Cuello Principal <yopli2000@gmail.com>
+ *
+ * This program and its files are under the terms of the license specified in the LICENSE file.
+ *
+ * @author Jose Antonio Cuello Principal <yopli2000@gmail.com>
+*/
+#}
+<div class="container-fluid">
+    <div class="form-row">
+        <div class="col-sm-8">
+            {{ _self.vouchersCard(fsc) }}
+        </div>
+        <div class="col-sm-4">
+            {{ _self.paymentsCard(fsc) }}
+        </div>
+    </div>
+</div>
+
+{#
+    PAYMENT
+#}
+{% macro paymentsCard(fsc) %}
+    <div class="card border-info shadow mb-3">
+        <div class="card-header bg-info text-white text-center">
+            <strong>{{ trans('payments')|upper }}</strong>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                <tbody>
+                {%  for payment in fsc.vouchers.payments %}
+                    {{ _self.paymentLineAdd(fsc, payment) }}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer text-muted text-center">
+            <div class="row">
+                <div class="col-12"></div>
+            </div>
+        </div>
+    </div>            
+{% endmacro %}
+
+{% macro paymentLineAdd(fsc, payment) %}
+    <tr>
+        <td>{{ payment.startdate }}</td>
+        <td>{{ payment.starttime }}</td>
+        <td class="text-right">{{ fsc.getMoney(payment.amount) }}</td>
+        <td>{{ payment.nick }}</td>
+    </tr>
+{% endmacro %}
+ 
+{#
+    VOUCHER
+#}
+{% macro vouchersCard(fsc) %}
+    <div class="card border-info shadow mb-3">
+        <div class="card-header bg-info text-white text-center">
+            <strong>{{ trans('vouchers')|upper }}</strong>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped mb-0">
+                {%  for voucher in fsc.vouchers.data %}
+                    {{ _self.voucherLineAdd(fsc, voucher) }}
+                {% endfor %}
+            </table>
+        </div>
+        <div class="card-footer text-muted text-center">
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>
+                        {{ trans('total')|upper }}: {{ fsc.getMoney(fsc.vouchers.total) }}
+                    </strong>
+                </div>
+                <div class="col-md-6">
+                    <strong>
+                        {{ trans('pending')|upper }}: {{ fsc.getMoney(fsc.vouchers.pending) }}
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro voucherLineAdd(fsc, voucher) %}
+    <tr {% if voucher.paid == false %}class="table-danger"{% endif %}>
+        <td>{{ voucher.startdate }}</td>
+        <td>{{ voucher.enddate }}</td>
+        <td>{{ voucher.name }}</td>
+        <td class="text-right">{{ fsc.getMoney(voucher.amount) }}</td>
+        <td class="text-right">{{ fsc.getMoney(voucher.pending) }}</td>
+    </tr>
+{% endmacro %}

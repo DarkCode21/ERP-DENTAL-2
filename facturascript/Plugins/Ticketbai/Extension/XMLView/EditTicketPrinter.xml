@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="design" title="design" icon="fa-solid fa-palette" numcolumns="12" valign="bottom">
+            <column name="tbai-qr-size" numcolumns="2" order="107">
+                <widget type="number" fieldname="tbai_qr_size" min="1" max="16" step="1" required="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

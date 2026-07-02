@@ -1,0 +1,254 @@
+{% extends "Master/MenuBghTemplate.html.twig" %}
+
+{% set pageData = fsc.getPageData() %}
+
+{% block bodyHeaderOptions %}
+    {{ parent() }}
+    <div class="container-fluid mb-1 d-print-none">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-secondary" href="{{ fsc.url() }}" title="{{ trans('refresh') }}">
+                        <i class="fa-solid fa-redo" aria-hidden="true"></i>
+                    </a>
+                    <a class="btn btn-sm btn-secondary" href="{{ fsc.url() }}?defaultPage=TRUE"
+                       title="{{ trans('mark-as-homepage') }}">
+                        <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-5 text-right">
+                <h1 class="h4 mb-0 d-none d-md-inline-block">
+                    {% set title = trans(fsc.getPageData()['title']) | capitalize %}
+                    {{ title }}<i class="{{ fsc.getPageData()['icon'] }} ml-3" aria-hidden="true"></i>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="pb-5">
+        <div class="h5 text-success text-center">{{ trans('exercise') }}</div>
+        <select class="form-control ml-auto mr-auto" id="selectExercise">
+            {% for company in fsc.getCompanies() %}
+                <optgroup label="{{ company.nombrecorto }}">
+                    {% for exercise in company.getExercises() %}
+                        <option value="{{ exercise.codejercicio }}" {{ fsc.code == exercise.codejercicio ? 'selected' : '' }}>
+                            {{ exercise.nombre }}
+                        </option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
+        <br/>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="container-fluid" style="margin-top: -50px;">
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="card border-info shadow mb-3">
+                    <div class="card-header bg-info text-white text-center">
+                        <strong>{{ trans('treasury') | upper }}</strong>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            {% if fsc.cajas %}
+                                <tr>
+                                    <td class="text-center align-middle">{{ trans('boxes') | upper }}
+                                        (570xxx)
+                                    </td>
+                                    <td class="p-0">
+                                        <table class="table m-0">
+                                            {% for caja in fsc.cajas %}
+                                                {{ _self.showLine(caja.descripcion, caja.saldo) }}
+                                            {% endfor %}
+                                            {{ _self.showLine(trans('total') | upper, fsc.da_tesoreria['total_cajas']) }}
+                                        </table>
+                                    </td>
+                                </tr>
+                            {% endif %}
+
+                            {% if fsc.bancos %}
+                                <tr>
+                                    <td class="text-center align-middle">{{ trans('banks') | upper }}
+                                        (572xxx)
+                                    </td>
+                                    <td class="p-0">
+                                        <table class="table m-0">
+                                            {% for banco in fsc.bancos %}
+                                                {{ _self.showLine(banco.descripcion, banco.saldo) }}
+                                            {% endfor %}
+                                            {{ _self.showLine(trans('total') | upper, fsc.da_tesoreria['total_bancos']) }}
+                                        </table>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            <tr>
+                                <td class="text-center align-middle">{{ trans('total') | upper }}</td>
+                                <td class="money">{{ _self.showPrecio(fsc.da_tesoreria['total_tesoreria']) }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card border-danger shadow mb-3">
+                    <div class="card-header bg-danger text-white text-center">
+                        <strong>{{ trans('pending-expenses-charges') | upper }}</strong>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            {{ _self.showLine('(a) ' ~ trans('expenses-pending-payment'), fsc.da_gastos_cobros['gastospdtepago']) }}
+                            {{ _self.showLine('(b) ' ~ trans('customers-pending-collection'), fsc.da_gastos_cobros['clientespdtecobro']) }}
+                            {{ _self.showLine('(c) ' ~ trans('payroll-pending-payment') ~ ' (465xxx)', fsc.da_gastos_cobros['nominaspdtepago']) }}
+                            {{ _self.showLine('(d) ' ~ trans('social-security-pending-payment') ~ ' (476xxx)', fsc.da_gastos_cobros['segsocialpdtepago']) }}
+                            {{ _self.showLine('(e) ' ~ trans('social-security-pending-collection') ~ ' (471xxx)', fsc.da_gastos_cobros['segsocialpdtecobro']) }}
+                            {{ _self.showLine(trans('total') | upper, fsc.da_gastos_cobros['total_gastoscobros']) }}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="card border-warning shadow mb-3">
+                    <div class="card-header bg-warning text-white text-center">
+                        <strong>{{ trans('taxes') | upper }}</strong>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            {{ _self.showLine(trans('irpf') | upper ~ ' (4751xxx) (' ~ trans('payroll-professionals-111') ~ ')', fsc.da_impuestos['irpf-mod111']) }}
+                            {{ _self.showLine(trans('irpf') | upper ~ ' (4751xxx) (' ~ trans('rent-office') ~ ')', fsc.da_impuestos['irpf-mod115']) }}
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            {{ _self.showLine('(a) ' ~ trans('passed-tax') ~ ' (477xxx)', fsc.da_impuestos['iva-repercutido']) }}
+                            {{ _self.showLine('(b) ' ~ trans('input-tax') ~ ' (472xxx)', fsc.da_impuestos['iva-soportado']) }}
+                            {{ _self.showLine('(c) ' ~ trans('tax-return-previous-quarters') ~ ' (470xxx)', fsc.da_impuestos['iva-devolver']) }}
+                            {{ _self.showLine(trans('result-tax') | upper ~ ' (MOD 303)', fsc.da_impuestos['resultado_iva-mod303']) }}
+                            <tr>
+                                <td class="text-center" colspan="2">
+                                    <strong>{{ trans('current-exercise') | upper }}</strong>
+                                </td>
+                            </tr>
+                            {{ _self.showLine(trans('sales'), fsc.da_impuestos['ventas_totales']) }}
+                            {{ _self.showLine(trans('expenses'), fsc.da_impuestos['gastos_totales']) }}
+                            {{ _self.showLine(trans('result'), fsc.da_impuestos['resultado']) }}
+                            {{ _self.showLine('(a) ' ~ trans('corporate-tax'), fsc.da_impuestos['sociedades']) }}
+                            {{ _self.showLine('(b) ' ~ trans('payment-previous-periods'), fsc.da_impuestos['pago-ant']) }}
+                            {{ _self.showLine(trans('fractional-payment-corporation-tax') ~ ' (MOD 202)', fsc.da_impuestos['pagofraccionado-mod202']) }}
+                            <tr>
+                                <td class="text-center" colspan="2">
+                                    <strong>{{ trans('previous-exercise') | upper }}</strong>
+                                </td>
+                            </tr>
+                            {{ _self.showLine(trans('result') ~ ' (129xxx)', fsc.da_impuestos['resultado_ejanterior']) }}
+                            {{ _self.showLine(trans('negative-results-other-exercises') ~ ' (121xxx)', fsc.da_impuestos['resultado_negotros']) }}
+                            {{ _self.showLine(trans('total-result'), fsc.da_impuestos['total']) }}
+                            {{ _self.showLine('(a) ' ~ trans('corporate-tax'), fsc.da_impuestos['sociedades_ant']) }}
+                            {{ _self.showLine('(b) ' ~ trans('corporate-tax-advances') ~ ' (4709xxx)', fsc.da_impuestos['sociedades_adelantos']) }}
+                            {{ _self.showLine(trans('total-pay-return-corporate-tax') ~ ' (MOD 200)', fsc.da_impuestos['total-mod200']) }}
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card border-success shadow mb-3">
+                    <div class="card-header bg-success text-white text-center">
+                        <strong>{{ trans('short-situation-results') | upper }}</strong>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            {%  set label = trans('total') ~ ' (' ~ trans('treasury') ~ ' + ' ~ trans('expenses-charges') ~ ' + MOD 111 + MOD 115 + MOD 303 + MOD 202 + MOD 200)' %}
+                            {{ _self.showLine(label, fsc.da_resultado_situacion['total']) }}
+                        </table>
+                    </div>
+                </div>
+                <div class="card border-dark shadow mb-3">
+                    <div class="card-header bg-dark text-white text-center">
+                        <strong>{{ trans('reserves-results-exercises') | upper }}</strong>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            {{ _self.showLine('(a) ' ~ trans('legal-reserve') ~ ' (112xxx)', fsc.da_reservas_resultados['reservalegal']) }}
+                            {{ _self.showLine('(b) ' ~ trans('voluntary-reserves') ~ ' (113xxx)', fsc.da_reservas_resultados['reservasvoluntarias']) }}
+                            {{ _self.showLine('(c) ' ~ trans('previous-exercise-result') ~ ' (129xxx + 121xxx)', fsc.da_reservas_resultados['resultadoejercicioanterior']) }}
+                            {{ _self.showLine(trans('total'), fsc.da_reservas_resultados['total_reservas']) }}
+                        </table>
+                    </div>
+                </div>
+                <div class="card border-primary shadow mb-3">
+                    <div class="card-header bg-primary text-white text-center">
+                        <strong>{{ trans('current-exercise-results') | upper }}</strong>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            {{ _self.showLine(trans('sales'), fsc.da_resultado_actual['total_ventas']) }}
+                            {{ _self.showLine(trans('expenses'), fsc.da_resultado_actual['total_gastos']) }}
+                            {{ _self.showLine(trans('result-exploitation'), fsc.da_resultado_actual['resultadoexplotacion']) }}
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            {{ _self.showLine(trans('amortization-intangible-assets') ~ ' (680xxx)', fsc.da_resultado_actual['amortizacioninmovintang']) }}
+                            {{ _self.showLine(trans('amortization-intangible-material') ~ ' (681xxx)', fsc.da_resultado_actual['amortizacioninmovmat']) }}
+                            {{ _self.showLine(trans('total-amortizations'), fsc.da_resultado_actual['total_amort']) }}
+                            {{ _self.showLine(trans('result-before-taxes-rai'), fsc.da_resultado_actual['resultado_antes_impuestos']) }}
+                            {{ _self.showLine(trans('corporate-tax'), fsc.da_resultado_actual['impuesto_sociedades']) }}
+                            {{ _self.showLine(trans('result-after-taxes-rdi'), fsc.da_resultado_actual['resultado_despues_impuestos']) }}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+
+    <style>
+        #selectExercise {
+            max-width: 300px;
+        }
+
+        .money {
+            white-space: nowrap;
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('change', '#selectExercise', function () {
+                window.location = '{{ fsc.url() }}?code=' + $('#selectExercise option:selected').val();
+            });
+        });
+    </script>
+{% endblock %}
+
+{% macro showLine(title, price) %}
+    <tr>
+        <td>{{ title }}</td>
+        <td class="money">
+            {% if price < 0 %}
+                <span class="text-danger">{{ money(price) }}</span>
+            {% else %}
+                {{ money(price) }}
+            {% endif %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro showPrecio(price) %}
+    {% if price < 0 %}
+        <span class="text-danger">{{ money(price) }}</span>
+    {% else %}
+        {{ money(price) }}
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Author Daniel Fernández Giménez <hola@danielfg.es>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="0">
+            <widget type="text" fieldname="idtpvpago"/>
+        </column>
+        <column name="tpv" display="none" order="0">
+            <widget type="text" fieldname="idtpv"/>
+        </column>
+        <column name="payment-method" order="100">
+            <widget type="select" fieldname="codpago" onclick="EditFormaPago" required="true">
+                <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+            </widget>
+        </column>
+    </columns>
+</view>

@@ -1,0 +1,17 @@
+{
+    "add-product": "Afegir producte",
+    "all-tags": "Totes",
+    "auto-generate-barcodes": "Generar codis de barres automàticament",
+    "barcode-generate-ok": "%num% codis de barres restants generats",
+    "barcode-type": "Tipus cod. barres",
+    "generate-barcodes": "Generar codis de barres",
+    "initial-column": "Columna inicial",
+    "initial-row": "Fila inicial",
+    "no-tag": "Cap",
+    "number-labels-per-product": "Número d'etiquetes per producte",
+    "one-per-product": "Una per producte",
+    "only-with-barcode": "Només productes amb codi de barres",
+    "print-barcodes": "Codis de barres",
+    "print-prices": "Preus",
+    "tags": "Etiquetes"
+}
