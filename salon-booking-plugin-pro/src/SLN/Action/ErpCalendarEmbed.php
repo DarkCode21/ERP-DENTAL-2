@@ -206,21 +206,44 @@ class SLN_Action_ErpCalendarEmbed
             }
 
             function processDataUrls(root) {
-                ['data-src', 'data-url', 'data-href', 'data-src-template-edit-booking'].forEach(function(attribute) {
+                [
+                    'data-src',
+                    'data-url',
+                    'data-href',
+                    'data-src-template-edit-booking',
+                    'data-src-template-new-booking',
+                    'data-src-template-duplicate-booking'
+                ].forEach(function(attribute) {
                     if (root.matches && root.matches('[' + attribute + ']')) {
                         var ownValue = root.getAttribute(attribute);
                         if (ownValue && isSameOriginAdmin(ownValue)) {
-                            root.setAttribute(attribute, appendToken(ownValue));
+                            setDataUrl(root, attribute, appendToken(ownValue));
                         }
                     }
 
                     root.querySelectorAll('[' + attribute + ']').forEach(function(element) {
                         var value = element.getAttribute(attribute);
                         if (value && isSameOriginAdmin(value)) {
-                            element.setAttribute(attribute, appendToken(value));
+                            setDataUrl(element, attribute, appendToken(value));
                         }
                     });
                 });
+            }
+
+            function setDataUrl(element, attribute, value) {
+                element.setAttribute(attribute, value);
+
+                if (!window.jQuery || attribute.indexOf('data-') !== 0) {
+                    return;
+                }
+
+                var dataName = attribute.substring(5);
+                var camelName = dataName.replace(/-([a-z])/g, function(all, letter) {
+                    return letter.toUpperCase();
+                });
+
+                window.jQuery(element).data(dataName, value);
+                window.jQuery(element).data(camelName, value);
             }
 
             function process(root) {
@@ -252,6 +275,28 @@ class SLN_Action_ErpCalendarEmbed
                     event.stopPropagation();
                 }
             }, true);
+
+            if (window.jQuery) {
+                window.jQuery(document).on('sln.iframeEditor.ready', function(event, bookingId, bookingDate, srcTemplate, editorLink) {
+                    if (!editorLink || !isSameOriginAdmin(editorLink)) {
+                        return;
+                    }
+
+                    var editor = document.querySelector('.booking-editor');
+                    if (!editor) {
+                        return;
+                    }
+
+                    var nextUrl = appendToken(editorLink);
+                    setDataUrl(editor, 'data-' + srcTemplate, nextUrl);
+
+                    window.setTimeout(function() {
+                        if (editor.getAttribute('src') === editorLink) {
+                            editor.setAttribute('src', nextUrl);
+                        }
+                    }, 0);
+                });
+            }
 
             if (window.fetch) {
                 var originalFetch = window.fetch;

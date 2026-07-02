@@ -6,6 +6,7 @@ namespace FacturaScripts\Plugins\Dental\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
 use FacturaScripts\Core\Model\CodeModel;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Plugins\Dental\Lib\SalonBookingClient;
 use FacturaScripts\Plugins\Dental\Model\Cita;
 
@@ -50,7 +51,7 @@ class EditCita extends EditController
     {
         $saved = parent::editAction();
         if ($saved) {
-            $this->syncSalonBooking();
+            $this->syncSalonBooking($this->views[$this->active]->model ?? null);
         }
 
         return $saved;
@@ -58,19 +59,51 @@ class EditCita extends EditController
 
     protected function insertAction()
     {
-        $saved = parent::insertAction();
-        if ($saved) {
-            $this->syncSalonBooking();
+        if (false === $this->permissions->allowUpdate) {
+            Tools::log()->warning('not-allowed-modify');
+            return false;
+        } elseif (false === $this->validateFormToken()) {
+            return false;
         }
 
-        return $saved;
+        $view = $this->views[$this->active];
+        $view->processFormData($this->request, 'edit');
+        if ($view->model->exists()) {
+            Tools::log()->error('duplicate-record');
+            return false;
+        }
+
+        if (false === $view->model->save()) {
+            Tools::log()->error('record-save-error');
+            return false;
+        }
+
+        $this->syncSalonBooking($view->model);
+
+        if ($this->active === $this->getMainViewName()) {
+            $this->redirect($view->model->url() . '&action=save-ok');
+        }
+
+        $view->newCode = $view->model->primaryColumnValue();
+        Tools::log()->notice('record-updated-correctly');
+        return true;
     }
 
-    private function syncSalonBooking(): void
+    private function syncSalonBooking($model): void
     {
-        $model = $this->views[$this->active]->model ?? null;
-        if ($model instanceof Cita) {
-            (new SalonBookingClient())->syncCita($model);
+        if (!$model instanceof Cita) {
+            Tools::log('dental-salon')->warning('Salon sync omitida: el modelo activo no es una cita.');
+            return;
+        }
+
+        $result = (new SalonBookingClient())->syncCita($model);
+        if (!empty($result['success'])) {
+            Tools::log()->notice('Cita sincronizada con Salon Booking.');
+            return;
+        }
+
+        if (($result['status'] ?? '') !== 'skipped') {
+            Tools::log()->warning('No se pudo sincronizar con Salon Booking: ' . ($result['message'] ?? 'sin detalle'));
         }
     }
 }

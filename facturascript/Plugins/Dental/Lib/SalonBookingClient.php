@@ -16,6 +16,7 @@ use Throwable;
 
 class SalonBookingClient
 {
+    private const LOG_CHANNEL = 'dental-salon';
     private const SETTINGS_GROUP = 'dental_salon';
     private const API_PATH = '/wp-json/salon/api/v1';
 
@@ -44,6 +45,16 @@ class SalonBookingClient
     public function syncCita(Cita $cita): array
     {
         try {
+            $this->logInfo('Salon sync iniciada.', [
+                'cita_id' => $cita->id,
+                'idpaciente' => $cita->idpaciente,
+                'idespecialista' => $cita->idespecialista,
+                'fecha' => $cita->fecha,
+                'hora_inicio' => $cita->hora_inicio,
+                'wp_url' => $this->settings['wp_url'] ?? '',
+                'sync_enabled' => empty($this->settings['sync_enabled']) ? '0' : '1',
+            ]);
+
             if (empty($this->settings['sync_enabled'])) {
                 return $this->storeResult($cita, false, 'skipped', 'Sincronizacion con Salon desactivada.');
             }
@@ -60,7 +71,14 @@ class SalonBookingClient
 
             $data = $response->json(true);
             if (!$response->ok() || !is_array($data) || empty($data['id'])) {
-                return $this->storeResult($cita, false, 'failed', $this->responseError($response, $data));
+                $error = $this->responseError($response, $data);
+                $this->logWarning('Salon booking fallo.', [
+                    'cita_id' => $cita->id,
+                    'booking_id' => $bookingId,
+                    'http_status' => $response->status(),
+                    'error' => $error,
+                ]);
+                return $this->storeResult($cita, false, 'failed', $error);
             }
 
             $cita->salon_booking_id = (int)$data['id'];
@@ -69,8 +87,20 @@ class SalonBookingClient
 
             $this->storePatientCustomerId($cita, (int)$cita->salon_customer_id);
 
+            $this->logInfo('Salon booking creado/actualizado.', [
+                'cita_id' => $cita->id,
+                'salon_booking_id' => $cita->salon_booking_id,
+                'salon_customer_id' => $cita->salon_customer_id,
+                'salon_service_id' => $cita->salon_service_id,
+                'salon_assistant_id' => $payload['services'][0]['assistant_id'] ?? 0,
+            ]);
+
             return $this->storeResult($cita, true, 'synced', '');
         } catch (Throwable $exception) {
+            $this->logWarning('Salon sync excepcion.', [
+                'cita_id' => $cita->id,
+                'error' => $exception->getMessage(),
+            ]);
             return $this->storeResult($cita, false, 'failed', $exception->getMessage());
         }
     }
@@ -222,6 +252,11 @@ class SalonBookingClient
             throw new \RuntimeException('Faltan URL, usuario o password de API de Salon.');
         }
 
+        $this->logInfo('Salon login API.', [
+            'wp_url' => $this->settings['wp_url'],
+            'api_username' => $this->settings['api_username'],
+        ]);
+
         $response = Http::get($this->apiUrl('/login'), [
             'name' => $this->settings['api_username'],
             'password' => $this->settings['api_password'],
@@ -229,8 +264,17 @@ class SalonBookingClient
 
         $data = $response->json(true);
         if (!$response->ok() || !is_array($data) || empty($data['access_token'])) {
-            throw new \RuntimeException($this->responseError($response, $data));
+            $error = $this->responseError($response, $data);
+            $this->logWarning('Salon login API fallo.', [
+                'http_status' => $response->status(),
+                'error' => $error,
+            ]);
+            throw new \RuntimeException($error);
         }
+
+        $this->logInfo('Salon login API correcto.', [
+            'http_status' => $response->status(),
+        ]);
 
         $this->token = (string)$data['access_token'];
         return $this->token;
@@ -298,14 +342,31 @@ class SalonBookingClient
 
     private function postResource(string $path, array $payload, string $token): array
     {
+        $this->logInfo('Salon POST recurso.', [
+            'path' => $path,
+            'name' => $payload['name'] ?? '',
+            'email' => $payload['email'] ?? '',
+        ]);
+
         $response = Http::postJson($this->apiUrl($path), $payload)
             ->setBearerToken($token)
             ->setTimeout(30);
 
         $data = $response->json(true);
         if (!$response->ok() || !is_array($data) || empty($data['id'])) {
-            throw new \RuntimeException($this->responseError($response, $data));
+            $error = $this->responseError($response, $data);
+            $this->logWarning('Salon POST recurso fallo.', [
+                'path' => $path,
+                'http_status' => $response->status(),
+                'error' => $error,
+            ]);
+            throw new \RuntimeException($error);
         }
+
+        $this->logInfo('Salon POST recurso correcto.', [
+            'path' => $path,
+            'id' => (int)$data['id'],
+        ]);
 
         return $data;
     }
@@ -335,13 +396,30 @@ class SalonBookingClient
         $assistant = [];
         if ((int)$especialista->salon_assistant_id > 0) {
             $assistant = $this->getResource('/assistants/' . (int)$especialista->salon_assistant_id, $token);
+            if (!empty($assistant)) {
+                $this->logInfo('Salon asistente resuelto por ID local.', [
+                    'especialista_id' => $especialista->id,
+                    'salon_assistant_id' => (int)$especialista->salon_assistant_id,
+                ]);
+            }
         }
 
         if (empty($assistant)) {
             $assistant = $this->findAssistantByProfile($especialista, $token);
+            if (!empty($assistant)) {
+                $this->logInfo('Salon asistente resuelto por perfil.', [
+                    'especialista_id' => $especialista->id,
+                    'salon_assistant_id' => (int)($assistant['id'] ?? 0),
+                ]);
+            }
         }
 
         if (empty($assistant)) {
+            $this->logInfo('Salon asistente no existe, creando.', [
+                'especialista_id' => $especialista->id,
+                'nombre' => $especialista->getFullName(),
+                'service_id' => $serviceId,
+            ]);
             $data = $this->postResource('/assistants', [
                 'name' => $especialista->getFullName(),
                 'services' => [$serviceId],
@@ -366,6 +444,10 @@ class SalonBookingClient
             $payload = $assistant;
             $payload['services'] = array_values(array_unique($services));
             $this->putResource('/assistants/' . $assistantId, $payload, $token);
+            $this->logInfo('Salon asistente actualizado con servicio.', [
+                'salon_assistant_id' => $assistantId,
+                'salon_service_id' => $serviceId,
+            ]);
         }
 
         if ((int)$especialista->salon_assistant_id !== $assistantId) {
@@ -379,6 +461,10 @@ class SalonBookingClient
     private function resolveServiceId(Cita $cita, string $token): int
     {
         if ((int)$cita->salon_service_id > 0 && $this->resourceExists('/services/' . (int)$cita->salon_service_id, $token)) {
+            $this->logInfo('Salon servicio resuelto por cita.', [
+                'cita_id' => $cita->id,
+                'salon_service_id' => (int)$cita->salon_service_id,
+            ]);
             return (int)$cita->salon_service_id;
         }
 
@@ -390,18 +476,32 @@ class SalonBookingClient
                 && (int)$tratamiento->salon_service_id > 0
                 && $this->resourceExists('/services/' . (int)$tratamiento->salon_service_id, $token)
             ) {
+                $this->logInfo('Salon servicio resuelto por tratamiento.', [
+                    'cita_id' => $cita->id,
+                    'tratamiento_id' => $tratamiento->id,
+                    'salon_service_id' => (int)$tratamiento->salon_service_id,
+                ]);
                 return (int)$tratamiento->salon_service_id;
             }
         }
 
         $defaultServiceId = (int)($this->settings['salon_default_service_id'] ?? 0);
         if ($defaultServiceId > 0 && $this->resourceExists('/services/' . $defaultServiceId, $token)) {
+            $this->logInfo('Salon servicio resuelto por defecto.', [
+                'cita_id' => $cita->id,
+                'salon_service_id' => $defaultServiceId,
+            ]);
             return $defaultServiceId;
         }
 
         $name = $this->serviceName($cita, $tratamiento);
         $service = $this->findServiceByName($name, $token);
         if (empty($service)) {
+            $this->logInfo('Salon servicio no existe, creando.', [
+                'cita_id' => $cita->id,
+                'name' => $name,
+                'duration' => $this->durationToSalon($cita),
+            ]);
             $data = $this->postResource('/services', [
                 'name' => $name,
                 'price' => $tratamiento instanceof TratamientoPaciente ? (float)$tratamiento->precio : 0,
@@ -442,6 +542,13 @@ class SalonBookingClient
 
         $data = $response->json(true);
         if (!$response->ok() || !is_array($data)) {
+            if ($response->status() !== 404) {
+                $this->logWarning('Salon GET recurso fallo.', [
+                    'path' => $path,
+                    'http_status' => $response->status(),
+                    'error' => $this->responseError($response, $data),
+                ]);
+            }
             return [];
         }
 
@@ -466,7 +573,21 @@ class SalonBookingClient
             ->setTimeout(30);
 
         $data = $response->json(true);
-        return $response->ok() && is_array($data) && is_array($data['items'] ?? null) ? $data['items'] : [];
+        if (!$response->ok() || !is_array($data) || !is_array($data['items'] ?? null)) {
+            $this->logWarning('Salon listado recurso fallo.', [
+                'path' => $path,
+                'http_status' => $response->status(),
+                'error' => $this->responseError($response, $data),
+            ]);
+            return [];
+        }
+
+        $this->logInfo('Salon listado recurso correcto.', [
+            'path' => $path,
+            'count' => count($data['items']),
+        ]);
+
+        return $data['items'];
     }
 
     private function normalizeText(string $text): string
@@ -479,7 +600,13 @@ class SalonBookingClient
         $response = $this->putJson($this->apiUrl($path), $payload, $token);
         $data = $response->json(true);
         if (!$response->ok()) {
-            throw new \RuntimeException($this->responseError($response, $data));
+            $error = $this->responseError($response, $data);
+            $this->logWarning('Salon PUT recurso fallo.', [
+                'path' => $path,
+                'http_status' => $response->status(),
+                'error' => $error,
+            ]);
+            throw new \RuntimeException($error);
         }
     }
 
@@ -520,7 +647,23 @@ class SalonBookingClient
             }
         }
 
-        return 'Salon API HTTP ' . $response->status() . ' ' . $response->errorMessage();
+        $body = trim((string)$response->body());
+        if (strlen($body) > 500) {
+            $body = substr($body, 0, 500) . '...';
+        }
+
+        return 'Salon API HTTP ' . $response->status() . ' ' . $response->errorMessage()
+            . ($body === '' ? '' : ' Body: ' . $body);
+    }
+
+    private function logInfo(string $message, array $context = []): void
+    {
+        Tools::log(self::LOG_CHANNEL)->info($message, $context);
+    }
+
+    private function logWarning(string $message, array $context = []): void
+    {
+        Tools::log(self::LOG_CHANNEL)->warning($message, $context);
     }
 
     private function storePatientCustomerId(Cita $cita, int $customerId): void
