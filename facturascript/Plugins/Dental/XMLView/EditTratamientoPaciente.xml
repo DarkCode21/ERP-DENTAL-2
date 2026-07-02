@@ -11,6 +11,9 @@
             <column name="reference" numcolumns="4" order="107">
                 <widget type="text" fieldname="referencia_servicio" />
             </column>
+            <column name="salon-service-id" numcolumns="3" order="108">
+                <widget type="number" decimal="0" fieldname="salon_service_id" />
+            </column>
             <column name="start-date" numcolumns="3" order="110">
                 <widget type="date" fieldname="fecha_inicio" />
             </column>

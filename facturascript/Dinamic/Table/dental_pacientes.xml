@@ -11,6 +11,10 @@
         <null>NO</null>
     </column>
     <column>
+        <name>salon_customer_id</name>
+        <type>integer</type>
+    </column>
+    <column>
         <name>aseguradora</name>
         <type>character varying(100)</type>
     </column>

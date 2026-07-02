@@ -19,6 +19,7 @@ class TratamientoPaciente extends ModelClass
     public $id;
     public $idpaciente;
     public $referencia_servicio;
+    public $salon_service_id;
     public $idespecialista;
     public $idpresupuesto;
     public $idfactura;

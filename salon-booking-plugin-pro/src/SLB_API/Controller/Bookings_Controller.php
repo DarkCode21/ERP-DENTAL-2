@@ -1112,12 +1112,18 @@ class Bookings_Controller extends REST_Controller
         $bb->set('admin_note', $request->get_param('admin_note'));
 
         $services = array();
+        $services_durations = array();
 
         foreach (array_filter($request->get_param('services')) as $service) {
+            $service_id = isset($service['service_id']) ? $service['service_id'] : '';
             $services[] = array(
                 'attendant' => isset($service['assistant_id']) ? $service['assistant_id'] : '',
-                'service'   => isset($service['service_id']) ? $service['service_id'] : '',
+                'service'   => $service_id,
             );
+
+            if (isset($service['duration']) && preg_match('/^\d{2}:\d{2}$/', $service['duration'])) {
+                $services_durations[$service_id] = $service['duration'];
+            }
         }
 
         $bb->set('services', $services);
@@ -1139,10 +1145,50 @@ class Bookings_Controller extends REST_Controller
 
 	$booking = $bb->getLastBooking();
 
+        if (!empty($services_durations)) {
+            $this->apply_custom_service_durations($booking->getId(), $services_durations);
+            $booking = new SLN_Wrapper_Booking($booking->getId());
+        }
+
         return array(
 	    'id'	  => $booking->getId(),
 	    'customer_id' => $booking->getUserId(),
 	);
+    }
+
+    protected function apply_custom_service_durations($id, array $services_durations)
+    {
+        $booking = new SLN_Wrapper_Booking($id);
+        $booking_services = $booking->getMeta('services');
+
+        if (!is_array($booking_services)) {
+            return;
+        }
+
+        foreach ($booking_services as &$booking_service) {
+            $service_id = isset($booking_service['service']) ? $booking_service['service'] : null;
+            if ($service_id && isset($services_durations[$service_id])) {
+                $booking_service['duration'] = $services_durations[$service_id];
+                $booking_service['break_duration'] = '00:00';
+                $booking_service['break_duration_data'] = array('from' => 0, 'to' => 0);
+                unset($booking_service['total_duration']);
+            }
+        }
+        unset($booking_service);
+
+        update_post_meta($id, '_sln_booking_services', $booking_services);
+        wp_cache_delete($id, 'post_meta');
+        clean_post_cache($id);
+
+        $total_minutes = 0;
+        foreach ($services_durations as $custom_duration) {
+            list($hours, $mins) = explode(':', $custom_duration);
+            $total_minutes += (intval($hours) * 60) + intval($mins);
+        }
+
+        $duration_string = sprintf('%02d:%02d', floor($total_minutes / 60), $total_minutes % 60);
+        $booking = new SLN_Wrapper_Booking($id);
+        $booking->setMeta('duration', $duration_string);
     }
 
     protected function update_item_post($request, $id, $customer_id)

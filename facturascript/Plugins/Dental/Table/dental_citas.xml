@@ -25,6 +25,30 @@
         <type>integer</type>
     </column>
     <column>
+        <name>salon_booking_id</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>salon_customer_id</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>salon_service_id</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>salon_sync_status</name>
+        <type>character varying(20)</type>
+    </column>
+    <column>
+        <name>salon_sync_error</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>salon_synced_at</name>
+        <type>timestamp</type>
+    </column>
+    <column>
         <name>fecha</name>
         <type>date</type>
         <null>NO</null>

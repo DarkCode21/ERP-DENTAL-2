@@ -10,6 +10,26 @@
         <a href="Paciente" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left mr-1"></i>Volver</a>
     </div>
 
+    <form method="post" class="card shadow-sm mb-3">
+        <input type="hidden" name="action" value="save-salon-customer">
+        <input type="hidden" name="id" value="{{ fsc.paciente.id }}">
+        <div class="card-body py-3">
+            <div class="row align-items-end">
+                <div class="col-md-4">
+                    <div class="form-group mb-md-0">
+                        <label>Salon customer ID</label>
+                        <input type="number" min="0" step="1" name="salon_customer_id" class="form-control" value="{{ fsc.paciente.salon_customer_id }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-1"></i>Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <ul class="nav nav-tabs mb-3" id="pacienteTab" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="archivo-tab" data-toggle="tab" href="#archivo-panel" role="tab">

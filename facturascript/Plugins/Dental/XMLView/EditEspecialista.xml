@@ -25,6 +25,9 @@
             <column name="email" numcolumns="4" order="150">
                 <widget type="text" fieldname="email" />
             </column>
+            <column name="salon-assistant-id" numcolumns="3" order="155">
+                <widget type="number" decimal="0" fieldname="salon_assistant_id" />
+            </column>
             <column name="status" numcolumns="3" order="160">
                 <widget type="select" fieldname="estado" translate="true">
                     <values title="active">activo</values>

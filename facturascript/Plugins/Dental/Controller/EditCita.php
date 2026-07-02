@@ -6,6 +6,8 @@ namespace FacturaScripts\Plugins\Dental\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
 use FacturaScripts\Core\Model\CodeModel;
+use FacturaScripts\Plugins\Dental\Lib\SalonBookingClient;
+use FacturaScripts\Plugins\Dental\Model\Cita;
 
 class EditCita extends EditController
 {
@@ -41,6 +43,34 @@ class EditCita extends EditController
                 $results[] = new CodeModel($row);
             }
             $columnPatient->widget->setValuesFromCodeModel($results);
+        }
+    }
+
+    protected function editAction()
+    {
+        $saved = parent::editAction();
+        if ($saved) {
+            $this->syncSalonBooking();
+        }
+
+        return $saved;
+    }
+
+    protected function insertAction()
+    {
+        $saved = parent::insertAction();
+        if ($saved) {
+            $this->syncSalonBooking();
+        }
+
+        return $saved;
+    }
+
+    private function syncSalonBooking(): void
+    {
+        $model = $this->views[$this->active]->model ?? null;
+        if ($model instanceof Cita) {
+            (new SalonBookingClient())->syncCita($model);
         }
     }
 }

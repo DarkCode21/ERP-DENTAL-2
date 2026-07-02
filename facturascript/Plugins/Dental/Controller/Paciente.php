@@ -38,6 +38,8 @@ class Paciente extends Controller
 
         if ($action === 'save') {
             $this->savePaciente();
+        } elseif ($action === 'save-salon-customer') {
+            $this->saveSalonCustomerId();
         }
 
         $model = new PacienteModel();
@@ -91,6 +93,7 @@ class Paciente extends Controller
 
         $this->paciente = new PacienteModel();
         $this->paciente->codcliente = $codcliente;
+        $this->paciente->salon_customer_id = (int)$this->request->request->get('salon_customer_id', 0) ?: null;
         $this->paciente->alergias = $this->request->request->get('alergias', '');
         $this->paciente->medicacion = $this->request->request->get('medicacion', '');
         $this->paciente->antecedentes_medicos = $this->request->request->get('antecedentes_medicos', '');
@@ -110,5 +113,23 @@ class Paciente extends Controller
         }
 
         Tools::log()->notice('record-saved-correctly');
+    }
+
+    private function saveSalonCustomerId(): void
+    {
+        $id = (int)$this->request->request->get('id', 0);
+        $paciente = new PacienteModel();
+        if ($id < 1 || false === $paciente->loadFromCode($id)) {
+            Tools::log()->warning('record-not-found');
+            return;
+        }
+
+        $paciente->salon_customer_id = (int)$this->request->request->get('salon_customer_id', 0) ?: null;
+        if ($paciente->save()) {
+            Tools::log()->notice('record-saved-correctly');
+            return;
+        }
+
+        Tools::log()->error('record-save-error');
     }
 }

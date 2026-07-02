@@ -17,6 +17,12 @@ class Cita extends ModelClass
     public $idespecialista;
     public $idgabinete;
     public $idtratamiento;
+    public $salon_booking_id;
+    public $salon_customer_id;
+    public $salon_service_id;
+    public $salon_sync_status;
+    public $salon_sync_error;
+    public $salon_synced_at;
     public $fecha;
     public $hora_inicio;
     public $hora_fin;

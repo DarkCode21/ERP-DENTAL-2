@@ -37,6 +37,10 @@
         <default>'#3b82f6'</default>
     </column>
     <column>
+        <name>salon_assistant_id</name>
+        <type>integer</type>
+    </column>
+    <column>
         <name>estado</name>
         <type>character varying(20)</type>
         <default>'activo'</default>

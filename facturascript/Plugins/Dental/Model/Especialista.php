@@ -20,6 +20,7 @@ class Especialista extends ModelClass
     public $telefono;
     public $email;
     public $color_agenda;
+    public $salon_assistant_id;
     public $estado;
     public $observaciones;
     public $created_at;

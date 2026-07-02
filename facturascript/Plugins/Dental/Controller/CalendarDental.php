@@ -5,10 +5,10 @@ namespace FacturaScripts\Plugins\Dental\Controller;
 use DateTimeImmutable;
 use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Http;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Plugins\Dental\Lib\DentalCalendar;
 use FacturaScripts\Plugins\Dental\Lib\DentalCrypto;
+use FacturaScripts\Plugins\Dental\Lib\SalonBookingClient;
 use FacturaScripts\Plugins\Dental\Model\Cita;
 use Throwable;
 
@@ -163,6 +163,8 @@ class CalendarDental extends Controller
             'embed_user' => trim((string)Tools::settings(self::SETTINGS_GROUP, 'embed_user', '')),
             'embed_secret' => $this->readSecret('embed_secret_enc', 'embed_secret'),
             'embed_enabled' => (bool)Tools::settings(self::SETTINGS_GROUP, 'embed_enabled', true),
+            'sync_enabled' => (bool)Tools::settings(self::SETTINGS_GROUP, 'sync_enabled', true),
+            'salon_default_service_id' => (int)Tools::settings(self::SETTINGS_GROUP, 'salon_default_service_id', 0),
         ];
     }
 
@@ -201,7 +203,17 @@ class CalendarDental extends Controller
         $cita->hora_fin = $horaFin;
         $cita->duracion = $this->calculateMinutes($fecha, $horaInicio, $horaFin);
 
-        $this->jsonResponse(['success' => $cita->save()]);
+        if (!$cita->save()) {
+            $this->jsonResponse(['success' => false, 'message' => 'record-save-error']);
+            return;
+        }
+
+        $sync = (new SalonBookingClient($this->settings))->syncCita($cita);
+        $this->jsonResponse([
+            'success' => true,
+            'sync' => $sync['status'] ?? '',
+            'message' => $sync['message'] ?? '',
+        ]);
     }
 
     private function calculateMinutes(string $fecha, string $start, string $end): int
@@ -218,6 +230,8 @@ class CalendarDental extends Controller
         Tools::settingsSet(self::SETTINGS_GROUP, 'api_username', $settings['api_username']);
         Tools::settingsSet(self::SETTINGS_GROUP, 'embed_user', $settings['embed_user']);
         Tools::settingsSet(self::SETTINGS_GROUP, 'embed_enabled', $settings['embed_enabled']);
+        Tools::settingsSet(self::SETTINGS_GROUP, 'sync_enabled', $settings['sync_enabled']);
+        Tools::settingsSet(self::SETTINGS_GROUP, 'salon_default_service_id', $settings['salon_default_service_id']);
         Tools::settingsSet(self::SETTINGS_GROUP, 'api_password', '');
         Tools::settingsSet(self::SETTINGS_GROUP, 'embed_secret', '');
         Tools::settingsSet(self::SETTINGS_GROUP, 'api_password_enc', $this->writeSecret($settings['api_password']));
@@ -249,6 +263,8 @@ class CalendarDental extends Controller
         $settings['api_username'] = trim((string)$this->request->request->get('api_username', ''));
         $settings['embed_user'] = trim((string)$this->request->request->get('embed_user', ''));
         $settings['embed_enabled'] = $this->request->request->get('embed_enabled', '0') === '1';
+        $settings['sync_enabled'] = $this->request->request->get('sync_enabled', '0') === '1';
+        $settings['salon_default_service_id'] = (int)$this->request->request->get('salon_default_service_id', 0);
 
         $apiPassword = (string)$this->request->request->get('api_password', '');
         if ($apiPassword !== '') {
@@ -290,28 +306,15 @@ class CalendarDental extends Controller
 
     private function testSalonApi(array $settings): void
     {
-        if (empty($settings['wp_url']) || empty($settings['api_username']) || empty($settings['api_password'])) {
-            $this->apiStatus = 'warning';
-            $this->apiStatusMessage = 'Faltan URL, usuario o password de API.';
-            return;
-        }
-
-        $loginUrl = rtrim($settings['wp_url'], '/') . '/wp-json/salon/api/v1/login';
-        $response = Http::get($loginUrl, [
-            'name' => $settings['api_username'],
-            'password' => $settings['api_password'],
-        ])->setTimeout(20);
-
-        $data = $response->json(true);
-        if ($response->ok() && is_array($data) && !empty($data['access_token'])) {
+        $result = (new SalonBookingClient($settings))->testConnection();
+        if (!empty($result['success'])) {
             $this->apiStatus = 'success';
-            $this->apiStatusMessage = 'Conexion API correcta.';
+            $this->apiStatusMessage = $result['message'];
             return;
         }
 
         $this->apiStatus = 'danger';
-        $this->apiStatusMessage = 'No se pudo conectar con la API de Salon. HTTP '
-            . $response->status() . ' ' . $response->errorMessage();
+        $this->apiStatusMessage = 'No se pudo conectar con la API de Salon. ' . $result['message'];
     }
 
     private function writeSecret(string $value): string

@@ -27,6 +27,7 @@ class Paciente extends ModelClass
 
     public $id;
     public $codcliente;
+    public $salon_customer_id;
     public $alergias;
     public $medicacion;
     public $antecedentes_medicos;

@@ -23,11 +23,11 @@ class SLN_Action_ErpCalendarEmbed
 
         add_action('init', array($this, 'authenticateRequest'), 0);
         add_action('send_headers', array($this, 'sendFrameHeaders'), 0);
+        add_action('admin_init', array($this, 'sendFrameHeaders'), 0);
         add_action('template_redirect', array($this, 'renderCalendar'), 0);
         add_filter('admin_url', array($this, 'appendTokenToAdminUrl'), 10, 4);
         add_filter('redirect_post_location', array($this, 'appendTokenToRedirect'), 20, 2);
-        add_action('admin_footer-post.php', array($this, 'printEditorTokenScript'));
-        add_action('admin_footer-post-new.php', array($this, 'printEditorTokenScript'));
+        add_action('admin_footer', array($this, 'printEmbedTokenScript'), 99);
     }
 
     public function appendTokenToAdminUrl($url, $path, $blogId, $scheme)
@@ -37,7 +37,8 @@ class SLN_Action_ErpCalendarEmbed
         }
 
         $basename = basename((string)parse_url($url, PHP_URL_PATH));
-        if (!in_array($basename, array('admin-ajax.php', 'post.php', 'post-new.php'), true)) {
+        $allowed = array('admin-ajax.php', 'admin.php', 'edit.php', 'post.php', 'post-new.php', 'profile.php', 'user-edit.php', 'users.php');
+        if (!in_array($basename, $allowed, true)) {
             return $url;
         }
 
@@ -88,6 +89,11 @@ class SLN_Action_ErpCalendarEmbed
 
     public function printEditorTokenScript(): void
     {
+        $this->printEmbedTokenScript();
+    }
+
+    public function printEmbedTokenScript(): void
+    {
         $token = $this->getTokenFromRequest();
         if ($token === '' || empty($this->validateToken($token))) {
             return;
@@ -96,29 +102,203 @@ class SLN_Action_ErpCalendarEmbed
         <script>
         (function() {
             var token = <?php echo wp_json_encode($token); ?>;
+            var tokenParam = '<?php echo esc_js(self::TOKEN_PARAM); ?>';
+
             function appendToken(url) {
+                if (!url || url === '#') {
+                    return url;
+                }
+
                 try {
                     var next = new URL(url || window.location.href, window.location.href);
                     if (next.origin !== window.location.origin) {
                         return url;
                     }
-                    next.searchParams.set('<?php echo esc_js(self::TOKEN_PARAM); ?>', token);
+                    next.searchParams.set(tokenParam, token);
                     next.searchParams.set('sln_erp_embed', '1');
                     return next.toString();
                 } catch (error) {
-                    return url;
+                    if (String(url).indexOf(tokenParam + '=') !== -1) {
+                        return url;
+                    }
+
+                    return url + (String(url).indexOf('?') === -1 ? '?' : '&')
+                        + tokenParam + '=' + encodeURIComponent(token)
+                        + '&sln_erp_embed=1';
                 }
             }
 
-            document.querySelectorAll('form').forEach(function(form) {
-                form.action = appendToken(form.action);
-            });
-
-            document.querySelectorAll('a[href]').forEach(function(link) {
-                if (link.href.indexOf('/wp-admin/') !== -1) {
-                    link.href = appendToken(link.href);
+            function isSameOriginAdmin(url) {
+                try {
+                    var next = new URL(url || '', window.location.href);
+                    return next.origin === window.location.origin && next.pathname.indexOf('/wp-admin/') !== -1;
+                } catch (error) {
+                    return String(url).indexOf('/wp-admin/') !== -1;
                 }
-            });
+            }
+
+            function isSameOrigin(url) {
+                try {
+                    return (new URL(url || '', window.location.href)).origin === window.location.origin;
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            function isCustomerLink(link) {
+                if (!link || !link.href) {
+                    return false;
+                }
+
+                if (link.classList && link.classList.contains('sln-icon--customerurl')) {
+                    return true;
+                }
+
+                try {
+                    var next = new URL(link.href, window.location.href);
+                    var page = next.searchParams.get('page') || '';
+                    var path = next.pathname.split('/').pop();
+                    return page === 'salon-customers'
+                        || path === 'user-edit.php'
+                        || path === 'profile.php'
+                        || path === 'users.php';
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            function blockCustomerLink(link) {
+                link.href = '#';
+                link.removeAttribute('target');
+                link.setAttribute('aria-disabled', 'true');
+                link.dataset.slnErpBlocked = '1';
+                if (link.dataset.slnErpBlockedHandler === '1') {
+                    return;
+                }
+
+                link.dataset.slnErpBlockedHandler = '1';
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }, true);
+            }
+
+            function processLink(link) {
+                if (!link || !link.href) {
+                    return;
+                }
+
+                if (isCustomerLink(link)) {
+                    blockCustomerLink(link);
+                    return;
+                }
+
+                if (isSameOriginAdmin(link.href)) {
+                    link.href = appendToken(link.href);
+                    link.removeAttribute('target');
+                }
+            }
+
+            function processForm(form) {
+                if (form && form.action && isSameOriginAdmin(form.action)) {
+                    form.action = appendToken(form.action);
+                }
+            }
+
+            function processDataUrls(root) {
+                ['data-src', 'data-url', 'data-href', 'data-src-template-edit-booking'].forEach(function(attribute) {
+                    if (root.matches && root.matches('[' + attribute + ']')) {
+                        var ownValue = root.getAttribute(attribute);
+                        if (ownValue && isSameOriginAdmin(ownValue)) {
+                            root.setAttribute(attribute, appendToken(ownValue));
+                        }
+                    }
+
+                    root.querySelectorAll('[' + attribute + ']').forEach(function(element) {
+                        var value = element.getAttribute(attribute);
+                        if (value && isSameOriginAdmin(value)) {
+                            element.setAttribute(attribute, appendToken(value));
+                        }
+                    });
+                });
+            }
+
+            function process(root) {
+                root = root || document;
+                if (root.matches && root.matches('form')) {
+                    processForm(root);
+                }
+                if (root.matches && root.matches('a[href]')) {
+                    processLink(root);
+                }
+                root.querySelectorAll('form').forEach(processForm);
+                root.querySelectorAll('a[href]').forEach(processLink);
+                processDataUrls(root);
+
+                if (window.ajaxurl) {
+                    window.ajaxurl = appendToken(window.ajaxurl);
+                }
+            }
+
+            document.addEventListener('click', function(event) {
+                var link = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+                if (!link) {
+                    return;
+                }
+
+                processLink(link);
+                if (link.dataset.slnErpBlocked === '1') {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            }, true);
+
+            if (window.fetch) {
+                var originalFetch = window.fetch;
+                window.fetch = function(input, init) {
+                    var url = typeof input === 'string' ? input : (input && input.url);
+                    if (isSameOrigin(url)) {
+                        init = init || {};
+                        var headers = new Headers(init.headers || (input && input.headers) || {});
+                        headers.set('X-SLN-ERP-TOKEN', token);
+                        init.headers = headers;
+                    }
+
+                    return originalFetch.call(this, input, init);
+                };
+            }
+
+            if (window.XMLHttpRequest) {
+                var originalOpen = window.XMLHttpRequest.prototype.open;
+                var originalSend = window.XMLHttpRequest.prototype.send;
+
+                window.XMLHttpRequest.prototype.open = function(method, url) {
+                    this.slnErpEmbedUrl = url;
+                    return originalOpen.apply(this, arguments);
+                };
+
+                window.XMLHttpRequest.prototype.send = function() {
+                    if (isSameOrigin(this.slnErpEmbedUrl)) {
+                        this.setRequestHeader('X-SLN-ERP-TOKEN', token);
+                    }
+
+                    return originalSend.apply(this, arguments);
+                };
+            }
+
+            process(document);
+
+            if (window.MutationObserver) {
+                new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.nodeType === 1) {
+                                process(node);
+                            }
+                        });
+                    });
+                }).observe(document.documentElement, { childList: true, subtree: true });
+            }
         })();
         </script>
         <?php
@@ -183,6 +363,7 @@ class SLN_Action_ErpCalendarEmbed
         <body class="sln-erp-calendar-embed">
             <?php echo $this->plugin->loadView('admin/calendar', array()); ?>
             <?php wp_footer(); ?>
+            <?php $this->printEmbedTokenScript(); ?>
         </body>
         </html><?php
         exit;

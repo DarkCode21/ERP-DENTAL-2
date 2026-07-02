@@ -110,6 +110,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Sincronizar citas</label>
+                            <div class="custom-control custom-switch mt-2">
+                                <input type="checkbox" class="custom-control-input" id="syncEnabled" name="sync_enabled" value="1" {{ fsc.settings.sync_enabled ? 'checked' : '' }}>
+                                <label class="custom-control-label" for="syncEnabled">Activo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Salon service ID por defecto</label>
+                            <input type="number" min="0" step="1" name="salon_default_service_id" class="form-control" value="{{ fsc.settings.salon_default_service_id }}">
+                        </div>
+                    </div>
+                </div>
             </form>
 
             {% if fsc.embedUrl %}
