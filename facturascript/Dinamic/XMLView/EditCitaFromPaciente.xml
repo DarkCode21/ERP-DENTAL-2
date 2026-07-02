@@ -55,25 +55,5 @@
                 <widget type="textarea" fieldname="observaciones"/>
             </column>
         </group>
-        <group name="salon" title="Salon Booking" icon="fas fa-sync-alt" numcolumns="12">
-            <column name="salon-service-id" numcolumns="3" order="210">
-                <widget type="number" decimal="0" fieldname="salon_service_id"/>
-            </column>
-            <column name="salon-booking-id" numcolumns="3" order="220">
-                <widget type="number" decimal="0" fieldname="salon_booking_id" readonly="true"/>
-            </column>
-            <column name="salon-customer-id" numcolumns="3" order="230">
-                <widget type="number" decimal="0" fieldname="salon_customer_id" readonly="true"/>
-            </column>
-            <column name="salon-sync-status" numcolumns="3" order="240">
-                <widget type="text" fieldname="salon_sync_status" readonly="true"/>
-            </column>
-            <column name="salon-synced-at" numcolumns="4" order="250">
-                <widget type="text" fieldname="salon_synced_at" readonly="true"/>
-            </column>
-            <column name="salon-sync-error" numcolumns="8" order="260">
-                <widget type="textarea" fieldname="salon_sync_error" readonly="true"/>
-            </column>
-        </group>
     </columns>
 </view>

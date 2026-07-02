@@ -398,11 +398,14 @@ class SLN_Action_ErpCalendarEmbed
 
     private function getFrameAncestors(): string
     {
+        $ancestors = '';
         if (defined('SLN_ERP_ALLOWED_FRAME_ANCESTORS')) {
-            return trim((string)SLN_ERP_ALLOWED_FRAME_ANCESTORS);
+            $ancestors = trim((string)SLN_ERP_ALLOWED_FRAME_ANCESTORS);
+        } else {
+            $ancestors = trim((string)get_option('sln_erp_allowed_frame_ancestors', ''));
         }
 
-        return trim((string)get_option('sln_erp_allowed_frame_ancestors', ''));
+        return $ancestors !== '' && strpos($ancestors, "'self'") === false ? "'self' " . $ancestors : $ancestors;
     }
 
     private function getPayloadUser(array $payload)
