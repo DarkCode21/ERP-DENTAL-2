@@ -4,12 +4,15 @@ namespace FacturaScripts\Plugins\Dental;
 
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Kernel;
+use FacturaScripts\Core\Controller\ApiRoot;
 
 class Init extends \FacturaScripts\Core\Base\InitClass
 {
     public function init(): void
     {
         Kernel::addRoute('/CalendarDental', Controller\CalendarDental::class, -1, 'dental-calendar');
+        Kernel::addRoute('/api/3/odontograma', Controller\Odontograma::class, -1);
+        Kernel::addRoute('/api/3/odontograma/*', Controller\Odontograma::class, -1);
     }
 
     public function update(): void

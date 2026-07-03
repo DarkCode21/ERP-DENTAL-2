@@ -49,6 +49,7 @@ class TratamientoPaciente extends ModelClass
         $this->estado_clinico = 'propuesto';
         $this->estado_economico = 'pendiente';
         $this->descuento = 0;
+        $this->idfactura = null;
     }
 
     public function getPaciente(): ?Paciente

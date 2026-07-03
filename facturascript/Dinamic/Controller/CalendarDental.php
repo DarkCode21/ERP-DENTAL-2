@@ -6,5 +6,5 @@
  */
 class CalendarDental extends \FacturaScripts\Plugins\Dental\Controller\CalendarDental
 {
-    use \FacturaScripts\Core\Base\ExtensionsTrait;
+	use \FacturaScripts\Core\Base\ExtensionsTrait;
 }

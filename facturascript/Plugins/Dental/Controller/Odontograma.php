@@ -1,155 +1,129 @@
 <?php
 
-/**
- * Odontograma
- */
-
 namespace FacturaScripts\Plugins\Dental\Controller;
 
-use FacturaScripts\Core\Base\Controller;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Base\ExtensionsTrait;
+use FacturaScripts\Core\Template\ApiController;
 use FacturaScripts\Plugins\Dental\Model\Odontograma as OdontogramaModel;
+use FacturaScripts\Plugins\Dental\Model\Paciente as PacienteModel;
 
-class Odontograma extends Controller
+class Odontograma extends ApiController
 {
-    use ExtensionsTrait;
-
-    public $idpaciente;
-
-    public function getPageData(): array
+    protected function runResource(): void
     {
-        $pageData = parent::getPageData();
-        $pageData['title'] = 'Odontograma';
-        $pageData['menu'] = 'dental';
-        $pageData['icon'] = 'fas fa-tooth';
-        return $pageData;
-    }
+        $action = $this->getUriParam(3) ?: $this->request->request->get('action', '');
 
-    protected function loadData($viewName, $view) {}
-
-    public function privateCore(&$response, $user, $permissions)
-    {
-        parent::privateCore($response, $user, $permissions);
-
-        $action = $this->request->request->get('action', '');
-        if ($action === 'save') {
-            $this->saveOdontograma();
-            return;
+        switch ($this->request->getMethod()) {
+            case 'GET':
+                $this->getOdontograma();
+                break;
+            case 'POST':
+                if ($action === 'list') {
+                    $this->listPacientes();
+                } else {
+                    $this->saveOdontograma();
+                }
+                break;
+            default:
+                $this->response->setContent(json_encode(['error' => 'Method not allowed']));
+                $this->response->setStatusCode(405);
         }
-        if ($action === 'list') {
-            $this->listPacientes();
-            return;
-        }
-        if ($action === 'get') {
-            $this->getOdontograma();
-            return;
-        }
-
-        $idpaciente = $this->request->query->get('idpaciente', '');
-        if (empty($idpaciente)) {
-            $idpaciente = $this->request->query->get('code', '');
-        }
-        $this->idpaciente = $idpaciente;
-    }
-
-    protected function createViews()
-    {
-        $idpaciente = $this->request->query->get('idpaciente', '');
-        if (empty($idpaciente)) {
-            $idpaciente = $this->request->query->get('code', '');
-        }
-        $this->idpaciente = $idpaciente;
-        $this->addHtmlView('Odontograma', 'Odontograma', 'Paciente', 'dental', 'fas fa-tooth');
-    }
-
-    private function noCache(): void
-    {
-        header('Cache-Control: no-cache, no-store, must-revalidate');
-        header('Pragma: no-cache');
-        header('Expires: 0');
     }
 
     private function getOdontograma(): void
     {
-        $this->noCache();
         $idpaciente = $this->request->query->get('idpaciente', '');
         if (empty($idpaciente)) {
-            $idpaciente = $this->request->query->get('code', '');
+            $idpaciente = $this->getUriParam(3) ?: '';
         }
 
         if (empty($idpaciente)) {
-            echo json_encode(["ok" => false, "error" => "Falta paciente"]);
-            exit;
+            $this->response->setContent(json_encode(['ok' => false, 'error' => 'Falta paciente']));
+            $this->response->setStatusCode(400);
+            return;
         }
 
-        $sql = "SELECT id, datos FROM dental_odontogramas WHERE idpaciente = " . intval($idpaciente);
-        $rows = $this->dataBase->select($sql);
+        $where = [new DataBaseWhere('idpaciente', $idpaciente)];
+        $odontogramaModel = new OdontogramaModel();
+        $odontogramas = $odontogramaModel->all($where, [], 0, 1);
 
-        if (!empty($rows) && isset($rows[0]['datos'])) {
-            echo json_encode(["ok" => true, "id" => $rows[0]['id'], "datos" => $rows[0]['datos']]);
+        if (!empty($odontogramas)) {
+            $this->response->setContent(json_encode([
+                'ok' => true,
+                'id' => $odontogramas[0]->id,
+                'datos' => $odontogramas[0]->datos
+            ]));
         } else {
-            echo json_encode(["ok" => true, "id" => null, "datos" => "{}"]);
+            $this->response->setContent(json_encode([
+                'ok' => true,
+                'id' => null,
+                'datos' => '{}'
+            ]));
         }
-        exit;
     }
 
     private function saveOdontograma(): void
     {
-        $this->noCache();
-        $idpaciente = $this->request->request->get('idpaciente', '');
+        $idpaciente = $this->getUriParam(3);
+
         if (empty($idpaciente)) {
-            $idpaciente = $this->request->request->get('code', '');
+            $this->response->setContent(json_encode(['ok' => false, 'error' => 'Falta paciente']));
+            $this->response->setStatusCode(400);
+            return;
         }
+
         $datos = $this->request->request->get('datos', '{}');
 
-        if (empty($idpaciente)) {
-            echo json_encode(["ok" => false, "error" => "Falta paciente"]);
-            exit;
+        $where = [new DataBaseWhere('idpaciente', $idpaciente)];
+        $odontogramaModel = new OdontogramaModel();
+        $odontogramas = $odontogramaModel->all($where, [], 0, 1);
+
+        if (!empty($odontogramas)) {
+            $odontogramaModel = $odontogramas[0];
         }
 
-        $sql = "SELECT id FROM dental_odontogramas WHERE idpaciente = " . intval($idpaciente) . " LIMIT 1";
-        $rows = $this->dataBase->select($sql);
+        $odontogramaModel->idpaciente = $idpaciente;
+        $odontogramaModel->datos = $datos;
 
-        $odontograma = new OdontogramaModel();
-        $isNew = true;
-        if (!empty($rows) && isset($rows[0]['id'])) {
-            $odontograma->loadFromCode($rows[0]['id']);
-            $isNew = false;
+        if (false === $odontogramaModel->test()) {
+            $this->response->setContent(json_encode([
+                'ok' => false,
+                'error' => 'Test failed'
+            ]));
+            $this->response->setStatusCode(500);
+            return;
         }
 
-        $odontograma->idpaciente = $idpaciente;
-        $odontograma->datos = $datos;
-
-        if (false === $odontograma->test()) {
-            echo json_encode(["ok" => false, "error" => "Test failed", "debug" => ["idpaciente" => $odontograma->idpaciente, "datosLen" => strlen($odontograma->datos)]]);
-            exit;
+        if (false === $odontogramaModel->save()) {
+            $this->response->setContent(json_encode([
+                'ok' => false,
+                'error' => 'Save failed'
+            ]));
+            $this->response->setStatusCode(500);
+            return;
         }
 
-        if (false === $odontograma->save()) {
-            echo json_encode(["ok" => false, "error" => "Save failed", "isNew" => $isNew]);
-            exit;
-        }
-
-        echo json_encode(["ok" => true, "id" => $odontograma->id, "isNew" => $isNew]);
-        exit;
+        $this->response->setContent(json_encode([
+            'ok' => true,
+            'id' => $odontogramaModel->id,
+            'isNew' => empty($odontogramas)
+        ]));
     }
 
     private function listPacientes(): void
     {
-        $this->noCache();
-        $sql = "SELECT p.id, c.razonsocial "
-            . "FROM dental_pacientes p "
-            . "INNER JOIN clientes c ON c.codcliente = p.codcliente "
-            . "ORDER BY c.razonsocial ASC";
-        $pacientes = [];
-        foreach ($this->dataBase->select($sql) as $row) {
-            $pacientes[] = [
-                'id' => $row['id'],
-                'razonsocial' => $row['razonsocial']
+        $pacienteModel = new PacienteModel();
+        $pacientes = $pacienteModel->all([], ['fecha_alta' => 'DESC']);
+
+        $data = [];
+        foreach ($pacientes as $paciente) {
+            $cliente = $paciente->getCliente();
+            $data[] = [
+                'id' => $paciente->id,
+                'razonsocial' => $cliente ? $cliente->razonsocial : ''
             ];
         }
-        echo json_encode(['ok' => true, 'data' => $pacientes]);
-        exit;
+
+        $this->response->setContent(json_encode(['ok' => true, 'data' => $data]));
     }
 }
