@@ -6,6 +6,9 @@ namespace SLB_API\Controller;
 use WP_REST_Controller;
 use WP_Error;
 use SLB_API\Plugin;
+use SLB_API\Helper\RequestHelper;
+use SLB_API\Helper\TokenHelper;
+use SLB_API\Helper\UserRoleHelper;
 
 abstract class REST_Controller extends WP_REST_Controller
 {
@@ -15,6 +18,15 @@ abstract class REST_Controller extends WP_REST_Controller
     {
         // Administrators have full access
         if (current_user_can('manage_options')) {
+            return true;
+        }
+
+        // Salon API users with salon management permissions can operate Salon resources.
+        if (current_user_can('manage_salon')) {
+            return true;
+        }
+
+        if ($this->is_allowed_api_token_user()) {
             return true;
         }
         
@@ -269,6 +281,31 @@ abstract class REST_Controller extends WP_REST_Controller
         // Check if user has shop_manager or sln_shop_manager role
         return in_array('shop_manager', (array) $user->roles) || 
                in_array('sln_shop_manager', (array) $user->roles);
+    }
+
+    protected function is_allowed_api_token_user()
+    {
+        $access_token = (new RequestHelper())->getAccessToken();
+        if (!$access_token) {
+            return false;
+        }
+
+        $user_id = (new TokenHelper())->getUserIdByAccessToken($access_token);
+        if (!$user_id) {
+            return false;
+        }
+
+        $user = get_user_by('id', (int)$user_id);
+        if (!$user instanceof \WP_User) {
+            return false;
+        }
+
+        if (!(new UserRoleHelper())->is_allowed_user($user)) {
+            return false;
+        }
+
+        wp_set_current_user((int)$user_id);
+        return true;
     }
 
     /**

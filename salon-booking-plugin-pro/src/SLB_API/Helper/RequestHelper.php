@@ -68,7 +68,25 @@ class RequestHelper {
 	}
 
 	public function getAccessToken() {
-		return $this->getHeaderValue('Access-Token');
+		$token = $this->getHeaderValue('Access-Token');
+
+		if (!$token) {
+			$token = $this->getHeaderValue('X-Access-Token');
+		}
+
+		if (!$token) {
+			$token = $this->extractBearerToken($this->getHeaderValue('Authorization'));
+		}
+
+		if (!$token && isset($_SERVER['HTTP_AUTHORIZATION'])) {
+			$token = $this->extractBearerToken(sanitize_text_field(wp_unslash($_SERVER['HTTP_AUTHORIZATION'])));
+		}
+
+		if (!$token && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+			$token = $this->extractBearerToken(sanitize_text_field(wp_unslash($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])));
+		}
+
+		return $token;
 	}
 
 	public function getHeaderValue($name) {
@@ -140,6 +158,19 @@ class RequestHelper {
 
 	public function getRequestUri() {
 		return isset($_SERVER['REQUEST_URI']) ? esc_url_raw(wp_unslash($_SERVER['REQUEST_URI'])) : '';
+	}
+
+	private function extractBearerToken($header)
+	{
+		if (!$header) {
+			return null;
+		}
+
+		if (stripos($header, 'Bearer ') === 0) {
+			return trim(substr($header, 7));
+		}
+
+		return trim($header);
 	}
 
 	private function getAllHeaders()

@@ -65,8 +65,7 @@ class SalonBookingClient
             $bookingId = (int)($cita->salon_booking_id ?? 0);
             $response = $bookingId > 0
                 ? $this->putJson($this->apiUrl('/bookings/' . $bookingId), $payload, $token)
-                : Http::postJson($this->apiUrl('/bookings'), $payload)
-                    ->setBearerToken($token)
+                : $this->withAccessToken(Http::postJson($this->apiUrl('/bookings'), $payload), $token)
                     ->setTimeout(30);
 
             $data = $response->json(true);
@@ -334,9 +333,10 @@ class SalonBookingClient
 
     private function putJson(string $url, array $payload, string $token): Http
     {
-        return Http::put($url, json_encode($payload))
-            ->setHeader('Content-Type', 'application/json')
-            ->setBearerToken($token)
+        return $this->withAccessToken(
+            Http::put($url, json_encode($payload))->setHeader('Content-Type', 'application/json'),
+            $token
+        )
             ->setTimeout(30);
     }
 
@@ -348,8 +348,7 @@ class SalonBookingClient
             'email' => $payload['email'] ?? '',
         ]);
 
-        $response = Http::postJson($this->apiUrl($path), $payload)
-            ->setBearerToken($token)
+        $response = $this->withAccessToken(Http::postJson($this->apiUrl($path), $payload), $token)
             ->setTimeout(30);
 
         $data = $response->json(true);
@@ -536,8 +535,7 @@ class SalonBookingClient
 
     private function getResource(string $path, string $token): array
     {
-        $response = Http::get($this->apiUrl($path))
-            ->setBearerToken($token)
+        $response = $this->withAccessToken(Http::get($this->apiUrl($path)), $token)
             ->setTimeout(20);
 
         $data = $response->json(true);
@@ -568,8 +566,7 @@ class SalonBookingClient
             'order' => 'asc',
         ];
 
-        $response = Http::get($this->apiUrl($path), $params)
-            ->setBearerToken($token)
+        $response = $this->withAccessToken(Http::get($this->apiUrl($path), $params), $token)
             ->setTimeout(30);
 
         $data = $response->json(true);
@@ -700,5 +697,12 @@ class SalonBookingClient
             'status' => $status,
             'message' => $error,
         ];
+    }
+
+    private function withAccessToken(Http $request, string $token): Http
+    {
+        return $request
+            ->setBearerToken($token)
+            ->setHeader('Access-Token', $token);
     }
 }
