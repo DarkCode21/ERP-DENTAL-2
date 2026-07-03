@@ -42,10 +42,7 @@ class SLN_Action_ErpCalendarEmbed
             return $url;
         }
 
-        return add_query_arg(array(
-            self::TOKEN_PARAM => $this->token,
-            'sln_erp_embed' => '1',
-        ), $url);
+        return $this->appendEmbedArgsToUrl((string)$url, $this->token);
     }
 
     public function appendTokenToRedirect($location, $postId)
@@ -55,10 +52,44 @@ class SLN_Action_ErpCalendarEmbed
             return $location;
         }
 
-        return add_query_arg(array(
-            self::TOKEN_PARAM => $token,
-            'sln_erp_embed' => '1',
-        ), $location);
+        return $this->appendEmbedArgsToUrl((string)$location, $token);
+    }
+
+    private function appendEmbedArgsToUrl(string $url, string $token): string
+    {
+        if ($url === '' || $url === '#') {
+            return $url;
+        }
+
+        $fragment = '';
+        $hashPosition = strpos($url, '#');
+        if ($hashPosition !== false) {
+            $fragment = substr($url, $hashPosition);
+            $url = substr($url, 0, $hashPosition);
+        }
+
+        $args = array();
+        if (strpos($url, self::TOKEN_PARAM . '=') === false) {
+            $args[] = self::TOKEN_PARAM . '=' . rawurlencode($token);
+        }
+        if (strpos($url, 'sln_erp_embed=') === false) {
+            $args[] = 'sln_erp_embed=1';
+        }
+        if (empty($args)) {
+            return $url . $fragment;
+        }
+
+        return $url . $this->querySeparator($url) . implode('&', $args) . $fragment;
+    }
+
+    private function querySeparator(string $url): string
+    {
+        if (strpos($url, '?') === false) {
+            return '?';
+        }
+
+        $lastCharacter = substr($url, -1);
+        return $lastCharacter === '?' || $lastCharacter === '&' ? '' : '&';
     }
 
     public function authenticateRequest(): void
@@ -109,31 +140,47 @@ class SLN_Action_ErpCalendarEmbed
                     return url;
                 }
 
-                try {
-                    var next = new URL(url || window.location.href, window.location.href);
-                    if (next.origin !== window.location.origin) {
-                        return url;
-                    }
-                    next.searchParams.set(tokenParam, token);
-                    next.searchParams.set('sln_erp_embed', '1');
-                    return next.toString();
-                } catch (error) {
-                    if (String(url).indexOf(tokenParam + '=') !== -1) {
-                        return url;
-                    }
-
-                    return url + (String(url).indexOf('?') === -1 ? '?' : '&')
-                        + tokenParam + '=' + encodeURIComponent(token)
-                        + '&sln_erp_embed=1';
+                if (!isSameOrigin(url)) {
+                    return url;
                 }
+
+                var value = String(url);
+                var hash = '';
+                var hashIndex = value.indexOf('#');
+                if (hashIndex !== -1) {
+                    hash = value.substring(hashIndex);
+                    value = value.substring(0, hashIndex);
+                }
+
+                var args = [];
+                if (!hasQueryParam(value, tokenParam)) {
+                    args.push(tokenParam + '=' + encodeURIComponent(token));
+                }
+                if (!hasQueryParam(value, 'sln_erp_embed')) {
+                    args.push('sln_erp_embed=1');
+                }
+                if (args.length === 0) {
+                    return url;
+                }
+
+                return value + querySeparator(value) + args.join('&') + hash;
+            }
+
+            function querySeparator(url) {
+                if (String(url).indexOf('?') === -1) {
+                    return '?';
+                }
+
+                return /[?&]$/.test(String(url)) ? '' : '&';
+            }
+
+            function hasQueryParam(url, name) {
+                var escaped = String(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                return (new RegExp('(?:[?&])' + escaped + '=')).test(String(url));
             }
 
             function hasToken(url) {
-                try {
-                    return (new URL(url || '', window.location.href)).searchParams.has(tokenParam);
-                } catch (error) {
-                    return String(url).indexOf(tokenParam + '=') !== -1;
-                }
+                return hasQueryParam(url, tokenParam);
             }
 
             function injectEmbedStyles() {
