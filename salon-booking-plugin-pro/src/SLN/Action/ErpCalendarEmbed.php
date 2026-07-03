@@ -128,6 +128,25 @@ class SLN_Action_ErpCalendarEmbed
                 }
             }
 
+            function hasToken(url) {
+                try {
+                    return (new URL(url || '', window.location.href)).searchParams.has(tokenParam);
+                } catch (error) {
+                    return String(url).indexOf(tokenParam + '=') !== -1;
+                }
+            }
+
+            function injectEmbedStyles() {
+                if (document.getElementById('sln-erp-embed-style')) {
+                    return;
+                }
+
+                var style = document.createElement('style');
+                style.id = 'sln-erp-embed-style';
+                style.textContent = '.sln-bootstrap.sln-calendar-plugin-update-notice--wrapper{display:none!important;}';
+                (document.head || document.documentElement).appendChild(style);
+            }
+
             function isSameOriginAdmin(url) {
                 try {
                     var next = new URL(url || '', window.location.href);
@@ -212,7 +231,8 @@ class SLN_Action_ErpCalendarEmbed
                     'data-href',
                     'data-src-template-edit-booking',
                     'data-src-template-new-booking',
-                    'data-src-template-duplicate-booking'
+                    'data-src-template-duplicate-booking',
+                    'data-src-template-duplicate_clone-booking'
                 ].forEach(function(attribute) {
                     if (root.matches && root.matches('[' + attribute + ']')) {
                         var ownValue = root.getAttribute(attribute);
@@ -246,16 +266,32 @@ class SLN_Action_ErpCalendarEmbed
                 window.jQuery(element).data(camelName, value);
             }
 
+            function processFrame(frame) {
+                if (!frame || !frame.getAttribute) {
+                    return;
+                }
+
+                var src = frame.getAttribute('src');
+                if (src && isSameOriginAdmin(src) && !hasToken(src)) {
+                    frame.setAttribute('src', appendToken(src));
+                }
+            }
+
             function process(root) {
                 root = root || document;
+                injectEmbedStyles();
                 if (root.matches && root.matches('form')) {
                     processForm(root);
                 }
                 if (root.matches && root.matches('a[href]')) {
                     processLink(root);
                 }
+                if (root.matches && root.matches('iframe[src]')) {
+                    processFrame(root);
+                }
                 root.querySelectorAll('form').forEach(processForm);
                 root.querySelectorAll('a[href]').forEach(processLink);
+                root.querySelectorAll('iframe[src]').forEach(processFrame);
                 processDataUrls(root);
 
                 if (window.ajaxurl) {
@@ -291,7 +327,8 @@ class SLN_Action_ErpCalendarEmbed
                     setDataUrl(editor, 'data-' + srcTemplate, nextUrl);
 
                     window.setTimeout(function() {
-                        if (editor.getAttribute('src') === editorLink) {
+                        var currentSrc = editor.getAttribute('src') || '';
+                        if (!currentSrc || currentSrc === editorLink || (isSameOriginAdmin(currentSrc) && !hasToken(currentSrc))) {
                             editor.setAttribute('src', nextUrl);
                         }
                     }, 0);
@@ -397,7 +434,8 @@ class SLN_Action_ErpCalendarEmbed
                 }
                 #wpadminbar,
                 .notice,
-                .update-nag {
+                .update-nag,
+                .sln-bootstrap.sln-calendar-plugin-update-notice--wrapper {
                     display: none !important;
                 }
                 html.wp-toolbar {

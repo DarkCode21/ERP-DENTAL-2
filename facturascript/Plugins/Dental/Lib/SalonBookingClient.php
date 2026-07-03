@@ -687,7 +687,7 @@ class SalonBookingClient
         }
 
         if ($success) {
-            Tools::log()->notice('Cita dental #' . $cita->id . ' sincronizada con Salon Booking');
+            Tools::log()->notice('Cita sincronizada con Salon Booking');
         } elseif ($status !== 'skipped') {
             Tools::log()->warning('Error sincronizando cita dental #' . $cita->id . ': ' . $error);
         }

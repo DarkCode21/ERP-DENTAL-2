@@ -98,7 +98,6 @@ class EditCita extends EditController
 
         $result = (new SalonBookingClient())->syncCita($model);
         if (!empty($result['success'])) {
-            Tools::log()->notice('Cita sincronizada con Salon Booking.');
             return;
         }
 

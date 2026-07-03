@@ -390,7 +390,6 @@ class Paciente extends Controller
     {
         $result = (new SalonBookingClient())->syncCita($cita);
         if (!empty($result['success'])) {
-            Tools::log()->notice('Cita sincronizada con Salon Booking.');
             return;
         }
 
