@@ -24,6 +24,10 @@ class SLN_Action_ErpCalendarEmbed
         add_action('init', array($this, 'authenticateRequest'), 0);
         add_action('send_headers', array($this, 'sendFrameHeaders'), 0);
         add_action('admin_init', array($this, 'sendFrameHeaders'), 0);
+        add_action('admin_init', array($this, 'sendFrameHeaders'), PHP_INT_MAX);
+        add_action('admin_head', array($this, 'sendFrameHeaders'), 0);
+        add_action('login_init', array($this, 'sendFrameHeaders'), 0);
+        add_action('login_init', array($this, 'sendFrameHeaders'), PHP_INT_MAX);
         add_action('template_redirect', array($this, 'renderCalendar'), 0);
         add_filter('admin_url', array($this, 'appendTokenToAdminUrl'), 10, 4);
         add_filter('redirect_post_location', array($this, 'appendTokenToRedirect'), 20, 2);
@@ -109,13 +113,18 @@ class SLN_Action_ErpCalendarEmbed
             return;
         }
 
+        if (!user_can($user, 'manage_salon') && !user_can($user, 'manage_options')) {
+            return;
+        }
+
         $this->payload = $payload;
         $this->token = $token;
 
         wp_set_current_user($user->ID);
+        $this->primeAuthCookies($user, (int)($payload['exp'] ?? (time() + HOUR_IN_SECONDS)));
 
-        remove_action('admin_init', 'send_frame_options_header');
-        remove_action('login_init', 'send_frame_options_header');
+        $this->disableFrameOptionsHeader();
+        $this->sendFrameHeaders();
     }
 
     public function printEditorTokenScript(): void
@@ -501,10 +510,12 @@ class SLN_Action_ErpCalendarEmbed
 
     public function sendFrameHeaders(): void
     {
-        if ($this->token === '') {
+        $token = $this->token !== '' ? $this->token : $this->getTokenFromRequest();
+        if ($token === '' || empty($this->validateToken($token))) {
             return;
         }
 
+        $this->disableFrameOptionsHeader();
         header_remove('X-Frame-Options');
         header('Referrer-Policy: no-referrer');
         header('X-Robots-Tag: noindex, nofollow', false);
@@ -512,6 +523,36 @@ class SLN_Action_ErpCalendarEmbed
         $frameAncestors = $this->getFrameAncestors();
         if ($frameAncestors !== '') {
             header('Content-Security-Policy: frame-ancestors ' . $frameAncestors);
+        }
+    }
+
+    private function disableFrameOptionsHeader(): void
+    {
+        remove_action('admin_init', 'send_frame_options_header');
+        remove_action('login_init', 'send_frame_options_header');
+    }
+
+    private function primeAuthCookies(WP_User $user, int $expiration): void
+    {
+        if (!function_exists('wp_generate_auth_cookie')) {
+            return;
+        }
+
+        $expiration = max($expiration, time() + MINUTE_IN_SECONDS);
+        $sessionToken = class_exists('WP_Session_Tokens')
+            ? WP_Session_Tokens::get_instance($user->ID)->create($expiration)
+            : '';
+
+        if (defined('AUTH_COOKIE')) {
+            $_COOKIE[AUTH_COOKIE] = wp_generate_auth_cookie($user->ID, $expiration, 'auth', $sessionToken);
+        }
+
+        if (defined('SECURE_AUTH_COOKIE')) {
+            $_COOKIE[SECURE_AUTH_COOKIE] = wp_generate_auth_cookie($user->ID, $expiration, 'secure_auth', $sessionToken);
+        }
+
+        if (defined('LOGGED_IN_COOKIE')) {
+            $_COOKIE[LOGGED_IN_COOKIE] = wp_generate_auth_cookie($user->ID, $expiration, 'logged_in', $sessionToken);
         }
     }
 
