@@ -846,6 +846,15 @@ class Bookings_Controller extends REST_Controller
             return true;
         }
 
+        // External ERP/API calls authenticated with a valid Salon API token must not be treated as public bookings.
+        if (is_user_logged_in() && current_user_can('manage_salon')) {
+            return true;
+        }
+
+        if ($this->is_allowed_api_token_user()) {
+            return true;
+        }
+
         // Rate limiting check FIRST (prevents brute force before reCAPTCHA)
         if (class_exists('SLN_Helper_RateLimiter') && SLN_Helper_RateLimiter::isEnabled()) {
             if (!SLN_Helper_RateLimiter::checkRateLimit()) {

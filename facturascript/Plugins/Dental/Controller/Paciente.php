@@ -8,6 +8,7 @@ use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Model\Cliente;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
+use FacturaScripts\Plugins\Dental\Lib\SalonBookingClient;
 use FacturaScripts\Plugins\Dental\Model\Paciente as PacienteModel;
 use FacturaScripts\Plugins\Dental\Model\TratamientoPaciente;
 use FacturaScripts\Plugins\Dental\Model\Cita;
@@ -235,6 +236,7 @@ class Paciente extends Controller
             return;
         }
 
+        $this->syncSalonBooking($cita);
         Tools::log()->notice('record-saved-correctly');
     }
 
@@ -380,7 +382,21 @@ class Paciente extends Controller
             return;
         }
 
+        $this->syncSalonBooking($cita);
         Tools::log()->notice('record-saved-correctly');
+    }
+
+    private function syncSalonBooking(Cita $cita): void
+    {
+        $result = (new SalonBookingClient())->syncCita($cita);
+        if (!empty($result['success'])) {
+            Tools::log()->notice('Cita sincronizada con Salon Booking.');
+            return;
+        }
+
+        if (($result['status'] ?? '') !== 'skipped') {
+            Tools::log()->warning('No se pudo sincronizar con Salon Booking: ' . ($result['message'] ?? 'sin detalle'));
+        }
     }
 
     private function generarFactura(): void
