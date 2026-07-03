@@ -121,7 +121,7 @@ class SLN_Action_ErpCalendarEmbed
         $this->token = $token;
 
         wp_set_current_user($user->ID);
-        $this->primeAuthCookies($user, (int)($payload['exp'] ?? (time() + HOUR_IN_SECONDS)));
+        $this->primeAuthCookies($user, (int)($payload['exp'] ?? (time() + HOUR_IN_SECONDS)), $token);
 
         $this->disableFrameOptionsHeader();
         $this->sendFrameHeaders();
@@ -275,9 +275,28 @@ class SLN_Action_ErpCalendarEmbed
             }
 
             function processForm(form) {
-                if (form && form.action && isSameOriginAdmin(form.action)) {
+                if (!form) {
+                    return;
+                }
+
+                ensureHiddenInput(form, tokenParam, token);
+                ensureHiddenInput(form, 'sln_erp_embed', '1');
+
+                if (form.action && isSameOriginAdmin(form.action)) {
                     form.action = appendToken(form.action);
                 }
+            }
+
+            function ensureHiddenInput(form, name, value) {
+                var field = form.querySelector('input[name="' + name + '"]');
+                if (!field) {
+                    field = document.createElement('input');
+                    field.type = 'hidden';
+                    field.name = name;
+                    form.appendChild(field);
+                }
+
+                field.value = value;
             }
 
             function processDataUrls(root) {
@@ -365,6 +384,12 @@ class SLN_Action_ErpCalendarEmbed
                 if (link.dataset.slnErpBlocked === '1') {
                     event.preventDefault();
                     event.stopPropagation();
+                }
+            }, true);
+
+            document.addEventListener('submit', function(event) {
+                if (event.target && event.target.tagName === 'FORM') {
+                    processForm(event.target);
                 }
             }, true);
 
@@ -532,16 +557,23 @@ class SLN_Action_ErpCalendarEmbed
         remove_action('login_init', 'send_frame_options_header');
     }
 
-    private function primeAuthCookies(WP_User $user, int $expiration): void
+    private function primeAuthCookies(WP_User $user, int $expiration, string $erpToken): void
     {
         if (!function_exists('wp_generate_auth_cookie')) {
             return;
         }
 
         $expiration = max($expiration, time() + MINUTE_IN_SECONDS);
-        $sessionToken = class_exists('WP_Session_Tokens')
-            ? WP_Session_Tokens::get_instance($user->ID)->create($expiration)
-            : '';
+        $sessionToken = hash_hmac('sha256', $erpToken, wp_salt('auth'));
+
+        if (class_exists('WP_Session_Tokens')) {
+            WP_Session_Tokens::get_instance($user->ID)->update($sessionToken, array(
+                'expiration' => $expiration,
+                'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
+                'ua' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                'login' => time(),
+            ));
+        }
 
         if (defined('AUTH_COOKIE')) {
             $_COOKIE[AUTH_COOKIE] = wp_generate_auth_cookie($user->ID, $expiration, 'auth', $sessionToken);
